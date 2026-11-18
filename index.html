@@ -2824,7 +2824,7 @@ async function googleWeather(lat, lon) {
   try { const cj = await get(`${base}currentConditions:lookup?key=${k}&${loc}&languageCode=th`); W.now = { temp: cj.temperature?.degrees, rh: cj.relativeHumidity, cond: cj.weatherCondition?.description?.text, wind: cj.wind?.speed?.value }; } catch (e) {}
 }
 async function loadWeather(quiet) {
-  const lat = L ? L.lat0 : 15.07, lon = L ? L.lon0 : 102.25;
+  const lat = L ? L.lat0 : 15.07, lon = L ? L.lon0 : 102.25; W.lat = L ? lat : null; W.lon = L ? lon : null;
   W.loading = true; renderWeather();
   const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}&longitude=${lon.toFixed(4)}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,et0_fao_evapotranspiration,wind_speed_10m_max,relative_humidity_2m_mean&hourly=precipitation&past_days=30&forecast_days=7&timezone=Asia%2FBangkok`;
   try {
@@ -3292,6 +3292,8 @@ function go(step) {
 function onLayoutChanged() {
   computeLayout(); if (!L) return;
   renderBOM(); renderZoneSelect(); initSim(); if (R.ok) build3D(); renderWeather();
+  // weather must follow the field: reload when the field is new or moved more than ~2 km
+  if (W.lat == null || geoDist({ lat: W.lat, lon: W.lon }, { lat: L.lat0, lon: L.lon0 }) > 2000) loadWeather(true);
 }
 function bindSettings() {
   const map = { sRow: 'rowSp', sPlant: 'plantSp', sEm: 'emSp', sQ: 'emQ', sPump: 'pumpQ', sEff: 'eff', sSoil: 'soil', sHarvest: 'harvest', sPlantDate: 'plantDate', sMaxAcc: 'maxAcc', sMinDist: 'minDist', sTrig: 'trigger', sStartHour: 'startHour', sRowDir: 'rowDir', sTape: 'tape', sYmax: 'ymax' };

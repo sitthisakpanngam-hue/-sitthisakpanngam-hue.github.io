@@ -511,6 +511,26 @@ input,select,textarea{border-radius:12px!important}
 .stat.st-ok{background:linear-gradient(160deg,#ffffff 55%,#e7f6ec)}.stat.st-warn{background:linear-gradient(160deg,#ffffff 55%,#fdf1d9)}.stat.st-bad{background:linear-gradient(160deg,#ffffff 50%,#fde3df)}.stat.st-run{background:linear-gradient(160deg,#ffffff 50%,#e2efff)}
 html.bigtext .panel{zoom:1.14}html.bigtext .steps{zoom:1.08}html.bigtext .chip{zoom:1.1}
 @media (max-width:920px){.rowtop{grid-template-columns:1fr}.compass{margin:0 auto;width:230px;height:230px}}
+/* ---- compass HUD, decluttered toolbar, intro ---- */
+.hcomp{position:absolute;z-index:4;right:84px;top:12px;width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.95);box-shadow:0 6px 18px rgba(16,40,24,.18);border:0;padding:0;display:grid;place-items:center}
+.hcomp .rose{position:absolute;inset:5px;transition:transform .08s linear}
+.hcomp .rose svg{width:100%;height:100%}
+.hcomp span{position:absolute;bottom:-20px;right:0;white-space:nowrap;font:600 11px 'Prompt',sans-serif;background:rgba(255,255,255,.9);padding:1px 7px;border-radius:8px;color:var(--ink2)}
+.vtools .more{display:none}
+.vtools.open .more{display:flex}
+.vtools #tMore.on{background:var(--ink);color:#fff}
+.legend3d{display:none!important}
+.chip .t3{display:block}
+#intro{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;background:rgba(12,30,20,.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;transition:opacity .25s;padding:16px}
+#intro.on{opacity:1}
+.introbox{width:min(420px,100%);background:#fff;border-radius:28px;padding:26px 22px 20px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.25);position:relative}
+.introbox .skip{position:absolute;right:14px;top:12px;border:0;background:none;color:var(--muted);font-weight:600}
+.introic{width:84px;height:84px;border-radius:26px;margin:4px auto 14px}.introic .ic{width:44px;height:44px}
+.introbox h2{font:600 24px 'Prompt',sans-serif;margin:0 0 8px}.introbox p{color:var(--ink2);font-size:15.5px;line-height:1.6;margin:0 0 16px}
+.idots{display:flex;gap:6px;justify-content:center;margin-bottom:6px}.idots i{width:8px;height:8px;border-radius:4px;background:#d6dfd2;transition:width .2s}.idots i.on{width:22px;background:var(--leaf)}
+#introBtns{display:flex;flex-direction:column;gap:8px}
+details.homemore{margin-top:4px}
+@media (max-width:920px){.hcomp{right:10px;top:10px;width:54px;height:54px}.chip .t3{display:none}.hud .chip{padding:7px 11px}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <style>/* required styles */
@@ -1269,17 +1289,19 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div><i style="background:#5ab0ff"></i>หยดน้ำ (โซนที่กำลังเปิด)</div>
     </div>
     <div class="hint" id="hint3d" style="display:none">ลากเพื่อหมุน · ถ่างสองนิ้วเพื่อซูม</div>
+    <button class="hcomp" id="hcomp" style="display:none" title="แตะเพื่อหันไปทีละทิศ"><div class="rose"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="47" fill="#fff" stroke="#e1e7dd" stroke-width="2"/><path d="M50 8 61 50 50 44 39 50z" fill="#d2402f"/><path d="M50 92 61 50 50 56 39 50z" fill="#9aa59f"/><text x="50" y="27" text-anchor="middle" font-family="Prompt,sans-serif" font-weight="700" font-size="0">N</text><circle cx="50" cy="50" r="5" fill="#fff" stroke="#9aa59f" stroke-width="2"/><text x="50" y="21" text-anchor="middle" font-family="Prompt,sans-serif" font-weight="700" font-size="14" fill="#fff">น</text></svg></div><span id="hcompT">เหนือ</span></button>
     <div class="vtools" id="vtools" style="display:none">
       <button id="tOver" title="มุมมองรวม"><svg class="ic"><use href="#i-globe"/></svg><span>ภาพรวม</span></button>
       <button id="tEye" title="ยืนในไร่"><svg class="ic"><use href="#i-eye"/></svg><span>ยืนในไร่</span></button>
-      <button id="tTop" title="มุมมองด้านบน"><svg class="ic"><use href="#i-top"/></svg><span>ด้านบน</span></button>
-      <button id="tZones" title="สีแบ่งโซน"><svg class="ic"><use href="#i-palette"/></svg><span>โซน</span></button>
-      <button id="tPlants" title="ซ่อน/แสดงต้นมัน"><svg class="ic"><use href="#i-leaf"/></svg><span>ต้นมัน</span></button>
-      <button id="tDay" title="ล็อกแสงกลางวัน"><svg class="ic"><use href="#i-sun"/></svg><span>กลางวัน</span></button>
       <button id="tSun" title="เส้นทางดวงอาทิตย์"><svg class="ic"><use href="#i-sunpath"/></svg><span>ดวงอาทิตย์</span></button>
       <button id="tRain" title="ดูตัวอย่างฝนตก"><svg class="ic"><use href="#i-rain"/></svg><span>ฝน</span></button>
-      <button id="tSound" title="เสียงน้ำ"><svg class="ic"><use href="#i-mute"/></svg><span>เสียง</span></button>
-      <button id="tQ" title="คุณภาพภาพ"><svg class="ic"><use href="#i-gear"/></svg><span>คุณภาพ</span></button>
+      <button id="tMore" title="ปุ่มเพิ่มเติม"><svg class="ic"><use href="#i-list"/></svg><span>เพิ่มเติม</span></button>
+      <button id="tTop" title="มุมมองด้านบน" class="more"><svg class="ic"><use href="#i-top"/></svg><span>ด้านบน</span></button>
+      <button id="tZones" title="สีแบ่งโซน" class="more"><svg class="ic"><use href="#i-palette"/></svg><span>โซน</span></button>
+      <button id="tPlants" title="ซ่อน/แสดงต้นมัน" class="more"><svg class="ic"><use href="#i-leaf"/></svg><span>ต้นมัน</span></button>
+      <button id="tDay" title="ล็อกแสงกลางวัน" class="more"><svg class="ic"><use href="#i-sun"/></svg><span>กลางวัน</span></button>
+      <button id="tSound" title="เสียงน้ำ" class="more"><svg class="ic"><use href="#i-mute"/></svg><span>เสียง</span></button>
+      <button id="tQ" title="คุณภาพภาพ" class="more"><svg class="ic"><use href="#i-gear"/></svg><span>คุณภาพ</span></button>
     </div>
   </section>
 
@@ -1328,17 +1350,21 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <button class="qa" data-go="water"><span class="ti t-bl"><svg class="ic"><use href="#i-drop"/></svg></span>ให้น้ำ</button>
           <button class="qa" data-go="grow"><span class="ti t-li"><svg class="ic"><use href="#i-sprout"/></svg></span>เติบโต</button>
           <button class="qa" data-go="measure"><span class="ti t-or"><svg class="ic"><use href="#i-ruler"/></svg></span>บันทึกความสูง</button>
+        </div>
+        <details class="card more homemore"><summary>เพิ่มเติม <span class="small">กราฟ · ตั้งค่า · กิจกรรม · แหล่งข้อมูล</span></summary>
+        <div class="tiles4" style="margin-top:12px">
           <button class="qa" data-go="chart"><span class="ti t-pu"><svg class="ic"><use href="#i-chart"/></svg></span>กราฟน้ำ</button>
           <button class="qa" data-go="eye"><span class="ti t-te"><svg class="ic"><use href="#i-eye"/></svg></span>เดินดูในไร่</button>
           <button class="qa" data-go="settings"><span class="ti t-gy"><svg class="ic"><use href="#i-gear"/></svg></span>ตั้งค่าระบบ</button>
           <button class="qa" data-go="newfield"><span class="ti t-rd"><svg class="ic"><use href="#i-map"/></svg></span>วัดแปลงใหม่</button>
         </div>
-        <div class="card">
+        <div class="card" style="box-shadow:none;background:#f6f8f4">
           <h3><svg class="ic sm"><use href="#i-list"/></svg> กิจกรรมล่าสุด <button class="link" data-go="log">ดูทั้งหมด</button></h3>
           <div class="feed" id="hFeed"></div>
         </div>
-        <div class="card devcard" id="hSrc" style="cursor:pointer"><span class="ti t-bl sm"><svg class="ic"><use href="#i-globe"/></svg></span><div><b>แหล่งข้อมูล</b><span id="hSrcTxt">—</span></div><span class="link">ตั้งค่า</span></div>
-        <div class="card devcard"><span class="ti t-gy sm"><svg class="ic"><use href="#i-bell"/></svg></span><div><b>โหมดจำลอง</b><span>ปุ่มเปิด–ปิดน้ำยังไม่ได้ต่อกับวาล์วจริง เชื่อมต่อ ESP32 + รีเลย์ได้ภายหลัง</span></div></div>
+        <div class="card devcard" style="box-shadow:none" id="hSrc" style="cursor:pointer"><span class="ti t-bl sm"><svg class="ic"><use href="#i-globe"/></svg></span><div><b>แหล่งข้อมูล</b><span id="hSrcTxt">—</span></div><span class="link">ตั้งค่า</span></div>
+        <div class="card devcard" style="box-shadow:none"><span class="ti t-gy sm"><svg class="ic"><use href="#i-bell"/></svg></span><div><b>โหมดจำลอง</b><span>ปุ่มเปิด–ปิดน้ำยังไม่ได้ต่อกับวาล์วจริง เชื่อมต่อ ESP32 + รีเลย์ได้ภายหลัง</span></div></div>
+        </details>
       </div>
     </div>
     <!-- STEP 1 -->
@@ -1649,6 +1675,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <p class="small" style="margin-top:8px">⚠️ หน้าตัวอย่างใน Claude บล็อกการเชื่อมต่อ Google ทั้งหมด ต้องเปิดเว็บที่ฝากไว้บน https เท่านั้น · key เก็บในเครื่องนี้เท่านั้น</p>
 </div></div>
 
+<div id="intro"><div class="introbox"><button class="skip" id="iSkip">ข้าม</button><div id="introBody"></div><div id="introBtns"></div></div></div>
 <div class="toast" id="toast"></div>
 
 <script type="module">
@@ -1944,7 +1971,7 @@ function closeField() {
   if (!L || L.area < 100) { toast('พื้นที่เล็กเกินไป ตรวจสอบเส้นทางอีกครั้ง'); return; }
   S.closed = true; save(); gpsUI('off', 'ปิดแปลงเรียบร้อย'); updateFieldStats(); drawGPS(); onLayoutChanged();
   toast(`ปิดแปลงแล้ว ${areaThai(L.area)}` + (L.elevOK ? ` · ต่างระดับ ${f(L.dz, 1)} ม.` : '') + ' — กำลังแสดงภาพ 3D');
-  setTimeout(() => go(2), 450);
+  if (!R.noAutoGo) setTimeout(() => go(2), 450);
   if (useG('elev') && S.src !== 'map' && S.src !== 'coord') setTimeout(() => fetchDEM(true), 600);
 }
 function updateFieldStats() {
@@ -2430,7 +2457,7 @@ function init3D() {
     R.plantGeos = [cassavaGeo(101), cassavaGeo(202), cassavaGeo(303)];
     R.treeGeos = [treeGeo(5, 'tree'), treeGeo(9, 'tree'), treeGeo(13, 'euc')];
     R.tuft = tuftGeo();
-    initRain();
+    initRain(); initSkyBodies();
     new ResizeObserver(resize3D).observe(el);
     R.ok = true;
   } catch (e) { console.error(e); R.ok = false; }
@@ -2496,6 +2523,7 @@ function build3D() {
   // boundary markers (concrete posts with red tops)
   const postM = STD({ color: '#d7d2c6' }), capM = STD({ color: '#b8352b' });
   L.poly.forEach(p => { const h = hz(p[0], p[1]); const m = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.7, 0.12), postM); m.position.set(p[0], h + 0.35, -p[1]); m.castShadow = true; g.add(m); const c = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.08, 0.13), capM); c.position.set(p[0], h + 0.72, -p[1]); g.add(c); });
+  buildGroundCompass(g);
   // contour lines only in elevation view
   R.contourStep = 0; R.contours = null;
   if (R.elevView && L.elevOK && L.dz > 0.15) {
@@ -2688,6 +2716,7 @@ function updateLighting(force) {
   const tt = R.dayLock ? (() => { const x = new Date(SIM.t); x.setHours(9, 30, 0, 0); return x.getTime(); })() : SIM.t, H = tt / 3600000;
   const sp = sunPos(tt, L.lat0, L.lon0), el = Math.max(sp.el, -20);
   const dir = sunDir3(sp.az, el);
+  skyBodiesFrame(dir, sp.el);
   R.sky.material.uniforms.sunPosition.value.copy(dir); R.skyEnv.material.uniforms.sunPosition.value.copy(dir);
   const day = clamp((el + 4) / 16, 0, 1), low = clamp(el / 25, 0, 1), night = 1 - day, rk = R.rainK || 0;
   const span = R.span || 100, tgt = R.sun.target.position;
@@ -2858,7 +2887,7 @@ function frame(now) {
       R.drops.instanceMatrix.needsUpdate = true; R.dropsOn = az;
     }
     R.flags && R.flags.forEach((fl, i) => { fl.position.y = fl.userData.h + 1.9 + (i === az ? Math.sin(now / 200) * 0.05 : 0); fl.scale.x = i === az ? 1.25 : 1; });
-    rainFrame(dt, now); sunPathFrame(); paintRidges(false); updateLighting(false); fxFrame(dt, now); tweenStep(now);
+    rainFrame(dt, now); sunPathFrame(); hudCompassFrame(); paintRidges(false); updateLighting(false); fxFrame(dt, now); tweenStep(now);
     R.controls.update(); R.renderer.render(R.scene, R.camera);
   }
   audioFrame(dt);
@@ -3111,7 +3140,7 @@ function renderHUD() {
   if (S.step === 1) { h.innerHTML = S.pts.length ? `<div class="chip"><div class="t">มุมมองสำรวจ</div><div class="v">${S.closed ? 'ขอบแปลงที่ปรับเส้นแล้ว' : 'เส้นทางที่เดิน · ' + S.pts.length + ' จุด'}</div></div>` : ''; return; }
   if (!L) { h.innerHTML = ''; return; }
   let s = `<div class="chip"><div class="t">${dShort(SIM.t)} · ${hm(SIM.t)} · ${S.mode === 'auto' ? 'อัตโนมัติ' : 'สั่งเอง'}</div><div class="v">${areaThai(L.area)} · ${L.zones.length} โซน</div>` +
-    (L.elevOK ? `<div class="t" style="margin-top:2px">⛰ ต่างระดับ ${f(L.dz, 1)} ม. · ลาด ${f(L.slopeAll, 1)}% · ขยายแนวตั้ง ×${R.vex}${R.contourStep ? ' · เส้นชั้นความสูงทุก ' + R.contourStep + ' ม.' : ''}${R.sunEl != null && R.sunEl < -2 && !R.dayLock ? ' · 🌙 กลางคืน' : ''}</div>` : `<div class="t" style="margin-top:2px">ไม่มีข้อมูลความสูง — แสดงเป็นพื้นราบ</div>`) + `</div>`;
+    (L.elevOK ? `<div class="t t3" style="margin-top:2px">⛰ ต่างระดับ ${f(L.dz, 1)} ม. · ลาด ${f(L.slopeAll, 1)}% · ขยายแนวตั้ง ×${R.vex}${R.contourStep ? ' · เส้นชั้นความสูงทุก ' + R.contourStep + ' ม.' : ''}${R.sunEl != null && R.sunEl < -2 && !R.dayLock ? ' · 🌙 กลางคืน' : ''}</div>` : `<div class="t t3" style="margin-top:2px">ไม่มีข้อมูลความสูง — แสดงเป็นพื้นราบ</div>`) + `</div>`;
   if (R.elevView && L.elevOK) s += `<div class="chip"><div class="t">สีตามระดับความสูง</div><div style="display:flex;align-items:center;gap:6px;font-size:12px"><span>ต่ำ</span><span style="width:90px;height:8px;border-radius:4px;background:linear-gradient(90deg,#ead9b8,#6e4426)"></span><span>สูง (+${f(L.dz, 1)} ม.)</span></div></div>`;
   if (R.viewDap != null) { const vd = Math.round(R.viewDap); s += `<div class="chip" style="border-color:#cfe0c6"><div class="v" style="color:var(--leaf)">🌱 ภาพจำลองอายุ ${vd} วัน</div><div class="t">ระยะ${stageOf(vd).n} · สูง ~${f(heightAt(vd) * 100)} ซม.</div></div>`; }
   if (R.rain_ && R.rain_.on) s += `<div class="chip" style="border-color:#c9d3dd"><div class="v">🌧 ${R.rain_.demo ? 'ตัวอย่างฝนตก' : 'ฝนกำลังตก · ' + f(R.rain_.rate, 1) + ' มม./ชม.'}</div><div class="t">${R.rain_.demo ? 'กด 🌧 อีกครั้งเพื่อปิด' : 'ระบบนับน้ำฝนเข้าความชื้นดินแล้ว'}</div></div>`;
@@ -3388,7 +3417,7 @@ function go(step) {
   $('#v3d').style.display = is3d ? 'block' : 'none';
   if (is3d || step === 0) { view.classList.remove('mapmode'); $('#v2d').style.display = 'none'; $('#vmap').style.display = 'none'; $('#mapUI').style.display = 'none'; $('#empty2d').style.display = 'none'; }
   const tools = is3d && R.ok && step > 0;
-  $('#legend3d').style.display = tools ? '' : 'none'; $('#hint3d').style.display = tools ? '' : 'none'; $('#vtools').style.display = tools ? 'flex' : 'none';
+  $('#legend3d').style.display = tools ? '' : 'none'; $('#hint3d').style.display = tools ? '' : 'none'; $('#vtools').style.display = tools ? 'flex' : 'none'; $('#hcomp').style.display = is3d && R.ok ? 'grid' : 'none';
   if (step === 1) showStep1View();
   if (step > 1 && !R.ok) { $('#empty2d').style.display = 'grid'; $('#empty2d').innerHTML = '<div><b>อุปกรณ์นี้แสดงผล 3D ไม่ได้</b>ระบบคำนวณและควบคุมยังใช้งานได้ตามปกติ</div>'; }
   if (is3d) { setTimeout(resize3D, 30); if (!R.group) build3D(); }
@@ -3473,6 +3502,12 @@ $('#tOver').addEventListener('click', () => { R.follow = false; fitCamera('overv
 $('#tDay').addEventListener('click', () => { R.dayLock = !R.dayLock; $('#tDay').classList.toggle('on', R.dayLock); R.envHour = -99; updateLighting(true); });
 const qLbl = () => { $('#tQ').innerHTML = '<svg class="ic"><use href="#i-gear"/></svg><span>' + (R.quality === 'high' ? 'สูง' : 'ประหยัด') + '</span>'; };
 $('#tSound').addEventListener('click', audioToggle);
+$('#tMore').addEventListener('click', () => { const v = $('#vtools'); v.classList.toggle('open'); $('#tMore').classList.toggle('on', v.classList.contains('open')); });
+$('#hcomp').addEventListener('click', faceNorth);
+$('#iSkip').addEventListener('click', closeIntro);
+$('#introBtns').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return;
+  if (b.id === 'iNext') { introI++; renderIntro(); } else if (b.id === 'iDemo') { closeIntro(); loadDemoInstant(); } else if (b.id === 'iMine') { closeIntro(); go(1); setMeasureMode('map'); } });
+$('#hWater').addEventListener('click', () => $('#hWater').classList.remove('pulse'));
 $('#tSun').addEventListener('click', () => { R.showSun = !R.showSun; $('#tSun').classList.toggle('on', R.showSun); buildSunPath(); if (R.showSun) { fitCamera('sun'); const sd = sunDay(SIM.t, L.lat0, L.lon0); toast(`☀ ขึ้น ${hm(sd.rise)} · ตก ${hm(sd.set)} · สูงสุด ${f(sd.maxEl)}°`); } });
 $('#rowOpts').addEventListener('click', e => { const b = e.target.closest('button[data-row]'); if (!b) return; S.set.rowDir = 'custom'; S.set.rowAng = +b.dataset.row; $('#sRowDir').value = 'custom'; $('#sRowAng').value = S.set.rowAng; $('#rowAngWrap').style.display = ''; save(); onLayoutChanged(); toast('เปลี่ยนแนวร่องเป็น ' + rowName(S.set.rowAng)); });
 $('#hBig').addEventListener('click', () => setBigText(!(S.ui && S.ui.big)));
@@ -3737,6 +3772,82 @@ function speakSummary() {
   speechSynthesis.speak(u); toast('🔊 กำลังอ่านสรุปวันนี้');
 }
 
+/* ================= sky sun / moon sprites, ground compass, HUD compass ================= */
+function glowTex(inner, mid) {
+  const c = document.createElement('canvas'); c.width = c.height = 256; const x = c.getContext('2d'), g = x.createRadialGradient(128, 128, 0, 128, 128, 128);
+  g.addColorStop(0, '#ffffff'); g.addColorStop(0.12, inner); g.addColorStop(0.3, mid); g.addColorStop(1, 'rgba(255,200,80,0)');
+  x.fillStyle = g; x.fillRect(0, 0, 256, 256); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+function initSkyBodies() {
+  R.sunSpr = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex('#fff2b0', 'rgba(255,190,60,.55)'), blending: THREE.AdditiveBlending, depthWrite: false, fog: false, toneMapped: false, transparent: true }));
+  R.moonSpr = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex('#f4f6ff', 'rgba(200,215,255,.35)'), depthWrite: false, fog: false, toneMapped: false, transparent: true }));
+  R.sunSpr.renderOrder = R.moonSpr.renderOrder = -1; R.scene.add(R.sunSpr, R.moonSpr);
+}
+function skyBodiesFrame(dir, el) {
+  if (!R.sunSpr || !L) return;
+  const span = R.span || 100, d = span * 3.2, c = R.controls.target;
+  R.sunSpr.visible = el > -2; R.sunSpr.position.copy(c).add(dir.clone().multiplyScalar(d)); const sz = span * (el < 8 ? 0.95 : 0.7); R.sunSpr.scale.set(sz, sz, 1);
+  R.sunSpr.material.color.set(el < 8 ? '#ffb15a' : '#ffffff');
+  const night = el < -2; R.moonSpr.visible = night;
+  if (night) { const m = sunDir3(((sunPos(SIM.t, L.lat0, L.lon0).az + 180) % 360), 40); R.moonSpr.position.copy(c).add(m.multiplyScalar(d)); R.moonSpr.scale.set(span * 0.45, span * 0.45, 1); }
+}
+function buildGroundCompass(g) {
+  const span = Math.max(L.W, L.H), ctr = V(L.W / 2, 0, -L.H / 2), rad = span * 0.62 + 10;
+  [['N · เหนือ', 0, '#d2402f'], ['ตะวันออก', 90, '#2a5b3a'], ['ใต้', 180, '#2a5b3a'], ['ตะวันตก', 270, '#2a5b3a']].forEach(([t, a, col]) => {
+    const p = ctr.clone().add(sunDir3(a, 0).multiplyScalar(rad)), h = hz(p.x, -p.z);
+    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 3, 8), STD({ color: a ? '#f2efe6' : '#d2402f' })); post.position.set(p.x, h + 1.5, p.z); post.castShadow = true; g.add(post);
+    const c = document.createElement('canvas'); c.width = 256; c.height = 96; const x = c.getContext('2d');
+    x.fillStyle = a ? '#ffffff' : '#d2402f'; x.beginPath(); x.roundRect ? x.roundRect(6, 10, 244, 76, 20) : x.rect(6, 10, 244, 76); x.fill();
+    x.strokeStyle = 'rgba(0,0,0,.15)'; x.lineWidth = 3; x.stroke(); x.fillStyle = a ? col : '#ffffff'; x.font = '700 40px Prompt, sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(t, 128, 50);
+    const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace;
+    const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true })); const s = Math.max(3, span * 0.05); sp.scale.set(s * 2.6, s, 1); sp.position.set(p.x, h + 3 + s * 0.6, p.z); g.add(sp);
+  });
+  // north arrow painted on the ground beside the field
+  const p = ctr.clone().add(sunDir3(0, 0).multiplyScalar(rad * 0.82)), sh = new THREE.Shape(), s = Math.max(2.5, span * 0.04);
+  sh.moveTo(0, s * 1.6); sh.lineTo(s * 0.8, -s * 0.8); sh.lineTo(0, -s * 0.3); sh.lineTo(-s * 0.8, -s * 0.8); sh.closePath();
+  const ar = new THREE.Mesh(new THREE.ShapeGeometry(sh), new THREE.MeshBasicMaterial({ color: '#d2402f', side: THREE.DoubleSide }));
+  ar.rotation.x = -Math.PI / 2; ar.rotation.z = -L.ang + Math.PI / 2; ar.position.set(p.x, hz(p.x, -p.z) + 0.25, p.z); g.add(ar);
+}
+function hudCompassFrame() {
+  const el = $('#hcomp'); if (!el || !L || !R.camera) return;
+  const fwd = new THREE.Vector3(); R.camera.getWorldDirection(fwd); fwd.y = 0; if (fwd.lengthSq() < 1e-6) return; fwd.normalize();
+  const c = Math.cos(-L.ang), s = Math.sin(-L.ang), north = V(-s, 0, -c), east = V(c, 0, -s);
+  const az = (Math.atan2(fwd.dot(east), fwd.dot(north)) / RAD + 360) % 360;
+  el.querySelector('.rose').style.transform = `rotate(${-az}deg)`; $('#hcompT').textContent = dirName(az);
+  R.camAz = az;
+}
+// tap the compass: face north, then east, south, west in turn
+function faceNorth() {
+  if (!L || !R.camera) return; const t = R.controls.target, d = R.camera.position.distanceTo(t), y = R.camera.position.y - t.y, hd = Math.sqrt(Math.max(1, d * d - y * y));
+  R.faceI = R.faceI == null ? 0 : (R.faceI + 1) % 4; const az = R.faceI * 90, look = sunDir3(az, 0);
+  R.follow = false; const hh = Math.max(8, hd * 0.32); flyTo(t.clone().sub(look.multiplyScalar(hd * 1.05)).setY(t.y + hh), t.clone().setY(t.y + hh * 0.35), 1.2);
+  toast('หันหน้าไปทิศ' + DIR8[R.faceI * 2] + ' — แตะเข็มทิศอีกครั้งเพื่อหมุนต่อ');
+}
+/* ================= first-run intro + instant demo ================= */
+function loadDemoInstant() {
+  stopGPS(); clearInterval(demoTimer); S.pts = []; S.closed = false; L = null; S.src = null; S.elevSrc = null;
+  const corners = [[0, 0], [86, -8], [98, 38], [74, 70], [22, 76], [-6, 36]], lat0 = 15.0712, lon0 = 102.2451, kx = 111320 * Math.cos(lat0 * Math.PI / 180), ky = 110540, r = rng(42);
+  const dz = (x, y) => 186 + 0.038 * x - 0.022 * y + 1.6 * Math.exp(-((x - 28) ** 2 + (y - 52) ** 2) / 420) - 0.9 * Math.exp(-((x - 70) ** 2 + (y - 18) ** 2) / 300);
+  S.hpts = [[25, 20], [50, 22], [72, 30], [30, 50], [55, 48], [75, 55], [45, 68], [15, 40], [85, 20]].map(([x, y]) => ({ lat: lat0 + y / ky, lon: lon0 + x / kx, alt: dz(x, y) }));
+  corners.forEach((a, i) => { const b = corners[(i + 1) % corners.length], n = Math.ceil(dist(a, b) / 3); for (let k = 0; k < n; k++) { const t = k / n, x = a[0] + (b[0] - a[0]) * t, y = a[1] + (b[1] - a[1]) * t; S.pts.push({ lat: lat0 + y / ky, lon: lon0 + x / kx, acc: 3, alt: dz(x, y) + (r() - 0.5) * 0.6, t: Date.now() }); } });
+  R.noAutoGo = true; closeField(); R.noAutoGo = false; go(0);
+  setTimeout(() => { $('#hWater').classList.add('pulse'); toast('👆 ลองแตะปุ่ม “เปิดน้ำตอนนี้” ดูได้เลย'); }, 600);
+}
+const INTRO = [
+  { ic: 'i-map', c: 't-or', h: 'วัดแปลงง่าย ๆ', p: 'จิ้มมุมแปลงบนแผนที่ หรือเดินรอบแปลงด้วย GPS ระบบบอกพื้นที่เป็นไร่–งาน–วาทันที' },
+  { ic: 'i-cube', c: 't-gr', h: 'เห็นไร่เป็น 3 มิติ', p: 'ระบบวางร่องปลูก ท่อ และเทปน้ำหยดให้เอง มีดวงอาทิตย์ ทิศ และความสูงต่ำของพื้นตามจริง' },
+  { ic: 'i-drop', c: 't-bl', h: 'กดปุ่มเดียว ให้น้ำ', p: 'ระบบดูดิน อากาศ และอายุต้นมัน แล้วบอกว่าวันนี้ต้องให้น้ำไหม ให้นานเท่าไร หรือให้ทำงานอัตโนมัติเลยก็ได้' },
+];
+let introI = 0;
+function showIntro() { introI = 0; renderIntro(); $('#intro').style.display = 'flex'; requestAnimationFrame(() => $('#intro').classList.add('on')); }
+function closeIntro() { S.ui = { ...(S.ui || {}), intro: 1 }; save(); $('#intro').classList.remove('on'); setTimeout(() => $('#intro').style.display = 'none', 250); }
+function renderIntro() {
+  const it = INTRO[introI], last = introI === INTRO.length - 1;
+  $('#introBody').innerHTML = `<div class="ti ${it.c} introic"><svg class="ic"><use href="#${it.ic}"/></svg></div><h2>${it.h}</h2><p>${it.p}</p><div class="idots">${INTRO.map((_, i) => `<i class="${i === introI ? 'on' : ''}"></i>`).join('')}</div>`;
+  $('#introBtns').innerHTML = last ? `<button class="btn primary xl" id="iDemo"><svg class="ic"><use href="#i-play"/></svg>ลองเล่นเลย (แปลงตัวอย่าง)</button><button class="btn xl" id="iMine"><svg class="ic"><use href="#i-map"/></svg>วัดแปลงของฉัน</button>`
+    : `<button class="btn primary xl" id="iNext">ถัดไป</button>`;
+}
+
 /* ================= boot ================= */
 init3D(); bindSettings(); updateFieldStats(); setMeasureMode(measureMode);
 $$('#modeSw button').forEach(b => b.classList.toggle('on', b.dataset.mode === S.mode));
@@ -3746,7 +3857,7 @@ drawGPS(); renderLog();
 loadWeather(true);
 go(0); renderGStatus(); if (S.ui && S.ui.big) setBigText(true); $('#rowAngWrap').style.display = S.set.rowDir === 'custom' ? '' : 'none';
 $('#hWater').addEventListener('click', () => { if (SIM.active || SIM.queue.length) { stopAll(); toast('■ ปิดน้ำแล้ว'); } else { quickStart(); R.follow = false; } renderHome(); });
-setTimeout(() => $('#splash').classList.add('off'), 900);
+setTimeout(() => { $('#splash').classList.add('off'); if (!(S.ui && S.ui.intro) && !S.closed) setTimeout(showIntro, 400); }, 900);
 requestAnimationFrame(frame);
 </script>
 </body>

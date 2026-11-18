@@ -1337,6 +1337,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div class="arRow"><button id="arOnRidge">🟫 ฉันยืนบนร่องพอดี</button><button id="arAlongRidge">↕ ร่องจริงไปทางที่หัน</button></div>
         <div class="arRow arPad"><span>เลื่อนภาพ</span><button data-nud="l">◀</button><button data-nud="f">▲</button><button data-nud="b">▼</button><button data-nud="r">▶</button></div>
         <div class="arRow"><button id="arCorner" class="wide">📌 ตอนนี้ฉันยืนที่เสามุมแปลง</button></div>
+        <div class="arRow"><button id="arNorth">🧭 หาทิศเหนือใหม่</button></div>
         <div class="arRow"><button id="arReset">รีเซ็ต</button><button id="arCalDone" class="ok">เสร็จ</button></div>
       </div>
       <div class="arBar">
@@ -4218,8 +4219,27 @@ function qHeading(q) { const f = new THREE.Vector3(0, 0, -1).applyQuaternion(q);
 const angDiff = (a, b) => ((a - b + 540) % 360) - 180;
 function arOri(e) {
   if (e.alpha == null && e.beta == null) return;
-  if (e.type === 'deviceorientationabsolute') AR.hasAbs = true; else if (AR.hasAbs && e.webkitCompassHeading == null) return;
-  AR.ori = { a: e.alpha || 0, b: e.beta || 0, g: e.gamma || 0, ch: e.webkitCompassHeading, abs: e.type === 'deviceorientationabsolute' || (e.absolute && e.webkitCompassHeading == null) };
+  const o = { a: e.alpha || 0, b: e.beta || 0, g: e.gamma || 0 }, now = performance.now();
+  if (e.type === 'deviceorientationabsolute' || (e.absolute && e.webkitCompassHeading == null)) {
+    AR.absO = o; AR.absT = now;                                   // Android compass (noisy): north only
+    if (!AR.relT || now - AR.relT > 1500) AR.ori = { ...o, src: 'abs' }; // no gyro stream → fall back
+  } else { AR.ori = { ...o, src: 'rel' }; AR.relT = now; if (e.webkitCompassHeading != null) { AR.ch = e.webkitCompassHeading; AR.chT = now; } }
+  arNorth();
+}
+/* fix north ONCE from ~1.5 s of compass samples, then freeze it so the field stays put */
+function arNorth() {
+  if (!AR.ori || AR.ori.src !== 'rel' || AR.northLocked) return;
+  const q = oriQuat(AR.ori, new THREE.Quaternion()), hh = qHeading(q); if (Math.abs(hh.up) > 0.8) return;
+  let abs = null, now = performance.now();
+  if (AR.ch != null && now - AR.chT < 300) abs = AR.ch;
+  else if (AR.absO && now - AR.absT < 300) abs = qHeading(oriQuat(AR.absO, new THREE.Quaternion())).h;
+  if (abs == null) return;
+  const d = angDiff(abs, hh.h); AR.ns.push(d);
+  if (AR.ns.length >= 25) {
+    let sx = 0, sy = 0; AR.ns.forEach(v => { sx += Math.cos(v * RAD); sy += Math.sin(v * RAD); });
+    AR.yawC = Math.atan2(sy, sx) / RAD; AR.northLocked = true; AR.ns = [];
+    arMsg('🧭 ล็อกทิศเหนือแล้ว — แปลงจะอยู่กับที่<br>ถ้ายังเอียง ลากนิ้วซ้าย–ขวาให้ตรง', 2200);
+  }
 }
 function startAR() {
   if (!L || !R.ok || !R.group) return toast('วัดแปลงให้เสร็จก่อน แล้วค่อยเปิดกล้อง AR');
@@ -4228,7 +4248,7 @@ function startAR() {
   const pOri = (typeof DeviceOrientationEvent !== 'undefined' && DeviceOrientationEvent.requestPermission) ? DeviceOrientationEvent.requestPermission().catch(() => 'denied') : Promise.resolve('granted');
   const pCam = navigator.mediaDevices && navigator.mediaDevices.getUserMedia ? navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } } }).catch(e => ({ err: e })) : Promise.resolve({ err: { name: 'NoAPI' } });
   const cal = (S.ui && S.ui.arCal) || {};
-  Object.assign(AR, { on: true, mode: 'mix', ori: null, hasAbs: false, yawC: null, user: cal.user || 0, fovK: cal.fovK || 1, pos: null, gps: null, gpsN: 0, off: cal.off || { x: 0, y: 0 }, lock: false, look: { yaw: 0, pitch: -8 }, msgT: 0, prev: { vex: R.vex, day: R.dayLock, plants: R.showPlants, follow: R.follow } });
+  Object.assign(AR, { on: true, mode: 'mix', ori: null, absO: null, absT: 0, relT: 0, ch: null, chT: 0, ns: [], northLocked: false, anchor: null, yawC: null, user: cal.user || 0, fovK: cal.fovK || 1, pos: null, gps: null, gpsN: 0, off: cal.off || { x: 0, y: 0 }, lock: false, look: { yaw: 0, pitch: -8 }, msgT: 0, prev: { vex: R.vex, day: R.dayLock, plants: R.showPlants, follow: R.follow } });
   document.body.classList.add('ar'); R.showPlants = false; R.follow = false; R.tween = null; R.controls.enabled = false;
   R.vex = 1; R.dayLock = true; build3D(); arScene(); arApplyMode();
   window.addEventListener('deviceorientationabsolute', arOri); window.addEventListener('deviceorientation', arOri);
@@ -4338,20 +4358,23 @@ function arFrame(dt) {
   let tgt;
   if (AR.gps) tgt = { x: AR.gps.x + AR.off.x, y: AR.gps.y + AR.off.y };
   else { const a = L.poly[0], c = [L.W / 2, L.H / 2], d = Math.hypot(a[0] - c[0], a[1] - c[1]) || 1; tgt = { x: a[0] + (a[0] - c[0]) / d * 3, y: a[1] + (a[1] - c[1]) / d * 3 }; }
-  if (!AR.pos) AR.pos = { ...tgt }; else if (!AR.lock) { const j = Math.hypot(tgt.x - AR.pos.x, tgt.y - AR.pos.y) > 60 ? 1 : k; AR.pos.x += (tgt.x - AR.pos.x) * j; AR.pos.y += (tgt.y - AR.pos.y) * j; }
+  // dead-band: standing still, GPS wander (±3–5 m) is ignored; move only when you really walk
+  const band = Math.max(2.5, Math.min(8, (AR.gps ? AR.gps.acc : 5) * 0.6));
+  if (!AR.anchor) AR.anchor = { ...tgt };
+  else if (!AR.lock) { const dd = Math.hypot(tgt.x - AR.anchor.x, tgt.y - AR.anchor.y); if (dd > 60) AR.anchor = { ...tgt }; else if (dd > band) { const m = (dd - band * 0.5) / dd; AR.anchor.x += (tgt.x - AR.anchor.x) * m; AR.anchor.y += (tgt.y - AR.anchor.y) * m; } }
+  if (!AR.pos || Math.hypot(AR.anchor.x - AR.pos.x, AR.anchor.y - AR.pos.y) > 60) AR.pos = { ...AR.anchor };
+  else { const j = Math.min(1, dt * 1.2); AR.pos.x += (AR.anchor.x - AR.pos.x) * j; AR.pos.y += (AR.anchor.y - AR.pos.y) * j; }
   const cam = R.camera; cam.position.set(AR.pos.x, hz(AR.pos.x, AR.pos.y) + 1.5, -AR.pos.y);
   if (R.arG && (!AR.tapeAt || Math.hypot(AR.pos.x - AR.tapeAt.x, AR.pos.y - AR.tapeAt.y) > 15)) arTape(AR.pos.x, AR.pos.y);
   // orientation
   const q = new THREE.Quaternion();
   if (AR.ori) {
     oriQuat(AR.ori, q);
-    if (!AR.ori.abs) {
-      const hh = qHeading(q);
-      if (AR.ori.ch != null && Math.abs(hh.up) < 0.85) { const want = angDiff(AR.ori.ch, hh.h); AR.yawC = AR.yawC == null ? want : AR.yawC + angDiff(want, AR.yawC) * 0.05; }
-    } else AR.yawC = 0;
-    const yaw = -((AR.yawC || 0) + AR.user) * RAD - L.ang;
+    const yc = AR.ori.src === 'abs' ? 0 : (AR.yawC || 0);
+    const yaw = -(yc + AR.user) * RAD - L.ang;
     q.premultiply(_arQ0.setFromAxisAngle(_arY, yaw));
-    if (!AR.qs) AR.qs = q.clone(); else AR.qs.slerp(q, 0.35); cam.quaternion.copy(AR.qs);
+    // gyro stream is already smooth: follow it directly (no lag = the field does not swim); the noisy compass-only stream gets light smoothing
+    if (AR.ori.src === 'abs') { if (!AR.qs) AR.qs = q.clone(); else AR.qs.slerp(q, 0.25); cam.quaternion.copy(AR.qs); } else { cam.quaternion.copy(q); AR.qs = null; }
   } else {
     // no motion sensors (desktop / denied): drag to look around
     const yaw = -(AR.look.yaw + AR.user) * RAD - L.ang; cam.quaternion.setFromEuler(new THREE.Euler(AR.look.pitch * RAD, yaw, 0, 'YXZ'));
@@ -4367,7 +4390,7 @@ function arInfo() {
   else { const c = sceneToLL(L.W / 2, L.H / 2), me = sceneToLL(AR.pos.x, AR.pos.y), br = (Math.atan2((c.lon - me.lon) * Math.cos(me.lat * RAD), c.lat - me.lat) / RAD + 360) % 360, rel = angDiff(br, az || 0);
     t = `<b>อยู่นอกแปลง · ห่าง ${f(w.dEdge)} ม.</b><br>แปลงอยู่${Math.abs(rel) < 25 ? 'ข้างหน้า' : Math.abs(rel) > 150 ? 'ด้านหลัง' : rel > 0 ? 'ทางขวา' : 'ทางซ้าย'} (ทิศ${dirName(br)})`; }
   const g = AR.gps ? `GPS ±${f(AR.gps.acc)} ม.${AR.lock ? ' · ล็อกอยู่' : ''}` : (AR.gpsErr || 'กำลังหา GPS…');
-  const o = AR.ori ? (AR.ori.abs || AR.ori.ch != null ? `🧭 หัน${dirName(az || 0)} ${f(az || 0)}°` : '🧭 ไม่มีเข็มทิศ — กดปรับทิศ') : (AR.oriPerm === 'denied' ? 'ไม่ได้อนุญาตไจโร — ลากเพื่อหันมอง' : 'ลากนิ้วเพื่อหันมอง');
+  const o = AR.ori ? (AR.ori.src === 'abs' || AR.northLocked ? `🧭 หัน${dirName(az || 0)} ${f(az || 0)}°` : AR.ch != null || AR.absO ? '🧭 กำลังหาทิศเหนือ… ถือนิ่ง ๆ' : '🧭 ไม่มีเข็มทิศ — ลากนิ้วให้ตรง') : (AR.oriPerm === 'denied' ? 'ไม่ได้อนุญาตไจโร — ลากเพื่อหันมอง' : 'ลากนิ้วเพื่อหันมอง');
   const run = SIM.active ? `<br>💧 กำลังให้น้ำโซน ${SIM.active.z + 1} · เหลือ ${dur(SIM.active.rem)}` : '';
   $('#arInfo').innerHTML = `${t}${run}<br><small>${g} · ${o}${AR.camErr ? '<br>' + AR.camErr : ''}</small>`;
   const wb = $('#arWater'), zr = w.inside ? w.zone : null, on = SIM.active && (zr == null || SIM.active.z === zr);
@@ -4398,13 +4421,14 @@ $('#arCal').addEventListener('click', () => { const p = $('#arCalP'); p.style.di
 $('#arCalDone').addEventListener('click', () => { $('#arCalP').style.display = 'none'; $('#arCal').classList.remove('on'); });
 $('#arCalP').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return;
   if (b.dataset.rot) AR.user += +b.dataset.rot; if (b.dataset.zoom) AR.fovK = clamp(AR.fovK * (b.dataset.zoom > 0 ? 1.05 : 1 / 1.05), 0.6, 1.6);
-  if (b.dataset.nud) { const [fx, fy] = arFwd(), st = 0.25, m = { f: [fx, fy], b: [-fx, -fy], r: [fy, -fx], l: [-fy, fx] }[b.dataset.nud]; AR.off.x += m[0] * st; AR.off.y += m[1] * st; if (AR.pos) { AR.pos.x += m[0] * st; AR.pos.y += m[1] * st; } }
+  if (b.dataset.nud) { const [fx, fy] = arFwd(), st = 0.25, m = { f: [fx, fy], b: [-fx, -fy], r: [fy, -fx], l: [-fy, fx] }[b.dataset.nud]; AR.off.x += m[0] * st; AR.off.y += m[1] * st; [AR.pos, AR.anchor].forEach(o => { if (o) { o.x += m[0] * st; o.y += m[1] * st; } }); }
   arSave(); arInfo(); });
+$('#arNorth').addEventListener('click', () => { AR.northLocked = false; AR.ns = []; AR.user = 0; arSave(); arMsg('ถือมือถือตั้งตรงนิ่ง ๆ สักครู่…', 1800); });
 $('#arMode').addEventListener('click', () => { AR.mode = AR.mode === 'sim' ? 'mix' : 'sim'; arApplyMode(); arMsg(AR.mode === 'sim' ? 'ภาพจำลองเต็ม — หันมือถือไปทางไหน ภาพก็หันตาม ณ จุดที่คุณยืน' : 'ภาพกล้อง + ร่องมันจำลองซ้อนบนของจริง', 2200); });
 $('#arOnRidge').addEventListener('click', () => {
   if (!AR.pos) return; let best = null, bd = Infinity; L.rows.forEach(r => { const d = Math.abs(r.y - AR.pos.y); if (d < bd) { bd = d; best = r; } });
   if (!best || bd > S.set.rowSp) return arMsg('ไม่พบร่องใกล้ตัว — เข้าไปยืนในแปลงก่อน', 2000);
-  const dy = best.y - AR.pos.y; AR.off.y += dy; AR.pos.y += dy; arSave(); arMsg(`เลื่อนร่องจำลองมาใต้เท้าคุณแล้ว (${f(Math.abs(dy) * 100)} ซม.)`, 2200);
+  const dy = best.y - AR.pos.y; AR.off.y += dy; AR.pos.y += dy; if (AR.anchor) AR.anchor.y += dy; arSave(); arMsg(`เลื่อนร่องจำลองมาใต้เท้าคุณแล้ว (${f(Math.abs(dy) * 100)} ซม.)`, 2200);
 });
 $('#arAlongRidge').addEventListener('click', () => {
   const az = Math.round(((R.camAz || 0) % 180 + 180) % 180), cur = Math.round(L.rowAz), d = Math.abs(((az - cur + 90) % 180 + 180) % 180 - 90);
@@ -4414,7 +4438,7 @@ $('#arAlongRidge').addEventListener('click', () => {
   const toLL = o => o && sceneToLL(o.x, o.y), pLL = toLL(AR.pos), gLL = toLL(AR.gps), goLL = AR.gps && sceneToLL(AR.gps.x + AR.off.x, AR.gps.y + AR.off.y);
   onLayoutChanged();
   const back = ll => ll && llToScene(ll.lat, ll.lon);
-  if (pLL) AR.pos = back(pLL);
+  if (pLL) { AR.pos = back(pLL); AR.anchor = { ...AR.pos }; }
   if (gLL) { const g = back(gLL), go = back(goLL); AR.gps = { ...AR.gps, x: g.x, y: g.y }; AR.off = { x: go.x - g.x, y: go.y - g.y }; }
   arScene(); arApplyMode(); AR.tapeAt = null; arSave();
   arMsg(`เปลี่ยนแนวร่องเป็น ${rowName(az)} (${az}°) ตามร่องจริงแล้ว<br>ต่อไปกด 🟫 ฉันยืนบนร่องพอดี`, 3500);
@@ -4424,7 +4448,7 @@ $('#arCorner').addEventListener('click', () => {
   if (!AR.gps) return arMsg('ยังไม่มีสัญญาณ GPS', 2000);
   let best = 0, bd = Infinity; L.poly.forEach((p, i) => { const d = Math.hypot(p[0] - AR.gps.x, p[1] - AR.gps.y); if (d < bd) { bd = d; best = i; } });
   if (bd > 60) return arMsg(`มุมแปลงที่ใกล้ที่สุดอยู่ห่าง ${f(bd)} ม. — เดินไปยืนที่เสามุมก่อน`, 3000);
-  const p = L.poly[best]; AR.off = { x: p[0] - AR.gps.x, y: p[1] - AR.gps.y }; AR.pos = { x: p[0], y: p[1] }; arSave();
+  const p = L.poly[best]; AR.off = { x: p[0] - AR.gps.x, y: p[1] - AR.gps.y }; AR.pos = { x: p[0], y: p[1] }; AR.anchor = { x: p[0], y: p[1] }; arSave();
   arMsg(`ตั้งตำแหน่งตามเสามุมที่ ${best + 1} แล้ว (GPS คลาด ${f(bd, 1)} ม.)<br>ต่อไปหันไปหาเสามุมถัดไป แล้วลากให้เสาตรงกัน`, 3500);
 });
 $('#arLock').addEventListener('click', () => { AR.lock = !AR.lock; arMsg(AR.lock ? 'ล็อกตำแหน่งแล้ว — ภาพจะไม่ขยับตาม GPS ที่กระตุก' : 'ปลดล็อก — ภาพตามตำแหน่ง GPS', 1800); arInfo(); });

@@ -2528,14 +2528,8 @@ function canvasTex(size, draw) {
 function wrapDraw(x, s, px, py, fn) { for (const ox of [-s, 0, s]) for (const oy of [-s, 0, s]) { const X = px + ox, Y = py + oy; if (X > -20 && X < s + 20 && Y > -20 && Y < s + 20) fn(X, Y); } }
 function makeTextures() {
   const r = rng(11);
-  const soil = canvasTex(512, (x, s) => {
-    x.fillStyle = '#b4875a'; x.fillRect(0, 0, s, s);
-    for (let i = 0; i < 260; i++) { const px = r() * s, py = r() * s, rad = 18 + r() * 50, l = r(); x.fillStyle = l < 0.5 ? `rgba(120,80,48,${0.08 + r() * 0.1})` : `rgba(205,160,112,${0.08 + r() * 0.1})`; wrapDraw(x, s, px, py, (X, Y) => { x.beginPath(); x.ellipse(X, Y, rad, rad * (0.5 + r() * 0.5), r() * 3, 0, 7); x.fill(); }); }
-    for (let i = 0; i < 9000; i++) { const px = r() * s, py = r() * s, rad = 0.6 + r() * 2.4, l = r(); x.fillStyle = l < 0.55 ? `rgba(78,50,28,${0.15 + r() * 0.3})` : `rgba(232,200,156,${0.15 + r() * 0.3})`; wrapDraw(x, s, px, py, (X, Y) => { x.beginPath(); x.ellipse(X, Y, rad * (1 + r()), rad, r() * 3, 0, 7); x.fill(); }); }
-    for (let i = 0; i < 160; i++) { const px = r() * s, py = r() * s, rad = 3 + r() * 5; wrapDraw(x, s, px, py, (X, Y) => { x.fillStyle = 'rgba(60,38,20,.35)'; x.beginPath(); x.ellipse(X + 1.5, Y + 1.5, rad, rad * 0.75, 0, 0, 7); x.fill(); x.fillStyle = `rgba(${170 + r() * 40},${125 + r() * 30},${80 + r() * 20},.9)`; x.beginPath(); x.ellipse(X, Y, rad, rad * 0.75, r() * 3, 0, 7); x.fill(); }); }
-    for (let i = 0; i < 70; i++) { const px = r() * s, py = r() * s; wrapDraw(x, s, px, py, (X, Y) => { x.strokeStyle = 'rgba(150,120,70,.55)'; x.lineWidth = 1; x.beginPath(); x.moveTo(X, Y); x.lineTo(X + (r() - 0.5) * 14, Y + (r() - 0.5) * 14); x.stroke(); }); }
-  });
-  soil.repeat.set(1 / 2.5, 1 / 2.5);
+  const { soil, soilBump } = soilTextures(512, r);
+  soil.repeat.set(1 / 2, 1 / 2); soilBump.repeat.copy(soil.repeat);
   const grass = canvasTex(512, (x, s) => {
     x.fillStyle = '#6b8436'; x.fillRect(0, 0, s, s);
     for (let i = 0; i < 220; i++) { const px = r() * s, py = r() * s, rad = 20 + r() * 60; x.fillStyle = r() < 0.5 ? `rgba(150,150,70,${0.1 + r() * 0.12})` : `rgba(55,85,30,${0.1 + r() * 0.15})`; wrapDraw(x, s, px, py, (X, Y) => { x.beginPath(); x.ellipse(X, Y, rad, rad * 0.7, r() * 3, 0, 7); x.fill(); }); }
@@ -2544,7 +2538,47 @@ function makeTextures() {
       wrapDraw(x, s, px, py, (X, Y) => { x.beginPath(); x.moveTo(X, Y); x.lineTo(X + Math.cos(a) * len, Y + Math.sin(a) * len); x.stroke(); }); }
   });
   grass.repeat.set(1 / 6, 1 / 6);
-  return { soil, grass };
+  return { soil, soilBump, grass };
+}
+/* tileable value-noise fBm → sandy-loam colour + matching height (bump) map */
+function soilTextures(N, r) {
+  const lat = (g) => { const a = new Float32Array(g * g); for (let i = 0; i < a.length; i++) a[i] = r(); return a; };
+  const oct = [[4, 0.5], [8, 0.25], [16, 0.13], [32, 0.07], [64, 0.05]].map(([g, w]) => ({ g, w, L: lat(g) }));
+  const sm = t => t * t * (3 - 2 * t);
+  const noise = (u, v, o) => { const g = o.g, x = u * g, y = v * g, xi = Math.floor(x), yi = Math.floor(y), fx = sm(x - xi), fy = sm(y - yi), L = o.L, i0 = ((xi % g) + g) % g, j0 = ((yi % g) + g) % g, i1 = (i0 + 1) % g, j1 = (j0 + 1) % g;
+    const a = L[j0 * g + i0], b = L[j0 * g + i1], c = L[j1 * g + i0], d = L[j1 * g + i1]; return a + (b - a) * fx + (c - a) * fy + (a - b - c + d) * fx * fy; };
+  const red = { g: 6, w: 1, L: lat(6) };
+  const cc = document.createElement('canvas'), hc = document.createElement('canvas'); cc.width = cc.height = hc.width = hc.height = N;
+  const cx = cc.getContext('2d'), hx = hc.getContext('2d'), ci = cx.createImageData(N, N), hi = hx.createImageData(N, N);
+  const D = [122, 88, 58], Lt = [196, 160, 120], Rd = [168, 104, 70];
+  for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
+    const u = i / N, v = j / N; let h = 0; oct.forEach(o => h += noise(u, v, o) * o.w); h = clamp((h - 0.25) / 0.75, 0, 1);
+    const rr = noise(u, v, red), grain = (r() - 0.5) * 26, k = (j * N + i) * 4, t = Math.pow(h, 1.2);
+    for (let c = 0; c < 3; c++) { let val = D[c] + (Lt[c] - D[c]) * t; val += (Rd[c] - val) * clamp((rr - 0.55) * 1.4, 0, 0.35); ci.data[k + c] = clamp(val + grain, 0, 255); }
+    ci.data[k + 3] = 255; const hv = clamp(h * 200 + grain * 1.4, 0, 255); hi.data[k] = hi.data[k + 1] = hi.data[k + 2] = hv; hi.data[k + 3] = 255;
+  }
+  cx.putImageData(ci, 0, 0); hx.putImageData(hi, 0, 0);
+  // clods with a lit top and a soft shadow; straw bits
+  for (let n = 0; n < 900; n++) { const px = r() * N, py = r() * N, rad = 0.8 + Math.pow(r(), 3) * 6;
+    wrapDraw(cx, N, px, py, (X, Y) => { cx.fillStyle = 'rgba(60,40,24,.35)'; cx.beginPath(); cx.ellipse(X + rad * 0.35, Y + rad * 0.35, rad, rad * 0.8, 0, 0, 7); cx.fill();
+      const l = 118 + r() * 50; cx.fillStyle = `rgb(${l},${l * 0.76},${l * 0.54})`; cx.beginPath(); cx.ellipse(X, Y, rad * 0.9, rad * 0.75, r() * 3, 0, 7); cx.fill();
+      hx.fillStyle = `rgba(255,255,255,${0.5 + r() * 0.5})`; hx.beginPath(); hx.ellipse(X, Y, rad * 0.9, rad * 0.75, 0, 0, 7); hx.fill(); }); }
+  for (let n = 0; n < 55; n++) { const px = r() * N, py = r() * N, a = r() * 6.28, len = 5 + r() * 12;
+    wrapDraw(cx, N, px, py, (X, Y) => { cx.strokeStyle = `rgba(${190 + r() * 40},${160 + r() * 30},${100},.7)`; cx.lineWidth = 0.8 + r() * 0.8; cx.beginPath(); cx.moveTo(X, Y); cx.lineTo(X + Math.cos(a) * len, Y + Math.sin(a) * len); cx.stroke(); }); }
+  const mk = (c, srgb) => { const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 8; if (srgb) t.colorSpace = THREE.SRGBColorSpace; return t; };
+  return { soil: mk(cc, true), soilBump: mk(hc, false) };
+}
+/* natural ridge: flat-topped mound with skirts that blend into the furrow, darker (occluded) at the foot */
+function ridgeGeoReal() {
+  const NX = 10, prof = [-0.66, -0.56, -0.46, -0.36, -0.24, -0.12, 0, 0.12, 0.24, 0.36, 0.46, 0.56, 0.66], P = [], C = [], U = [], I = [], rr = rng(91);
+  const yAt = z => Math.abs(z) >= 0.5 ? -0.04 * (Math.abs(z) - 0.5) / 0.16 : 0.5 * Math.pow(1 - (2 * z) ** 2, 0.55);
+  for (let i = 0; i <= NX; i++) { const x = -0.5 + i / NX;
+    prof.forEach((z, j) => { const edge = Math.abs(z) > 0.3, jit = (rr() - 0.5) * (edge ? 0.12 : 0.05), zz = z + (edge ? (rr() - 0.5) * 0.05 : 0);
+      const y = yAt(zz) * (1 + jit) + (rr() - 0.5) * 0.02; P.push(x, y, zz);
+      const ao = clamp(0.62 + Math.max(0, y) / 0.5 * 0.42, 0.6, 1.04); C.push(ao, ao * 0.98, ao * 0.96); U.push(x * 2.2, zz * 0.7); }); }
+  const nz = prof.length; for (let i = 0; i < NX; i++) for (let j = 0; j < nz - 1; j++) { const a = i * nz + j, b = a + nz; I.push(a, a + 1, b, b, a + 1, b + 1); }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(P, 3)); g.setAttribute('color', new THREE.Float32BufferAttribute(C, 3)); g.setAttribute('uv', new THREE.Float32BufferAttribute(U, 2)); g.setIndex(I); g.computeVertexNormals();
+  g.userData.yAt = yAt; return g;
 }
 
 /* --- geometry builders --- */
@@ -2759,7 +2793,7 @@ function build3D() {
   }
   const P = new THREE.BufferAttribute(pos, 3), U = new THREE.BufferAttribute(uv, 2);
   const mk = (idx, col, mat) => { const tg = new THREE.BufferGeometry(); tg.setAttribute('position', P); tg.setAttribute('uv', U); tg.setAttribute('color', new THREE.BufferAttribute(col, 3)); tg.setIndex(idx); tg.computeVertexNormals(); const m = new THREE.Mesh(tg, mat); m.receiveShadow = true; g.add(m); return m; };
-  R.fieldMat = mk(iF, cF, STD({ map: R.tex.soil, vertexColors: true, roughness: 0.95 })).material;
+  R.fieldMesh = mk(iF, cF, STD({ map: R.tex.soil, bumpMap: R.tex.soilBump, bumpScale: 2.5, vertexColors: true, roughness: 0.97 })); R.fieldMat = R.fieldMesh.material;
   R.fakeScenery = [mk(iG, cG, STD({ map: R.tex.grass, vertexColors: true, roughness: 1 }))];
   R.grassMat = far.material;
   // boundary markers (concrete posts with red tops)
@@ -2782,13 +2816,11 @@ function build3D() {
   const chunks = [];
   const rowStep = R.rowStep = Math.max(1, Math.ceil(L.tape / 4 / 16000)), chunkLen = Math.max(3, Math.min(6, L.tape / rowStep / 16000)); L.rows.forEach((r, ri) => ri % rowStep ? 0 : r.segs.forEach(s => { const n = Math.max(1, Math.ceil(s.len / chunkLen)); for (let k = 0; k < n; k++) { const xa = s.x1 + s.len * k / n, xb = s.x1 + s.len * (k + 1) / n; chunks.push({ xa, xb, y: r.y, zone: r.zone, ha: hz(xa, r.y), hb: hz(xb, r.y) }); } }));
   R.chunks = chunks;
-  const rw = st.rowSp * 0.62, rh = 0.16, tOff = Math.min(0.1, rw * 0.3), tY = rh * Math.sqrt(1 - (tOff / (rw / 2)) ** 2);
+  const ridgeGeo = ridgeGeoReal(), rw = st.rowSp * 0.62, rh = 0.16, tOff = Math.min(0.1, rw * 0.3), tY = rh * 2 * ridgeGeo.userData.yAt(tOff / rw) - 0.004;
   R.tapeY = tY; R.tapeOff = tOff;
-  const ridgeGeo = new THREE.CylinderGeometry(0.5, 0.5, 1, 12, 1, true).rotateZ(Math.PI / 2);
-  const uvR = ridgeGeo.attributes.uv; for (let i = 0; i < uvR.count; i++) uvR.setXY(i, uvR.getX(i) * 1.2, uvR.getY(i) * 1.2);
-  const tapeGeo = new THREE.CylinderGeometry(0.008, 0.008, 1, 6).rotateZ(Math.PI / 2); tapeGeo.scale(1, 0.55, 2.2);
-  const ridge = new THREE.InstancedMesh(ridgeGeo, STD({ map: R.tex.soil, roughness: 0.95 }), chunks.length);
-  const tape = new THREE.InstancedMesh(tapeGeo, STD({ color: '#ffffff', roughness: 0.35 }), chunks.length);
+  const tapeGeo = new THREE.CylinderGeometry(0.008, 0.008, 1, 8).rotateZ(Math.PI / 2); tapeGeo.scale(1, 0.45, 2.4);   // flat-lying thin-wall tape
+  const ridge = new THREE.InstancedMesh(ridgeGeo, STD({ map: R.tex.soil, bumpMap: R.tex.soilBump, bumpScale: 3, vertexColors: true, roughness: 0.97 }), chunks.length);
+  const tape = new THREE.InstancedMesh(tapeGeo, STD({ color: '#ffffff', roughness: 0.3, metalness: 0.05, envMapIntensity: 1.2 }), chunks.length);
   const mtx = new THREE.Matrix4(), q = new THREE.Quaternion(), Z = V(0, 0, 1);
   chunks.forEach((c, i) => {
     const dx = c.xb - c.xa, dh = c.hb - c.ha, len = Math.hypot(dx, dh) + 0.04; q.setFromAxisAngle(Z, Math.atan2(dh, dx));
@@ -2798,6 +2830,20 @@ function build3D() {
   });
   ridge.receiveShadow = true; tape.receiveShadow = true;
   g.add(ridge, tape); R.ridge = ridge; R.tape = tape;
+  { // furrow detail: soil clods and a few weeds (sparse, capped for phones)
+    const rr = rng(17), capC = R.quality === 'high' ? 6000 : 2500, capW = R.quality === 'high' ? 2500 : 1200, per = Math.max(1, Math.ceil(L.tape / 0.8 / capC));
+    const cg = new THREE.DodecahedronGeometry(1, 0); cg.scale(1, 0.55, 1);
+    const clods = new THREE.InstancedMesh(cg, STD({ map: R.tex.soil, bumpMap: R.tex.soilBump, bumpScale: 2, roughness: 1, color: '#86705a' }), capC);
+    const weeds = R.tuft ? new THREE.InstancedMesh(R.tuft, STD({ vertexColors: true, roughness: 0.8, side: THREE.DoubleSide, color: '#9fb07a' }), capW) : null;
+    const m4 = new THREE.Matrix4(), qq = new THREE.Quaternion(), e = new THREE.Euler(); let nc = 0, nw = 0, k = 0;
+    L.rows.forEach((r, ri) => { if (ri % R.rowStep) return; r.segs.forEach(sg => { for (let x = sg.x1 + rr() * 0.8; x < sg.x2; x += 0.8) { if (k++ % per) continue;
+      if (nc < capC) { const side = rr() < 0.5 ? -1 : 1, y = r.y + side * (st.rowSp * (0.31 + rr() * 0.17)), sc = 0.018 + Math.pow(rr(), 3) * 0.05; e.set(rr() * 3, rr() * 3, rr() * 3); qq.setFromEuler(e);
+        m4.compose(V(x + (rr() - 0.5) * 0.4, hz(x, y) + sc * 0.2, -y), qq, V(sc, sc, sc)); clods.setMatrixAt(nc++, m4); }
+      if (weeds && nw < capW && rr() < 0.09) { const y = r.y + st.rowSp / 2 + (rr() - 0.5) * 0.15, sc = 0.25 + rr() * 0.35; qq.setFromAxisAngle(V(0, 1, 0), rr() * 6.28); m4.compose(V(x, hz(x, y), -y), qq, V(sc, sc * (0.6 + rr() * 0.6), sc)); weeds.setMatrixAt(nw++, m4); }
+    } }); });
+    clods.count = nc; clods.receiveShadow = true; clods.userData.arHide = true; g.add(clods);
+    if (weeds) { weeds.count = nw; weeds.userData.arHide = true; g.add(weeds); }
+  }
   R.wet = L.zones.map(() => 0); R.wetShown = L.zones.map(() => -1);
   paintRidges(true);
   // connectors, submain, takeoffs
@@ -2908,11 +2954,23 @@ function buildPlants() {
     if (!pos.length) return;
     const st1 = new THREE.InstancedMesh(R.plantGeos[vi].stem, stemM, pos.length), lf = new THREE.InstancedMesh(R.plantGeos[vi].leaf, R.leafMat, pos.length);
     st1.userData.shared = lf.userData.shared = true;
-    const inst = pos.map(([x, y]) => ({ x, y, base: hz(x, y) + R.tapeY * 0.85, s: 0.82 + rand() * 0.36, yaw: rand() * 6.28, sx: 0.9 + rand() * 0.25, sz: 0.9 + rand() * 0.25 }));
+    const inst = pos.map(([x, y]) => ({ x, y, base: hz(x, y) + R.tapeY * 0.85, s: 0.82 + rand() * 0.36, yaw: rand() * 6.28, sx: 0.9 + rand() * 0.25, sz: 0.9 + rand() * 0.25, lean: rand() * 0.09, la: rand() * 6.28 }));
     inst.forEach((_, i) => { col.setHSL(0, 0, 0.8 + rand() * 0.25); lf.setColorAt(i, col); });
     lf.castShadow = hi; st1.castShadow = hi; lf.receiveShadow = true;
     pg.add(st1, lf); R.pMeshes.push({ st1, lf, inst });
   });
+  // far-away canopy: a leafy layer over the field that fades out near the camera (sparse instanced plants read as bare soil from afar)
+  if (R.fieldMesh) {
+    const W2 = 256, cv = document.createElement('canvas'); cv.width = cv.height = W2; const x = cv.getContext('2d'), rr = rng(5), band = W2 / 3;
+    for (let b = 0; b < 3; b++) for (let n = 0; n < 420; n++) { const px = rr() * W2, py = b * band + band / 2 + (rr() - 0.5) * band * 0.95, rad = 3 + rr() * 7, g = rr();
+      x.fillStyle = g < 0.45 ? `rgba(47,90,36,.95)` : g < 0.8 ? `rgba(58,104,42,.95)` : g < 0.95 ? `rgba(84,128,52,.95)` : `rgba(120,96,60,.9)`;
+      wrapDraw(x, W2, px, py, (X, Y) => { x.beginPath(); x.ellipse(X, Y, rad, rad * (0.6 + rr() * 0.4), rr() * 3, 0, 7); x.fill(); }); }
+    const tx = new THREE.CanvasTexture(cv); tx.wrapS = tx.wrapT = THREE.RepeatWrapping; tx.colorSpace = THREE.SRGBColorSpace; tx.anisotropy = 8; tx.repeat.set(1 / (st.rowSp * 3), 1 / (st.rowSp * 3));
+    const cm = STD({ map: tx, transparent: true, depthWrite: false, roughness: 0.8, side: THREE.DoubleSide });
+    cm.onBeforeCompile = sh => { sh.vertexShader = 'varying float vCanD;\n' + sh.vertexShader.replace('#include <project_vertex>', '#include <project_vertex>\n vCanD = length(mvPosition.xyz);');
+      sh.fragmentShader = 'varying float vCanD;\n' + sh.fragmentShader.replace('#include <dithering_fragment>', '#include <dithering_fragment>\n gl_FragColor.a *= smoothstep(16.0, 55.0, vCanD);'); };
+    const can = new THREE.Mesh(R.fieldMesh.geometry, cm); can.userData.shared = true; can.userData.arHide = true; can.renderOrder = 2; can.receiveShadow = true; pg.add(can); R.canopy = can;
+  }
   R.plantDap = null; updatePlantGrowth();
 }
 // rescale every plant for a crop age (today, or the age chosen on the growth slider)
@@ -2925,12 +2983,13 @@ function updatePlantGrowth() {
   R.pMeshes.forEach(({ st1, lf, inst }) => {
     inst.forEach((p, i) => {
       if (h <= 0 || (p.g ?? (p.g = Math.random())) > germ) { st1.setMatrixAt(i, zero); lf.setMatrixAt(i, zero); return; }
-      const s = h * p.s; q.setFromAxisAngle(Y, p.yaw); m.compose(V(p.x, p.base, -p.y), q, V(s * p.sx, s, s * p.sz));
+      const s = h * p.s; q.setFromAxisAngle(Y, p.yaw); if (p.lean) q.premultiply(new THREE.Quaternion().setFromAxisAngle(V(Math.cos(p.la), 0, Math.sin(p.la)), p.lean)); m.compose(V(p.x, p.base, -p.y), q, V(s * p.sx, s, s * p.sz));
       st1.setMatrixAt(i, m); lf.setMatrixAt(i, m);
     });
     st1.instanceMatrix.needsUpdate = true; lf.instanceMatrix.needsUpdate = true;
     st1.computeBoundingSphere(); lf.computeBoundingSphere();
   });
+  if (R.canopy) { const gw = growthAt(dap), cover = h <= 0 ? 0 : clamp(1 - Math.exp(-0.65 * (gw.lai || 0)), 0, 0.93); R.canopy.visible = cover > 0.08; R.canopy.material.opacity = Math.min(1, cover * 1.15); R.canopy.position.y = (R.tapeY || 0.15) + h * 0.7; }
   updateStressLook();
 }
 function updateStressLook() {
@@ -2967,13 +3026,13 @@ function updateLighting(force) {
   const day = clamp((el + 4) / 16, 0, 1), low = clamp(el / 25, 0, 1), night = 1 - day, rk = R.rainK || 0;
   const span = R.span || 100, tgt = R.sun.target.position;
   R.sun.position.copy(tgt).add(dir.clone().multiplyScalar(span * 2 + 100)); R.sun.color.set('#ffae66').lerp(new THREE.Color('#fff4e2'), low);
-  R.sun.intensity = 3.2 * clamp((el + 2) / 12, 0, 1) * (1 - 0.8 * rk);
+  R.sun.intensity = 3.9 * clamp((el + 2) / 12, 0, 1) * (1 - 0.8 * rk);
   // moonlight keeps the field readable at night
   R.moon.position.copy(tgt).add(V(-0.35, 1, 0.45).normalize().multiplyScalar(span * 2 + 100)); R.moon.target.position.copy(tgt);
   R.moon.intensity = 1.5 * night * (1 - 0.4 * rk);
-  R.hemi.intensity = 0.62 * day + 1.05 * night; R.hemi.color.set('#b4c6ef').lerp(new THREE.Color('#e3edff'), day).lerp(new THREE.Color('#c9cfd6'), rk * 0.7);
+  R.hemi.intensity = 0.5 * day + 1.05 * night; R.hemi.color.set('#b4c6ef').lerp(new THREE.Color('#e3edff'), day).lerp(new THREE.Color('#c9cfd6'), rk * 0.7);
   R.hemi.groundColor.set('#40444f').lerp(new THREE.Color('#5a4a32'), day);
-  R.renderer.toneMappingExposure = (0.5 + night * 0.35) * (1 - 0.12 * rk);
+  R.renderer.toneMappingExposure = (0.56 + night * 0.3) * (1 - 0.12 * rk);
   const su = R.sky.material.uniforms; su.turbidity.value = 7 + 13 * rk; su.rayleigh.value = 1.5 - 1.2 * rk; su.mieCoefficient.value = 0.004 + 0.02 * rk;
   const se = R.skyEnv.material.uniforms; se.turbidity.value = su.turbidity.value; se.rayleigh.value = su.rayleigh.value; se.mieCoefficient.value = su.mieCoefficient.value;
   const fog = new THREE.Color('#2b3a57').lerp(new THREE.Color('#e3b48c'), day).lerp(new THREE.Color('#c9d5de'), low).lerp(new THREE.Color(day > 0.5 ? '#9aa3aa' : '#323a48'), rk * 0.8);
@@ -4417,7 +4476,7 @@ function arApplyMode() {
   const sim = AR.mode === 'sim';
   document.body.classList.toggle('arsim', sim);
   const hide = new Set([R.grassMat, R.fieldMat]);
-  R.group.traverse(o => { if (o.material && hide.has(o.material)) o.visible = sim; });
+  R.group.traverse(o => { if ((o.material && hide.has(o.material)) || o.userData.arHide) o.visible = sim; });
   const satOn = SAT.on && R.satMesh && SAT.state === 'ok';
   if (R.satMesh) R.satMesh.visible = sim && !!satOn; (R.fakeScenery || []).forEach(o => o.visible = sim && !satOn);
   [R.tape, R.water].forEach(o => { if (o) o.visible = sim; });
@@ -5094,7 +5153,7 @@ function arMsg(html, ms) { const m = $('#arMsg'); m.innerHTML = html; m.style.di
 /* hide the model ground and scenery; add bright overlays that read well over a camera picture */
 function arScene() {
   const hide = new Set([R.grassMat, R.fieldMat]);
-  R.group.traverse(o => { if (o.material && hide.has(o.material)) o.visible = false; if (o.isSprite) o.visible = false; });
+  R.group.traverse(o => { if (o.material && hide.has(o.material)) o.visible = false; if (o.isSprite || o.userData.arHide) o.visible = false; });
   [R.tape, R.water, R.satMesh, R.contours, ...(R.fakeScenery || [])].forEach(o => { if (o) o.visible = false; });
   if (R.ridge) { R.ridgeMat0 = R.ridge.material; R.ridgeMatAR = R.ridge.material.clone(); R.ridgeMatAR.transparent = true; R.ridgeMatAR.opacity = 0.62; R.ridge.material = R.ridgeMatAR; }
   if (R.plantG) R.plantG.visible = R.showPlants;

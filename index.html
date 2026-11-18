@@ -61,12 +61,14 @@ body.ar #arUI{display:block;position:absolute;inset:0;z-index:5;pointer-events:n
 .arInfo b{font-size:15px}.arInfo small{opacity:.75}
 #arMap{position:absolute;left:10px;bottom:calc(env(safe-area-inset-bottom) + 92px);width:120px;height:120px;border-radius:16px;background:rgba(10,20,14,.55)}
 .arMsg{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);max-width:82%;background:rgba(10,20,14,.72);color:#fff;border-radius:14px;padding:12px 16px;text-align:center;font-size:14px;line-height:1.5}
-.arBar{position:absolute;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom) + 12px);display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.arBar button{border:0;border-radius:16px;background:rgba(255,255,255,.92);color:#16241a;font-size:12px;font-weight:600;padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:62px;justify-content:center}
+.arBar{position:absolute;left:8px;right:8px;bottom:calc(env(safe-area-inset-bottom) + 12px);display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.arBar button{border:0;border-radius:16px;background:rgba(255,255,255,.92);color:#16241a;font-size:11.5px;font-weight:600;padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:62px;justify-content:center}
 .arBar button span{font-size:22px;line-height:1}.arBar button.on{background:#1e7a45;color:#fff}.arBar button.w{background:#1d6fd6;color:#fff}.arBar button.w.on{background:#c0392b}
 .arCal{position:absolute;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom) + 86px);background:rgba(255,255,255,.95);border-radius:18px;padding:12px;pointer-events:auto;color:#16241a}
 .arCalT{font-size:13px;margin-bottom:8px;text-align:center}.arCalT small{color:#5d6b60}
 .arRow{display:flex;gap:6px;justify-content:center;align-items:center;margin-top:6px}.arRow button{flex:1;border:1px solid #d6ddd3;background:#f4f7f2;border-radius:12px;padding:9px 4px;font-size:13px;font-weight:600}
+.arPad span{font-size:12px;color:#5d6b60;white-space:nowrap}.arPad button{max-width:56px}
+body.ar.arsim #arVid{display:none}
 .arRow b{min-width:48px;text-align:center;font-family:'IBM Plex Mono',monospace}.arRow button.ok{background:#1e7a45;color:#fff;border-color:#1e7a45}.arRow button.wide{flex:1}
 .vtools button.arbtn{background:#1d6fd6;color:#fff}.vtools button.arbtn span,.vtools button.arbtn .ic{color:#fff;stroke:#fff}
 .panel{overflow:auto;padding:16px 16px 40px;border-left:1px solid var(--line)}
@@ -1332,6 +1334,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div class="arCalT">ลากนิ้ว ซ้าย–ขวา บนจอ เพื่อหมุนภาพให้ตรงกับของจริง<br><small>เทียบกับเสามุมแปลง หรือแนวร่องที่เห็นในกล้อง</small></div>
         <div class="arRow"><button data-rot="-5">↺ 5°</button><button data-rot="-1">↺ 1°</button><b id="arRotV">0°</b><button data-rot="1">1° ↻</button><button data-rot="5">5° ↻</button></div>
         <div class="arRow"><button data-zoom="-1">ภาพเล็กลง</button><button data-zoom="1">ภาพใหญ่ขึ้น</button></div>
+        <div class="arRow"><button id="arOnRidge">🟫 ฉันยืนบนร่องพอดี</button><button id="arAlongRidge">↕ ร่องจริงไปทางที่หัน</button></div>
+        <div class="arRow arPad"><span>เลื่อนภาพ</span><button data-nud="l">◀</button><button data-nud="f">▲</button><button data-nud="b">▼</button><button data-nud="r">▶</button></div>
         <div class="arRow"><button id="arCorner" class="wide">📌 ตอนนี้ฉันยืนที่เสามุมแปลง</button></div>
         <div class="arRow"><button id="arReset">รีเซ็ต</button><button id="arCalDone" class="ok">เสร็จ</button></div>
       </div>
@@ -1340,6 +1344,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <button id="arLock"><span>📍</span>ล็อกตำแหน่ง</button>
         <button id="arWater" class="w"><span>💧</span>เปิดน้ำโซนนี้</button>
         <button id="arPlants"><span>🌱</span>ต้นมัน</button>
+        <button id="arMode"><span>🧩</span>ภาพจำลอง</button>
       </div>
     </div>
     <div class="empty" id="empty2d"><div class="welcome">
@@ -4222,12 +4227,16 @@ function startAR() {
   // iOS: motion permission must be asked inside the tap, before anything awaits
   const pOri = (typeof DeviceOrientationEvent !== 'undefined' && DeviceOrientationEvent.requestPermission) ? DeviceOrientationEvent.requestPermission().catch(() => 'denied') : Promise.resolve('granted');
   const pCam = navigator.mediaDevices && navigator.mediaDevices.getUserMedia ? navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } } }).catch(e => ({ err: e })) : Promise.resolve({ err: { name: 'NoAPI' } });
-  Object.assign(AR, { on: true, ori: null, hasAbs: false, yawC: null, user: 0, fovK: 1, pos: null, gps: null, off: { x: 0, y: 0 }, lock: false, look: { yaw: 0, pitch: -8 }, msgT: 0, prev: { vex: R.vex, day: R.dayLock, plants: R.showPlants, follow: R.follow } });
+  const cal = (S.ui && S.ui.arCal) || {};
+  Object.assign(AR, { on: true, mode: 'mix', ori: null, hasAbs: false, yawC: null, user: cal.user || 0, fovK: cal.fovK || 1, pos: null, gps: null, gpsN: 0, off: cal.off || { x: 0, y: 0 }, lock: false, look: { yaw: 0, pitch: -8 }, msgT: 0, prev: { vex: R.vex, day: R.dayLock, plants: R.showPlants, follow: R.follow } });
   document.body.classList.add('ar'); R.showPlants = false; R.follow = false; R.tween = null; R.controls.enabled = false;
-  R.vex = 1; R.dayLock = true; build3D(); arScene();
+  R.vex = 1; R.dayLock = true; build3D(); arScene(); arApplyMode();
   window.addEventListener('deviceorientationabsolute', arOri); window.addEventListener('deviceorientation', arOri);
   if (navigator.geolocation) AR.watch = navigator.geolocation.watchPosition(p => {
-    const q = llToScene(p.coords.latitude, p.coords.longitude); AR.gps = { x: q.x, y: q.y, acc: p.coords.accuracy, t: Date.now() };
+    const q = llToScene(p.coords.latitude, p.coords.longitude), acc = p.coords.accuracy || 20, o = AR.gps;
+    if (o && acc > 25 && o.acc < acc && Date.now() - o.t < 15000) return;   // keep the better fix
+    const w = o ? clamp(o.acc / (o.acc + acc), 0.25, 0.85) : 1;
+    AR.gps = o ? { x: o.x + (q.x - o.x) * w, y: o.y + (q.y - o.y) * w, acc, t: Date.now() } : { x: q.x, y: q.y, acc, t: Date.now() }; AR.gpsN++;
   }, e => { AR.gpsErr = e.code === 1 ? 'ไม่ได้อนุญาตตำแหน่ง' : 'หา GPS ไม่เจอ'; }, { enableHighAccuracy: true, maximumAge: 1000, timeout: 20000 });
   else AR.gpsErr = 'เครื่องนี้ไม่มี GPS';
   pOri.then(r => { AR.oriPerm = r; });
@@ -4246,17 +4255,39 @@ function stopAR() {
   window.removeEventListener('deviceorientationabsolute', arOri); window.removeEventListener('deviceorientation', arOri);
   if (AR.watch != null) navigator.geolocation.clearWatch(AR.watch); AR.watch = null;
   if (AR.stream) AR.stream.getTracks().forEach(t => t.stop()); AR.stream = null; $('#arVid').srcObject = null;
-  document.body.classList.remove('ar'); $('#arCalP').style.display = 'none';
+  document.body.classList.remove('ar', 'arsim'); $('#arCalP').style.display = 'none';
   R.vex = AR.prev.vex; R.dayLock = AR.prev.day; R.showPlants = AR.prev.plants; R.controls.enabled = true; R.camera.fov = 40; R.camera.updateProjectionMatrix();
   R.renderer.setClearColor(0x000000, 0); [R.sky, R.stars, R.sunSpr, R.moonSpr].forEach(o => { if (o) o.visible = true; });
   build3D(); applySatVisibility(); R.envHour = -99; updateLighting(true);
 }
+function arApplyMode() {
+  const sim = AR.mode === 'sim';
+  document.body.classList.toggle('arsim', sim);
+  const hide = new Set([R.grassMat, R.fieldMat]);
+  R.group.traverse(o => { if (o.material && hide.has(o.material)) o.visible = sim; });
+  const satOn = SAT.on && R.satMesh && SAT.state === 'ok';
+  if (R.satMesh) R.satMesh.visible = sim && !!satOn; (R.fakeScenery || []).forEach(o => o.visible = sim && !satOn);
+  [R.tape, R.water].forEach(o => { if (o) o.visible = sim; });
+  if (R.ridge) R.ridge.material = sim ? R.ridgeMat0 : R.ridgeMatAR;
+  if (R.arTape) R.arTape.visible = !sim;
+  if (R.arG) R.arG.children.forEach(o => { if (o !== R.arTape && o.isMesh) o.visible = !sim; });
+  R.sky.visible = sim;
+  R.renderer.setClearColor(0x000000, sim ? 1 : 0);
+  R.envHour = -99; updateLighting(true);
+  if (!sim && R.scene.fog) { R.scene.fog.near = 1e6; R.scene.fog.far = 2e6; }
+  [R.stars, R.sunSpr, R.moonSpr, R.sunPathG].forEach(o => { if (o) o.visible = false; });
+  const b = $('#arMode'); b.innerHTML = sim ? '<span>🎥</span>ภาพกล้อง' : '<span>🧩</span>ภาพจำลอง'; b.classList.toggle('on', sim);
+}
+function arSave() { S.ui = { ...(S.ui || {}), arCal: { user: AR.user, fovK: AR.fovK, off: AR.off } }; save(); }
+function arFwd() { const h = (R.camAz || 0) * RAD, c = Math.cos(-L.ang), s2 = Math.sin(-L.ang); // heading → field-frame (x, y) unit vector
+  const n = [-s2, c], e = [c, s2]; return [e[0] * Math.sin(h) + n[0] * Math.cos(h), e[1] * Math.sin(h) + n[1] * Math.cos(h)]; }
 function arMsg(html, ms) { const m = $('#arMsg'); m.innerHTML = html; m.style.display = ''; clearTimeout(AR.msgTO); AR.msgTO = setTimeout(() => { m.style.display = 'none'; }, ms || 3000); }
 /* hide the model ground and scenery; add bright overlays that read well over a camera picture */
 function arScene() {
   const hide = new Set([R.grassMat, R.fieldMat]);
-  R.group.traverse(o => { if (o.material && hide.has(o.material)) o.visible = false; });
-  [R.ridge, R.tape, R.water, R.satMesh, R.contours, ...(R.fakeScenery || [])].forEach(o => { if (o) o.visible = false; });
+  R.group.traverse(o => { if (o.material && hide.has(o.material)) o.visible = false; if (o.isSprite) o.visible = false; });
+  [R.tape, R.water, R.satMesh, R.contours, ...(R.fakeScenery || [])].forEach(o => { if (o) o.visible = false; });
+  if (R.ridge) { R.ridgeMat0 = R.ridge.material; R.ridgeMatAR = R.ridge.material.clone(); R.ridgeMatAR.transparent = true; R.ridgeMatAR.opacity = 0.62; R.ridge.material = R.ridgeMatAR; }
   if (R.plantG) R.plantG.visible = R.showPlants;
   [R.sky, R.stars, R.sunSpr, R.moonSpr, R.sunPathG].forEach(o => { if (o) o.visible = false; });
   if (R.scene.fog) { R.scene.fog.near = 1e6; R.scene.fog.far = 2e6; }
@@ -4283,7 +4314,7 @@ function arTape(cx, cy) {
   if (R.arTape) { R.arTape.geometry.dispose(); R.arTape.material.dispose(); R.arG.remove(R.arTape); }
   const P = [], C = [], cc = new THREE.Color(), RAD2 = 45 * 45, white = new THREE.Color('#ffffff');
   (R.chunks || []).forEach(c => { const mx = (c.xa + c.xb) / 2; if ((mx - cx) ** 2 + (c.y - cy) ** 2 > RAD2) return; const d = Math.sqrt((mx - cx) ** 2 + (c.y - cy) ** 2), a = clamp(1 - d / 45, 0.2, 1);
-    cc.set(ZC[c.zone % ZC.length]).lerp(white, 0.3).multiplyScalar(a); const y = -(c.y - (R.tapeOff || 0)); P.push(c.xa, c.ha + 0.03, y, c.xb, c.hb + 0.03, y); C.push(cc.r, cc.g, cc.b, cc.r, cc.g, cc.b); });
+    cc.set(ZC[c.zone % ZC.length]).lerp(white, 0.3).multiplyScalar(a); const y = -(c.y - (R.tapeOff || 0)), th = (R.tapeY || 0.15) + 0.015; P.push(c.xa, c.ha + th, y, c.xb, c.hb + th, y); C.push(cc.r, cc.g, cc.b, cc.r, cc.g, cc.b); });
   const tg = new THREE.BufferGeometry(); tg.setAttribute('position', new THREE.Float32BufferAttribute(P, 3)); tg.setAttribute('color', new THREE.Float32BufferAttribute(C, 3));
   R.arTape = new THREE.LineSegments(tg, new THREE.LineBasicMaterial({ vertexColors: true, toneMapped: false, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false })); R.arG.add(R.arTape);
   AR.tapeAt = { x: cx, y: cy };
@@ -4365,13 +4396,35 @@ $('#tAR').addEventListener('click', startAR);
 $('#arExit').addEventListener('click', stopAR);
 $('#arCal').addEventListener('click', () => { const p = $('#arCalP'); p.style.display = p.style.display === 'none' ? '' : 'none'; $('#arCal').classList.toggle('on', p.style.display === ''); });
 $('#arCalDone').addEventListener('click', () => { $('#arCalP').style.display = 'none'; $('#arCal').classList.remove('on'); });
-$('#arCalP').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.rot) AR.user += +b.dataset.rot; if (b.dataset.zoom) AR.fovK = clamp(AR.fovK * (b.dataset.zoom > 0 ? 1.05 : 1 / 1.05), 0.6, 1.6); arInfo(); });
-$('#arReset').addEventListener('click', () => { AR.user = 0; AR.fovK = 1; AR.off = { x: 0, y: 0 }; AR.lock = false; arMsg('รีเซ็ตการปรับทั้งหมดแล้ว', 1500); arInfo(); });
+$('#arCalP').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.rot) AR.user += +b.dataset.rot; if (b.dataset.zoom) AR.fovK = clamp(AR.fovK * (b.dataset.zoom > 0 ? 1.05 : 1 / 1.05), 0.6, 1.6);
+  if (b.dataset.nud) { const [fx, fy] = arFwd(), st = 0.25, m = { f: [fx, fy], b: [-fx, -fy], r: [fy, -fx], l: [-fy, fx] }[b.dataset.nud]; AR.off.x += m[0] * st; AR.off.y += m[1] * st; if (AR.pos) { AR.pos.x += m[0] * st; AR.pos.y += m[1] * st; } }
+  arSave(); arInfo(); });
+$('#arMode').addEventListener('click', () => { AR.mode = AR.mode === 'sim' ? 'mix' : 'sim'; arApplyMode(); arMsg(AR.mode === 'sim' ? 'ภาพจำลองเต็ม — หันมือถือไปทางไหน ภาพก็หันตาม ณ จุดที่คุณยืน' : 'ภาพกล้อง + ร่องมันจำลองซ้อนบนของจริง', 2200); });
+$('#arOnRidge').addEventListener('click', () => {
+  if (!AR.pos) return; let best = null, bd = Infinity; L.rows.forEach(r => { const d = Math.abs(r.y - AR.pos.y); if (d < bd) { bd = d; best = r; } });
+  if (!best || bd > S.set.rowSp) return arMsg('ไม่พบร่องใกล้ตัว — เข้าไปยืนในแปลงก่อน', 2000);
+  const dy = best.y - AR.pos.y; AR.off.y += dy; AR.pos.y += dy; arSave(); arMsg(`เลื่อนร่องจำลองมาใต้เท้าคุณแล้ว (${f(Math.abs(dy) * 100)} ซม.)`, 2200);
+});
+$('#arAlongRidge').addEventListener('click', () => {
+  const az = Math.round(((R.camAz || 0) % 180 + 180) % 180), cur = Math.round(L.rowAz), d = Math.abs(((az - cur + 90) % 180 + 180) % 180 - 90);
+  if (d < 2) return arMsg(`แนวร่องตรงกับของจริงอยู่แล้ว (${cur}°)`, 2000);
+  S.set.rowDir = 'custom'; S.set.rowAng = az; $('#sRowDir').value = 'custom'; $('#sRowAng').value = az; $('#rowAngWrap').style.display = ''; save();
+  // keep where you stand: field frame changes with the row direction
+  const toLL = o => o && sceneToLL(o.x, o.y), pLL = toLL(AR.pos), gLL = toLL(AR.gps), goLL = AR.gps && sceneToLL(AR.gps.x + AR.off.x, AR.gps.y + AR.off.y);
+  onLayoutChanged();
+  const back = ll => ll && llToScene(ll.lat, ll.lon);
+  if (pLL) AR.pos = back(pLL);
+  if (gLL) { const g = back(gLL), go = back(goLL); AR.gps = { ...AR.gps, x: g.x, y: g.y }; AR.off = { x: go.x - g.x, y: go.y - g.y }; }
+  arScene(); arApplyMode(); AR.tapeAt = null; arSave();
+  arMsg(`เปลี่ยนแนวร่องเป็น ${rowName(az)} (${az}°) ตามร่องจริงแล้ว<br>ต่อไปกด 🟫 ฉันยืนบนร่องพอดี`, 3500);
+});
+$('#arReset').addEventListener('click', () => { AR.user = 0; AR.fovK = 1; AR.off = { x: 0, y: 0 }; AR.lock = false; arSave(); arMsg('รีเซ็ตการปรับทั้งหมดแล้ว', 1500); arInfo(); });
 $('#arCorner').addEventListener('click', () => {
   if (!AR.gps) return arMsg('ยังไม่มีสัญญาณ GPS', 2000);
   let best = 0, bd = Infinity; L.poly.forEach((p, i) => { const d = Math.hypot(p[0] - AR.gps.x, p[1] - AR.gps.y); if (d < bd) { bd = d; best = i; } });
   if (bd > 60) return arMsg(`มุมแปลงที่ใกล้ที่สุดอยู่ห่าง ${f(bd)} ม. — เดินไปยืนที่เสามุมก่อน`, 3000);
-  const p = L.poly[best]; AR.off = { x: p[0] - AR.gps.x, y: p[1] - AR.gps.y }; AR.pos = { x: p[0], y: p[1] };
+  const p = L.poly[best]; AR.off = { x: p[0] - AR.gps.x, y: p[1] - AR.gps.y }; AR.pos = { x: p[0], y: p[1] }; arSave();
   arMsg(`ตั้งตำแหน่งตามเสามุมที่ ${best + 1} แล้ว (GPS คลาด ${f(bd, 1)} ม.)<br>ต่อไปหันไปหาเสามุมถัดไป แล้วลากให้เสาตรงกัน`, 3500);
 });
 $('#arLock').addEventListener('click', () => { AR.lock = !AR.lock; arMsg(AR.lock ? 'ล็อกตำแหน่งแล้ว — ภาพจะไม่ขยับตาม GPS ที่กระตุก' : 'ปลดล็อก — ภาพตามตำแหน่ง GPS', 1800); arInfo(); });
@@ -4386,7 +4439,7 @@ $('#arWater').addEventListener('click', () => {
   el.addEventListener('pointerdown', e => { if (AR.on) d = { x: e.clientX, y: e.clientY }; });
   window.addEventListener('pointermove', e => { if (!AR.on || !d) return; const dx = e.clientX - d.x, dy = e.clientY - d.y; d = { x: e.clientX, y: e.clientY };
     if (AR.ori) AR.user -= dx * 0.12; else { AR.look.yaw -= dx * 0.25; AR.look.pitch = clamp(AR.look.pitch - dy * 0.2, -80, 60); } });
-  window.addEventListener('pointerup', () => { d = null; });
+  window.addEventListener('pointerup', () => { if (d && AR.on) arSave(); d = null; });
 }
 function sceneToLL(x, y) { // scene field frame (x, y) → lat/lon
   const t = L.tf, rx = x + t.minX, ry = y + t.minY, px = rx * t.c + ry * t.s, py = -rx * t.s + ry * t.c;

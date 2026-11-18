@@ -549,6 +549,10 @@ details.homemore{margin-top:4px}
 .htodo{display:flex;gap:10px;align-items:center;cursor:pointer;background:#fff8e6}
 .htodo.hot{box-shadow:inset 0 0 0 2px #f3d08a,var(--sh)}.htodo .hb{flex:1}.htodo b{display:block;font-size:14px}.htodo span{font-size:12.5px;color:var(--ink2)}
 @media (max-width:520px){.dtiles{grid-template-columns:repeat(4,1fr)}}
+
+.hudx{pointer-events:auto;align-self:flex-start;border:0;background:rgba(255,255,255,.92);border-radius:10px;padding:4px 10px;font:600 12px 'Prompt',sans-serif;color:var(--ink2);box-shadow:0 2px 8px rgba(16,40,24,.12)}
+.hudpill{pointer-events:auto;border:0;background:rgba(255,255,255,.94);border-radius:99px;padding:7px 12px;font:600 13px 'Prompt',sans-serif;color:var(--ink);box-shadow:0 4px 14px rgba(16,40,24,.16);display:inline-flex;align-items:center;gap:6px;align-self:flex-start}
+.hudpill small{font:400 10px 'IBM Plex Sans Thai',sans-serif;color:var(--muted)}.hudpill b{color:var(--leaf);font-size:16px;line-height:1}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <style>/* required styles */
@@ -2574,7 +2578,7 @@ function build3D() {
   }
   // ridges (rounded soil mounds) + drip tape, as chunks following the slope
   const chunks = [];
-  const chunkLen = Math.max(3, L.tape / 15000); L.rows.forEach(r => r.segs.forEach(s => { const n = Math.max(1, Math.ceil(s.len / chunkLen)); for (let k = 0; k < n; k++) { const xa = s.x1 + s.len * k / n, xb = s.x1 + s.len * (k + 1) / n; chunks.push({ xa, xb, y: r.y, zone: r.zone, ha: hz(xa, r.y), hb: hz(xb, r.y) }); } }));
+  const rowStep = R.rowStep = Math.max(1, Math.ceil(L.tape / 4 / 16000)), chunkLen = Math.max(3, Math.min(6, L.tape / rowStep / 16000)); L.rows.forEach((r, ri) => ri % rowStep ? 0 : r.segs.forEach(s => { const n = Math.max(1, Math.ceil(s.len / chunkLen)); for (let k = 0; k < n; k++) { const xa = s.x1 + s.len * k / n, xb = s.x1 + s.len * (k + 1) / n; chunks.push({ xa, xb, y: r.y, zone: r.zone, ha: hz(xa, r.y), hb: hz(xb, r.y) }); } }));
   R.chunks = chunks;
   const rw = st.rowSp * 0.62, rh = 0.16, tOff = Math.min(0.1, rw * 0.3), tY = rh * Math.sqrt(1 - (tOff / (rw / 2)) ** 2);
   R.tapeY = tY; R.tapeOff = tOff;
@@ -2595,10 +2599,10 @@ function build3D() {
   R.wet = L.zones.map(() => 0); R.wetShown = L.zones.map(() => -1);
   paintRidges(true);
   // connectors, submain, takeoffs
-  L.rows.forEach(r => { for (let k = 1; k < r.segs.length; k++) groundPipe(g, [r.segs[k - 1].x2, r.y - tOff], [r.segs[k].x1, r.y - tOff], 0.01, '#15191d', 0.05); });
+  L.rows.forEach((r, ri) => { if (ri % R.rowStep) return; for (let k = 1; k < r.segs.length; k++) groundPipe(g, [r.segs[k - 1].x2, r.y - tOff], [r.segs[k].x1, r.y - tOff], 0.01, '#15191d', 0.05); });
   for (let i = 1; i < L.sub.length; i++) groundPipe(g, L.sub[i - 1], L.sub[i], 0.045, PIPE, 0.05);
   const tkM = STD({ color: '#15191d', roughness: 0.4 });
-  L.rows.forEach(r => pipe(g, V(r.segs[0].x1 - 0.4, hz(r.segs[0].x1 - 0.4, r.y) + 0.05, -r.y), V(r.segs[0].x1, hz(r.segs[0].x1, r.y) + tY, -(r.y - tOff)), 0.01, null, tkM));
+  L.rows.forEach((r, ri) => ri % R.rowStep ? 0 : pipe(g, V(r.segs[0].x1 - 0.4, hz(r.segs[0].x1 - 0.4, r.y) + 0.05, -r.y), V(r.segs[0].x1, hz(r.segs[0].x1, r.y) + tY, -(r.y - tOff)), 0.01, null, tkM));
   // pond + pump house + fertiliser tank
   const [px, py] = L.pump, ph = hz(px, py), th = hz(px - 4, py);
   const pc = [px - 16, py + 2], pch = Math.min(hz(pc[0], pc[1]), hz(pc[0] - 6, pc[1]), hz(pc[0] + 6, pc[1])) + 0.05;
@@ -2620,12 +2624,14 @@ function build3D() {
   if (L.sub.length) { const s0 = L.sub[0]; groundPipe(g, [px + 2, py], [s0[0], py], 0.06, PIPE, 0.06); groundPipe(g, [s0[0], py], s0, 0.06, PIPE, 0.06); }
   // zone valves + flags
   R.flags = []; R.valves = [];
+  const zStep = Math.max(1, Math.ceil(L.zones.length / 60));
   L.zones.forEach(z => {
+    if (z.id % zStep) return;
     const r = L.rows[z.rows[0]]; const x = r.segs[0].x1 - 0.4, y = r.y - st.rowSp / 2, h = hz(x, y);
     const box = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.35, 0.4), STD({ color: '#3a3f44' })); box.position.set(x, h + 0.05, -y); g.add(box);
-    const v = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.3, 14), STD({ color: '#d03a2c', roughness: 0.4 })); v.position.set(x, h + 0.35, -y); v.castShadow = true; g.add(v); R.valves.push(v);
+    const v = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.3, 14), STD({ color: '#d03a2c', roughness: 0.4 })); v.position.set(x, h + 0.35, -y); v.castShadow = true; g.add(v); R.valves[z.id] = v;
     pipe(g, V(x - 1.2, h, -y), V(x - 1.2, h + 2.2, -y), 0.025, '#cfcabd');
-    const fl = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.55, 0.02), STD({ color: ZC[z.id % ZC.length], roughness: 0.7, side: THREE.DoubleSide })); fl.position.set(x - 0.75, h + 1.9, -y); fl.userData.h = h; fl.castShadow = true; g.add(fl); R.flags.push(fl);
+    const fl = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.55, 0.02), STD({ color: ZC[z.id % ZC.length], roughness: 0.7, side: THREE.DoubleSide })); fl.position.set(x - 0.75, h + 1.9, -y); fl.userData.h = h; fl.castShadow = true; g.add(fl); R.flags[z.id] = fl;
   });
   // surroundings: trees, eucalyptus line, grass tufts
   const rr = rng(hash(String(L.lat0.toFixed(4)))), avoid = (x, y, d) => dist([x, y], [px, py]) < d || dist([x, y], pc) < 10;
@@ -2642,7 +2648,7 @@ function build3D() {
   buildPlants();
   // water drops at emitters
   const sample = []; const per = Math.max(1, Math.ceil(L.em / 2600));
-  L.rows.forEach(r => r.segs.forEach(s => { const n = Math.floor(s.len / st.emSp) + 1; for (let k = 0; k < n; k += per) { const x = s.x1 + k * st.emSp; sample.push({ x, z: -(r.y - tOff), h: hz(x, r.y) + tY, zone: r.zone, ph: Math.random() }); } }));
+  L.rows.forEach((r, ri) => ri % R.rowStep ? 0 : r.segs.forEach(s => { const n = Math.floor(s.len / st.emSp) + 1; for (let k = 0; k < n; k += per) { const x = s.x1 + k * st.emSp; sample.push({ x, z: -(r.y - tOff), h: hz(x, r.y) + tY, zone: r.zone, ph: Math.random() }); } }));
   R.dropData = sample;
   R.drops = new THREE.InstancedMesh(new THREE.SphereGeometry(0.045, 8, 6), new THREE.MeshBasicMaterial({ color: '#9fd8ff', toneMapped: false, transparent: true, opacity: 0.9 }), sample.length);
   R.drops.frustumCulled = false;
@@ -2799,7 +2805,7 @@ function fxFrame(dt, now) {
   if (!R.flow) return;
   const act = SIM.active ? SIM.active.z : -1, t = now / 1000;
   if (act !== R.lastAct) {
-    R.valves.forEach((v, i) => { v.material.color.set(i === act ? '#2fbf5b' : '#d03a2c'); v.material.emissive.set(i === act ? '#1b7a38' : '#000000'); });
+    R.valves.forEach((v, i) => { if (!v) return; v.material.color.set(i === act ? '#2fbf5b' : '#d03a2c'); v.material.emissive.set(i === act ? '#1b7a38' : '#000000'); });
     R.pumpLight.material.color.set(act >= 0 ? '#44ff7a' : '#3a3a3a');
     if (act < 0) { for (let i = 0; i < R.flowN; i++) R.flow.setMatrixAt(i, _z); R.flow.instanceMatrix.needsUpdate = true; for (let i = 0; i < 3; i++) R.pondRings.setMatrixAt(i, _z); R.pondRings.instanceMatrix.needsUpdate = true; R.house.position.y = R.houseY; }
     if (R.lastAct >= 0) { R.dropIdx[R.lastAct].forEach(i => R.rings.setMatrixAt(i, _z)); R.rings.instanceMatrix.needsUpdate = true; }
@@ -2923,7 +2929,7 @@ function frame(now) {
       });
       R.drops.instanceMatrix.needsUpdate = true; R.dropsOn = az;
     }
-    R.flags && R.flags.forEach((fl, i) => { fl.position.y = fl.userData.h + 1.9 + (i === az ? Math.sin(now / 200) * 0.05 : 0); fl.scale.x = i === az ? 1.25 : 1; });
+    R.flags && R.flags.forEach((fl, i) => { if (!fl) return; fl.position.y = fl.userData.h + 1.9 + (i === az ? Math.sin(now / 200) * 0.05 : 0); fl.scale.x = i === az ? 1.25 : 1; });
     rainFrame(dt, now); sunPathFrame(); hudCompassFrame(); paintRidges(false); updateLighting(false); fxFrame(dt, now); tweenStep(now);
     R.controls.update(); R.renderer.render(R.scene, R.camera);
   }
@@ -3180,12 +3186,20 @@ function renderTerrain() {
   $('#terrNote').className = 'note' + (st.tape !== 'pc' && maxZ > 2 ? ' warn' : '');
   $('#terrNote').innerHTML = tips.join('<br>') + (S.elevSrc === 'google' ? `<br><span class="small">ความสูงจาก Google Elevation API ${S.hpts.length} จุดทั่วแปลง (ความละเอียดตามข้อมูลของ Google ในพื้นที่นั้น) · <a href="#" id="reElev">ดึงใหม่</a></span>` : S.elevSrc === 'dem' ? '<br><span class="small">ความสูงจากแบบจำลองภูมิประเทศ (Copernicus DEM ~90 ม. ผ่าน Open-Meteo) เห็นแนวลาดใหญ่ แต่ไม่เห็นหลุมหรือคันเล็ก ๆ — วัดเพิ่มด้วย “⛰ วัดระดับกลางแปลง” ได้</span>' : '<br><span class="small">ความสูงจาก GPS มือถือคลาดเคลื่อนได้ 3–10 ม. ระบบเฉลี่ยหลายจุดให้เรียบ หากต้องการความแม่นยำ ควรวัดด้วยกล้องระดับหรือ RTK</span>');
 }
+function hudPill() {
+  const bits = [`${hm(SIM.t)}`];
+  if (SIM.active) bits.push(`💧 ${SIM.active.z + 1}/${L.zones.length}`); else bits.push(`${L.zones.length} โซน`);
+  if (R.rain_ && R.rain_.on) bits.push('🌧'); if (R.viewDap != null) bits.push(`🌱 ${Math.round(R.viewDap)} วัน`);
+  const attr = SAT.on && SAT.state === 'ok' ? `<small>© ${SAT.src === 'google' ? 'Google' : 'Esri'}</small>` : '';
+  return `<button class="hudpill" data-act="hudshow" title="แสดงข้อมูล">${bits.join(' · ')} ${attr}<b>›</b></button>`;
+}
 function renderHUD() {
   const h = $('#hud');
   if (S.step === 0) { h.innerHTML = ''; return; }
   if (S.step === 1) { h.innerHTML = S.pts.length ? `<div class="chip"><div class="t">มุมมองสำรวจ</div><div class="v">${S.closed ? 'ขอบแปลงที่ปรับเส้นแล้ว' : 'เส้นทางที่เดิน · ' + S.pts.length + ' จุด'}</div></div>` : ''; return; }
   if (!L) { h.innerHTML = ''; return; }
-  let s = `<div class="chip"><div class="t">${dShort(SIM.t)} · ${hm(SIM.t)} · ${S.mode === 'auto' ? 'อัตโนมัติ' : 'สั่งเอง'}</div><div class="v">${areaThai(L.area)} · ${L.zones.length} โซน</div>` +
+  if (S.ui && S.ui.hudMin) { h.innerHTML = hudPill(); return; }
+  let s = `<button class="hudx" data-act="hudhide" title="ซ่อนข้อมูล">‹ ซ่อน</button><div class="chip"><div class="t">${dShort(SIM.t)} · ${hm(SIM.t)} · ${S.mode === 'auto' ? 'อัตโนมัติ' : 'สั่งเอง'}</div><div class="v">${areaThai(L.area)} · ${L.zones.length} โซน</div>` +
     (L.elevOK ? `<div class="t t3" style="margin-top:2px">⛰ ต่างระดับ ${f(L.dz, 1)} ม. · ลาด ${f(L.slopeAll, 1)}% · ขยายแนวตั้ง ×${R.vex}${R.contourStep ? ' · เส้นชั้นความสูงทุก ' + R.contourStep + ' ม.' : ''}${R.sunEl != null && R.sunEl < -2 && !R.dayLock ? ' · 🌙 กลางคืน' : ''}</div>` : `<div class="t t3" style="margin-top:2px">ไม่มีข้อมูลความสูง — แสดงเป็นพื้นราบ</div>`) + `</div>`;
   if (R.elevView && L.elevOK) s += `<div class="chip"><div class="t">สีตามระดับความสูง</div><div style="display:flex;align-items:center;gap:6px;font-size:12px"><span>ต่ำ</span><span style="width:90px;height:8px;border-radius:4px;background:linear-gradient(90deg,#ead9b8,#6e4426)"></span><span>สูง (+${f(L.dz, 1)} ม.)</span></div></div>`;
   if (SAT.on && SAT.state === 'loading' && S.step > 0) s += `<div class="chip"><div class="t">🛰 กำลังโหลดภาพดาวเทียมรอบไร่…</div></div>`;
@@ -3607,7 +3621,9 @@ $('#mAdd').addEventListener('click', () => {
 $('#measList').addEventListener('click', e => { const b = e.target.closest('button[data-del]'); if (!b) return; S.meas.splice(+b.dataset.del, 1); save(); renderGrowth(); });
 addEventListener('resize', () => { if (S.step === 1) drawGPS(); renderCharts(); });
 $$('details').forEach(d => d.addEventListener('toggle', () => { if (d.open) setTimeout(renderCharts, 30); }));
-$('#hud').addEventListener('click', e => { if (e.target.dataset.act === 'follow') { R.follow = true; R.lastAct = -2; } });
+$('#hud').addEventListener('click', e => { const b = e.target.closest('[data-act]'); if (!b) return; const a = b.dataset.act;
+  if (a === 'follow') { R.follow = true; R.lastAct = -2; }
+  if (a === 'hudhide' || a === 'hudshow') { S.ui = { ...(S.ui || {}), hudMin: a === 'hudhide' }; save(); renderHUD(); } });
 new ResizeObserver(() => { if (S.step === 1) drawGPS(); }).observe($('#view'));
 
 /* ================= HOME dashboard ================= */

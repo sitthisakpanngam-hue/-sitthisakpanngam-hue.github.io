@@ -104,6 +104,28 @@ body.arxr #view{background:transparent}
 .lvRes{margin-top:10px;padding:10px 12px;border-radius:12px;background:#eef4ec;font-weight:600;font-size:15px;min-height:20px}
 .clAng{position:absolute;left:50%;top:calc(50% + 50px);transform:translateX(-50%);background:rgba(10,20,14,.7);color:#fff;border-radius:14px;padding:8px 16px;font:700 28px 'IBM Plex Mono',monospace;z-index:3}
 .clHz{position:absolute;left:0;right:0;height:2px;background:rgba(255,210,63,.85);z-index:2;top:50%;pointer-events:none}
+.dzh{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}.dzh .tag{margin-left:auto;white-space:nowrap}
+.dzlist{display:flex;flex-direction:column}
+.dzrow{display:flex;align-items:center;gap:12px;padding:12px 2px;border:0;border-top:1px solid var(--line);background:none;text-align:left;font:inherit;color:inherit;cursor:pointer;width:100%}
+.dzrow:first-child{border-top:0}.dzrow:active{background:var(--paper)}
+.dzrow .ico{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:21px;flex:none;background:#eef4ec}
+.dzrow .tx{flex:1;min-width:0}.dzrow .tx b{display:block;font-size:15px}.dzrow .tx span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:13px;color:var(--ink2);overflow:hidden;line-height:1.4}
+.dzrow .st{font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:99px;white-space:nowrap}.st.ok{background:#e3f3e8;color:#1f6a3a}.st.warn{background:#fff1d6;color:#8a5a00}.st.bad{background:#fde3df;color:#a3261a}.st.info{background:#eaf1fb;color:#1d5fa8}
+.dzrow .chev{color:var(--muted);font-size:20px;line-height:1}
+.dzbox{max-height:94vh}
+.dzsec{margin:14px 0 6px;font-size:12.5px;font-weight:700;color:var(--muted);letter-spacing:.02em}
+.dzfig{background:#f6f8f4;border-radius:16px;padding:10px;margin-top:6px}.dzfig svg{display:block;width:100%;height:auto}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chips button{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:7px 12px;font:600 13.5px 'Prompt',sans-serif;color:var(--ink2);position:relative}
+.chips button.on{background:var(--leaf);border-color:var(--leaf);color:#fff}.chips button.rec:after{content:'แนะนำ';position:absolute;top:-8px;right:-4px;background:#ffd23f;color:#3a2c00;font-size:9.5px;padding:1px 5px;border-radius:99px}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}.kv>div{background:var(--paper);border-radius:12px;padding:9px 11px}.kv .l{font-size:11.5px;color:var(--muted)}.kv .v{font:600 17px 'IBM Plex Mono',monospace}.kv .v small{font:400 11px 'IBM Plex Sans Thai',sans-serif;color:var(--muted);margin-left:3px}
+.kv .wide{grid-column:1/-1}
+.dzrec{margin-top:12px;border-radius:14px;padding:11px 13px;background:#eef4ec;font-size:14px;line-height:1.55}.dzrec.warn{background:#fff4e0}.dzrec.bad{background:#fde9e6}
+.dzwhy{margin:8px 0 0;padding-left:18px;font-size:13px;color:var(--ink2);line-height:1.6}
+.dzfoot{position:sticky;bottom:calc(-22px - var(--sab));background:#fff;padding:12px 0 2px;display:flex;gap:8px}.dzfoot .btn{flex:1}
+.dztbl{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}.dztbl td,.dztbl th{padding:7px 4px;border-bottom:1px solid var(--line);text-align:right}.dztbl td:first-child,.dztbl th:first-child{text-align:left}.dztbl th{font-size:11.5px;color:var(--muted);font-weight:600}
+.bar{height:6px;border-radius:99px;background:#e9ede6;overflow:hidden;margin-top:3px}.bar i{display:block;height:100%;background:var(--leaf)}.bar i.warn{background:#e6a23c}.bar i.bad{background:#d9534f}
+.insheet>h3:first-child{display:none}.dzfig svg text{font-family:'Prompt',sans-serif}
+.insheet{border:0!important;box-shadow:none!important;padding:0!important;margin:0!important;background:none!important}
 .arCal{position:absolute;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom) + 86px);background:rgba(255,255,255,.95);border-radius:18px;padding:12px;pointer-events:auto;color:#16241a}
 .arCalT{font-size:13px;margin-bottom:8px;text-align:center}.arCalT small{color:#5d6b60}
 .arRow{display:flex;gap:6px;justify-content:center;align-items:center;margin-top:6px}.arRow button{flex:1;border:1px solid #d6ddd3;background:#f4f7f2;border-radius:12px;padding:9px 4px;font-size:13px;font-weight:600}
@@ -1595,6 +1617,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
             <option value="sand">ทราย</option><option value="lsand">ร่วนปนทราย</option><option value="loam">ร่วน</option><option value="clay">ร่วนเหนียว / เหนียว</option></select></label>
         </div>
       </div>
+      <div class="card dzcard" id="dzCard">
+        <div class="dzh"><div><div class="stepk" style="margin:0">ออกแบบระบบน้ำหยด</div><div class="small">แตะแต่ละหัวข้อเพื่อดูการคำนวณและปรับค่า</div></div><span class="tag" id="dzScore">—</span></div>
+        <div class="dzlist" id="dzList"></div>
+      </div>
       <div class="card rowcard" id="rowCard">
         <h3><svg class="ic sm"><use href="#i-compass"/></svg> แนวร่องปลูก</h3>
         <div class="rowtop"><div id="rowCompass"></div><div id="rowBest"></div></div>
@@ -1604,7 +1630,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div id="rowOpts"></div>
         <p class="small" style="margin:10px 0 0">คะแนนรวมจาก ความลาด (กันดินพัง/แรงดันน้ำ), แสงแดดตลอดปีจากตำแหน่งดวงอาทิตย์จริงของพิกัดนี้, จำนวนหัวท้ายร่อง และความยาวเทปน้ำหยด — น้ำหนักเรื่องความลาดเพิ่มขึ้นอัตโนมัติเมื่อพื้นลาดมาก</p>
       </div>
-      <div class="card">
+      <div class="card" id="bomCard" style="display:none">
         <h3>สรุประบบ</h3>
         <div class="stats" id="bom"></div>
         <div class="note" id="layoutNote"></div>
@@ -1626,7 +1652,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         </div>
         <div class="row"><button class="btn sm" id="tElev">🗻 สีตามระดับความสูง</button></div>
       </details>
-      <details class="card more">
+      <details class="card more" id="zoneBox" style="display:none">
         <summary>โซนให้น้ำ <span class="small">ปั๊มจ่ายทีละโซน</span></summary>
         <table class="z" id="zoneTable"></table>
       </details>
@@ -1821,6 +1847,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
 </div></div>
 
 <div id="intro"><div class="introbox"><button class="skip" id="iSkip">ข้าม</button><div id="introBody"></div><div id="introBtns"></div></div></div>
+<div class="sheet" id="dzSheet" style="display:none"><div class="sheetbg" data-close></div><div class="sheetbox dzbox">
+  <div class="sheeth"><span class="ti t-gr sm" id="dzIco">📐</span><b id="dzTitle">ออกแบบ</b><button class="xbtn" data-close aria-label="ปิด">✕</button></div>
+  <div id="dzBody"></div>
+  <div id="dzHold"></div>
+  <div class="dzfoot" id="dzFoot"></div>
+</div></div>
 <div class="sheet" id="lvSheet" style="display:none"><div class="sheetbg" data-close></div><div class="sheetbox">
   <div class="sheeth"><span class="ti t-gr sm">📏</span><b id="lvTitle">จุดวัดระดับ</b><button class="xbtn" data-close aria-label="ปิด">✕</button></div>
   <div class="lvForm">
@@ -1891,7 +1923,7 @@ function rng(seed) { let a = seed; return () => { a |= 0; a = a + 0x6D2B79F5 | 0
 function areaThai(m2) { const rai = Math.floor(m2 / 1600), ngan = Math.floor((m2 - rai * 1600) / 400), wa = Math.round((m2 - rai * 1600 - ngan * 400) / 4); return `${rai} ไร่ ${ngan} งาน ${wa} ตร.วา`; }
 
 /* ================= state ================= */
-const DEF = { rowSp: 1.0, plantSp: 0.8, emSp: 0.3, emQ: 1.5, pumpQ: 10, eff: 90, soil: 'lsand', harvest: 300,
+const DEF = { mech: 'small', canopy: 'mid', rowSp: 1.0, plantSp: 0.8, emSp: 0.3, emQ: 1.5, pumpQ: 10, eff: 90, soil: 'lsand', harvest: 300,
   plantDate: isoOf(Date.now() - 115 * DAY), maxAcc: 15, minDist: 2, startHour: 6, trigger: 50, rainWait: 3, rowDir: 'best', rowAng: 0, tapeMax: 120, tape: 'std', ymax: 6 };
 let S = { pts: [], hpts: [], closed: false, set: { ...DEF }, mode: 'auto', step: 1 };
 try { const s = JSON.parse(localStorage.getItem('raidrop-v1')); if (s && s.set) { S = { ...S, ...s, set: { ...DEF, ...s.set } }; } } catch (e) {}
@@ -3379,7 +3411,7 @@ function renderBOM() {
   ].map(([l, v, c]) => `<div class="${c || ''}"><div class="l">${l}</div><div class="v mono">${v}</div></div>`).join('');
   $('#zoneTable').innerHTML = `<tr><th>โซน</th><th class="r">แถว</th><th class="r">พื้นที่</th><th class="r">อัตราไหล</th><th class="r">ต่างระดับ</th></tr>` +
     L.zones.map(z => `<tr><td><span class="zd" style="background:${ZC[z.id % ZC.length]}"></span>โซน ${z.id + 1}</td><td class="r mono">${z.rows.length}</td><td class="r mono">${f(z.area / 1600, 2)} ไร่</td><td class="r mono">${f(z.flow / 1000, 1)} ลบ.ม./ชม.</td><td class="r mono" style="color:${z.dz > 2 && st.tape !== 'pc' ? 'var(--bad)' : 'inherit'}">${f(z.dz, 1)} ม.</td></tr>`).join('');
-  renderTerrain(); renderRowCard(); renderLvl();
+  renderTerrain(); renderRowCard(); renderLvl(); renderDZ();
   $('#layoutNote').innerHTML = `ร่องแนว <b>${rowName(L.rowAz)}</b> (${f(L.rowAz)}°) ${st.rowDir === 'best' ? '— ระบบเลือกแนวที่ดีที่สุดให้อัตโนมัติ' : st.rowDir === 'contour' ? '— ขวางความลาด' : st.rowDir === 'edge' ? '— ขนานขอบแปลงยาว' : '— กำหนดเอง'} · ปั๊ม ${f(st.pumpQ)} ลบ.ม./ชม. จ่ายน้ำได้ครั้งละ 1 โซน จึงแบ่งเป็น <b>${L.zones.length} โซน</b> เปิดทีละโซนตามลำดับ` +
     (L.zones.length > 6 ? '<br><b>หมายเหตุ:</b> โซนเยอะ ใช้เวลานาน ควรพิจารณาปั๊มใหญ่ขึ้น' : '');
 }
@@ -4799,7 +4831,7 @@ function renderLvl() {
   $('#lvlTap').classList.toggle('on', LV.tap); $('#lvlTap').textContent = LV.tap ? '✋ เลิกแตะ' : '👆 แตะจุดบนภาพ 3D';
 }
 $('#lvlList').addEventListener('click', e => { const b = e.target.closest('[data-lv]'); if (b) lvOpen(+b.dataset.lv); });
-$('#lvlTap').addEventListener('click', () => { if (!L) return toast('วัดแปลงก่อน'); LV.tap = !LV.tap; renderLvl(); if (LV.tap) { if (S.step !== 2) go(2); toast('แตะพื้นในภาพ 3D ตรงจุดที่วัดระดับ'); } });
+$('#lvlTap').addEventListener('click', () => { if (!L) return toast('วัดแปลงก่อน'); dzClose(); LV.tap = !LV.tap; renderLvl(); if (LV.tap) { if (S.step !== 2) go(2); toast('แตะพื้นในภาพ 3D ตรงจุดที่วัดระดับ'); } });
 $('#lvlGPS').addEventListener('click', () => {
   if (!L) return toast('วัดแปลงก่อน'); if (!navigator.geolocation) return toast('มือถือนี้ไม่มี GPS');
   toast('ยืนนิ่ง ๆ กำลังเฉลี่ย GPS 8 วินาที…'); const F = [];
@@ -4896,6 +4928,168 @@ $('#lvAim').addEventListener('click', () => {
 function clStop() { CLN.on = false; window.removeEventListener('deviceorientation', CLN.h); if (CLN.st) CLN.st.getTracks().forEach(t => t.stop()); CLN.st = null; $('#clVid').srcObject = null; $('#clino').style.display = 'none'; }
 $('#clX').addEventListener('click', clStop);
 $('#clUse').addEventListener('click', () => { if (CLN.val == null) return; $('#lvAng').value = CLN.val.toFixed(1); clStop(); lvCalc(); });
+/* ================= design panel: spacing, emitters, zones ================= */
+const WET = { sand: 0.30, lsand: 0.45, loam: 0.60, clay: 0.80 };          // wetted width (m) under a 1.5 L/h dripper, rule of thumb
+const INFIL = { sand: 25, lsand: 18, loam: 10, clay: 5 };                // basic infiltration (mm/h), rule of thumb
+const PEAK_ET = 6;                                                       // peak crop water use (mm/day) in the hot dry season
+const EMS = [0.15, 0.2, 0.25, 0.3, 0.4, 0.5], QS = [1.0, 1.5, 2.0, 2.5], ROWS = [0.8, 1.0, 1.2, 1.5], PLS = [0.5, 0.6, 0.8, 1.0], PUMPS = [5, 8, 10, 15, 20, 30];
+const DZ = { k: null, d: {} };
+function wetW(soil, q) { return WET[soil] * Math.pow(q / 1.5, 0.3); }
+function recSpacing(st) {
+  let row = st.soil === 'loam' || st.soil === 'clay' ? 1.2 : 1.0, why = [];
+  why.push(st.soil === 'sand' || st.soil === 'lsand' ? 'ดินทราย/ร่วนปนทราย ความอุดมสมบูรณ์ต่ำ ปลูกถี่ขึ้นเล็กน้อยให้ทรงพุ่มคลุมดินเร็ว' : 'ดินร่วน/เหนียวอุดมสมบูรณ์ ทรงพุ่มใหญ่ ให้ระยะแถวกว้างขึ้นเพื่อแสงและการระบายอากาศ');
+  if (st.canopy === 'wide') { row = Math.max(row, 1.2); why.push('พันธุ์ทรงพุ่มกว้าง ต้องการระยะแถวกว้าง'); }
+  if (st.mech === 'tractor') { row = Math.max(row, 1.2); why.push('ใช้รถแทรกเตอร์ ระยะแถวต้องพอดีล้อรถ (≥ 1.2 ม.)'); }
+  else if (st.mech === 'small') why.push('รถไถเดินตาม/รถเล็ก ใช้ระยะแถว 1.0–1.2 ม. ได้');
+  const plant = st.canopy === 'narrow' ? 0.6 : st.canopy === 'wide' ? 1.0 : 0.8;
+  why.push(`ระยะต้น ${f(plant, 1)} ม. ตามทรงพุ่ม${{ narrow: 'แคบ/ตั้งตรง', mid: 'ปานกลาง', wide: 'กว้าง/แตกกิ่งมาก' }[st.canopy]}`);
+  return { row, plant, why };
+}
+function recEmit(st) {
+  const w = wetW(st.soil, st.emQ), lim = Math.min(0.8 * w, st.plantSp / 2 + 1e-6);
+  const em = EMS.filter(v => v <= lim + 1e-6).pop() || EMS[0];
+  return { em, w, why: [`ดิน${SOILS[st.soil].n} หัวหยด ${f(st.emQ, 1)} ลิตร/ชม. น้ำแผ่ออกด้านข้างราว ${f(w * 100)} ซม.`, `ระยะหัวหยด ≤ 80% ของความกว้างวงเปียก (${f(0.8 * w * 100)} ซม.) แถบเปียกจะต่อกันตลอดร่อง`, `มีหัวหยดอย่างน้อย 2 หัวต่อต้น (ระยะต้น ${f(st.plantSp, 1)} ม.)`] };
+}
+/* numbers for any candidate design (no re-layout needed: scales the current layout) */
+function dzEval(c) {
+  const st = { ...S.set, ...c }, A = L ? L.cropArea : 1600, tape = L ? L.tape * S.set.rowSp / st.rowSp : A / st.rowSp;
+  const em = tape / st.emSp, flow = em * st.emQ / 1000, app = st.emQ / (st.emSp * st.rowSp);
+  let zones = Math.max(1, Math.ceil(flow / st.pumpQ - 1e-9));
+  if (L && Math.abs(st.rowSp - S.set.rowSp) < 1e-6) { const maxEm = st.pumpQ * 1000 / st.emQ, k = S.set.emSp / st.emSp; let n = 0, cur = Infinity; L.rows.forEach(r => { const e2 = r.em * k; if (cur + e2 > maxEm) { n++; cur = 0; } cur += e2; }); zones = Math.max(1, n); }
+  const eff = st.eff / 100 * (L ? L.unif : 0.95), grossPeak = PEAK_ET / eff, tZone = grossPeak / app, total = tZone * zones;
+  const pumpNeed = flow * tZone / 10, w = wetW(st.soil, st.emQ);
+  return { st, tape, em, flow, app, zones, tZone, total, pumpNeed, w, overlap: w / st.emSp, perPlant: st.plantSp / st.emSp, plantsRai: 1600 / (st.rowSp * st.plantSp), tapeRai: 1600 / st.rowSp, plants: A / (st.rowSp * st.plantSp), infil: INFIL[st.soil] };
+}
+function dzStatus() {
+  const st = S.set, e = dzEval({}), rs = recSpacing(st), re = recEmit(st);
+  const sp = Math.abs(st.rowSp - rs.row) < 0.11 && Math.abs(st.plantSp - rs.plant) < 0.11 ? ['ok', '✓ เหมาะสม'] : ['info', 'ปรับได้'];
+  const em = e.overlap < 1 ? ['warn', 'แถบเปียกไม่ต่อกัน'] : e.app > e.infil ? ['warn', 'น้ำอาจไหลบ่า'] : st.emSp > re.em + 0.051 ? ['info', 'ปรับได้'] : ['ok', '✓ เหมาะสม'];
+  const zn = e.total <= 12 ? ['ok', `✓ ${f(e.total, 1)} ชม./วัน`] : e.total <= 20 ? ['warn', `${f(e.total, 1)} ชม./วัน`] : ['bad', 'ปั๊มเล็กไป'];
+  const lv = (S.lvl || []).length >= 3 ? ['ok', `✓ วัดจริง ${S.lvl.length} จุด`] : L && L.elevOK ? ['info', 'ใช้ค่า DEM'] : ['warn', 'ยังไม่มี'];
+  const rw = L && L.rowA && L.rowA.best ? (Math.abs(((L.rowAz - L.rowA.best.th + 90) % 180 + 180) % 180 - 90) < 6 ? ['ok', '✓ ดีที่สุด'] : ['info', 'ยังไม่ดีที่สุด']) : ['info', '—'];
+  return { e, sp, em, zn, lv, rw };
+}
+function renderDZ() {
+  const el = $('#dzList'); if (!el) return;
+  if (!L) { el.innerHTML = '<div class="small" style="padding:8px 0">วัดแปลงก่อน แล้วระบบจะออกแบบให้</div>'; $('#dzScore').textContent = '—'; return; }
+  const st = S.set, Z = dzStatus(), e = Z.e;
+  const row = (k, ico, bg, t, v, s2) => `<button class="dzrow" data-dz="${k}"><span class="ico" style="background:${bg}">${ico}</span><span class="tx"><b>${t}</b><span>${v}</span></span><span class="st ${s2[0]}">${s2[1]}</span><span class="chev">›</span></button>`;
+  el.innerHTML = row('row', '🧭', '#eaf1fb', 'แนวร่อง', `${rowName(L.rowAz)} · ${f(L.rowAz)}°`, Z.rw)
+    + row('space', '↔️', '#eef4ec', 'ระยะร่อง × ระยะต้น', `${f(st.rowSp, 2)} × ${f(st.plantSp, 2)} ม. · ${f(e.plantsRai)} ต้น/ไร่`, Z.sp)
+    + row('emit', '💧', '#e6f1fb', 'ระยะหัวหยด', `ทุก ${f(st.emSp * 100)} ซม. · ${f(st.emQ, 1)} ลิตร/ชม. · ${f(e.app, 1)} มม./ชม.`, Z.em)
+    + row('zone', '🧩', '#f4eefb', 'การแบ่งโซน & ปั๊ม', `${L.zones.length} โซน · ปั๊ม ${f(st.pumpQ)} ลบ.ม./ชม.`, Z.zn)
+    + row('lvl', '📏', '#f6efe6', 'ระดับพื้น & ความลาด', L.elevOK ? `ต่างระดับ ${f(L.dz, 1)} ม. · ลาด ${f(L.slopeAll, 1)}%` : 'ยังไม่มีข้อมูลความสูง', Z.lv)
+    + row('bom', '🧾', '#f1f3ef', 'รายการอุปกรณ์', `เทป ${f(L.tape)} ม. · ท่อ ${f(L.subLen + L.mainLen)} ม. · ${L.zones.length} วาล์ว`, ['info', 'ดูรายการ']);
+  const bad = [Z.sp, Z.em, Z.zn, Z.lv, Z.rw].filter(x => x[0] === 'warn' || x[0] === 'bad').length;
+  $('#dzScore').className = 'tag' + (bad ? '' : ' live'); $('#dzScore').textContent = bad ? `ควรดู ${bad} ข้อ` : 'พร้อมติดตั้ง';
+}
+$('#dzList').addEventListener('click', e => { const b = e.target.closest('[data-dz]'); if (b) dzOpen(b.dataset.dz); });
+function dzOpen(k) {
+  DZ.k = k; DZ.d = { rowSp: S.set.rowSp, plantSp: S.set.plantSp, emSp: S.set.emSp, emQ: S.set.emQ, pumpQ: S.set.pumpQ, mech: S.set.mech, canopy: S.set.canopy };
+  const T = { row: ['🧭', 'แนวร่องปลูก'], space: ['↔️', 'ระยะร่อง × ระยะต้น'], emit: ['💧', 'ระยะหัวหยด & อัตราไหล'], zone: ['🧩', 'การแบ่งโซน & ปั๊มน้ำ'], lvl: ['📏', 'ระดับพื้น & ความลาด'], bom: ['🧾', 'รายการอุปกรณ์'] }[k];
+  $('#dzIco').textContent = T[0]; $('#dzTitle').textContent = T[1];
+  // reuse the existing cards for orientation and levels
+  ['rowCard', 'lvlCard', 'terrBox'].forEach(id => { const c = $('#' + id); if (c && c.parentElement !== $('#dzHold')) { c.classList.add('insheet'); $('#dzHold').appendChild(c); } c.style.display = 'none'; });
+  if (k === 'row') { $('#rowCard').style.display = ''; renderRowCard(); }
+  if (k === 'lvl') { $('#lvlCard').style.display = ''; $('#terrBox').style.display = ''; $('#terrBox').open = true; renderLvl(); renderTerrain(); }
+  dzRender(); const sh = $('#dzSheet'); sh.style.display = 'block'; clearTimeout(DZ.ct); requestAnimationFrame(() => sh.classList.add('on')); sh.querySelector('.sheetbox').scrollTop = 0;
+}
+function dzInit() { ['rowCard', 'lvlCard', 'terrBox'].forEach(id => { const c = $('#' + id); if (c) { c.classList.add('insheet'); c.style.display = 'none'; $('#dzHold').appendChild(c); } }); }
+dzInit();
+function dzClose() { const sh = $('#dzSheet'); sh.classList.remove('on'); clearTimeout(DZ.ct); DZ.ct = setTimeout(() => sh.style.display = 'none', 250); }
+$('#dzSheet').addEventListener('click', e => {
+  if (e.target.closest('[data-close]')) return dzClose();
+  const b = e.target.closest('[data-set]'); if (b) { const [key, v] = b.dataset.set.split(':'); DZ.d[key] = isNaN(+v) ? v : +v; dzRender(); return; }
+  const st = e.target.closest('[data-step]'); if (st) { const [key, d] = st.dataset.step.split(':'); const lim = { rowSp: [0.6, 2], plantSp: [0.4, 1.5], emSp: [0.1, 1], emQ: [0.5, 4], pumpQ: [1, 100] }[key]; DZ.d[key] = clamp(Math.round((DZ.d[key] + +d) * 100) / 100, lim[0], lim[1]); dzRender(); return; }
+  if (e.target.closest('#dzRecBtn')) { Object.assign(DZ.d, DZ.rec || {}); dzRender(); return; }
+  if (e.target.closest('#dzApply')) { const ch = Object.keys(DZ.d).filter(k2 => DZ.d[k2] !== S.set[k2]); Object.assign(S.set, DZ.d); save(); ['sRow', 'sPlant', 'sEm', 'sQ', 'sPump'].forEach(id => { const k2 = { sRow: 'rowSp', sPlant: 'plantSp', sEm: 'emSp', sQ: 'emQ', sPump: 'pumpQ' }[id]; if ($('#' + id)) $('#' + id).value = S.set[k2]; });
+    dzClose(); if (ch.some(k2 => ['rowSp', 'plantSp', 'emSp', 'emQ', 'pumpQ'].includes(k2)) && S.closed) onLayoutChanged(); renderDZ(); toast(ch.length ? 'ใช้ค่าใหม่แล้ว — คำนวณระบบใหม่ทั้งแปลง' : 'ไม่มีการเปลี่ยนแปลง'); }
+  if (e.target.closest('#dzLvTap')) { dzClose(); }
+});
+const chipRow = (key, vals, cur, rec, fmt) => `<div class="chips">${vals.map(v => `<button data-set="${key}:${v}" class="${Math.abs(v - cur) < 1e-6 ? 'on' : ''}${rec != null && Math.abs(v - rec) < 1e-6 ? ' rec' : ''}">${fmt(v)}</button>`).join('')}<button data-step="${key}:-${key === 'pumpQ' ? 1 : key === 'emQ' ? 0.1 : 0.05}">−</button><button data-step="${key}:${key === 'pumpQ' ? 1 : key === 'emQ' ? 0.1 : 0.05}">+</button></div>`;
+const optRow = (key, opts, cur) => `<div class="chips">${opts.map(([v, t]) => `<button data-set="${key}:${v}" class="${v === cur ? 'on' : ''}">${t}</button>`).join('')}</div>`;
+const kvb = arr => `<div class="kv">${arr.map(([l, v, w]) => `<div class="${w || ''}"><div class="l">${l}</div><div class="v">${v}</div></div>`).join('')}</div>`;
+function dzRender() {
+  const k = DZ.k, d = DZ.d, body = $('#dzBody'), foot = $('#dzFoot'); if (!L) return;
+  let h = '', showApply = true;
+  if (k === 'space') {
+    const r = recSpacing({ ...S.set, ...d }); DZ.rec = { rowSp: r.row, plantSp: r.plant }; const e = dzEval(d), e0 = dzEval({});
+    h += `<div class="dzfig">${svgSpacing(d.rowSp, d.plantSp)}</div>`
+      + `<div class="dzsec">ระยะระหว่างร่อง (= ระยะเทปน้ำหยด 1 เส้นต่อร่อง)</div>${chipRow('rowSp', ROWS, d.rowSp, r.row, v => f(v, 1) + ' ม.')}`
+      + `<div class="dzsec">ระยะระหว่างต้นในร่อง</div>${chipRow('plantSp', PLS, d.plantSp, r.plant, v => f(v, 1) + ' ม.')}`
+      + `<div class="dzsec">ปัจจัยที่ใช้แนะนำ</div>${optRow('mech', [['hand', '👐 แรงงานคน'], ['small', '🚜 รถไถเล็ก'], ['tractor', '🚜 แทรกเตอร์']], d.mech)}<div style="height:6px"></div>${optRow('canopy', [['narrow', 'ทรงพุ่มแคบ'], ['mid', 'ทรงพุ่มปานกลาง'], ['wide', 'ทรงพุ่มกว้าง']], d.canopy)}`
+      + `<div class="dzsec">ผลกับแปลงนี้</div>` + kvb([['ต้นต่อไร่', f(e.plantsRai) + '<small>ต้น</small>'], ['ต้นทั้งแปลง', f(e.plants) + '<small>ต้น</small>'], ['เทปน้ำหยดต่อไร่', f(e.tapeRai) + '<small>ม.</small>'], ['เทปทั้งแปลง', f(e.tape) + `<small>ม. (${e.tape >= e0.tape ? '+' : ''}${f((e.tape / e0.tape - 1) * 100)}%)</small>`]])
+      + `<div class="dzrec"><b>แนะนำ ${f(r.row, 1)} × ${f(r.plant, 1)} ม.</b> (${f(1600 / (r.row * r.plant))} ต้น/ไร่)<ul class="dzwhy">${r.why.map(x => `<li>${x}</li>`).join('')}<li>ร่องกว้างขึ้น = ใช้เทปน้อยลง ต้นทุนต่ำลง แต่จำนวนต้นต่อไร่ลดลง</li></ul></div>`;
+  } else if (k === 'emit') {
+    const r = recEmit({ ...S.set, ...d }); DZ.rec = { emSp: r.em }; const e = dzEval(d);
+    const ov = e.overlap, wst = ov >= 1.2 ? '' : ov >= 1 ? ' warn' : ' bad', runoff = e.app > e.infil;
+    h += `<div class="dzfig">${svgEmit(d.emSp, e.w, d.plantSp)}</div>`
+      + `<div class="dzsec">ระยะหัวหยดบนเทป</div>${chipRow('emSp', EMS, d.emSp, r.em, v => f(v * 100) + ' ซม.')}`
+      + `<div class="dzsec">อัตราไหลต่อหัว</div>${chipRow('emQ', QS, d.emQ, null, v => f(v, 1) + ' ลิตร/ชม.')}`
+      + `<div class="dzsec">ผลการคำนวณ</div>` + kvb([['อัตราให้น้ำ', f(e.app, 1) + '<small>มม./ชม.</small>'], ['ดินรับน้ำได้', '~' + f(e.infil) + '<small>มม./ชม.</small>'], ['วงเปียกซ้อนกัน', f(ov * 100) + '<small>%</small>'], ['หัวหยดต่อต้น', f(e.perPlant, 1) + '<small>หัว</small>'],
+        ['น้ำต่อเทป 100 ม.', f(100 / d.emSp * d.emQ) + '<small>ลิตร/ชม.</small>'], ['ให้น้ำช่วงพีค/โซน', f(e.tZone * 60) + '<small>นาที/วัน</small>']])
+      + `<div class="dzrec${runoff || ov < 1 ? ' warn' : ''}"><b>แนะนำ ทุก ${f(r.em * 100)} ซม.</b>${runoff ? `<br>⚠ ให้น้ำเร็ว ${f(e.app, 1)} มม./ชม. มากกว่าที่ดินรับได้ (~${e.infil}) — ลดอัตราไหลหรือเพิ่มระยะหัว` : ''}${ov < 1 ? '<br>⚠ วงเปียกไม่ต่อกัน ดินระหว่างหัวจะแห้ง รากเดินไม่ทั่ว' : ''}<ul class="dzwhy">${r.why.map(x => `<li>${x}</li>`).join('')}</ul></div>`;
+  } else if (k === 'zone') {
+    const e = dzEval(d), tst = e.total <= 12 ? 'ok' : e.total <= 20 ? 'warn' : 'bad', rp = PUMPS.find(v => v >= e.pumpNeed) || Math.ceil(e.pumpNeed);
+    DZ.rec = { pumpQ: rp };
+    const zs = L.zones.map(z => ({ id: z.id, area: z.area, flow: z.flow / 1000, dz: z.dz }));
+    h += `<div class="dzfig"><canvas id="dzMap" width="640" height="360" style="width:100%;height:auto;display:block"></canvas></div>`
+      + `<div class="dzsec">ปั๊มน้ำ (ลบ.ม./ชม.)</div>${chipRow('pumpQ', PUMPS, d.pumpQ, rp, v => f(v))}`
+      + `<div class="dzsec">ผลการคำนวณ (ช่วงต้องการน้ำสูงสุด ${PEAK_ET} มม./วัน)</div>` + kvb([['น้ำรวมทั้งแปลง', f(e.flow, 1) + '<small>ลบ.ม./ชม.</small>'], ['จำนวนโซน', f(e.zones) + '<small>โซน</small>'], ['เวลาต่อโซน', f(e.tZone * 60) + '<small>นาที</small>'], ['รวมทั้งแปลง', f(e.total, 1) + '<small>ชม./วัน</small>']])
+      + `<div class="bar" style="margin-top:10px"><i class="${tst === 'ok' ? '' : tst}" style="width:${clamp(e.total / 24 * 100, 3, 100)}%"></i></div><div class="small" style="display:flex;justify-content:space-between"><span>0</span><span>12 ชม.</span><span>24 ชม.</span></div>`
+      + `<div class="dzrec ${tst === 'ok' ? '' : tst}"><b>${tst === 'ok' ? '✓ ปั๊มนี้รดทั้งแปลงได้ทันในวันเดียว' : tst === 'warn' ? '⚠ ใช้เวลานาน — ควรเปิดน้ำตั้งแต่เช้ามืดหรือเพิ่มปั๊ม' : '✗ ปั๊มเล็กเกินไป รดไม่ทันในวันที่ร้อนจัด'}</b><br>ปั๊มแนะนำ ≥ <b>${f(e.pumpNeed, 1)} ลบ.ม./ชม.</b> (≈ ${rp}) เพื่อรดเสร็จใน 10 ชม. · แรงดันที่ต้องการ ~${f(L.head, 0)} ม. (${f(L.head / 10.2, 1)} บาร์)
+        <ul class="dzwhy"><li>ปั๊มจ่ายได้ครั้งละ ${f(d.pumpQ)} ลบ.ม./ชม. จึงแบ่งร่องเป็นกลุ่มที่ใช้น้ำไม่เกินปั๊ม แล้วเปิดทีละโซน</li><li>ปั๊มใหญ่ขึ้น = โซนน้อยลง ใช้เวลาน้อยลง แต่ท่อเมนต้องใหญ่ขึ้น</li></ul></div>`
+      + (Math.abs(d.pumpQ - S.set.pumpQ) < 1e-6 ? `<div class="dzsec">รายละเอียดแต่ละโซน</div><table class="dztbl"><tr><th>โซน</th><th>พื้นที่</th><th>น้ำ (ลบ.ม./ชม.)</th><th>ใช้ปั๊ม</th><th>ต่างระดับ</th></tr>${zs.map(z => `<tr><td><span class="zd" style="background:${ZC[z.id % ZC.length]}"></span>${z.id + 1}</td><td>${f(z.area / 1600, 2)} ไร่</td><td>${f(z.flow, 1)}</td><td>${f(z.flow / S.set.pumpQ * 100)}%</td><td>${f(z.dz, 2)} ม.</td></tr>`).join('')}</table>` : '<div class="small" style="margin-top:10px">กด “ใช้ค่านี้” เพื่อแบ่งโซนใหม่และดูรายละเอียดแต่ละโซน</div>');
+  } else if (k === 'bom') {
+    showApply = false; const ends = L.rows.reduce((a, r) => a + r.segs.length, 0);
+    const items = [['เทปน้ำหยด', `ระยะหัว ${f(S.set.emSp * 100)} ซม. · ${f(S.set.emQ, 1)} ลิตร/ชม.${S.set.tape === 'pc' ? ' · ชดเชยแรงดัน' : ''}`, f(L.tape) + ' ม.', `≈ ${Math.ceil(L.tape / 1000)} ม้วน (1,000 ม.)`],
+      ['ท่อย่อย PE/PVC', 'จ่ายน้ำเข้าเทปทุกร่อง', f(L.subLen) + ' ม.', ''], ['ท่อเมน', 'จากปั๊มถึงท่อย่อย', f(L.mainLen) + ' ม.', ''],
+      ['ข้อต่อเทป (มินิวาล์ว)', '1 ตัวต่อร่อง', f(L.rows.length) + ' ตัว', ''], ['ตัวปิดปลายเทป', 'ปลายร่องทุกเส้น', f(ends) + ' ตัว', ''],
+      ['บอลวาล์ว/โซลินอยด์ประจำโซน', `${L.zones.length} โซน`, f(L.zones.length) + ' ตัว', ''], ['กรองน้ำ (ดิสก์/ตะแกรง 120 mesh)', `≥ ${f(S.set.pumpQ)} ลบ.ม./ชม.`, '1 ชุด', ''],
+      ['ปั๊มน้ำ', `${f(S.set.pumpQ)} ลบ.ม./ชม. · แรงดัน ~${f(L.head, 0)} ม.`, '1 เครื่อง', ''], ['เกจวัดแรงดัน', 'ที่หัวโซน', '1–2 ตัว', '']];
+    h += `<table class="dztbl"><tr><th>รายการ</th><th>จำนวน</th></tr>${items.map(([a, b, c, d2]) => `<tr><td><b>${a}</b><br><span class="small">${b}</span></td><td class="mono">${c}${d2 ? `<br><span class="small">${d2}</span>` : ''}</td></tr>`).join('')}</table>`
+      + kvb([['พื้นที่', areaThai(L.area), 'wide'], ['จำนวนร่อง', f(L.rows.length) + '<small>ร่อง</small>'], ['หัวหยด', f(L.em) + '<small>หัว</small>'], ['ต้นมัน', f(L.plants) + '<small>ต้น</small>'], ['น้ำรวม', f(L.flowAll / 1000, 1) + '<small>ลบ.ม./ชม.</small>']])
+      + `<div class="small" style="margin-top:10px">จำนวนเป็นค่าประมาณจากแบบในแอป ควรเผื่อเทปและท่อ 5–10% สำหรับรอยต่อและส่วนเกิน</div>`;
+  } else if (k === 'row') { showApply = false; h = ''; }
+  else if (k === 'lvl') { showApply = false; h = ''; }
+  body.innerHTML = h;
+  foot.innerHTML = showApply ? `<button class="btn" id="dzRecBtn">ใช้ค่าแนะนำ</button><button class="btn primary" id="dzApply">ใช้ค่านี้</button>` : `<button class="btn primary" data-close>เสร็จ</button>`;
+  if (k === 'zone') dzMap();
+}
+function svgSpacing(r, p) {
+  const W = 320, cx = [70, 160, 250], sc = 90 / Math.max(r, 0.8);
+  const ridges = cx.map((x, i) => { const xx = 160 + (x - 160) * r * sc / 90; return `<path d="M${xx - 32} 92 Q${xx} 58 ${xx + 32} 92 Z" fill="#c9a67a"/><circle cx="${xx}" cy="${62}" r="4" fill="#1b1f22"/><path d="M${xx} 60 l0 -30" stroke="#3f8a3a" stroke-width="3"/><circle cx="${xx - 8}" cy="30" r="9" fill="#5aa04a"/><circle cx="${xx + 8}" cy="26" r="9" fill="#4b9440"/>`; }).join('');
+  const x0 = 160 - r * sc, x1 = 160;
+  const dots = Array.from({ length: 7 }, (_, i) => `<circle cx="${40 + i * p * 60}" cy="140" r="6" fill="#4b9440"/>`).filter((_, i) => 40 + i * p * 60 < 300).join('');
+  return `<svg viewBox="0 0 ${W} 170" font-family="Prompt" font-size="12"><rect x="0" y="92" width="${W}" height="8" fill="#e3d2b6"/>${ridges}
+    <path d="M${x0} 110 L${x1} 110" stroke="#1d6fd6" stroke-width="2" marker-start="url(#a1)" marker-end="url(#a1)"/><defs><marker id="a1" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1d6fd6"/></marker></defs>
+    <text x="${(x0 + x1) / 2}" y="124" text-anchor="middle" fill="#1d6fd6" font-weight="700">ระยะร่อง ${f(r, 2)} ม.</text>
+    <line x1="20" y1="140" x2="300" y2="140" stroke="#1b1f22" stroke-width="2"/>${dots}
+    <path d="M40 156 L${40 + p * 60} 156" stroke="#2f7d3c" stroke-width="2" marker-start="url(#a1)" marker-end="url(#a1)"/><text x="${40 + p * 30}" y="168" text-anchor="middle" fill="#2f7d3c" font-weight="700" font-size="11">ระยะต้น ${f(p, 2)} ม.</text>
+    <text x="8" y="14" fill="#5d6b60" font-size="11">ภาพตัดขวางร่อง / มองจากบน</text></svg>`;
+}
+function svgEmit(sp, w, p) {
+  const sc = 300 / 1.6, n = Math.floor(1.6 / sp) + 1; let c = '', dr = '';
+  for (let i = 0; i < n; i++) { const x = 10 + i * sp * sc; if (x > 312) break; c += `<ellipse cx="${x}" cy="60" rx="${w / 2 * sc}" ry="${Math.min(40, w / 2 * sc * 0.75)}" fill="rgba(29,111,214,.18)" stroke="rgba(29,111,214,.35)"/>`; dr += `<circle cx="${x}" cy="60" r="3.5" fill="#1d6fd6"/>`; }
+  let pl = ''; for (let x = 10 + p * sc / 2; x < 312; x += p * sc) pl += `<g transform="translate(${x} 60)"><circle r="7" fill="#4b9440" opacity=".85"/></g>`;
+  return `<svg viewBox="0 0 320 130" font-family="Prompt" font-size="12"><rect x="0" y="10" width="320" height="100" rx="10" fill="#e9dcc6"/>${c}<line x1="0" y1="60" x2="320" y2="60" stroke="#1b1f22" stroke-width="3"/>${dr}${pl}
+    <text x="10" y="124" fill="#1d6fd6" font-weight="700">หัวหยดทุก ${f(sp * 100)} ซม. · วงเปียก ~${f(w * 100)} ซม.</text><text x="310" y="26" text-anchor="end" fill="#5d6b60" font-size="11">มองจากด้านบน 1.6 ม.</text></svg>`;
+}
+function dzMap() {
+  const c = $('#dzMap'); if (!c || !L) return; const x = c.getContext('2d'), W = c.width, H = c.height, pad = 16, sc = Math.min((W - 2 * pad) / L.W, (H - 2 * pad) / L.H), ox = (W - L.W * sc) / 2, oy = (H - L.H * sc) / 2;
+  const P = (a, b) => [ox + a * sc, H - oy - b * sc]; x.clearRect(0, 0, W, H);
+  x.beginPath(); L.poly.forEach((p, i) => { const [a, b] = P(p[0], p[1]); i ? x.lineTo(a, b) : x.moveTo(a, b); }); x.closePath(); x.fillStyle = '#efe6d4'; x.fill();
+  const lw = Math.max(1, S.set.rowSp * sc * 0.8); x.lineWidth = lw;
+  const step = Math.max(1, Math.ceil(L.rows.length / 250));
+  L.rows.forEach((r, i) => { if (i % step) return; x.strokeStyle = ZC[r.zone % ZC.length]; r.segs.forEach(g => { const [a, b] = P(g.x1, r.y), [c2, d] = P(g.x2, r.y); x.beginPath(); x.moveTo(a, b); x.lineTo(c2, d); x.stroke(); }); });
+  x.lineWidth = 2; x.strokeStyle = '#1b1f22'; x.beginPath(); L.poly.forEach((p, i) => { const [a, b] = P(p[0], p[1]); i ? x.lineTo(a, b) : x.moveTo(a, b); }); x.closePath(); x.stroke();
+  x.strokeStyle = '#1d6fd6'; x.lineWidth = 3; x.beginPath(); L.sub.forEach((p, i) => { const [a, b] = P(p[0], p[1]); i ? x.lineTo(a, b) : x.moveTo(a, b); }); x.stroke();
+  x.font = '600 18px Prompt'; x.textAlign = 'center'; x.textBaseline = 'middle';
+  let lastB = -1e9;
+  L.zones.forEach(z => { const r0 = L.rows[z.rows[0]], r1 = L.rows[z.rows[z.rows.length - 1]], rm = L.rows[z.rows[Math.floor(z.rows.length / 2)]], g = rm.segs.reduce((a, b) => b.len > a.len ? b : a), ym = (r0.y + r1.y) / 2, xm = (g.x1 + g.x2) / 2; const [a, b] = P(xm, ym);
+    if (Math.abs(b - lastB) < 26) return; lastB = b;
+    x.fillStyle = 'rgba(255,255,255,.9)'; x.beginPath(); x.arc(a, b, 13, 0, 7); x.fill(); x.fillStyle = '#1b1f22'; x.fillText(z.id + 1, a, b + 1); });
+}
 function arMsg(html, ms) { const m = $('#arMsg'); m.innerHTML = html; m.style.display = ''; clearTimeout(AR.msgTO); AR.msgTO = setTimeout(() => { m.style.display = 'none'; }, ms || 3000); }
 /* hide the model ground and scenery; add bright overlays that read well over a camera picture */
 function arScene() {

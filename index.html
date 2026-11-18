@@ -94,6 +94,16 @@ body.arxr #view{background:transparent}
 .cdBar button b{font-size:24px;line-height:1}.cdBar button.pin{background:#1e7a45;color:#fff;font-size:15px}.cdBar button.pin.wait{background:#7f8c84}
 .cdBar button:disabled{opacity:.45}
 #cd .arMsg{z-index:4}#cd .arAnchor{z-index:4;bottom:calc(env(safe-area-inset-bottom) + 100px)}
+.lvlList{display:flex;flex-direction:column;gap:6px;margin:6px 0 10px}
+.lvlList .lv{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:var(--paper);cursor:pointer;text-align:left;font:inherit;color:inherit}
+.lvlList .lv b.n{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#6e4426;color:#fff;font-size:13px;flex:none}
+.lvlList .lv b.n.ref{background:#1e7a45}.lvlList .lv .dh{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-weight:600;white-space:nowrap}
+.lvlList .lv small{color:var(--muted)}
+.lvForm select,.lvForm input[type=text]{border:1px solid var(--line);border-radius:10px;padding:9px 10px;font:inherit;background:var(--card);width:100%}
+.lvm{display:none;margin-top:8px}.lvm.on{display:block}
+.lvRes{margin-top:10px;padding:10px 12px;border-radius:12px;background:#eef4ec;font-weight:600;font-size:15px;min-height:20px}
+.clAng{position:absolute;left:50%;top:calc(50% + 50px);transform:translateX(-50%);background:rgba(10,20,14,.7);color:#fff;border-radius:14px;padding:8px 16px;font:700 28px 'IBM Plex Mono',monospace;z-index:3}
+.clHz{position:absolute;left:0;right:0;height:2px;background:rgba(255,210,63,.85);z-index:2;top:50%;pointer-events:none}
 .arCal{position:absolute;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom) + 86px);background:rgba(255,255,255,.95);border-radius:18px;padding:12px;pointer-events:auto;color:#16241a}
 .arCalT{font-size:13px;margin-bottom:8px;text-align:center}.arCalT small{color:#5d6b60}
 .arRow{display:flex;gap:6px;justify-content:center;align-items:center;margin-top:6px}.arRow button{flex:1;border:1px solid #d6ddd3;background:#f4f7f2;border-radius:12px;padding:9px 4px;font-size:13px;font-weight:600}
@@ -1599,6 +1609,14 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div class="stats" id="bom"></div>
         <div class="note" id="layoutNote"></div>
       </div>
+      <div class="card" id="lvlCard">
+        <h3 style="display:flex;align-items:center;gap:8px">📏 วัดระดับพื้นจริง <span class="tag" id="lvlTag" style="margin-left:auto">ยังไม่มี</span></h3>
+        <p class="small" style="margin:4px 0 8px">ความสูงจากดาวเทียม/DEM หยาบ (±2–5 ม.) วัดจริงด้วย <b>สายยางระดับน้ำ</b> หรือ <b>กล้องมือถือ</b> อย่างน้อย 3 จุด แล้วระบบจะใช้ค่าจริงสร้างพื้น 3D คำนวณความลาด แรงดัน และโซนให้ใหม่</p>
+        <div id="lvlList" class="lvlList"></div>
+        <div class="row" style="flex-wrap:wrap;gap:8px"><button class="btn primary sm" id="lvlTap">👆 แตะจุดบนภาพ 3D</button><button class="btn sm" id="lvlGPS">📍 ยืนตรงจุดนี้ (GPS)</button></div>
+        <details class="small" style="margin-top:10px"><summary><b>วิธีวัดด้วยสายยางระดับน้ำ</b> (แม่น ±1 ซม.)</summary>
+          <ol style="margin:6px 0 0;padding-left:18px;line-height:1.6"><li>สายยางใสยาว 20–30 ม. เติมน้ำเต็ม ไล่ฟองอากาศออก</li><li>คนที่ 1 ถือปลายสายตั้งตรงที่ <b>จุดที่รู้ระดับแล้ว</b> (จุดแรก = จุดอ้างอิง เช่น ข้างปั๊ม) วัดว่าระดับน้ำสูงจากพื้นกี่ ซม.</li><li>คนที่ 2 ถือปลายอีกข้างที่จุดใหม่ รอน้ำนิ่ง วัดระดับน้ำจากพื้นกี่ ซม.</li><li>ใส่ 2 ตัวเลขนี้ในแอป ระบบคำนวณให้ว่าสูง/ต่ำกว่ากี่ ซม.</li><li>วัดที่มุมแปลง หัว–ท้ายร่อง จุดสูงสุด จุดต่ำสุด และจุดที่น้ำขัง</li></ol></details>
+      </div>
       <details class="card more" id="terrBox">
         <summary>ภูมิประเทศและแรงดันน้ำ <span class="tag" id="terrTag">—</span></summary>
         <div class="stats" id="terrStats" style="margin-top:10px"></div>
@@ -1803,6 +1821,35 @@ svg.leaflet-image-layer.leaflet-interactive path {
 </div></div>
 
 <div id="intro"><div class="introbox"><button class="skip" id="iSkip">ข้าม</button><div id="introBody"></div><div id="introBtns"></div></div></div>
+<div class="sheet" id="lvSheet" style="display:none"><div class="sheetbg" data-close></div><div class="sheetbox">
+  <div class="sheeth"><span class="ti t-gr sm">📏</span><b id="lvTitle">จุดวัดระดับ</b><button class="xbtn" data-close aria-label="ปิด">✕</button></div>
+  <div class="lvForm">
+    <div class="small" id="lvWhere"></div>
+    <div id="lvRefNote" class="note" style="display:none">จุดแรกคือ <b>จุดอ้างอิง (ระดับ 0)</b> — จุดอื่นจะวัดเทียบกับจุดนี้ แนะนำเลือกจุดข้างปั๊มหรือหัวแปลง</div>
+    <div id="lvMeas">
+      <div class="sect" style="margin:10px 0 6px">วัดเทียบกับจุด</div>
+      <select id="lvBase"></select>
+      <div class="sect" style="margin:12px 0 6px">วิธีวัด</div>
+      <div class="seg seg3" id="lvMethod"><button data-lm="hose">💧 สายยาง</button><button data-lm="tilt">📐 กล้องวัดมุม</button><button data-lm="manual">✏️ ใส่ค่าเอง</button></div>
+      <div class="lvm" data-lm="hose"><div class="form"><label>ระดับน้ำจากพื้น ที่จุดเทียบ <span class="u">ซม.</span><input type="number" inputmode="decimal" id="lvA" step="0.5"></label><label>ระดับน้ำจากพื้น ที่จุดนี้ <span class="u">ซม.</span><input type="number" inputmode="decimal" id="lvB" step="0.5"></label></div>
+        <p class="small">ตัวอย่าง: จุดเทียบ 80 ซม. จุดนี้ 95 ซม. → พื้นตรงนี้ <b>ต่ำกว่า</b> 15 ซม. (น้ำอยู่ระดับเดียวกันเสมอ)</p></div>
+      <div class="lvm" data-lm="tilt"><div class="form"><label>ระยะห่างแนวราบ <span class="u">ม. (ตลับเมตร/ก้าว)</span><input type="number" inputmode="decimal" id="lvD" step="0.1"></label><label>ความสูงมือถือของคุณ <span class="u">ม.</span><input type="number" inputmode="decimal" id="lvEye" step="0.05" value="1.40"></label><label>ความสูงจุดที่เล็งบนไม้ของอีกคน <span class="u">ม.</span><input type="number" inputmode="decimal" id="lvMark" step="0.05" value="1.40"></label><label>มุมที่วัดได้ <span class="u">องศา (+ เงย / − ก้ม)</span><input type="number" inputmode="decimal" id="lvAng" step="0.1"></label></div>
+        <button class="btn sm" id="lvAim" style="width:100%">📐 เปิดกล้องเล็งวัดมุม</button>
+        <p class="small">คุณยืนที่ <b>จุดเทียบ</b> อีกคนถือไม้ตั้งตรงที่จุดนี้ ทำเครื่องหมายที่ไม้สูงเท่ามือถือ แล้วเล็งวงเป้าไปที่เครื่องหมาย · แม่นราว ±5–20 ซม. ยิ่งใกล้ยิ่งแม่น</p></div>
+      <div class="lvm" data-lm="manual"><div class="form"><label class="wide">จุดนี้สูงกว่าจุดเทียบ <span class="u">ซม. (ต่ำกว่าใส่ลบ เช่น −12)</span><input type="number" inputmode="decimal" id="lvM" step="0.5"></label></div></div>
+    </div>
+    <label class="wide" style="display:block;margin-top:10px">ชื่อ/หมายเหตุ <input type="text" id="lvName" placeholder="เช่น มุมเหนือ, จุดน้ำขัง" style="width:100%"></label>
+    <div class="lvRes" id="lvRes"></div>
+    <div class="row" style="gap:8px;margin-top:12px"><button class="btn" id="lvDel" style="display:none">🗑 ลบจุด</button><button class="btn primary" id="lvSave" style="flex:1">บันทึกจุดนี้</button></div>
+  </div>
+</div></div>
+<div id="clino" class="cd" style="display:none">
+  <video id="clVid" playsinline muted autoplay></video>
+  <div class="cdTop"><button class="arX" id="clX">✕</button><div class="arInfo">เล็ง <b>วงเป้า</b> ไปที่เครื่องหมายบนไม้ของอีกคน ถือนิ่ง ๆ<br><small>ถือมือถือตั้งตรงแนวตั้ง ไม่เอียงซ้าย–ขวา</small></div></div>
+  <div class="cdRet"><i></i></div><div class="clHz" id="clHz"></div>
+  <div class="clAng" id="clAng">—</div>
+  <div class="cdBar" style="grid-template-columns:1fr"><button id="clUse" class="pin"><b>✔</b>ใช้มุมนี้</button></div>
+</div>
 <div class="sheet" id="dSheet" style="display:none"><div class="sheetbg" data-close></div><div class="sheetbox">
   <div class="sheeth"><span class="ti t-gr sm"><svg class="ic"><use href="#i-list"/></svg></span><b>สมุดไร่</b><button class="xbtn" data-close aria-label="ปิด">✕</button></div>
   <div id="dMain">
@@ -1849,7 +1896,8 @@ const DEF = { rowSp: 1.0, plantSp: 0.8, emSp: 0.3, emQ: 1.5, pumpQ: 10, eff: 90,
 let S = { pts: [], hpts: [], closed: false, set: { ...DEF }, mode: 'auto', step: 1 };
 try { const s = JSON.parse(localStorage.getItem('raidrop-v1')); if (s && s.set) { S = { ...S, ...s, set: { ...DEF, ...s.set } }; } } catch (e) {}
 if (!S.crop) S.crop = { status: S.closed ? 'planted' : 'none' };
-function save() { try { localStorage.setItem('raidrop-v1', JSON.stringify({ crop: S.crop, obs: S.obs, diary: S.diary, ui: S.ui, g: S.g, pts: S.pts, hpts: S.hpts, meas: S.meas, mpts: S.mpts, src: S.src, elevSrc: S.elevSrc, closed: S.closed, set: S.set, mode: S.mode })); } catch (e) {} }
+if (!Array.isArray(S.lvl)) S.lvl = [];
+function save() { try { localStorage.setItem('raidrop-v1', JSON.stringify({ crop: S.crop, obs: S.obs, diary: S.diary, ui: S.ui, g: S.g, pts: S.pts, hpts: S.hpts, lvl: S.lvl, meas: S.meas, mpts: S.mpts, src: S.src, elevSrc: S.elevSrc, closed: S.closed, set: S.set, mode: S.mode })); } catch (e) {} }
 
 /* ================= geometry ================= */
 function project(pts) {
@@ -1895,8 +1943,11 @@ function gridAt(G, x, y) {
   return (d[k] * (1 - tx) + d[k + 1] * tx) * (1 - ty) + (d[k + G.nx] * (1 - tx) + d[k + G.nx + 1] * tx) * ty;
 }
 // elevation points [x,y,z] in the projected frame: boundary GPS altitudes (smoothed) + interior level points
+let lvlMode = false;
 function elevPoints(P) {
   const E = [];
+  lvlMode = (S.lvl || []).length >= 3;
+  if (lvlMode) { S.lvl.forEach(h => E.push([(h.lon - P.lon0) * P.kx, (h.lat - P.lat0) * P.ky, h.dh, 1])); return E; }
   const idx = S.elevSrc === 'google' || S.elevSrc === 'dem' ? [] : S.pts.map((p, i) => i).filter(i => S.pts[i].alt != null && isFinite(S.pts[i].alt));
   if (idx.length >= 3) {
     const w = Math.min(4, Math.floor(idx.length / 6));
@@ -2006,7 +2057,7 @@ function computeLayout() {
     const res = E.map(e => e[2] - (pl[0] * e[0] + pl[1] * e[1] + pl[2]));
     for (let j = 0; j < G.ny; j++) for (let i = 0; i < G.nx; i++) {
       const x = G.x0 + i * cs, y = G.y0 + j * cs; let sw = 0, sr = 0;
-      E.forEach((e, k) => { const w = 1 / ((x - e[0]) ** 2 + (y - e[1]) ** 2 + 36); sw += w; sr += w * res[k]; });
+      E.forEach((e, k) => { const w = 1 / ((x - e[0]) ** 2 + (y - e[1]) ** 2 + (lvlMode ? 1 : 36)); sw += w; sr += w * res[k]; });
       G.data[j * G.nx + i] = pl[0] * x + pl[1] * y + pl[2] + sr / sw;
     }
   }
@@ -2047,7 +2098,7 @@ function computeLayout() {
   const head = lift + (st.tape === 'pc' ? 12 : 8) + 3 + (mainLen + subLen) * 0.02;
   L = { poly: rp, W, H, rows, zones, tape, em, plants, sub, subLen, pump, mainLen, area: polyArea(poly), perim: polyPerim(poly),
     cropArea, flowAll: em * st.emQ, appRate: st.emQ / (st.emSp * st.rowSp), lat0: P.lat0, lon0: P.lon0, verts: poly.length, ang,
-    G, elevOK, nElev: E.length, dz: zmax - zmin, zBase: zmin, slopeRow: ns ? sdx / ns * 100 : 0, slopeAcross: ns ? sdy / ns * 100 : 0,
+    G, elevOK, measured: lvlMode, nElev: E.length, dz: zmax - zmin, zBase: zmin, slopeRow: ns ? sdx / ns * 100 : 0, slopeAcross: ns ? sdy / ns * 100 : 0,
     slopeAll: slopeAll * 100, unif, head, lift, rowA, rowAz: angToAz(ang), tf: { c, s, minX, minY, kx: P.kx, ky: P.ky, lat0: P.lat0, lon0: P.lon0 } };
 }
 const effF = () => S.set.eff / 100 * (L ? L.unif : 1);
@@ -2806,6 +2857,7 @@ function build3D() {
   R.lastAct = -2;
   R.envHour = -99; updateLighting(true);
   buildSunPath(); R.satMesh = null; buildSatGround(g);
+  R.lvG = null; lvMarkers();
   fitCamera('overview');
 }
 function buildPlants() {
@@ -3327,7 +3379,7 @@ function renderBOM() {
   ].map(([l, v, c]) => `<div class="${c || ''}"><div class="l">${l}</div><div class="v mono">${v}</div></div>`).join('');
   $('#zoneTable').innerHTML = `<tr><th>โซน</th><th class="r">แถว</th><th class="r">พื้นที่</th><th class="r">อัตราไหล</th><th class="r">ต่างระดับ</th></tr>` +
     L.zones.map(z => `<tr><td><span class="zd" style="background:${ZC[z.id % ZC.length]}"></span>โซน ${z.id + 1}</td><td class="r mono">${z.rows.length}</td><td class="r mono">${f(z.area / 1600, 2)} ไร่</td><td class="r mono">${f(z.flow / 1000, 1)} ลบ.ม./ชม.</td><td class="r mono" style="color:${z.dz > 2 && st.tape !== 'pc' ? 'var(--bad)' : 'inherit'}">${f(z.dz, 1)} ม.</td></tr>`).join('');
-  renderTerrain(); renderRowCard();
+  renderTerrain(); renderRowCard(); renderLvl();
   $('#layoutNote').innerHTML = `ร่องแนว <b>${rowName(L.rowAz)}</b> (${f(L.rowAz)}°) ${st.rowDir === 'best' ? '— ระบบเลือกแนวที่ดีที่สุดให้อัตโนมัติ' : st.rowDir === 'contour' ? '— ขวางความลาด' : st.rowDir === 'edge' ? '— ขนานขอบแปลงยาว' : '— กำหนดเอง'} · ปั๊ม ${f(st.pumpQ)} ลบ.ม./ชม. จ่ายน้ำได้ครั้งละ 1 โซน จึงแบ่งเป็น <b>${L.zones.length} โซน</b> เปิดทีละโซนตามลำดับ` +
     (L.zones.length > 6 ? '<br><b>หมายเหตุ:</b> โซนเยอะ ใช้เวลานาน ควรพิจารณาปั๊มใหญ่ขึ้น' : '');
 }
@@ -3346,7 +3398,7 @@ function renderTerrain() {
     ['ต่างระดับในแปลง', f(L.dz, 1) + '<small>ม.</small>'], ['ความลาดรวม', f(L.slopeAll, 1) + '<small>%</small>'],
     ['ลาดตามแถว', f(L.slopeRow, 1) + '<small>%</small>'], ['ลาดขวางแถว', f(L.slopeAcross, 1) + '<small>%</small>'],
     ['แรงดันปั๊มที่ต้องการ', f(L.head, 0) + `<small>ม. (${f(L.head / 10.2, 1)} บาร์)</small>`], ['ความสม่ำเสมอของน้ำ', f(L.unif * 100) + '<small>%</small>'],
-    ['ระดับต่ำสุดจาก GPS', f(L.zBase, 1) + '<small>ม.</small>'], ['จุดความสูงที่ใช้', f(L.nElev) + '<small>จุด</small>'],
+    L.measured ? ['ที่มาของความสูง', 'วัดจริง<small> (' + L.nElev + ' จุด)</small>'] : ['ระดับต่ำสุดจาก GPS', f(L.zBase, 1) + '<small>ม.</small>'], ['จุดความสูงที่ใช้', f(L.nElev) + '<small>จุด</small>'],
   ].map(([l, v]) => `<div><div class="l">${l}</div><div class="v mono">${v}</div></div>`).join('');
   const maxZ = Math.max(...L.zones.map(z => z.dz)), tips = [];
   if (st.tape !== 'pc' && maxZ > 2) tips.push(`<b>ควรใช้เทปชดเชยแรงดัน (PC)</b> — บางโซนต่างระดับ ${f(maxZ, 1)} ม. เทปธรรมดาจะจ่ายน้ำจุดต่ำมากกว่าจุดสูงราว ${f(maxZ * 3)}% ระบบเพิ่มเวลาให้น้ำชดเชยแล้ว แต่จุดต่ำจะเปียกเกิน`);
@@ -3354,9 +3406,10 @@ function renderTerrain() {
   if (st.rowDir !== 'contour' && L.slopeRow > 2) tips.push('แถวปลูกวิ่งตามความลาดมากกว่า 2% — แนะนำเปลี่ยน “แนวแถวปลูก” เป็นขวางความลาด เพื่อลดน้ำไหลบ่าและการชะหน้าดิน');
   if (L.lift > 1) tips.push(`ปั๊มอยู่ต่ำกว่าจุดสูงสุด ${f(L.lift, 1)} ม. — ควรมีวาล์วลดแรงดัน/ตัวปรับแรงดันที่หัวโซนฝั่งที่ต่ำ`);
   if (L.slopeAll > 8) tips.push('พื้นลาดชันมาก ควรยกร่องตามแนวระดับและทำคันชะลอน้ำ');
+  if (L.measured) { const sl = L.slopeAll; tips.unshift(sl < 1 ? `✅ ความลาด ${f(sl, 1)}% (ต่ำกว่า 1%) — ใช้เทปน้ำหยดธรรมดาได้` : sl <= 3 ? `ความลาด ${f(sl, 1)}% (1–3%) — ควรวางร่องตามแนวระดับ (ขวางความลาด)` : `<b>ความลาด ${f(sl, 1)}% (เกิน 3%)</b> — ควรใช้หัวหยดชดเชยแรงดัน (PC) และแบ่งโซนตามความสูง`); }
   if (!tips.length) tips.push('พื้นค่อนข้างสม่ำเสมอ ระบบน้ำหยดแบบเทปธรรมดาจ่ายน้ำได้สม่ำเสมอดี');
   $('#terrNote').className = 'note' + (st.tape !== 'pc' && maxZ > 2 ? ' warn' : '');
-  $('#terrNote').innerHTML = tips.join('<br>') + (S.elevSrc === 'google' ? `<br><span class="small">ความสูงจาก Google Elevation API ${S.hpts.length} จุดทั่วแปลง (ความละเอียดตามข้อมูลของ Google ในพื้นที่นั้น) · <a href="#" id="reElev">ดึงใหม่</a></span>` : S.elevSrc === 'dem' ? '<br><span class="small">ความสูงจากแบบจำลองภูมิประเทศ (Copernicus DEM ~90 ม. ผ่าน Open-Meteo) เห็นแนวลาดใหญ่ แต่ไม่เห็นหลุมหรือคันเล็ก ๆ — วัดเพิ่มด้วย “⛰ วัดระดับกลางแปลง” ได้</span>' : '<br><span class="small">ความสูงจาก GPS มือถือคลาดเคลื่อนได้ 3–10 ม. ระบบเฉลี่ยหลายจุดให้เรียบ หากต้องการความแม่นยำ ควรวัดด้วยกล้องระดับหรือ RTK</span>');
+  $('#terrNote').innerHTML = tips.join('<br>') + (L.measured ? `<br><span class="small">ความสูงจากจุดวัดระดับจริง ${L.nElev} จุด (สายยาง/กล้อง/AR) — แม่นกว่า DEM มาก</span>` : S.elevSrc === 'google' ? `<br><span class="small">ความสูงจาก Google Elevation API ${S.hpts.length} จุดทั่วแปลง (ความละเอียดตามข้อมูลของ Google ในพื้นที่นั้น) · <a href="#" id="reElev">ดึงใหม่</a></span>` : S.elevSrc === 'dem' ? '<br><span class="small">ความสูงจากแบบจำลองภูมิประเทศ (Copernicus DEM ~90 ม. ผ่าน Open-Meteo) เห็นแนวลาดใหญ่ แต่ไม่เห็นหลุมหรือคันเล็ก ๆ — วัดเพิ่มด้วย “⛰ วัดระดับกลางแปลง” ได้</span>' : '<br><span class="small">ความสูงจาก GPS มือถือคลาดเคลื่อนได้ 3–10 ม. ระบบเฉลี่ยหลายจุดให้เรียบ หากต้องการความแม่นยำ ควรวัดด้วยกล้องระดับหรือ RTK</span>');
 }
 function hudPill() {
   const bits = [`${hm(SIM.t)}`];
@@ -4709,6 +4762,8 @@ $('#cdDone').addEventListener('click', () => {
   const pts = C.map(c => c.ll);
   if (polyArea(project(pts).xy) < 2) return cdMsg('พื้นที่เล็กเกินไป (ต่ำกว่า 2 ตร.ม.)');
   S.mpts = pts.map(p => ({ ...p })); S.pts = pts.map(p => ({ lat: p.lat, lon: p.lon, acc: 0, alt: null, t: Date.now() })); S.src = 'cam'; S.hpts = []; S.closed = false;
+  const XC = C.filter(c => c.xr);
+  if (XC.length >= 3 && !(S.lvl || []).length) S.lvl = XC.map((c, i) => ({ lat: c.ll.lat, lon: c.ll.lon, dh: c.xr.y - XC[0].xr.y, name: `มุม ${i + 1}`, src: i ? 'ar' : 'ref', base: i ? 0 : null, t: Date.now() }));
   R.noAutoGo = true; closeField(); R.noAutoGo = false; fetchDEM();
   if (!L) return cdMsg('ปิดแปลงไม่สำเร็จ ลองปักมุมใหม่');
   CD.done = true; const sig = C.map(c => c.sig || (c.g && c.g.sig) || 3), avg = sig.reduce((a, b) => a + b, 0) / sig.length;
@@ -4732,6 +4787,115 @@ function camXRgrow() {
   const wrap = new THREE.Group(); wrap.add(grp); wrap.rotation.y = T.th; wrap.position.set(T.t[0], dy, -T.t[1]);
   grp.scale.y = 0.001; X.scene.add(wrap); X.grow = { g: grp, t0: performance.now() };
 }
+/* ================= measured spot heights ================= */
+const LV = { edit: null, src: null, method: 'hose', tap: false };
+const cmTxt = dh => { const c = Math.round(dh * 100); return c === 0 ? '0 ซม.' : (c > 0 ? '+' : '−') + Math.abs(c) + ' ซม.'; };
+function renderLvl() {
+  const el = $('#lvlList'); if (!el) return; const P = S.lvl || [];
+  el.innerHTML = P.length ? P.map((p, i) => `<button class="lv" data-lv="${i}"><b class="n${i ? '' : ' ref'}">${i ? 'ป' + i : 'อ้าง'}</b><span>${p.name || (i ? 'จุดที่ ' + i : 'จุดอ้างอิง')}<br><small>${{ hose: '💧 สายยาง', tilt: '📐 กล้องวัดมุม', manual: '✏️ ใส่เอง', ar: '🟢 AR', ref: 'ระดับ 0' }[p.src] || ''}${p.base != null && i ? ' · เทียบ ' + (p.base ? 'ป' + p.base : 'อ้าง') : ''}</small></span><span class="dh">${i ? cmTxt(p.dh) : '0'}</span></button>`).join('')
+    : '<div class="small" style="color:var(--muted)">ยังไม่มีจุดวัด — เริ่มจากจุดอ้างอิง (เช่น ข้างปั๊ม)</div>';
+  const t = $('#lvlTag'); t.className = 'tag' + (P.length >= 3 ? ' live' : P.length ? '' : ' off');
+  t.textContent = P.length >= 3 ? `ใช้ค่าจริง ${P.length} จุด` : P.length ? `${P.length} จุด (ต้อง ≥ 3)` : 'ยังไม่มี';
+  $('#lvlTap').classList.toggle('on', LV.tap); $('#lvlTap').textContent = LV.tap ? '✋ เลิกแตะ' : '👆 แตะจุดบนภาพ 3D';
+}
+$('#lvlList').addEventListener('click', e => { const b = e.target.closest('[data-lv]'); if (b) lvOpen(+b.dataset.lv); });
+$('#lvlTap').addEventListener('click', () => { if (!L) return toast('วัดแปลงก่อน'); LV.tap = !LV.tap; renderLvl(); if (LV.tap) { if (S.step !== 2) go(2); toast('แตะพื้นในภาพ 3D ตรงจุดที่วัดระดับ'); } });
+$('#lvlGPS').addEventListener('click', () => {
+  if (!L) return toast('วัดแปลงก่อน'); if (!navigator.geolocation) return toast('มือถือนี้ไม่มี GPS');
+  toast('ยืนนิ่ง ๆ กำลังเฉลี่ย GPS 8 วินาที…'); const F = [];
+  const id = navigator.geolocation.watchPosition(p => F.push(p.coords), () => {}, { enableHighAccuracy: true, maximumAge: 0, timeout: 15000 });
+  setTimeout(() => { navigator.geolocation.clearWatch(id); if (!F.length) return toast('หา GPS ไม่เจอ ลองแตะบนภาพ 3D แทน');
+    let sw = 0, la = 0, lo = 0, ac = 0; F.forEach(c => { const w = 1 / (c.accuracy * c.accuracy); sw += w; la += c.latitude * w; lo += c.longitude * w; ac += c.accuracy; });
+    lvOpen(null, { lat: la / sw, lon: lo / sw, how: `GPS เฉลี่ย ${F.length} ค่า ±${f(ac / F.length / Math.sqrt(F.length / 3 + 1), 1)} ม.` }); }, 8000);
+});
+function lvOpen(i, at) {
+  LV.edit = i; LV.at = at || null; const P = S.lvl, p = i != null ? P[i] : null, isRef = i === 0 || (i == null && !P.length);
+  $('#lvTitle').textContent = p ? (i ? `จุดวัดที่ ${i}` : 'จุดอ้างอิง') : isRef ? 'ตั้งจุดอ้างอิง (ระดับ 0)' : `จุดวัดใหม่ (ป${P.length})`;
+  const ll = p || at; let where = '';
+  if (ll && L) { const q = llToScene(ll.lat, ll.lon), w = pip(q.x, q.y, L.poly); where = `${at && at.how ? at.how + ' · ' : ''}${w ? 'ในแปลง' : 'นอกแปลง'} · ห่างปั๊ม ${f(Math.hypot(q.x - L.pump[0], q.y - L.pump[1]))} ม.`; }
+  $('#lvWhere').textContent = where; $('#lvRefNote').style.display = isRef ? '' : 'none'; $('#lvMeas').style.display = isRef ? 'none' : '';
+  $('#lvBase').innerHTML = P.map((q, k) => k === i ? '' : `<option value="${k}">${k ? 'ป' + k : 'จุดอ้างอิง'} ${q.name ? '· ' + q.name : ''} (${k ? cmTxt(q.dh) : '0'})</option>`).join('');
+  if (p && p.base != null) $('#lvBase').value = p.base; else if (P.length) $('#lvBase').value = P.length - 1 === i ? 0 : P.length - 1;
+  LV.method = p && p.src && p.src !== 'ref' && p.src !== 'ar' ? p.src : 'hose'; lvMethod();
+  const r = (p && p.raw) || {}; $('#lvA').value = r.a ?? ''; $('#lvB').value = r.b ?? ''; $('#lvD').value = r.d ?? (ll && P.length ? lvDist(ll) : ''); $('#lvEye').value = r.eye ?? (S.ui && S.ui.cdEye) ?? 1.4; $('#lvMark').value = r.mark ?? (S.ui && S.ui.cdEye) ?? 1.4; $('#lvAng').value = r.ang ?? ''; $('#lvM').value = p && i ? Math.round((p.dh - (P[p.base] ? P[p.base].dh : 0)) * 1000) / 10 : '';
+  $('#lvName').value = p ? p.name || '' : ''; $('#lvDel').style.display = p ? '' : 'none';
+  clearTimeout(LV.ct); $('#lvSheet').style.display = 'block'; requestAnimationFrame(() => $('#lvSheet').classList.add('on')); lvCalc();
+}
+function lvClose() { $('#lvSheet').classList.remove('on'); clearTimeout(LV.ct); LV.ct = setTimeout(() => { $('#lvSheet').style.display = 'none'; }, 250); }
+function lvDist(ll) { const b = S.lvl[+$('#lvBase').value || 0]; if (!b) return ''; const a = llToScene(ll.lat, ll.lon), c = llToScene(b.lat, b.lon); return f(Math.hypot(a.x - c.x, a.y - c.y), 1); }
+function lvMethod() { $$('#lvMethod button').forEach(b => b.classList.toggle('on', b.dataset.lm === LV.method)); $$('.lvm').forEach(d => d.classList.toggle('on', d.dataset.lm === LV.method)); lvCalc(); }
+$('#lvMethod').addEventListener('click', e => { const b = e.target.closest('[data-lm]'); if (b) { LV.method = b.dataset.lm; lvMethod(); } });
+['lvA', 'lvB', 'lvD', 'lvEye', 'lvMark', 'lvAng', 'lvM', 'lvBase'].forEach(id => $('#' + id).addEventListener('input', lvCalc));
+$('#lvBase').addEventListener('change', () => { const ll = LV.edit != null ? S.lvl[LV.edit] : LV.at; if (ll && LV.method === 'tilt') $('#lvD').value = lvDist(ll); lvCalc(); });
+/* returns the height of this point relative to the reference (m), or null */
+function lvCalc() {
+  const P = S.lvl, isRef = LV.edit === 0 || (LV.edit == null && !P.length), out = $('#lvRes');
+  if (isRef) { out.textContent = 'ระดับ 0 — จุดอื่นจะเทียบกับจุดนี้'; return 0; }
+  const base = P[+$('#lvBase').value || 0], bdh = base ? base.dh : 0, n = id => parseFloat($('#' + id).value);
+  let rel = null;
+  if (LV.method === 'hose') { const a = n('lvA'), b = n('lvB'); if (isFinite(a) && isFinite(b)) rel = (a - b) / 100; }
+  else if (LV.method === 'tilt') { const d = n('lvD'), eye = n('lvEye'), mk = n('lvMark'), ang = n('lvAng'); if (isFinite(d) && isFinite(ang) && isFinite(eye) && isFinite(mk)) rel = d * Math.tan(ang * RAD) + eye - mk; }
+  else { const m = n('lvM'); if (isFinite(m)) rel = m / 100; }
+  if (rel == null) { out.textContent = 'ใส่ค่าที่วัดได้'; return null; }
+  const dh = bdh + rel, far = LV.method === 'tilt' && n('lvD') > 30 ? '<br><small style="color:#b5651d">⚠ ไกลเกิน 30 ม. — มุมคลาด 0.5° = ' + f(n('lvD') * Math.tan(0.5 * RAD) * 100) + ' ซม. ควรวัดเป็นช่วงสั้น ๆ ต่อกัน</small>' : '';
+  out.innerHTML = `จุดนี้ <b>${rel >= 0 ? 'สูงกว่า' : 'ต่ำกว่า'}</b> จุดเทียบ ${Math.abs(Math.round(rel * 1000) / 10)} ซม. → เทียบจุดอ้างอิง <b>${cmTxt(dh)}</b>` + far;
+  return dh;
+}
+$('#lvSave').addEventListener('click', () => {
+  const P = S.lvl, i = LV.edit, isRef = i === 0 || (i == null && !P.length), dh = lvCalc(); if (dh == null) return toast('ใส่ค่าที่วัดได้ก่อน');
+  const ll = i != null ? P[i] : LV.at; if (!ll) return;
+  const rec = { lat: ll.lat, lon: ll.lon, dh, name: $('#lvName').value.trim(), src: isRef ? 'ref' : LV.method, base: isRef ? null : +$('#lvBase').value || 0, t: Date.now(),
+    raw: isRef ? null : { a: $('#lvA').value, b: $('#lvB').value, d: $('#lvD').value, eye: $('#lvEye').value, mark: $('#lvMark').value, ang: $('#lvAng').value } };
+  if (i != null) { const old = P[i].dh; P[i] = rec; if (i === 0) { /* moving the reference shifts nothing else */ } else { const delta = dh - old; P.forEach((q, k) => { if (k !== i && q.base === i) lvShift(k, delta); }); } }
+  else P.push(rec);
+  save(); lvClose(); lvApply();
+  toast(isRef ? 'ตั้งจุดอ้างอิงแล้ว — วัดจุดต่อไปเทียบกับจุดนี้' : `บันทึกแล้ว ${cmTxt(dh)}` + (P.length < 3 ? ` · อีก ${3 - P.length} จุดจะเริ่มใช้ค่าจริง` : ''));
+});
+function lvShift(k, delta) { const P = S.lvl; P[k].dh += delta; P.forEach((q, j) => { if (j !== k && q.base === k) lvShift(j, delta); }); }
+$('#lvDel').addEventListener('click', () => { const i = LV.edit; if (i == null) return; if (i === 0 && S.lvl.length > 1 && !confirm('ลบจุดอ้างอิงจะลบทุกจุด — ยืนยัน?')) return;
+  if (i === 0) S.lvl = []; else { S.lvl.splice(i, 1); S.lvl.forEach(q => { if (q.base === i) q.base = 0; else if (q.base > i) q.base--; }); }
+  save(); lvClose(); lvApply(); });
+$('#lvSheet').addEventListener('click', e => { if (e.target.closest('[data-close]')) lvClose(); });
+function lvApply() { renderLvl(); if (S.closed) onLayoutChanged(); else lvMarkers(); }
+/* stakes with labels in the 3D view */
+function lvMarkers() {
+  if (!R.group || !L) return; if (R.lvG) { disposeGroup(R.lvG); R.group.remove(R.lvG); R.lvG = null; }
+  const P = S.lvl || []; if (!P.length) return; const g = new THREE.Group(); R.lvG = g;
+  const k = clamp(Math.max(L.W, L.H) / 60, 1, 8);
+  P.forEach((p, i) => { const q = llToScene(p.lat, p.lon), h = hz(q.x, q.y);
+    const st = new THREE.Mesh(new THREE.CylinderGeometry(0.06 * k, 0.06 * k, 1.6 * k, 8), new THREE.MeshStandardMaterial({ color: i ? '#8a5a32' : '#1e7a45' })); st.position.set(q.x, h + 0.8 * k, -q.y); g.add(st);
+    const c = document.createElement('canvas'); c.width = 256; c.height = 72; const x = c.getContext('2d'); x.fillStyle = i ? 'rgba(110,68,38,.92)' : 'rgba(30,122,69,.95)'; x.beginPath(); x.roundRect ? x.roundRect(4, 6, 248, 60, 16) : x.rect(4, 6, 248, 60); x.fill();
+    x.fillStyle = '#fff'; x.font = '700 30px Prompt, sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(`${i ? 'ป' + i : 'อ้างอิง'} ${i ? cmTxt(p.dh) : '0'}`, 128, 37);
+    const tx = new THREE.CanvasTexture(c); tx.colorSpace = THREE.SRGBColorSpace; const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tx, depthTest: false, toneMapped: false }));
+    sp.position.set(q.x, h + 2.4 * k, -q.y); sp.scale.set(3.6 * k, k, 1); sp.renderOrder = 5; g.add(sp); });
+  R.group.add(g);
+}
+{ // tap the ground in 3D to place a level point
+  let down = null; const ray = new THREE.Raycaster(), v2 = new THREE.Vector2();
+  $('#v3d').addEventListener('pointerdown', e => { if (LV.tap && !AR.on) down = { x: e.clientX, y: e.clientY, t: performance.now() }; });
+  $('#v3d').addEventListener('pointerup', e => {
+    if (!LV.tap || !down || AR.on || !R.group || !L) return; const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y); down = null; if (moved > 8) return;
+    const rc = R.renderer.domElement.getBoundingClientRect(); v2.set((e.clientX - rc.left) / rc.width * 2 - 1, -((e.clientY - rc.top) / rc.height) * 2 + 1); ray.setFromCamera(v2, R.camera);
+    const targets = []; R.group.traverse(o => { if (o.isMesh && (o.material === R.fieldMat || o.material === R.grassMat || o === R.satMesh)) targets.push(o); });
+    const hit = ray.intersectObjects(targets, false)[0]; if (!hit) return toast('แตะที่พื้นดิน');
+    const ll = sceneToLL(hit.point.x, -hit.point.z); lvOpen(null, { ...ll, how: 'แตะบนภาพ 3D' });
+  });
+}
+/* ---- clinometer: phone camera measures the vertical angle to a mark ---- */
+const CLN = {};
+$('#lvAim').addEventListener('click', () => {
+  if (typeof DeviceOrientationEvent !== 'undefined' && DeviceOrientationEvent.requestPermission) DeviceOrientationEvent.requestPermission().catch(() => {});
+  CLN.buf = []; CLN.on = true; $('#clino').style.display = ''; $('#clAng').textContent = '—';
+  CLN.h = e => { if (e.beta == null) return; const q = oriQuat({ a: e.alpha || 0, b: e.beta || 0, g: e.gamma || 0 }, new THREE.Quaternion()), el = Math.asin(clamp(qHeading(q).up, -1, 1)) / RAD;
+    CLN.buf.push({ t: performance.now(), el, roll: Math.abs(e.gamma || 0) }); while (CLN.buf.length && performance.now() - CLN.buf[0].t > 900) CLN.buf.shift();
+    const m = CLN.buf.reduce((a, b) => a + b.el, 0) / CLN.buf.length, sd = Math.sqrt(CLN.buf.reduce((a, b) => a + (b.el - m) ** 2, 0) / CLN.buf.length);
+    CLN.val = m; $('#clAng').textContent = `${m >= 0 ? '+' : ''}${m.toFixed(1)}°${sd > 0.4 ? ' ~' : ''}`; $('#clAng').style.color = sd > 0.4 ? '#ffd23f' : '#fff'; };
+  window.addEventListener('deviceorientation', CLN.h);
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: 'environment' } } }).then(st => { if (!CLN.on) return st.getTracks().forEach(t => t.stop()); CLN.st = st; $('#clVid').srcObject = st; $('#clVid').play().catch(() => {}); }).catch(() => {});
+});
+function clStop() { CLN.on = false; window.removeEventListener('deviceorientation', CLN.h); if (CLN.st) CLN.st.getTracks().forEach(t => t.stop()); CLN.st = null; $('#clVid').srcObject = null; $('#clino').style.display = 'none'; }
+$('#clX').addEventListener('click', clStop);
+$('#clUse').addEventListener('click', () => { if (CLN.val == null) return; $('#lvAng').value = CLN.val.toFixed(1); clStop(); lvCalc(); });
 function arMsg(html, ms) { const m = $('#arMsg'); m.innerHTML = html; m.style.display = ''; clearTimeout(AR.msgTO); AR.msgTO = setTimeout(() => { m.style.display = 'none'; }, ms || 3000); }
 /* hide the model ground and scenery; add bright overlays that read well over a camera picture */
 function arScene() {

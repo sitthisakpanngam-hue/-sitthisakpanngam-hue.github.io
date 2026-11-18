@@ -47,6 +47,28 @@ header{display:flex;align-items:center;gap:14px;padding:10px 18px;background:var
 #v2d{position:absolute;inset:0;width:100%;height:100%;display:block;background:#eef0e6}
 #v3d{position:absolute;inset:0}
 #v3d canvas{display:block}
+#arVid,#arUI{display:none}
+body.ar{overflow:hidden}body.ar #view{position:fixed!important;inset:0!important;height:auto!important;min-height:0!important;border-radius:0!important;z-index:1000;background:linear-gradient(#a9c8e4,#dfe8dc 55%,#8f8463)}
+body.ar #arVid{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+body.ar #v3d{display:block!important;z-index:1}
+body.ar #hud,body.ar #vtools,body.ar #fab,body.ar #legend3d,body.ar #hint3d,body.ar .flash{display:none!important}
+body.ar #hcomp{display:none!important}
+body.ar #arUI{display:block;position:absolute;inset:0;z-index:5;pointer-events:none;font-family:'Prompt',sans-serif}
+#arUI button{pointer-events:auto;font-family:inherit;cursor:pointer}
+.arTop{position:absolute;left:10px;right:10px;top:calc(env(safe-area-inset-top) + 10px);display:flex;gap:8px;align-items:flex-start}
+.arX{width:44px;height:44px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:20px;flex:none}
+.arInfo{flex:1;background:rgba(10,20,14,.62);color:#fff;border-radius:14px;padding:8px 12px;font-size:13px;line-height:1.45;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.arInfo b{font-size:15px}.arInfo small{opacity:.75}
+#arMap{position:absolute;left:10px;bottom:calc(env(safe-area-inset-bottom) + 92px);width:120px;height:120px;border-radius:16px;background:rgba(10,20,14,.55)}
+.arMsg{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);max-width:82%;background:rgba(10,20,14,.72);color:#fff;border-radius:14px;padding:12px 16px;text-align:center;font-size:14px;line-height:1.5}
+.arBar{position:absolute;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom) + 12px);display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.arBar button{border:0;border-radius:16px;background:rgba(255,255,255,.92);color:#16241a;font-size:12px;font-weight:600;padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:62px;justify-content:center}
+.arBar button span{font-size:22px;line-height:1}.arBar button.on{background:#1e7a45;color:#fff}.arBar button.w{background:#1d6fd6;color:#fff}.arBar button.w.on{background:#c0392b}
+.arCal{position:absolute;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom) + 86px);background:rgba(255,255,255,.95);border-radius:18px;padding:12px;pointer-events:auto;color:#16241a}
+.arCalT{font-size:13px;margin-bottom:8px;text-align:center}.arCalT small{color:#5d6b60}
+.arRow{display:flex;gap:6px;justify-content:center;align-items:center;margin-top:6px}.arRow button{flex:1;border:1px solid #d6ddd3;background:#f4f7f2;border-radius:12px;padding:9px 4px;font-size:13px;font-weight:600}
+.arRow b{min-width:48px;text-align:center;font-family:'IBM Plex Mono',monospace}.arRow button.ok{background:#1e7a45;color:#fff;border-color:#1e7a45}.arRow button.wide{flex:1}
+.vtools button.arbtn{background:#1d6fd6;color:#fff}.vtools button.arbtn span,.vtools button.arbtn .ic{color:#fff;stroke:#fff}
 .panel{overflow:auto;padding:16px 16px 40px;border-left:1px solid var(--line)}
 .pane{display:none}.pane.on{display:block}
 
@@ -1245,6 +1267,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.4M12 18.8v2.4M21.2 12h-2.4M5.2 12H2.8M18.5 5.5l-1.7 1.7M7.2 16.8l-1.7 1.7M18.5 18.5l-1.7-1.7M7.2 7.2 5.5 5.5"/></symbol>
   <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M21.5 12h-2M4.5 12h-2M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4M18.7 18.7l-1.4-1.4M6.7 6.7 5.3 5.3"/></symbol>
   <symbol id="i-rain" viewBox="0 0 24 24"><path d="M7 15.5a4.5 4.5 0 1 1 1-8.9 5.5 5.5 0 0 1 10.4 2.2A3.5 3.5 0 0 1 17.5 15.5z"/><path d="m8.5 18-1 2.5M12.5 18l-1 2.5M16.5 18l-1 2.5"/></symbol>
+  <symbol id="i-cam" viewBox="0 0 24 24"><path d="M3 8.5A2.5 2.5 0 0 1 5.5 6h2l1.6-2h5.8l1.6 2h2A2.5 2.5 0 0 1 21 8.5v9a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5z"/><circle cx="12" cy="13" r="3.6"/></symbol>
   <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></symbol>
   <symbol id="i-top" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M4 9.5h16M9.5 9.5V20"/></symbol>
   <symbol id="i-globe" viewBox="0 0 24 24"><path d="M3 18 9 6l4 7 3-4 5 9z"/><circle cx="17" cy="5.5" r="1.5"/></symbol>
@@ -1299,7 +1322,26 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="vtxmenu" id="vtxMenu" style="display:none"><b>มุม</b><button id="vDel">ลบมุมนี้</button><button id="vClose">ปิด</button></div>
       <div class="note warn mapnote" id="mapNote" style="display:none" onclick="this.style.display='none';this.dataset.closed=1">ภาพแผนที่ดาวเทียมถูกบล็อกในหน้าตัวอย่างนี้ — ยังจิ้มวางมุมได้ แต่จะไม่เห็นภาพพื้นที่ เปิดไฟล์เว็บผ่าน https บนมือถือเพื่อดูภาพดาวเทียม หรือใช้ “⌨ ใส่พิกัด” <b>(แตะเพื่อปิด)</b></div>
     </div>
+    <video id="arVid" playsinline muted autoplay></video>
     <div id="v3d" style="display:none"></div>
+    <div id="arUI">
+      <div class="arTop"><button class="arX" id="arExit">✕</button><div class="arInfo" id="arInfo">กำลังเปิดกล้อง…</div></div>
+      <canvas id="arMap" width="240" height="240"></canvas>
+      <div class="arMsg" id="arMsg" style="display:none"></div>
+      <div class="arCal" id="arCalP" style="display:none">
+        <div class="arCalT">ลากนิ้ว ซ้าย–ขวา บนจอ เพื่อหมุนภาพให้ตรงกับของจริง<br><small>เทียบกับเสามุมแปลง หรือแนวร่องที่เห็นในกล้อง</small></div>
+        <div class="arRow"><button data-rot="-5">↺ 5°</button><button data-rot="-1">↺ 1°</button><b id="arRotV">0°</b><button data-rot="1">1° ↻</button><button data-rot="5">5° ↻</button></div>
+        <div class="arRow"><button data-zoom="-1">ภาพเล็กลง</button><button data-zoom="1">ภาพใหญ่ขึ้น</button></div>
+        <div class="arRow"><button id="arCorner" class="wide">📌 ตอนนี้ฉันยืนที่เสามุมแปลง</button></div>
+        <div class="arRow"><button id="arReset">รีเซ็ต</button><button id="arCalDone" class="ok">เสร็จ</button></div>
+      </div>
+      <div class="arBar">
+        <button id="arCal"><span>🧭</span>ปรับทิศ</button>
+        <button id="arLock"><span>📍</span>ล็อกตำแหน่ง</button>
+        <button id="arWater" class="w"><span>💧</span>เปิดน้ำโซนนี้</button>
+        <button id="arPlants"><span>🌱</span>ต้นมัน</button>
+      </div>
+    </div>
     <div class="empty" id="empty2d"><div class="welcome">
       <div class="wicon">💧🌱</div>
       <b>ยินดีต้อนรับสู่ไร่หยด</b>
@@ -1320,7 +1362,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <div class="vtools" id="vtools" style="display:none">
       <button id="tOver" title="มุมมองรวม"><svg class="ic"><use href="#i-globe"/></svg><span>ภาพรวม</span></button>
       <button id="tSat" title="ภาพดาวเทียมพื้นที่จริงรอบไร่" class="on"><svg class="ic"><use href="#i-map"/></svg><span>แผนที่จริง</span></button>
-      <button id="tEye" title="ยืนในไร่"><svg class="ic"><use href="#i-eye"/></svg><span>ยืนในไร่</span></button>
+      <button id="tAR" title="กล้อง AR ในพื้นที่จริง" class="arbtn"><svg class="ic"><use href="#i-cam"/></svg><span>กล้อง AR</span></button>
+      <button id="tEye" title="ยืนในไร่" class="more"><svg class="ic"><use href="#i-eye"/></svg><span>ยืนในไร่</span></button>
       <button id="tSun" title="เส้นทางดวงอาทิตย์"><svg class="ic"><use href="#i-sunpath"/></svg><span>ดวงอาทิตย์</span></button>
       <button id="tRain" title="ดูตัวอย่างฝนตก"><svg class="ic"><use href="#i-rain"/></svg><span>ฝน</span></button>
       <button id="tMore" title="ปุ่มเพิ่มเติม"><svg class="ic"><use href="#i-list"/></svg><span>เพิ่มเติม</span></button>
@@ -2335,6 +2378,7 @@ function drawGPS() {
 
 /* ================= STEP 2 : 3D ================= */
 const isSmall = matchMedia('(max-width: 920px)').matches;
+const AR = { on: false };
 const R = { ok: false, showPlants: true, zoneColors: false, elevView: false, vex: 3, wet: [], quality: isSmall ? 'eco' : 'high', dayLock: false, envAt: 0, envHour: -99 };
 const ZC = ['#2a78d6', '#e08a1e', '#1f9e89', '#8b5cc7', '#d4507a', '#6b8e23', '#c0782d', '#3a9bd9'];
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
@@ -2497,7 +2541,7 @@ function rainFrame(dt, now) {
 function init3D() {
   try {
     const el = $('#v3d');
-    const rr = R.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+    const rr = R.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
     rr.setPixelRatio(Math.min(devicePixelRatio || 1, isSmall ? 1.75 : 2));
     rr.outputColorSpace = THREE.SRGBColorSpace; rr.toneMapping = THREE.ACESFilmicToneMapping; rr.toneMappingExposure = 0.55;
     rr.shadowMap.enabled = true; rr.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -2952,8 +2996,9 @@ function frame(now) {
       R.drops.instanceMatrix.needsUpdate = true; R.dropsOn = az;
     }
     R.flags && R.flags.forEach((fl, i) => { if (!fl) return; fl.position.y = fl.userData.h + 1.9 + (i === az ? Math.sin(now / 200) * 0.05 : 0); fl.scale.x = i === az ? 1.25 : 1; });
-    rainFrame(dt, now); sunPathFrame(); hudCompassFrame(); paintRidges(false); updateLighting(false); fxFrame(dt, now); tweenStep(now);
-    R.controls.update(); R.renderer.render(R.scene, R.camera);
+    rainFrame(dt, now); if (!AR.on) sunPathFrame(); paintRidges(false); if (!AR.on) updateLighting(false); fxFrame(dt, now);
+    if (AR.on) arFrame(dt); else { tweenStep(now); R.controls.update(); }
+    hudCompassFrame(); R.renderer.render(R.scene, R.camera);
   }
   audioFrame(dt);
   if (R.growPlay && L) { const H = S.set.harvest; R.gp = Math.min(H, (R.gp || 0) + dt * H / 14); const v = Math.round(R.gp);
@@ -4159,6 +4204,190 @@ function saveDiary(k, extra) {
 
 /* ================= real satellite imagery around the farm (3D ground) ================= */
 const SAT = { cache: {}, on: true };
+/* ================= AR camera: the drip system over the real field ================= */
+function llToScene(lat, lon) { const t = L.tf, px = (lon - t.lon0) * t.kx, py = (lat - t.lat0) * t.ky; return { x: px * t.c - py * t.s - t.minX, y: px * t.s + py * t.c - t.minY }; }
+const _arE = new THREE.Euler(), _arQ0 = new THREE.Quaternion(), _arQ1 = new THREE.Quaternion(-Math.SQRT1_2, 0, 0, Math.SQRT1_2), _arZ = new THREE.Vector3(0, 0, 1), _arY = new THREE.Vector3(0, 1, 0);
+const scrAng = () => (screen.orientation && screen.orientation.angle) || window.orientation || 0;
+function oriQuat(o, out) { _arE.set(o.b * RAD, o.a * RAD, -o.g * RAD, 'YXZ'); out.setFromEuler(_arE); out.multiply(_arQ1); out.multiply(_arQ0.setFromAxisAngle(_arZ, -scrAng() * RAD)); return out; }
+function qHeading(q) { const f = new THREE.Vector3(0, 0, -1).applyQuaternion(q); return { h: (Math.atan2(f.x, -f.z) / RAD + 360) % 360, up: f.y }; }
+const angDiff = (a, b) => ((a - b + 540) % 360) - 180;
+function arOri(e) {
+  if (e.alpha == null && e.beta == null) return;
+  if (e.type === 'deviceorientationabsolute') AR.hasAbs = true; else if (AR.hasAbs && e.webkitCompassHeading == null) return;
+  AR.ori = { a: e.alpha || 0, b: e.beta || 0, g: e.gamma || 0, ch: e.webkitCompassHeading, abs: e.type === 'deviceorientationabsolute' || (e.absolute && e.webkitCompassHeading == null) };
+}
+function startAR() {
+  if (!L || !R.ok || !R.group) return toast('วัดแปลงให้เสร็จก่อน แล้วค่อยเปิดกล้อง AR');
+  if (AR.on) return;
+  // iOS: motion permission must be asked inside the tap, before anything awaits
+  const pOri = (typeof DeviceOrientationEvent !== 'undefined' && DeviceOrientationEvent.requestPermission) ? DeviceOrientationEvent.requestPermission().catch(() => 'denied') : Promise.resolve('granted');
+  const pCam = navigator.mediaDevices && navigator.mediaDevices.getUserMedia ? navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } } }).catch(e => ({ err: e })) : Promise.resolve({ err: { name: 'NoAPI' } });
+  Object.assign(AR, { on: true, ori: null, hasAbs: false, yawC: null, user: 0, fovK: 1, pos: null, gps: null, off: { x: 0, y: 0 }, lock: false, look: { yaw: 0, pitch: -8 }, msgT: 0, prev: { vex: R.vex, day: R.dayLock, plants: R.showPlants, follow: R.follow } });
+  document.body.classList.add('ar'); R.showPlants = false; R.follow = false; R.tween = null; R.controls.enabled = false;
+  R.vex = 1; R.dayLock = true; build3D(); arScene();
+  window.addEventListener('deviceorientationabsolute', arOri); window.addEventListener('deviceorientation', arOri);
+  if (navigator.geolocation) AR.watch = navigator.geolocation.watchPosition(p => {
+    const q = llToScene(p.coords.latitude, p.coords.longitude); AR.gps = { x: q.x, y: q.y, acc: p.coords.accuracy, t: Date.now() };
+  }, e => { AR.gpsErr = e.code === 1 ? 'ไม่ได้อนุญาตตำแหน่ง' : 'หา GPS ไม่เจอ'; }, { enableHighAccuracy: true, maximumAge: 1000, timeout: 20000 });
+  else AR.gpsErr = 'เครื่องนี้ไม่มี GPS';
+  pOri.then(r => { AR.oriPerm = r; });
+  pCam.then(st => {
+    if (!AR.on) { if (st && st.getTracks) st.getTracks().forEach(t => t.stop()); return; }
+    if (st && st.getTracks) { AR.stream = st; const v = $('#arVid'); v.srcObject = st; v.play().catch(() => {}); }
+    else AR.camErr = st && st.err && st.err.name === 'NotAllowedError' ? 'ไม่ได้อนุญาตกล้อง — เปิดสิทธิ์กล้องให้เบราว์เซอร์ แล้วลองใหม่' : 'เปิดกล้องไม่ได้ (เปิดผ่านลิงก์ https บนมือถือ) — แสดงแบบจำลองแทน';
+  });
+  setTimeout(() => { if (AR.on && !AR.gps) arMsg(AR.gpsErr ? `${AR.gpsErr} — วางคุณไว้ที่มุมแปลงก่อน` : 'กำลังหา GPS… ถ้ายังไม่ได้ ระบบจะวางคุณไว้ที่มุมแปลง', 4000); }, 2500);
+  $('#arPlants').classList.toggle('on', R.showPlants);
+  arMsg('ยกมือถือขึ้นตรง ๆ แล้วหันไปรอบ ๆ<br>ถ้าภาพไม่ตรงกับของจริง กด 🧭 ปรับทิศ', 3500);
+  log('เปิดกล้อง AR ในพื้นที่จริง', '');
+}
+function stopAR() {
+  if (!AR.on) return; AR.on = false;
+  window.removeEventListener('deviceorientationabsolute', arOri); window.removeEventListener('deviceorientation', arOri);
+  if (AR.watch != null) navigator.geolocation.clearWatch(AR.watch); AR.watch = null;
+  if (AR.stream) AR.stream.getTracks().forEach(t => t.stop()); AR.stream = null; $('#arVid').srcObject = null;
+  document.body.classList.remove('ar'); $('#arCalP').style.display = 'none';
+  R.vex = AR.prev.vex; R.dayLock = AR.prev.day; R.showPlants = AR.prev.plants; R.controls.enabled = true; R.camera.fov = 40; R.camera.updateProjectionMatrix();
+  R.renderer.setClearColor(0x000000, 0); [R.sky, R.stars, R.sunSpr, R.moonSpr].forEach(o => { if (o) o.visible = true; });
+  build3D(); applySatVisibility(); R.envHour = -99; updateLighting(true);
+}
+function arMsg(html, ms) { const m = $('#arMsg'); m.innerHTML = html; m.style.display = ''; clearTimeout(AR.msgTO); AR.msgTO = setTimeout(() => { m.style.display = 'none'; }, ms || 3000); }
+/* hide the model ground and scenery; add bright overlays that read well over a camera picture */
+function arScene() {
+  const hide = new Set([R.grassMat, R.fieldMat]);
+  R.group.traverse(o => { if (o.material && hide.has(o.material)) o.visible = false; });
+  [R.ridge, R.tape, R.water, R.satMesh, R.contours, ...(R.fakeScenery || [])].forEach(o => { if (o) o.visible = false; });
+  if (R.plantG) R.plantG.visible = R.showPlants;
+  [R.sky, R.stars, R.sunSpr, R.moonSpr, R.sunPathG].forEach(o => { if (o) o.visible = false; });
+  if (R.scene.fog) { R.scene.fog.near = 1e6; R.scene.fog.far = 2e6; }
+  R.renderer.setClearColor(0x000000, 0);
+  const g = new THREE.Group(); R.arG = g; R.group.add(g);
+  // boundary: yellow ribbon + line
+  const rib = [], idx = [], ln = [];
+  L.poly.forEach((a, i) => { const b = L.poly[(i + 1) % L.poly.length], n = Math.max(1, Math.ceil(dist(a, b) / 2));
+    for (let k = 0; k <= n; k++) { const x = a[0] + (b[0] - a[0]) * k / n, y = a[1] + (b[1] - a[1]) * k / n, h = hz(x, y); const v0 = rib.length / 3; rib.push(x, h + 0.02, -y, x, h + 0.45, -y); if (k) { idx.push(v0 - 2, v0 - 1, v0, v0 - 1, v0 + 1, v0); ln.push(rib[(v0 - 1) * 3], rib[(v0 - 1) * 3 + 1] + 0.43, rib[(v0 - 1) * 3 + 2], x, h + 0.47, -y); } } });
+  const rg = new THREE.BufferGeometry(); rg.setAttribute('position', new THREE.Float32BufferAttribute(rib, 3)); rg.setIndex(idx);
+  g.add(new THREE.Mesh(rg, new THREE.MeshBasicMaterial({ color: '#ffd23f', transparent: true, opacity: 0.42, side: THREE.DoubleSide, depthWrite: false, toneMapped: false })));
+  const lg = new THREE.BufferGeometry(); lg.setAttribute('position', new THREE.Float32BufferAttribute(ln, 3));
+  g.add(new THREE.LineSegments(lg, new THREE.LineBasicMaterial({ color: '#fff27a', toneMapped: false })));
+  R.arTape = null; AR.tapeAt = null;
+  // sub-main / main pipe as a thick blue band
+  const pb = []; for (let i = 1; i < L.sub.length; i++) { const a = L.sub[i - 1], b = L.sub[i]; pb.push(a[0], hz(a[0], a[1]) + 0.08, -a[1], b[0], hz(b[0], b[1]) + 0.08, -b[1]); }
+  if (pb.length) { const bg = new THREE.BufferGeometry(); bg.setAttribute('position', new THREE.Float32BufferAttribute(pb, 3)); g.add(new THREE.LineSegments(bg, new THREE.LineBasicMaterial({ color: '#3aa0ff', toneMapped: false }))); }
+  // zone labels over each valve, pump label
+  L.zones.forEach(z => { if (!R.valves[z.id]) return; const sp = labelSprite(`โซน ${z.id + 1}`, '#123b22'); const v = R.valves[z.id].position; sp.position.set(v.x, v.y + 2.6, v.z); sp.scale.set(1.6, 0.8, 1); sp.material.depthTest = true; g.add(sp); });
+  { const [px, py] = L.pump, sp = labelSprite('ปั๊มน้ำ', '#0d3c75'); sp.position.set(px, hz(px, py) + 3.4, -py); sp.scale.set(2, 1, 1); g.add(sp); }
+}
+/* drip tape lines only near the person (far-away lines turn into noise on a phone screen) */
+function arTape(cx, cy) {
+  if (R.arTape) { R.arTape.geometry.dispose(); R.arTape.material.dispose(); R.arG.remove(R.arTape); }
+  const P = [], C = [], cc = new THREE.Color(), RAD2 = 45 * 45, white = new THREE.Color('#ffffff');
+  (R.chunks || []).forEach(c => { const mx = (c.xa + c.xb) / 2; if ((mx - cx) ** 2 + (c.y - cy) ** 2 > RAD2) return; const d = Math.sqrt((mx - cx) ** 2 + (c.y - cy) ** 2), a = clamp(1 - d / 45, 0.2, 1);
+    cc.set(ZC[c.zone % ZC.length]).lerp(white, 0.3).multiplyScalar(a); const y = -(c.y - (R.tapeOff || 0)); P.push(c.xa, c.ha + 0.03, y, c.xb, c.hb + 0.03, y); C.push(cc.r, cc.g, cc.b, cc.r, cc.g, cc.b); });
+  const tg = new THREE.BufferGeometry(); tg.setAttribute('position', new THREE.Float32BufferAttribute(P, 3)); tg.setAttribute('color', new THREE.Float32BufferAttribute(C, 3));
+  R.arTape = new THREE.LineSegments(tg, new THREE.LineBasicMaterial({ vertexColors: true, toneMapped: false, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false })); R.arG.add(R.arTape);
+  AR.tapeAt = { x: cx, y: cy };
+}
+function arFov() {
+  const el = $('#v3d'), W = el.clientWidth, H = el.clientHeight, v = $('#arVid'), vw = v.videoWidth, vh = v.videoHeight;
+  if (!vw || !vh || !W || !H) return (W < H ? 62 : 44) / AR.fovK;
+  const f = (Math.max(vw, vh) / 2) / Math.tan(66 * RAD / 2), sc = Math.max(W / vw, H / vh);
+  return 2 * Math.atan((H / 2 / sc) / f) / RAD / AR.fovK;
+}
+function arWhere(x, y) {
+  const inside = pip(x, y, L.poly); let row = null, bd = Infinity;
+  L.rows.forEach((r, i) => { const d = Math.abs(r.y - y); if (d < bd) { bd = d; row = i; } });
+  const zone = row != null ? L.rows[row].zone : null, dPump = Math.hypot(x - L.pump[0], y - L.pump[1]);
+  let dEdge = Infinity; for (let i = 0; i < L.poly.length; i++) dEdge = Math.min(dEdge, segDist([x, y], L.poly[i], L.poly[(i + 1) % L.poly.length]));
+  return { inside, row, zone, dPump, dEdge };
+}
+function arFrame(dt) {
+  const k = Math.min(1, dt * 2);
+  // position: GPS (smoothed) + manual offset; until GPS arrives stand at the first corner, a little outside
+  let tgt;
+  if (AR.gps) tgt = { x: AR.gps.x + AR.off.x, y: AR.gps.y + AR.off.y };
+  else { const a = L.poly[0], c = [L.W / 2, L.H / 2], d = Math.hypot(a[0] - c[0], a[1] - c[1]) || 1; tgt = { x: a[0] + (a[0] - c[0]) / d * 3, y: a[1] + (a[1] - c[1]) / d * 3 }; }
+  if (!AR.pos) AR.pos = { ...tgt }; else if (!AR.lock) { const j = Math.hypot(tgt.x - AR.pos.x, tgt.y - AR.pos.y) > 60 ? 1 : k; AR.pos.x += (tgt.x - AR.pos.x) * j; AR.pos.y += (tgt.y - AR.pos.y) * j; }
+  const cam = R.camera; cam.position.set(AR.pos.x, hz(AR.pos.x, AR.pos.y) + 1.5, -AR.pos.y);
+  if (R.arG && (!AR.tapeAt || Math.hypot(AR.pos.x - AR.tapeAt.x, AR.pos.y - AR.tapeAt.y) > 15)) arTape(AR.pos.x, AR.pos.y);
+  // orientation
+  const q = new THREE.Quaternion();
+  if (AR.ori) {
+    oriQuat(AR.ori, q);
+    if (!AR.ori.abs) {
+      const hh = qHeading(q);
+      if (AR.ori.ch != null && Math.abs(hh.up) < 0.85) { const want = angDiff(AR.ori.ch, hh.h); AR.yawC = AR.yawC == null ? want : AR.yawC + angDiff(want, AR.yawC) * 0.05; }
+    } else AR.yawC = 0;
+    const yaw = -((AR.yawC || 0) + AR.user) * RAD - L.ang;
+    q.premultiply(_arQ0.setFromAxisAngle(_arY, yaw));
+    if (!AR.qs) AR.qs = q.clone(); else AR.qs.slerp(q, 0.35); cam.quaternion.copy(AR.qs);
+  } else {
+    // no motion sensors (desktop / denied): drag to look around
+    const yaw = -(AR.look.yaw + AR.user) * RAD - L.ang; cam.quaternion.setFromEuler(new THREE.Euler(AR.look.pitch * RAD, yaw, 0, 'YXZ'));
+  }
+  const fv = arFov(); if (Math.abs(cam.fov - fv) > 0.2) { cam.fov = fv; cam.updateProjectionMatrix(); }
+  const fwd = new THREE.Vector3(); cam.getWorldDirection(fwd); R.controls.target.copy(cam.position).addScaledVector(fwd, 12);
+  AR.t = (AR.t || 0) + dt; if (AR.t > 0.3) { AR.t = 0; arInfo(); arMap(); }
+}
+function arInfo() {
+  const w = arWhere(AR.pos.x, AR.pos.y), az = R.camAz;
+  let t;
+  if (w.inside) t = `<b>📍 โซน ${w.zone + 1} · แถวที่ ${w.row + 1}</b><br>ห่างปั๊ม ${f(w.dPump)} ม. · ห่างขอบแปลง ${f(w.dEdge)} ม.`;
+  else { const c = sceneToLL(L.W / 2, L.H / 2), me = sceneToLL(AR.pos.x, AR.pos.y), br = (Math.atan2((c.lon - me.lon) * Math.cos(me.lat * RAD), c.lat - me.lat) / RAD + 360) % 360, rel = angDiff(br, az || 0);
+    t = `<b>อยู่นอกแปลง · ห่าง ${f(w.dEdge)} ม.</b><br>แปลงอยู่${Math.abs(rel) < 25 ? 'ข้างหน้า' : Math.abs(rel) > 150 ? 'ด้านหลัง' : rel > 0 ? 'ทางขวา' : 'ทางซ้าย'} (ทิศ${dirName(br)})`; }
+  const g = AR.gps ? `GPS ±${f(AR.gps.acc)} ม.${AR.lock ? ' · ล็อกอยู่' : ''}` : (AR.gpsErr || 'กำลังหา GPS…');
+  const o = AR.ori ? (AR.ori.abs || AR.ori.ch != null ? `🧭 หัน${dirName(az || 0)} ${f(az || 0)}°` : '🧭 ไม่มีเข็มทิศ — กดปรับทิศ') : (AR.oriPerm === 'denied' ? 'ไม่ได้อนุญาตไจโร — ลากเพื่อหันมอง' : 'ลากนิ้วเพื่อหันมอง');
+  const run = SIM.active ? `<br>💧 กำลังให้น้ำโซน ${SIM.active.z + 1} · เหลือ ${dur(SIM.active.rem)}` : '';
+  $('#arInfo').innerHTML = `${t}${run}<br><small>${g} · ${o}${AR.camErr ? '<br>' + AR.camErr : ''}</small>`;
+  const wb = $('#arWater'), zr = w.inside ? w.zone : null, on = SIM.active && (zr == null || SIM.active.z === zr);
+  wb.classList.toggle('on', !!on); wb.innerHTML = on ? '<span>⏹</span>หยุดน้ำ' : `<span>💧</span>${zr != null ? 'เปิดน้ำโซน ' + (zr + 1) : 'เปิดน้ำทุกโซน'}`;
+  $('#arRotV').textContent = `${AR.user > 0 ? '+' : ''}${f(AR.user)}°`;
+  $('#arLock').classList.toggle('on', AR.lock);
+}
+function arMap() {
+  const c = $('#arMap'), x = c.getContext('2d'), S2 = c.width, pad = 22, sc = (S2 - pad * 2) / Math.max(L.W, L.H, 1);
+  const P = (px, py) => [pad + (px - (L.W - Math.max(L.W, L.H)) / 2) * sc, S2 - pad - (py - (L.H - Math.max(L.W, L.H)) / 2) * sc];
+  x.clearRect(0, 0, S2, S2);
+  x.save(); x.translate(S2 / 2, S2 / 2); x.rotate(L.ang); x.translate(-S2 / 2, -S2 / 2);   // north-up
+  x.beginPath(); L.poly.forEach((p, i) => { const [a, b] = P(p[0], p[1]); i ? x.lineTo(a, b) : x.moveTo(a, b); }); x.closePath(); x.fillStyle = 'rgba(255,210,63,.18)'; x.fill(); x.strokeStyle = '#ffd23f'; x.lineWidth = 3; x.stroke();
+  const st = Math.max(1, Math.ceil(L.rows.length / 40)); x.lineWidth = 1.5;
+  L.rows.forEach((r, i) => { if (i % st) return; x.strokeStyle = ZC[r.zone % ZC.length]; r.segs.forEach(s2 => { const [a, b] = P(s2.x1, r.y), [c2, d] = P(s2.x2, r.y); x.beginPath(); x.moveTo(a, b); x.lineTo(c2, d); x.stroke(); }); });
+  { const [a, b] = P(L.pump[0], L.pump[1]); x.fillStyle = '#3aa0ff'; x.fillRect(a - 5, b - 5, 10, 10); }
+  const [mx, my] = P(AR.pos.x, AR.pos.y); x.restore();
+  // me (in north-up frame)
+  const cx = S2 / 2, cy = S2 / 2, ang = L.ang, rx = (mx - cx) * Math.cos(ang) - (my - cy) * Math.sin(ang) + cx, ry = (mx - cx) * Math.sin(ang) + (my - cy) * Math.cos(ang) + cy;
+  const ex = clamp(rx, 10, S2 - 10), ey = clamp(ry, 10, S2 - 10), h = ((R.camAz || 0) - 90) * RAD;
+  x.fillStyle = 'rgba(80,170,255,.35)'; x.beginPath(); x.moveTo(ex, ey); x.arc(ex, ey, 34, h - 0.5, h + 0.5); x.closePath(); x.fill();
+  x.fillStyle = '#fff'; x.beginPath(); x.arc(ex, ey, 8, 0, 7); x.fill(); x.fillStyle = '#1d6fd6'; x.beginPath(); x.arc(ex, ey, 5.5, 0, 7); x.fill();
+  x.fillStyle = '#fff'; x.font = '700 20px Prompt, sans-serif'; x.textAlign = 'center'; x.fillText('น', S2 / 2, 18);
+}
+$('#tAR').addEventListener('click', startAR);
+$('#arExit').addEventListener('click', stopAR);
+$('#arCal').addEventListener('click', () => { const p = $('#arCalP'); p.style.display = p.style.display === 'none' ? '' : 'none'; $('#arCal').classList.toggle('on', p.style.display === ''); });
+$('#arCalDone').addEventListener('click', () => { $('#arCalP').style.display = 'none'; $('#arCal').classList.remove('on'); });
+$('#arCalP').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.rot) AR.user += +b.dataset.rot; if (b.dataset.zoom) AR.fovK = clamp(AR.fovK * (b.dataset.zoom > 0 ? 1.05 : 1 / 1.05), 0.6, 1.6); arInfo(); });
+$('#arReset').addEventListener('click', () => { AR.user = 0; AR.fovK = 1; AR.off = { x: 0, y: 0 }; AR.lock = false; arMsg('รีเซ็ตการปรับทั้งหมดแล้ว', 1500); arInfo(); });
+$('#arCorner').addEventListener('click', () => {
+  if (!AR.gps) return arMsg('ยังไม่มีสัญญาณ GPS', 2000);
+  let best = 0, bd = Infinity; L.poly.forEach((p, i) => { const d = Math.hypot(p[0] - AR.gps.x, p[1] - AR.gps.y); if (d < bd) { bd = d; best = i; } });
+  if (bd > 60) return arMsg(`มุมแปลงที่ใกล้ที่สุดอยู่ห่าง ${f(bd)} ม. — เดินไปยืนที่เสามุมก่อน`, 3000);
+  const p = L.poly[best]; AR.off = { x: p[0] - AR.gps.x, y: p[1] - AR.gps.y }; AR.pos = { x: p[0], y: p[1] };
+  arMsg(`ตั้งตำแหน่งตามเสามุมที่ ${best + 1} แล้ว (GPS คลาด ${f(bd, 1)} ม.)<br>ต่อไปหันไปหาเสามุมถัดไป แล้วลากให้เสาตรงกัน`, 3500);
+});
+$('#arLock').addEventListener('click', () => { AR.lock = !AR.lock; arMsg(AR.lock ? 'ล็อกตำแหน่งแล้ว — ภาพจะไม่ขยับตาม GPS ที่กระตุก' : 'ปลดล็อก — ภาพตามตำแหน่ง GPS', 1800); arInfo(); });
+$('#arPlants').addEventListener('click', () => { R.showPlants = !R.showPlants; if (R.plantG) R.plantG.visible = R.showPlants; $('#arPlants').classList.toggle('on', R.showPlants); });
+$('#arWater').addEventListener('click', () => {
+  if (!SIM.today) return; const w = arWhere(AR.pos.x, AR.pos.y);
+  if (SIM.active || SIM.queue.length) { stopAll(); return arInfo(); }
+  quickStart(w.inside ? [w.zone] : null); if (SIM.speed === 'pause') setSpeed('real'); arInfo();
+});
+{ // drag on the view: rotate the model to line up with reality (or look around without sensors)
+  let d = null; const el = $('#v3d');
+  el.addEventListener('pointerdown', e => { if (AR.on) d = { x: e.clientX, y: e.clientY }; });
+  window.addEventListener('pointermove', e => { if (!AR.on || !d) return; const dx = e.clientX - d.x, dy = e.clientY - d.y; d = { x: e.clientX, y: e.clientY };
+    if (AR.ori) AR.user -= dx * 0.12; else { AR.look.yaw -= dx * 0.25; AR.look.pitch = clamp(AR.look.pitch - dy * 0.2, -80, 60); } });
+  window.addEventListener('pointerup', () => { d = null; });
+}
 function sceneToLL(x, y) { // scene field frame (x, y) → lat/lon
   const t = L.tf, rx = x + t.minX, ry = y + t.minY, px = rx * t.c + ry * t.s, py = -rx * t.s + ry * t.c;
   return { lat: t.lat0 + py / t.ky, lon: t.lon0 + px / t.kx };
@@ -4219,8 +4448,8 @@ async function buildSatGround(g) {
 }
 function applySatVisibility() {
   const on = SAT.on && R.satMesh && SAT.state === 'ok';
-  if (R.satMesh) R.satMesh.visible = !!on;
-  (R.fakeScenery || []).forEach(o => o.visible = !on);
+  if (R.satMesh) R.satMesh.visible = !!on && !AR.on;
+  (R.fakeScenery || []).forEach(o => o.visible = !on && !AR.on);
   $('#tSat') && $('#tSat').classList.toggle('on', !!on);
 }
 

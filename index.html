@@ -137,7 +137,7 @@ table.z td.r,table.z th.r{text-align:right}
 .log{max-height:240px;overflow:auto;font-size:12.5px}
 .log div{display:flex;gap:8px;padding:5px 0;border-bottom:1px dashed var(--line)}
 .log .tm{color:var(--muted);flex:none;width:108px;white-space:nowrap;font-size:11.5px}
-.log .k-irr{color:var(--water)}.log .k-warn{color:var(--warn)}.log .k-skip{color:var(--muted)}
+.log .k-irr{color:var(--water)}.log .k-warn{color:var(--warn)}.log .k-skip{color:var(--muted)}.log .k-rain{color:#3f6f9f}
 .chart{position:relative}
 .chart canvas{width:100%;height:150px;display:block}
 .chart .tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;font-size:12px;padding:6px 8px;border-radius:8px;white-space:nowrap;display:none;z-index:2;line-height:1.45}
@@ -427,7 +427,12 @@ input,select,textarea{border-radius:12px!important}
 .feed>div{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid #f0f2ee;font-size:13px;align-items:flex-start}
 .feed>div:last-child{border-bottom:0}
 .feed .fd{width:8px;height:8px;border-radius:50%;margin-top:6px;flex:none;background:var(--muted)}
-.feed .fd.irr{background:var(--water)}.feed .fd.warn{background:var(--warn)}.feed .fd.skip{background:#c6ccc3}
+.feed .fd.irr{background:var(--water)}.feed .fd.warn{background:var(--warn)}.feed .fd.skip{background:#c6ccc3}.feed .fd.rain{background:#6f9cc9}
+.bal .bline{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px dashed var(--line);font-size:14px}.bal .bline:last-of-type{border:0}
+.bal .bline span{color:var(--ink2)}.bal .bline b{font-family:'IBM Plex Mono',monospace;font-weight:600;white-space:nowrap}
+.bal .bbar{display:flex;height:12px;border-radius:99px;overflow:hidden;background:#eef1ec;margin:10px 0 6px;gap:2px}.bal .bbar i{display:block;height:100%}
+.bal .bkey{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--muted)}.bal .bkey i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.bal .bres{margin-top:10px;padding:10px 12px;border-radius:12px;font-weight:600;font-size:15px}.bal .bres.ok{background:#e8f4ec;color:#1f6a3a}.bal .bres.go{background:#e6f0fb;color:#1d5fa8}.bal .bres.wait{background:#eef2f7;color:#41566d}
 .feed .ft{color:var(--muted);font-size:11.5px}
 .link{border:0;background:none;color:var(--leaf);font-weight:500;margin-left:auto;font-size:13px}
 .devcard{display:flex;gap:12px;align-items:center;background:#fbfaf6}
@@ -1361,6 +1366,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <button class="btn primary xl big" id="hPlant" style="display:none"><svg class="ic"><use href="#i-sprout"/></svg><span class="bt"><b>บันทึกวันปลูก</b><small>เมื่อปลูกเสร็จ กดเพื่อเริ่มนับอายุและให้น้ำอัตโนมัติ</small></span></button>
           <button class="btn water xl big" id="hWater"><svg class="ic"><use href="#i-drop"/></svg><span class="bt"><b id="hWaterT">เปิดน้ำตอนนี้</b><small id="hWaterS"></small></span></button>
         </div>
+        <div class="card bal" id="hBal"><div class="minih"><span class="ti t-bl sm"><svg class="ic"><use href="#i-rain"/></svg></span>น้ำวันนี้ · ฝนพอไหม <span class="small" style="margin-left:auto;font-weight:400" id="hBalSrc"></span></div><div id="hBalBody"></div></div>
         <div class="card htodo" id="hTodo"><span style="font-size:26px">📒</span><div class="hb"><b>สมุดไร่</b><span id="hTodoT">—</span></div><span class="link">เปิด ›</span></div>
         <div class="card suncard"><div class="minih"><span class="ti t-or sm"><svg class="ic"><use href="#i-sun"/></svg></span>ดวงอาทิตย์วันนี้ <span class="small" style="margin-left:auto;font-weight:400">ตามตำแหน่งจริงของแปลง</span></div><div id="hSun"></div></div>
         <div class="grid2">
@@ -1597,6 +1603,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div class="form" style="margin-top:10px">
           <label>เริ่มให้น้ำเวลา <span class="u">น.</span><select id="sStartHour"></select></label>
           <label>ให้น้ำเมื่อดินขาดน้ำ <span class="u">% ของจุดเครียดน้ำ</span><input type="number" id="sTrig" min="20" max="100" step="5"></label>
+          <label>รอฝนถ้าพยากรณ์ว่าจะตกภายใน <span class="u">ชม.</span><select id="sRainWait"><option value="0">ไม่รอ</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="6">6</option></select></label>
         </div>
       </details>
 
@@ -1743,7 +1750,7 @@ function areaThai(m2) { const rai = Math.floor(m2 / 1600), ngan = Math.floor((m2
 
 /* ================= state ================= */
 const DEF = { rowSp: 1.0, plantSp: 0.8, emSp: 0.3, emQ: 1.5, pumpQ: 10, eff: 90, soil: 'lsand', harvest: 300,
-  plantDate: isoOf(Date.now() - 115 * DAY), maxAcc: 15, minDist: 2, startHour: 6, trigger: 50, rowDir: 'best', rowAng: 0, tapeMax: 120, tape: 'std', ymax: 6 };
+  plantDate: isoOf(Date.now() - 115 * DAY), maxAcc: 15, minDist: 2, startHour: 6, trigger: 50, rainWait: 3, rowDir: 'best', rowAng: 0, tapeMax: 120, tape: 'std', ymax: 6 };
 let S = { pts: [], hpts: [], closed: false, set: { ...DEF }, mode: 'auto', step: 1 };
 try { const s = JSON.parse(localStorage.getItem('raidrop-v1')); if (s && s.set) { S = { ...S, ...s, set: { ...DEF, ...s.set } }; } } catch (e) {}
 if (!S.crop) S.crop = { status: S.closed ? 'planted' : 'none' };
@@ -2428,14 +2435,29 @@ function tuftGeo() {
 }
 
 /* ---- rain: hourly data when available, else afternoon shower from the daily total ---- */
-function rainNow() {
-  if (R.rainForce) return { on: true, rate: 8, demo: true };
-  const d = new Date(SIM.t), iso = isoOf(SIM.t), hh = d.getHours();
-  const key = `${iso}T${pad(hh)}:00`;
-  if (W.hours && key in W.hours) { const r = W.hours[key]; return { on: r >= 0.1, rate: r, src: 'live' }; }
-  const w = wx(iso); if (w.rain < 1) return { on: false, rate: 0 };
+function rainAt(t) {
+  const d = new Date(t), iso = isoOf(t), hh = d.getHours(), ob = S.obs && S.obs[iso];
+  if (!(ob && ob.rain != null)) {
+    const mk = `${iso}T${pad(hh)}:${pad(Math.floor(d.getMinutes() / 15) * 15)}`, key = `${iso}T${pad(hh)}:00`, prob = W.hp ? W.hp[key] : null;
+    if (W.m15 && mk in W.m15) { const r = W.m15[mk] * 4; return { on: r >= 0.2, rate: r, prob, src: 'live' }; }
+    if (W.hours && key in W.hours) { const r = W.hours[key]; return { on: r >= 0.1, rate: r, prob, src: 'live' }; }
+  }
+  const w = wx(iso); if (w.rain < 1) return { on: false, rate: 0, prob: w.prob };
   const durH = clamp(Math.round(w.rain / 6), 1, 6), start = 13 + hash(iso) % 4;
-  return hh >= start && hh < start + durH ? { on: true, rate: w.rain / durH } : { on: false, rate: 0 };
+  return hh >= start && hh < start + durH ? { on: true, rate: w.rain / durH, prob: w.prob } : { on: false, rate: 0, prob: w.prob };
+}
+function rainNow() { return R.rainForce ? { on: true, rate: 8, demo: true } : rainAt(SIM.t); }
+/* rain (mm) falling between t0 and t1, 15-minute steps */
+function rainSum(t0, t1) { let mm = 0; for (let t = t0; t < t1; t += 15 * 60000) { const r = rainAt(t); if (r.on) mm += r.rate * Math.min(15, (t1 - t) / 60000) / 60; } return mm; }
+function rainToday(t = SIM.t) { return rainSum(parseIso(isoOf(t)), t) + (SIM.today && SIM.today.demo || 0); }
+/* look ahead: is it raining, when will the next rain start/stop and how much will fall */
+function rainOutlook(t, hAhead) {
+  const Q = 15 * 60000, now = R.rainForce || rainAt(t).on;
+  let k = 0, start = null, prob = null;
+  if (!now) { for (k = 1; k <= hAhead * 4; k++) { const r = rainAt(t + k * Q); if (r.on && r.rate >= 0.3 && (r.prob == null || r.prob >= 40)) { start = k; prob = r.prob; break; } } if (start == null) return { now: false, start: null }; }
+  let dry = 0, end = start || 0, mm = 0;
+  for (let j = start || 0; j < (start || 0) + 48 && dry < 4; j++) { const r = rainAt(t + j * Q); if (r.on) { mm += r.rate / 4; dry = 0; end = j + 1; } else dry++; }
+  return { now, startMin: (start || 0) * 15, endMin: R.rainForce ? null : end * 15, mm, prob };
 }
 function initRain() {
   const N = isSmall ? 2200 : 4500, pos = new Float32Array(N * 6), r = rng(99);
@@ -3004,7 +3026,7 @@ async function googleWeather(lat, lon) {
   let tok = '', pages = 0;
   do {
     const hj = await get(`${base}forecast/hours:lookup?key=${k}&${loc}&hours=48&pageSize=24${tok ? '&pageToken=' + tok : ''}`);
-    (hj.forecastHours || []).forEach(h => { const t = new Date(h.interval?.startTime || 0); if (!+t) return; W.hours[`${isoOf(t)}T${pad(t.getHours())}:00`] = h.precipitation?.qpf?.quantity || 0; });
+    (hj.forecastHours || []).forEach(h => { const t = new Date(h.interval?.startTime || 0); if (!+t) return; const k = `${isoOf(t)}T${pad(t.getHours())}:00`; W.hours[k] = h.precipitation?.qpf?.quantity || 0; const pp = h.precipitation?.probability?.percent; if (pp != null) (W.hp = W.hp || {})[k] = pp; });
     tok = hj.nextPageToken || ''; pages++;
   } while (tok && pages < 2);
   try { const cj = await get(`${base}currentConditions:lookup?key=${k}&${loc}&languageCode=th`); W.now = { temp: cj.temperature?.degrees, rh: cj.relativeHumidity, cond: cj.weatherCondition?.description?.text, wind: cj.wind?.speed?.value }; } catch (e) {}
@@ -3012,7 +3034,7 @@ async function googleWeather(lat, lon) {
 async function loadWeather(quiet) {
   const lat = L ? L.lat0 : 15.07, lon = L ? L.lon0 : 102.25; W.lat = L ? lat : null; W.lon = L ? lon : null;
   W.loading = true; renderWeather();
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}&longitude=${lon.toFixed(4)}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,et0_fao_evapotranspiration,wind_speed_10m_max,relative_humidity_2m_mean&hourly=precipitation&past_days=30&forecast_days=7&timezone=Asia%2FBangkok`;
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}&longitude=${lon.toFixed(4)}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,et0_fao_evapotranspiration,wind_speed_10m_max,relative_humidity_2m_mean&hourly=precipitation,precipitation_probability&minutely_15=precipitation&forecast_minutely_15=96&past_days=30&forecast_days=7&timezone=Asia%2FBangkok`;
   try {
     const ac = new AbortController(); const to = setTimeout(() => ac.abort(), 7000);
     const r = await fetch(url, { signal: ac.signal }); clearTimeout(to);
@@ -3023,7 +3045,8 @@ async function loadWeather(quiet) {
       W.days[t] = { tmax: d.temperature_2m_max[i], tmin: d.temperature_2m_min[i], rain: d.precipitation_sum[i] || 0, prob: d.precipitation_probability_max?.[i] ?? (d.precipitation_sum[i] > 1 ? 70 : 10),
         et0: d.et0_fao_evapotranspiration[i], rh: d.relative_humidity_2m_mean?.[i] ?? 70, wind: d.wind_speed_10m_max[i], src: 'live' };
     });
-    W.hours = {}; if (j.hourly && j.hourly.time) j.hourly.time.forEach((t, i) => { W.hours[t] = j.hourly.precipitation[i] || 0; });
+    W.hours = {}; W.hp = {}; W.m15 = {}; if (j.hourly && j.hourly.time) j.hourly.time.forEach((t, i) => { W.hours[t] = j.hourly.precipitation[i] || 0; const pp = j.hourly.precipitation_probability?.[i]; if (pp != null) W.hp[t] = pp; });
+    if (j.minutely_15 && j.minutely_15.time) j.minutely_15.time.forEach((t, i) => { const v = j.minutely_15.precipitation?.[i]; if (v != null) W.m15[t] = v; });
     W.src = 'live'; W.at = Date.now(); W.err = null;
   } catch (e) { W.src = 'clim'; W.err = 'เชื่อมต่อบริการพยากรณ์อากาศไม่ได้ — ใช้ค่าเฉลี่ยภูมิอากาศรายเดือนแทน (ภาคอีสานตอนกลาง)'; }
   if (useG('wx')) {
@@ -3046,7 +3069,7 @@ const SIM = { t: Date.now(), speed: 'real', Dr: 0, today: null, hist: [], queue:
 function log(msg, k = '') { SIM.log.unshift({ t: SIM.t, msg, k }); SIM.log.length = Math.min(SIM.log.length, 80); renderLog(); }
 function initSim(keep) {
   if (!L) return;
-  const kept = keep && SIM.today ? { q: SIM.queue, a: SIM.active, log: SIM.log, irr: SIM.today.irr, vol: SIM.today.vol, t: SIM.t } : null;
+  const kept = keep && SIM.today ? { q: SIM.queue, a: SIM.active, log: SIM.log, irr: SIM.today.irr, vol: SIM.today.vol, demo: SIM.today.demo, t: SIM.t, wait: SIM.wait } : null;
   const now = Date.now(); SIM.t = kept ? kept.t : now - now % 1000; SIM.queue = []; SIM.active = null; SIM.hist = []; SIM.log = [];
   // spin-up: 30 days of history using the automatic policy
   let Dr = need(SIM.t - 30 * DAY).raw * 0.4;
@@ -3060,7 +3083,7 @@ function initSim(keep) {
     SIM.hist.push({ iso: n.iso, t, etc: n.etc, rain: n.w.rain, pe: n.pe, irr, dp, sw: 100 * (1 - D / n.taw), thr: 100 * (1 - n.raw / n.taw), wsrc: n.w.src, ks: n.c.dap >= 0 ? (D <= n.raw ? 1 : clamp((n.taw - D) / (n.taw - n.raw), 0, 1)) : null });
     Dr = D;
   }
-  SIM.Dr = Dr; SIM.today = { iso: isoOf(SIM.t), irr: kept ? kept.irr : 0, vol: kept ? kept.vol : 0 }; SIM.decided = null;
+  SIM.Dr = Dr; SIM.today = { iso: isoOf(SIM.t), irr: kept ? kept.irr : 0, vol: kept ? kept.vol : 0, demo: kept ? kept.demo || 0 : 0 }; SIM.decided = null; SIM.wait = kept ? kept.wait : null;
   { const ob = S.obs && S.obs[SIM.today.iso]; if (ob && ob.soil != null) setSoilNow(ob.soil); }
   if (kept) { SIM.queue = kept.q; SIM.active = kept.a; SIM.log = kept.log; renderCharts(); return; }
   log(`เริ่มระบบ · ความชื้นดินปัจจุบัน ${f(swNow(), 0)}%`, '');
@@ -3070,7 +3093,7 @@ function initSim(keep) {
 }
 function depNow() {
   const n = need(SIM.t), d = new Date(SIM.t), frac = (d.getHours() * 60 + d.getMinutes()) / 1440;
-  return SIM.Dr + (n.etc - n.pe) * frac - SIM.today.irr;
+  return SIM.Dr + n.etc * frac - peff(rainToday()) - SIM.today.irr;
 }
 function swNow() { const n = need(SIM.t); return clamp(100 * (1 - depNow() / n.taw), 0, 100); }
 function plan(netMm) {
@@ -3090,19 +3113,68 @@ function nextZone() {
   if (R.ridge) paintRidges(true);
 }
 function stopAll() { if (SIM.active || SIM.queue.length) log('ปิดน้ำทั้งหมด (สั่งด้วยมือ)', 'warn'); SIM.queue = []; SIM.active = null; if (R.ridge) paintRidges(true); }
-function autoDecide(initial) {
-  const n = need(SIM.t), D = depNow(), trig = n.raw * S.set.trigger / 100;
-  SIM.decided = n.iso;
-  if (n.c.noIrr) return log(n.c.notPlanted ? 'ยังไม่ได้บันทึกการปลูก — ระบบอัตโนมัติจะเริ่มเมื่อบันทึกวันปลูกในสมุดไร่' : n.c.dap < 0 ? 'ยังไม่ถึงวันปลูก — ไม่ให้น้ำ' : 'งดให้น้ำ: 30 วันก่อนเก็บเกี่ยว เพื่อเพิ่มเปอร์เซ็นต์แป้ง', 'skip');
-  if (D < trig) return log(`ไม่ต้องให้น้ำ — ดินขาดน้ำ ${f(D, 1)} มม. ยังไม่ถึงเกณฑ์ ${f(trig, 1)} มม.`, 'skip');
-  if (n.w.prob >= 60 && n.pe >= D * 0.5) return log(`เลื่อนการให้น้ำ — พยากรณ์ฝน ${f(n.w.rain, 1)} มม. (โอกาส ${f(n.w.prob)}%) เพียงพอ`, 'skip');
-  let items = plan(D); const total = items.reduce((a, b) => a + b.min, 0), cap = 20 * 60;
+function rainBal() {
+  const n = need(SIM.t), fell = rainToday(), D = depNow(), trig = n.raw * S.set.trigger / 100;
+  return { n, fell, used: peff(fell), D, trig, etc: n.etc };
+}
+function minTxt(m) { m = Math.max(0, Math.round(m)); return m < 60 ? `${m} นาที` : `${Math.floor(m / 60)} ชม.${m % 60 ? ' ' + m % 60 + ' นาที' : ''}`; }
+/* automatic mode: rain first, then top up only what is still missing */
+function autoDecide(initial, noWait) {
+  const n = need(SIM.t), label = initial ? 'ประเมินทันที' : 'อัตโนมัติ';
+  if (n.c.noIrr) { SIM.decided = n.iso; SIM.wait = null; return log(n.c.notPlanted ? 'ยังไม่ได้บันทึกการปลูก — ระบบอัตโนมัติจะเริ่มเมื่อบันทึกวันปลูกในสมุดไร่' : n.c.dap < 0 ? 'ยังไม่ถึงวันปลูก — ไม่ให้น้ำ' : 'งดให้น้ำ: 30 วันก่อนเก็บเกี่ยว เพื่อเพิ่มเปอร์เซ็นต์แป้ง', 'skip'); }
+  const B = rainBal(), stressed = B.D > n.raw;
+  if (!noWait) {
+    const hr = new Date(SIM.t).getHours(), toNight = Math.max(0, (22 - hr) * 60);
+    const ol = rainOutlook(SIM.t, S.set.rainWait ?? 3);
+    if (ol.now) {
+      SIM.wait = { kind: 'now', since: SIM.t };
+      return log(`🌧 ฝนกำลังตก — รอให้ฝนหยุดก่อน แล้วค่อยคำนวณว่าน้ำฝนพอหรือไม่` + (ol.endMin ? ` (คาดว่าหยุดในอีก ${minTxt(ol.endMin)} · ได้ฝนอีก ~${f(ol.mm, 1)} มม.)` : ''), 'rain');
+    }
+    if (ol.start !== null && ol.mm >= 2 && ol.startMin < toNight) {
+      SIM.wait = { kind: 'fc', until: SIM.t + (ol.startMin + 60) * 60000, mm: ol.mm, at: SIM.t + ol.startMin * 60000 };
+      return log(`⏳ พยากรณ์ว่าฝนจะตกในอีก ${minTxt(ol.startMin)} (~${f(ol.mm, 1)} มม.${ol.prob != null ? ' · โอกาส ' + f(ol.prob) + '%' : ''}) — รอฝนก่อน ยังไม่เปิดน้ำ`, 'rain');
+    }
+    // heavier rain later today that would cover the need: hold off (unless the crop is already stressed)
+    if (!stressed && B.D >= B.trig) {
+      const ol2 = rainOutlook(SIM.t, Math.max(0, 21 - hr));
+      if (ol2.start !== null && peff(ol2.mm) >= B.D * 0.8 && (ol2.prob == null || ol2.prob >= 60)) {
+        SIM.wait = { kind: 'fc', until: SIM.t + (ol2.startMin + 60) * 60000, mm: ol2.mm, at: SIM.t + ol2.startMin * 60000 };
+        return log(`⏳ พยากรณ์ฝนหนัก ~${f(ol2.mm, 1)} มม. ตอน ${hm(SIM.t + ol2.startMin * 60000)} น. พอสำหรับความต้องการ — เลื่อนการให้น้ำไปดูหลังฝนตก`, 'rain');
+      }
+    }
+  }
+  SIM.wait = null; SIM.decided = n.iso;
+  const rainTxt = B.fell > 0.1 ? `ฝนวันนี้ ${f(B.fell, 1)} มม. ใช้ได้จริง ${f(B.used, 1)} มม.${B.used === 0 ? ' (ฝนน้อยกว่า 5 มม. ระเหยหมด)' : ''} · ` : '';
+  if (B.D <= 0.05) return log(`✅ ${rainTxt}ดินชุ่มเต็มที่แล้ว — วันนี้ไม่ต้องเปิดน้ำ`, 'skip');
+  if (B.D < B.trig) return log(`✅ ${rainTxt}ดินขาดน้ำ ${f(B.D, 1)} มม. ยังไม่ถึงเกณฑ์ ${f(B.trig, 1)} มม. — ไม่ต้องเปิดน้ำ`, 'skip');
+  let items = plan(B.D); const total = items.reduce((a, b) => a + b.min, 0), cap = 20 * 60;
   if (total > cap) { items = items.map(it => ({ ...it, min: it.min * cap / total })); log(`ต้องการน้ำมากกว่าที่ปั๊มให้ได้ใน 20 ชม. — ให้เท่าที่ได้ก่อน แล้วชดเชยวันถัดไป`, 'warn'); }
-  log(`${initial ? 'ประเมินทันที' : 'อัตโนมัติ ' + pad(S.set.startHour) + ':00'} — ดินขาดน้ำ ${f(D, 1)} มม. → ให้น้ำสุทธิ ${f(D, 1)} มม. (${f(D / effF() * L.cropArea / 1000, 1)} ลบ.ม.)`, 'irr');
+  log(`💧 ${label} ${hm(SIM.t)} — ${rainTxt}ยังขาดน้ำ ${f(B.D, 1)} มม. → เติมน้ำ ${f(B.D, 1)} มม. (${f(B.D / effF() * L.cropArea / 1000, 1)} ลบ.ม. · ${dur(Math.min(total, cap))})`, 'irr');
   enqueue(items, 'auto');
 }
+/* called every 15 simulated minutes */
+function rainWatch() {
+  if (!SIM.today) return;
+  const r = rainNow(), auto = S.mode === 'auto';
+  // rain starts while watering → stop and re-plan after the rain
+  if (r.on && (SIM.active || SIM.queue.length)) {
+    if (auto && (SIM.active ? SIM.active.src : SIM.queue[0].src) === 'auto') {
+      SIM.queue = []; SIM.active = null; SIM.doneMin = 0; if (R.ridge) paintRidges(true);
+      SIM.wait = { kind: 'now', since: SIM.t }; SIM.decided = null;
+      log(`🌧 ฝนเริ่มตก — หยุดให้น้ำชั่วคราว (เติมไปแล้ว ${f(SIM.today.irr, 1)} มม.) รอฝนหยุดแล้วคำนวณใหม่`, 'rain');
+    } else if (!SIM._rainWarn) { SIM._rainWarn = true; log('🌧 ฝนตกขณะเปิดน้ำ — แนะนำกดหยุด แล้วรอฝนหยุดก่อน', 'warn'); }
+  }
+  if (!r.on) SIM._rainWarn = false;
+  if (!auto || !SIM.wait) return;
+  const hr = new Date(SIM.t).getHours();
+  if (SIM.wait.kind === 'fc' && r.on) { SIM.wait = { kind: 'now', since: SIM.t }; return log('🌧 ฝนเริ่มตกตามพยากรณ์ — รอฝนหยุด', 'rain'); }
+  if (SIM.wait.kind === 'now' && !r.on) { log(`☁️ ฝนหยุดแล้ว · ฝนตกวันนี้รวม ${f(rainToday(), 1)} มม. — คำนวณน้ำใหม่`, 'rain'); return autoDecide(false); }
+  if (SIM.wait.kind === 'fc' && SIM.t >= SIM.wait.until) { log('🌤 ฝนไม่ตกตามพยากรณ์ — คำนวณและให้น้ำตามปกติ', 'warn'); return autoDecide(false, true); }
+  if (hr >= 22 && SIM.wait.kind === 'fc') { log('ดึกแล้ว ฝนยังไม่ตก — ให้น้ำตามที่ขาด', 'warn'); return autoDecide(false, true); }
+}
 function finalizeDay() {
-  const iso = SIM.today.iso, t = parseIso(iso) + 12 * 3600e3, n = need(t);
+  const iso = SIM.today.iso, t = parseIso(iso) + 12 * 3600e3, n = need(t), d0 = parseIso(iso);
+  { const rain = rainSum(d0, d0 + DAY) + (SIM.today.demo || 0); n.w = { ...n.w, rain }; n.pe = peff(rain); }
   let D = SIM.Dr + n.etc - n.pe - SIM.today.irr, dp = 0;
   if (D < 0) { dp = -D; D = 0; if (dp > 1) log(`น้ำเกินความจุดิน ${f(dp, 1)} มม. ซึมลึกเกินเขตราก (${f(dp * L.cropArea / 1000, 1)} ลบ.ม.)`, 'warn'); }
   D = Math.min(D, n.taw);
@@ -3110,7 +3182,7 @@ function finalizeDay() {
   if (SIM.hist.length > 120) SIM.hist.shift();
   if (n.pe > 0) log(`ฝนตก ${f(n.w.rain, 1)} มม. (เป็นประโยชน์ ${f(n.pe, 1)} มม.)`, '');
   if (D > n.raw) log(`มันเริ่มเครียดน้ำ — ความชื้นดินต่ำกว่าเกณฑ์`, 'warn');
-  SIM.Dr = D; SIM.today = { iso: isoOf(SIM.t), irr: 0, vol: 0 };
+  SIM.Dr = D; SIM.today = { iso: isoOf(SIM.t), irr: 0, vol: 0, demo: 0 }; SIM.wait = null;
   renderCharts();
   if (R.group) updatePlantGrowth();
 }
@@ -3123,8 +3195,8 @@ function tick(dt) {
   if (SIM.active && rate > 10) rate = SIM.speed === 'turbo' ? 30 : 8;
   let dm = dt * rate, guard = 0;
   while (dm > 1 / 60000 && guard++ < 200) {
-    const toMid = minutesTo(0), toStart = minutesTo(S.set.startHour);
-    const step = Math.min(dm, toMid, toStart, SIM.active ? SIM.active.rem : Infinity);
+    const toMid = minutesTo(0), toStart = minutesTo(S.set.startHour), dq = new Date(SIM.t), toQ = 15 - (dq.getMinutes() % 15) - dq.getSeconds() / 60 - dq.getMilliseconds() / 60000;
+    const step = Math.min(dm, toMid, toStart, toQ > 1e-6 ? toQ : 15, SIM.active ? SIM.active.rem : Infinity);
     const ms = Math.max(1, Math.round(step * 60000));
     // irrigate
     if (SIM.active) {
@@ -3133,15 +3205,17 @@ function tick(dt) {
       SIM.active.rem -= step; R.wet[SIM.active.z] = Math.min(1, (R.wet[SIM.active.z] || 0) + step / 60);
     }
     R.wet && R.wet.forEach((w, i) => { if (!SIM.active || SIM.active.z !== i) R.wet[i] = Math.max(0, w - step / 900); });
+    if (R.rainForce) SIM.today.demo = (SIM.today.demo || 0) + 8 * step / 60;
     SIM.t += ms; dm -= step;
+    if (new Date(SIM.t).getMinutes() % 15 === 0 && new Date(SIM.t).getSeconds() === 0) rainWatch();
     if (SIM.active && SIM.active.rem <= 1e-6) nextZone();
     if (isoOf(SIM.t) !== SIM.today.iso) finalizeDay();
     if (Math.abs(step - toStart) < 1e-6 && new Date(SIM.t).getHours() === S.set.startHour && new Date(SIM.t).getMinutes() === 0) morning();
   }
 }
 function morning() {
-  if (S.mode === 'auto') { if (SIM.decided !== isoOf(SIM.t)) autoDecide(false); }
-  else { const n = need(SIM.t); if (!n.c.noIrr && depNow() >= n.raw * S.set.trigger / 100) log(`แนะนำ: ควรให้น้ำวันนี้ (ดินขาดน้ำ ${f(depNow(), 1)} มม.) — อยู่ในโหมดสั่งเอง`, 'warn'); }
+  if (S.mode === 'auto') { if (SIM.decided !== isoOf(SIM.t) && !SIM.wait) autoDecide(false); }
+  else { const n = need(SIM.t); if (!n.c.noIrr && depNow() >= n.raw * S.set.trigger / 100) { const ol = rainOutlook(SIM.t, S.set.rainWait ?? 3); log(ol.now ? '🌧 ฝนกำลังตก — แนะนำรอฝนหยุดก่อนค่อยเปิดน้ำ' : ol.start !== null && ol.mm >= 2 ? `⏳ ฝนจะตกในอีก ${minTxt(ol.startMin)} (~${f(ol.mm, 1)} มม.) — แนะนำรอฝนก่อน` : `แนะนำ: ควรให้น้ำวันนี้ (ดินขาดน้ำ ${f(depNow(), 1)} มม.) — อยู่ในโหมดสั่งเอง`, 'warn'); } }
 }
 
 /* ================= UI rendering ================= */
@@ -3189,7 +3263,7 @@ function renderTerrain() {
 function hudPill() {
   const bits = [`${hm(SIM.t)}`];
   if (SIM.active) bits.push(`💧 ${SIM.active.z + 1}/${L.zones.length}`); else bits.push(`${L.zones.length} โซน`);
-  if (R.rain_ && R.rain_.on) bits.push('🌧'); if (R.viewDap != null) bits.push(`🌱 ${Math.round(R.viewDap)} วัน`);
+  if (R.rain_ && R.rain_.on) bits.push('🌧'); else if (SIM.wait && S.mode === 'auto') bits.push('⏳ รอฝน'); if (R.viewDap != null) bits.push(`🌱 ${Math.round(R.viewDap)} วัน`);
   const attr = SAT.on && SAT.state === 'ok' ? `<small>© ${SAT.src === 'google' ? 'Google' : 'Esri'}</small>` : '';
   return `<button class="hudpill" data-act="hudshow" title="แสดงข้อมูล">${bits.join(' · ')} ${attr}<b>›</b></button>`;
 }
@@ -3205,6 +3279,7 @@ function renderHUD() {
   if (SAT.on && SAT.state === 'loading' && S.step > 0) s += `<div class="chip"><div class="t">🛰 กำลังโหลดภาพดาวเทียมรอบไร่…</div></div>`;
   if (SAT.on && SAT.state === 'ok' && S.step > 0) s += `<div class="chip" style="padding:3px 9px;opacity:.85"><div class="t">ภาพดาวเทียม © ${SAT.src === 'google' ? 'Google' : 'Esri, Maxar, Earthstar Geographics'}</div></div>`;
   if (R.viewDap != null) { const vd = Math.round(R.viewDap); s += `<div class="chip" style="border-color:#cfe0c6"><div class="v" style="color:var(--leaf)">🌱 ภาพจำลองอายุ ${vd} วัน</div><div class="t">ระยะ${stageOf(vd).n} · สูง ~${f(heightAt(vd) * 100)} ซม.</div></div>`; }
+  if (SIM.wait && S.mode === 'auto' && !SIM.active) s += `<div class="chip"><div class="v">${SIM.wait.kind === 'now' ? '⏳ รอฝนหยุดแล้วค่อยเปิดน้ำ' : '⏳ รอฝนก่อนเปิดน้ำ'}</div><div class="t">${waitTxt()}</div></div>`;
   if (R.rain_ && R.rain_.on) s += `<div class="chip" style="border-color:#c9d3dd"><div class="v">🌧 ${R.rain_.demo ? 'ตัวอย่างฝนตก' : 'ฝนกำลังตก · ' + f(R.rain_.rate, 1) + ' มม./ชม.'}</div><div class="t">${R.rain_.demo ? 'กด 🌧 อีกครั้งเพื่อปิด' : 'ระบบนับน้ำฝนเข้าความชื้นดินแล้ว'}</div></div>`;
   if (SIM.active) { const pr = (1 - SIM.active.rem / SIM.active.tot) * 100;
     s += `<div class="chip" style="border-color:#bcd5f5"><div class="t">กำลังให้น้ำ · ใช้น้ำแล้ว ${f(SIM.today.vol / 1000, 1)} ลบ.ม.</div><div class="v" style="color:var(--water)">💧 โซน ${SIM.active.z + 1}/${L.zones.length} · เหลือ ${dur(SIM.active.rem)}</div><div class="bar"><i style="width:${pr}%"></i></div>${R.follow ? '' : '<button data-act="follow">📷 ไปดูโซนนี้</button>'}</div>`; }
@@ -3229,12 +3304,13 @@ function renderControl() {
   const net = Math.max(0, D), gross = net / effF(), vol = gross * L.cropArea, pl = plan(net), tot = pl.reduce((a, b) => a + b.min, 0);
   $('#needStats').innerHTML = [
     ['มันใช้น้ำวันนี้ (ETc)', f(n.etc, 2) + '<small>มม./วัน</small>'], ['คิดเป็นทั้งแปลง', f(n.etc * L.cropArea / 1000, 1) + '<small>ลบ.ม./วัน</small>'],
+    ['ฝนตกวันนี้ (ใช้ได้)', f(rainToday(), 1) + `<small>มม. (${f(peff(rainToday()), 1)})</small>`], ['ฝนที่จะตก 6 ชม.', (o6 => o6.start !== null || o6.now ? '~' + f(o6.mm, 1) + '<small>มม.</small>' : 'ไม่มี')(rainOutlook(SIM.t, 6))],
     ['ดินขาดน้ำตอนนี้', f(net, 1) + '<small>มม.</small>'], ['เกณฑ์เริ่มให้น้ำ', f(trig, 1) + '<small>มม.</small>'],
     ['ควรให้น้ำ (รวมการสูญเสีย)', f(vol / 1000, 1) + '<small>ลบ.ม.</small>'], ['เวลาเปิดน้ำรวม', tot > 0.5 ? dur(tot) : '—'],
   ].map(([l, v]) => `<div><div class="l">${l}</div><div class="v mono">${v}</div></div>`).join('');
   $('#formula').innerHTML = `<b>ETc</b> = Kc ${f(n.c.kc, 2)} × Kr ${f(n.c.kr, 2)} (การคลุมดินของน้ำหยด) × ET₀ ${f(n.w.et0, 2)} = <b>${f(n.etc, 2)} มม.</b><br>` +
     `<b>น้ำที่ดินเก็บได้ (TAW)</b> = ${SOILS[st.soil].taw} มม./ม. × รากลึก ${f(n.c.zr, 2)} ม. = ${f(n.taw, 1)} มม. · พืชเริ่มเครียดเมื่อขาดเกิน ${f(n.p * 100)}% = ${f(n.raw, 1)} มม.<br>` +
-    `<b>ฝนที่เป็นประโยชน์</b> ${f(n.pe, 1)} มม. · <b>น้ำที่ต้องให้</b> = ${f(net, 1)} ÷ (ประสิทธิภาพ ${st.eff}% × ความสม่ำเสมอจากพื้นต่างระดับ ${f(L.unif * 100)}%) = ${f(gross, 1)} มม. × ${f(L.cropArea)} ม² = ${f(vol / 1000, 1)} ลบ.ม. · อัตราให้น้ำ ${f(L.appRate, 1)} มม./ชม. → <b>${f(gross / L.appRate * 60)} นาที/โซน</b>`;
+    `<b>ฝนที่เป็นประโยชน์วันนี้</b> ${f(peff(rainToday()), 1)} มม. (นับเมื่อฝนตกจริง) · <b>น้ำที่ต้องให้</b> = ${f(net, 1)} ÷ (ประสิทธิภาพ ${st.eff}% × ความสม่ำเสมอจากพื้นต่างระดับ ${f(L.unif * 100)}%) = ${f(gross, 1)} มม. × ${f(L.cropArea)} ม² = ${f(vol / 1000, 1)} ลบ.ม. · อัตราให้น้ำ ${f(L.appRate, 1)} มม./ชม. → <b>${f(gross / L.appRate * 60)} นาที/โซน</b>`;
   // auto panel
   $('#autoCard').style.display = S.mode === 'auto' ? '' : 'none';
   {
@@ -3498,12 +3574,13 @@ function onLayoutChanged() {
   if (W.lat == null || geoDist({ lat: W.lat, lon: W.lon }, { lat: L.lat0, lon: L.lon0 }) > 2000) loadWeather(true);
 }
 function bindSettings() {
-  const map = { sRow: 'rowSp', sPlant: 'plantSp', sEm: 'emSp', sQ: 'emQ', sPump: 'pumpQ', sEff: 'eff', sSoil: 'soil', sHarvest: 'harvest', sPlantDate: 'plantDate', sMaxAcc: 'maxAcc', sMinDist: 'minDist', sTrig: 'trigger', sStartHour: 'startHour', sRowDir: 'rowDir', sTape: 'tape', sYmax: 'ymax', sRowAng: 'rowAng', sTapeMax: 'tapeMax' };
+  const map = { sRow: 'rowSp', sPlant: 'plantSp', sEm: 'emSp', sQ: 'emQ', sPump: 'pumpQ', sEff: 'eff', sSoil: 'soil', sHarvest: 'harvest', sPlantDate: 'plantDate', sMaxAcc: 'maxAcc', sMinDist: 'minDist', sTrig: 'trigger', sStartHour: 'startHour', sRowDir: 'rowDir', sTape: 'tape', sYmax: 'ymax', sRowAng: 'rowAng', sTapeMax: 'tapeMax', sRainWait: 'rainWait' };
+  if (S.set.rainWait == null) S.set.rainWait = 3;
   $('#sStartHour').innerHTML = Array.from({ length: 24 }, (_, h) => `<option value="${h}">${pad(h)}:00</option>`).join('');
   Object.entries(map).forEach(([id, k]) => {
     const el = $('#' + id); el.value = S.set[k];
     el.addEventListener('change', () => {
-      const v = el.type === 'number' || id === 'sStartHour' ? +el.value : el.value;
+      const v = el.type === 'number' || id === 'sStartHour' || id === 'sRainWait' ? +el.value : el.value;
       if (el.type === 'number' && (!isFinite(v) || v < 0 || (v === 0 && k !== 'rowAng'))) { el.value = S.set[k]; return; }
       S.set[k] = v; if (k === 'plantDate' && v) S.crop = { ...(S.crop || {}), status: 'planted' }; save();
       if (k === 'rowDir') $('#rowAngWrap').style.display = v === 'custom' ? '' : 'none';
@@ -3600,7 +3677,7 @@ $('#bRec').addEventListener('click', () => { const D = Math.max(0, depNow()), m 
 $('#bStop').addEventListener('click', () => { stopAll(); toast('ปิดน้ำแล้ว'); });
 $('#fab').addEventListener('click', () => { if (SIM.active || SIM.queue.length) { stopAll(); toast('■ ปิดน้ำแล้ว'); } else quickStart(); });
 $('#zoneBtns').addEventListener('click', e => { const b = e.target.closest('button[data-z]'); if (b) { toggleZone(+b.dataset.z); zbSig = ''; renderZoneBtns(); } });
-$('#tRain').addEventListener('click', () => { R.rainForce = !R.rainForce; $('#tRain').classList.toggle('on', R.rainForce); toast(R.rainForce ? '🌧 แสดงตัวอย่างฝนตก' : 'ปิดตัวอย่างฝน — กลับไปใช้ข้อมูลฝนจริง'); });
+$('#tRain').addEventListener('click', () => { R.rainForce = !R.rainForce; $('#tRain').classList.toggle('on', R.rainForce); if (L && SIM.today) { if (R.rainForce && S.mode === 'auto' && !SIM.wait && !SIM.active) { SIM.wait = { kind: 'now', since: SIM.t }; SIM.decided = null; log('🌧 ฝนตก (ตัวอย่าง) — รอฝนหยุดก่อน แล้วค่อยคำนวณน้ำ', 'rain'); } rainWatch(); } toast(R.rainForce ? '🌧 แสดงตัวอย่างฝนตก' : 'ปิดตัวอย่างฝน — กลับไปใช้ข้อมูลฝนจริง'); });
 $('#bNow').addEventListener('click', () => quickStart());
 $('#bWx').addEventListener('click', () => loadWeather(false));
 GC.g1 = setupChart('#g1'); GC.g2 = setupChart('#g2');
@@ -3646,6 +3723,7 @@ function renderHome() {
   $('#hFieldName').textContent = `ไร่มันสำปะหลัง · ${areaThai(L.area)}`;
   let v;
   if (SIM.active) v = `💧 กำลังให้น้ำ โซน ${SIM.active.z + 1}/${L.zones.length}`;
+  else if (SIM.wait && S.mode === 'auto') v = SIM.wait.kind === 'now' ? '🌧 ฝนตก — รอฝนหยุด' : '⏳ รอฝนก่อนเปิดน้ำ';
   else if (c.notPlanted) v = S.crop.status === 'harvested' ? '🚜 เก็บเกี่ยวแล้ว — รอปลูกรอบใหม่' : '🟫 ยังไม่ได้ปลูกมัน';
   else if (rn && !R.rain_.demo) v = '🌧 ฝนกำลังตก';
   else if (c.noIrr && c.dap >= 0) v = '🌾 งดน้ำช่วงก่อนเก็บเกี่ยว';
@@ -3657,6 +3735,7 @@ function renderHome() {
   if (!R._sunT || Date.now() - R._sunT > 20000 || R._sunS !== SIM.t >> 22) { R._sunT = Date.now(); R._sunS = SIM.t >> 22; $('#hSun').innerHTML = sunCardHTML(L.lat0, L.lon0); }
   const nx = new Date(SIM.t + minutesTo(st.startHour) * 60000);
   $('#hNext').textContent = SIM.active ? `เหลือ ${dur([SIM.active, ...SIM.queue].reduce((a, b) => a + b.rem, 0))} · ใช้น้ำแล้ว ${f(SIM.today.vol / 1000, 1)} ลบ.ม.`
+    : SIM.wait && S.mode === 'auto' ? waitTxt()
     : c.notPlanted ? 'ให้น้ำเตรียมดินได้ · ระบบอัตโนมัติเริ่มหลังบันทึกวันปลูก' : S.mode === 'auto' ? `อัตโนมัติ · ตรวจรอบถัดไป ${dShort(nx)} ${pad(st.startHour)}:00 น.` : 'โหมดสั่งเอง · กดปุ่มด้านล่างเพื่อให้น้ำ';
   $('#hProg').style.display = running ? '' : 'none';
   if (running) { const all = [SIM.active, ...SIM.queue].filter(Boolean), tot = all.reduce((a, b) => a + b.tot, 0) + (SIM.doneMin || 0), rem = all.reduce((a, b) => a + b.rem, 0); $('#hProgBar').style.width = (tot ? (1 - rem / tot) * 100 : 0) + '%'; }
@@ -3674,8 +3753,36 @@ function renderHome() {
   $('#hTemp').textContent = `${f(w.tmax)}° / ${f(w.tmin)}°`;
   $('#hRain').textContent = `ฝน ${f(w.rain, 0)} มม. · โอกาส ${f(w.prob)}%`;
   $('#hEt').textContent = `มันใช้น้ำ ${f(n.etc, 1)} มม./วัน`;
+  renderBal();
   const feed = SIM.log.slice(0, 4).map(l => `<div><i class="fd ${l.k}"></i><div><div>${l.msg}</div><div class="ft">${dShort(l.t)} ${hm(l.t)} น.</div></div></div>`).join('');
   if ($('#hFeed').dataset.sig !== feed) { $('#hFeed').innerHTML = feed || '<div class="small">ยังไม่มีกิจกรรม</div>'; $('#hFeed').dataset.sig = feed; }
+}
+function waitTxt() {
+  const w = SIM.wait; if (!w) return '';
+  if (w.kind === 'fc') return `พยากรณ์ฝน ~${f(w.mm, 1)} มม. ตอน ${hm(w.at)} น. · เปิดน้ำหลังฝนหยุด ถ้ายังขาด`;
+  const ol = rainOutlook(SIM.t, 0); return `ตกแล้ว ${f(rainToday(), 1)} มม.` + (ol.endMin ? ` · คาดว่าหยุดในอีก ${minTxt(ol.endMin)}` : '') + ' · แล้วระบบจะคำนวณใหม่';
+}
+function renderBal() {
+  const el = $('#hBalBody'); if (!el || !L || !SIM.today) return;
+  const B = rainBal(), n = B.n, sig = [f(B.fell, 1), f(B.D, 1), f(SIM.today.irr, 1), SIM.wait ? SIM.wait.kind : '', SIM.active ? 1 : 0, Math.floor(SIM.t / 9e5)].join('|');
+  if (el.dataset.sig === sig) return; el.dataset.sig = sig;
+  if (n.c.noIrr) { el.innerHTML = `<div class="small">${n.c.notPlanted ? 'ยังไม่ได้ปลูก — บันทึกวันปลูกแล้วระบบจะเริ่มคำนวณ' : 'ช่วงงดน้ำ'}</div>`; return; }
+  const ol = rainOutlook(SIM.t, Math.max(S.set.rainWait ?? 3, 6)), need0 = Math.max(0.01, SIM.Dr + n.etc);
+  const rainP = clamp(B.used / need0, 0, 1), irrP = clamp(SIM.today.irr / need0, 0, 1 - rainP), lackP = clamp(B.D / need0, 0, 1 - rainP - irrP);
+  const vol = B.D / effF() * L.cropArea / 1000;
+  let res;
+  if (SIM.wait && S.mode === 'auto') res = `<div class="bres wait">⏳ ${SIM.wait.kind === 'now' ? 'ฝนกำลังตก รอฝนหยุดก่อน' : 'รอฝนตามพยากรณ์'} แล้วระบบจะเติมเฉพาะส่วนที่ยังขาด</div>`;
+  else if (B.D <= 0.05) res = `<div class="bres ok">✅ ดินชุ่มเต็มที่ — วันนี้ไม่ต้องเปิดน้ำ</div>`;
+  else if (B.D < B.trig) res = `<div class="bres ok">✅ ${B.used > 0 ? 'ฝนช่วยแล้ว ' : ''}ยังไม่ถึงเกณฑ์ — ไม่ต้องเปิดน้ำ (ขาด ${f(B.D, 1)} มม.)</div>`;
+  else res = `<div class="bres go">💧 ต้องเติมอีก ${f(B.D, 1)} มม. ≈ ${f(vol, 1)} ลบ.ม. · โซนละ ${dur(recMinutes())}</div>`;
+  el.innerHTML = `<div class="bline"><span>มันต้องการ (ขาดสะสม ${f(SIM.Dr, 1)} + ใช้วันนี้ ${f(n.etc, 1)})</span><b>${f(SIM.Dr + n.etc, 1)} มม.</b></div>
+    <div class="bline"><span>ฝนตกแล้ววันนี้ → ใช้ได้จริง</span><b>${f(B.fell, 1)} → ${f(B.used, 1)} มม.</b></div>
+    ${SIM.today.irr > 0.05 ? `<div class="bline"><span>ให้น้ำไปแล้ววันนี้</span><b>${f(SIM.today.irr, 1)} มม.</b></div>` : ''}
+    <div class="bline"><span>${ol.now ? 'ฝนที่จะตกต่อ' : 'ฝนที่จะตก'}${ol.start !== null || ol.now ? (ol.now ? '' : ` (อีก ${minTxt(ol.startMin)})`) : ' (6 ชม.ข้างหน้า)'}</span><b>${ol.start !== null || ol.now ? '~' + f(ol.mm, 1) + ' มม.' : 'ไม่มี'}</b></div>
+    <div class="bbar"><i style="width:${rainP * 100}%;background:#7aa6d2"></i><i style="width:${irrP * 100}%;background:var(--water)"></i><i style="width:${lackP * 100}%;background:#e6a23c"></i></div>
+    <div class="bkey"><span><i style="background:#7aa6d2"></i>ฝน</span><span><i style="background:var(--water)"></i>น้ำหยด</span><span><i style="background:#e6a23c"></i>ยังขาด</span></div>${res}
+    <div class="small" style="margin-top:8px">ฝนน้อยกว่า 5 มม./วัน ระเหยก่อนถึงราก จึงไม่นับ · ฝนที่มากกว่านั้นนับ 80%</div>`;
+  $('#hBalSrc').textContent = W.m15 && Object.keys(W.m15).length ? 'พยากรณ์ทุก 15 นาที' : W.hours && Object.keys(W.hours).length ? 'พยากรณ์รายชั่วโมง' : 'ค่าเฉลี่ยตามฤดู';
 }
 function homeGo(k) {
   const need3 = () => { if (!S.closed) { toast('สร้างแปลงก่อน'); return false; } return true; };

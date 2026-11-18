@@ -1310,6 +1310,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <button class="hcomp" id="hcomp" style="display:none" title="แตะเพื่อหันไปทีละทิศ"><div class="rose"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="47" fill="#fff" stroke="#e1e7dd" stroke-width="2"/><path d="M50 8 61 50 50 44 39 50z" fill="#d2402f"/><path d="M50 92 61 50 50 56 39 50z" fill="#9aa59f"/><text x="50" y="27" text-anchor="middle" font-family="Prompt,sans-serif" font-weight="700" font-size="0">N</text><circle cx="50" cy="50" r="5" fill="#fff" stroke="#9aa59f" stroke-width="2"/><text x="50" y="21" text-anchor="middle" font-family="Prompt,sans-serif" font-weight="700" font-size="14" fill="#fff">น</text></svg></div><span id="hcompT">เหนือ</span></button>
     <div class="vtools" id="vtools" style="display:none">
       <button id="tOver" title="มุมมองรวม"><svg class="ic"><use href="#i-globe"/></svg><span>ภาพรวม</span></button>
+      <button id="tSat" title="ภาพดาวเทียมพื้นที่จริงรอบไร่" class="on"><svg class="ic"><use href="#i-map"/></svg><span>แผนที่จริง</span></button>
       <button id="tEye" title="ยืนในไร่"><svg class="ic"><use href="#i-eye"/></svg><span>ยืนในไร่</span></button>
       <button id="tSun" title="เส้นทางดวงอาทิตย์"><svg class="ic"><use href="#i-sunpath"/></svg><span>ดวงอาทิตย์</span></button>
       <button id="tRain" title="ดูตัวอย่างฝนตก"><svg class="ic"><use href="#i-rain"/></svg><span>ฝน</span></button>
@@ -1941,7 +1942,7 @@ function computeLayout() {
   L = { poly: rp, W, H, rows, zones, tape, em, plants, sub, subLen, pump, mainLen, area: polyArea(poly), perim: polyPerim(poly),
     cropArea, flowAll: em * st.emQ, appRate: st.emQ / (st.emSp * st.rowSp), lat0: P.lat0, lon0: P.lon0, verts: poly.length, ang,
     G, elevOK, nElev: E.length, dz: zmax - zmin, zBase: zmin, slopeRow: ns ? sdx / ns * 100 : 0, slopeAcross: ns ? sdy / ns * 100 : 0,
-    slopeAll: slopeAll * 100, unif, head, lift, rowA, rowAz: angToAz(ang) };
+    slopeAll: slopeAll * 100, unif, head, lift, rowA, rowAz: angToAz(ang), tf: { c, s, minX, minY, kx: P.kx, ky: P.ky, lat0: P.lat0, lon0: P.lon0 } };
 }
 const effF = () => S.set.eff / 100 * (L ? L.unif : 1);
 
@@ -2498,7 +2499,7 @@ function init3D() {
   } catch (e) { console.error(e); R.ok = false; }
 }
 function resize3D() { if (!R.ok) return; const el = $('#v3d'); const w = el.clientWidth, h = el.clientHeight; if (!w || !h) return; R.renderer.setSize(w, h); R.camera.aspect = w / h; R.camera.updateProjectionMatrix(); }
-function disposeGroup(g) { g.traverse(o => { if (o.geometry && !o.userData.shared) o.geometry.dispose(); if (o.material) [].concat(o.material).forEach(m => m.dispose()); }); g.parent && g.parent.remove(g); }
+function disposeGroup(g) { g.traverse(o => { if (o.geometry && !o.userData.shared) o.geometry.dispose(); if (o.material) [].concat(o.material).forEach(m => { if (!o.userData.sharedTex && m.map && m.map.isCanvasTexture && m.map !== R.tex?.soil && m.map !== R.tex?.grass) m.map.dispose(); m.dispose(); }); }); g.parent && g.parent.remove(g); }
 const hz = (x, y) => (L && L.G ? gridAt(L.G, x, y) : 0) * R.vex;
 function pipe(g, a, b, r, color, mat) {
   const d = b.clone().sub(a), len = d.length(); if (len < 0.01) return;
@@ -2553,7 +2554,7 @@ function build3D() {
   const P = new THREE.BufferAttribute(pos, 3), U = new THREE.BufferAttribute(uv, 2);
   const mk = (idx, col, mat) => { const tg = new THREE.BufferGeometry(); tg.setAttribute('position', P); tg.setAttribute('uv', U); tg.setAttribute('color', new THREE.BufferAttribute(col, 3)); tg.setIndex(idx); tg.computeVertexNormals(); const m = new THREE.Mesh(tg, mat); m.receiveShadow = true; g.add(m); return m; };
   R.fieldMat = mk(iF, cF, STD({ map: R.tex.soil, vertexColors: true, roughness: 0.95 })).material;
-  mk(iG, cG, STD({ map: R.tex.grass, vertexColors: true, roughness: 1 }));
+  R.fakeScenery = [mk(iG, cG, STD({ map: R.tex.grass, vertexColors: true, roughness: 1 }))];
   R.grassMat = far.material;
   // boundary markers (concrete posts with red tops)
   const postM = STD({ color: '#d7d2c6' }), capM = STD({ color: '#b8352b' });
@@ -2601,8 +2602,8 @@ function build3D() {
   // pond + pump house + fertiliser tank
   const [px, py] = L.pump, ph = hz(px, py), th = hz(px - 4, py);
   const pc = [px - 16, py + 2], pch = Math.min(hz(pc[0], pc[1]), hz(pc[0] - 6, pc[1]), hz(pc[0] + 6, pc[1])) + 0.05;
-  const bank = new THREE.Mesh(new THREE.CircleGeometry(1, 40), STD({ color: '#7b5a3a', roughness: 1 })); bank.rotation.x = -Math.PI / 2; bank.scale.set(8.2, 5.8, 1); bank.position.set(pc[0], pch - 0.02, -pc[1]); bank.receiveShadow = true; g.add(bank);
-  const water = new THREE.Mesh(new THREE.CircleGeometry(1, 40), STD({ color: '#35585a', roughness: 0.08, metalness: 0.2 })); water.rotation.x = -Math.PI / 2; water.scale.set(7.2, 4.9, 1); water.position.set(pc[0], pch + 0.04, -pc[1]); g.add(water); R.water = water;
+  const bank = new THREE.Mesh(new THREE.CircleGeometry(1, 40), STD({ color: '#7b5a3a', roughness: 1 })); bank.rotation.x = -Math.PI / 2; bank.scale.set(8.2, 5.8, 1); bank.position.set(pc[0], pch - 0.02, -pc[1]); bank.receiveShadow = true; g.add(bank); R.fakeScenery.push(bank);
+  const water = new THREE.Mesh(new THREE.CircleGeometry(1, 40), STD({ color: '#35585a', roughness: 0.08, metalness: 0.2 })); water.rotation.x = -Math.PI / 2; water.scale.set(7.2, 4.9, 1); water.position.set(pc[0], pch + 0.04, -pc[1]); g.add(water); R.water = water; R.fakeScenery.push(water);
   groundPipe(g, [pc[0] + 6.5, pc[1] - 1], [px - 1.2, py], 0.06, '#1f1f1f', 0.08);
   const tank = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.95, 1.6, 28), STD({ color: '#2d5ea3', roughness: 0.5 })); tank.position.set(px - 4, th + 2.2, -py); tank.castShadow = true; g.add(tank);
   const lid = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, 0.15, 20), STD({ color: '#24497f' })); lid.position.set(px - 4, th + 3.08, -py); g.add(lid);
@@ -2634,10 +2635,10 @@ function build3D() {
   for (let x = -6; x < L.W + 6; x += 3 + rr() * 1.5) { const y = L.H + 9 + rr() * 2; if (!pip(x, y, L.poly) && !nearPoly(x, y, 6)) placeT[2].push([x, y, 13 + rr() * 6]); }
   const treeM = STD({ vertexColors: true, roughness: 0.9 }), m4 = new THREE.Matrix4(), qq = new THREE.Quaternion();
   placeT.forEach((list, vi) => { if (!list.length) return; const im = new THREE.InstancedMesh(R.treeGeos[vi], treeM, list.length); im.userData.shared = true;
-    list.forEach(([x, y, s], i) => { qq.setFromAxisAngle(V(0, 1, 0), rr() * 6.28); m4.compose(V(x, hz(x, y) - 0.05, -y), qq, V(s, s, s)); im.setMatrixAt(i, m4); }); im.castShadow = true; g.add(im); });
+    list.forEach(([x, y, s], i) => { qq.setFromAxisAngle(V(0, 1, 0), rr() * 6.28); m4.compose(V(x, hz(x, y) - 0.05, -y), qq, V(s, s, s)); im.setMatrixAt(i, m4); }); im.castShadow = true; g.add(im); R.fakeScenery.push(im); });
   const tufts = []; for (let t = 0; t < (hi ? 9000 : 4000) && tufts.length < (hi ? 4500 : 2000); t++) { const x = -20 + rr() * (L.W + 40), y = -20 + rr() * (L.H + 40); if (pip(x, y, L.poly) || avoid(x, y, 3)) continue; tufts.push([x, y]); }
   if (tufts.length) { const im = new THREE.InstancedMesh(R.tuft, STD({ vertexColors: true, side: THREE.DoubleSide, roughness: 1 }), tufts.length); im.userData.shared = true;
-    tufts.forEach(([x, y], i) => { qq.setFromAxisAngle(V(0, 1, 0), rr() * 6.28); const s = 0.35 + rr() * 0.5; m4.compose(V(x, hz(x, y) - 0.02, -y), qq, V(s, s * (0.7 + rr() * 0.6), s)); im.setMatrixAt(i, m4); }); im.receiveShadow = true; g.add(im); }
+    tufts.forEach(([x, y], i) => { qq.setFromAxisAngle(V(0, 1, 0), rr() * 6.28); const s = 0.35 + rr() * 0.5; m4.compose(V(x, hz(x, y) - 0.02, -y), qq, V(s, s * (0.7 + rr() * 0.6), s)); im.setMatrixAt(i, m4); }); im.receiveShadow = true; g.add(im); R.fakeScenery.push(im); }
   buildPlants();
   // water drops at emitters
   const sample = []; const per = Math.max(1, Math.ceil(L.em / 2600));
@@ -2679,7 +2680,7 @@ function build3D() {
   R.pondPt = V(pc[0] + 5.5, pch + 0.06, -(pc[1] - 1));
   R.lastAct = -2;
   R.envHour = -99; updateLighting(true);
-  buildSunPath();
+  buildSunPath(); R.satMesh = null; buildSatGround(g);
   fitCamera('overview');
 }
 function buildPlants() {
@@ -3187,6 +3188,8 @@ function renderHUD() {
   let s = `<div class="chip"><div class="t">${dShort(SIM.t)} · ${hm(SIM.t)} · ${S.mode === 'auto' ? 'อัตโนมัติ' : 'สั่งเอง'}</div><div class="v">${areaThai(L.area)} · ${L.zones.length} โซน</div>` +
     (L.elevOK ? `<div class="t t3" style="margin-top:2px">⛰ ต่างระดับ ${f(L.dz, 1)} ม. · ลาด ${f(L.slopeAll, 1)}% · ขยายแนวตั้ง ×${R.vex}${R.contourStep ? ' · เส้นชั้นความสูงทุก ' + R.contourStep + ' ม.' : ''}${R.sunEl != null && R.sunEl < -2 && !R.dayLock ? ' · 🌙 กลางคืน' : ''}</div>` : `<div class="t t3" style="margin-top:2px">ไม่มีข้อมูลความสูง — แสดงเป็นพื้นราบ</div>`) + `</div>`;
   if (R.elevView && L.elevOK) s += `<div class="chip"><div class="t">สีตามระดับความสูง</div><div style="display:flex;align-items:center;gap:6px;font-size:12px"><span>ต่ำ</span><span style="width:90px;height:8px;border-radius:4px;background:linear-gradient(90deg,#ead9b8,#6e4426)"></span><span>สูง (+${f(L.dz, 1)} ม.)</span></div></div>`;
+  if (SAT.on && SAT.state === 'loading' && S.step > 0) s += `<div class="chip"><div class="t">🛰 กำลังโหลดภาพดาวเทียมรอบไร่…</div></div>`;
+  if (SAT.on && SAT.state === 'ok' && S.step > 0) s += `<div class="chip" style="padding:3px 9px;opacity:.85"><div class="t">ภาพดาวเทียม © ${SAT.src === 'google' ? 'Google' : 'Esri, Maxar, Earthstar Geographics'}</div></div>`;
   if (R.viewDap != null) { const vd = Math.round(R.viewDap); s += `<div class="chip" style="border-color:#cfe0c6"><div class="v" style="color:var(--leaf)">🌱 ภาพจำลองอายุ ${vd} วัน</div><div class="t">ระยะ${stageOf(vd).n} · สูง ~${f(heightAt(vd) * 100)} ซม.</div></div>`; }
   if (R.rain_ && R.rain_.on) s += `<div class="chip" style="border-color:#c9d3dd"><div class="v">🌧 ${R.rain_.demo ? 'ตัวอย่างฝนตก' : 'ฝนกำลังตก · ' + f(R.rain_.rate, 1) + ' มม./ชม.'}</div><div class="t">${R.rain_.demo ? 'กด 🌧 อีกครั้งเพื่อปิด' : 'ระบบนับน้ำฝนเข้าความชื้นดินแล้ว'}</div></div>`;
   if (SIM.active) { const pr = (1 - SIM.active.rem / SIM.active.tot) * 100;
@@ -3548,6 +3551,9 @@ $('#tOver').addEventListener('click', () => { R.follow = false; fitCamera('overv
 $('#tDay').addEventListener('click', () => { R.dayLock = !R.dayLock; $('#tDay').classList.toggle('on', R.dayLock); R.envHour = -99; updateLighting(true); });
 const qLbl = () => { $('#tQ').innerHTML = '<svg class="ic"><use href="#i-gear"/></svg><span>' + (R.quality === 'high' ? 'สูง' : 'ประหยัด') + '</span>'; };
 $('#tSound').addEventListener('click', audioToggle);
+$('#tSat').addEventListener('click', () => { SAT.on = !SAT.on; S.ui = { ...(S.ui || {}), sat: SAT.on }; save();
+  if (SAT.on && !R.satMesh && R.group) buildSatGround(R.group); applySatVisibility();
+  toast(SAT.on ? (SAT.state === 'fail' ? 'โหลดภาพดาวเทียมไม่ได้ (ต้องเปิดจากเว็บ https และมีอินเทอร์เน็ต)' : '🛰 แสดงภาพดาวเทียมพื้นที่จริงรอบไร่') : 'ซ่อนภาพดาวเทียม ใช้ภาพจำลอง'); });
 $('#dSheet').addEventListener('click', e => {
   if (e.target.closest('[data-close]')) { closeDiary(); return; }
   const kb = e.target.closest('#dTodo [data-k], #dTiles [data-k]'); if (kb) { diaryForm(kb.dataset.k); return; }
@@ -4028,6 +4034,73 @@ function saveDiary(k, extra) {
   save(); $('#dForm').style.display = 'none'; $('#dMain').style.display = ''; renderDiary(); if (S.step === 0) renderHome();
 }
 
+/* ================= real satellite imagery around the farm (3D ground) ================= */
+const SAT = { cache: {}, on: true };
+function sceneToLL(x, y) { // scene field frame (x, y) → lat/lon
+  const t = L.tf, rx = x + t.minX, ry = y + t.minY, px = rx * t.c + ry * t.s, py = -rx * t.s + ry * t.c;
+  return { lat: t.lat0 + py / t.ky, lon: t.lon0 + px / t.kx };
+}
+const merc = (lat, lon, z) => { const n = 256 * 2 ** z, s = Math.sin(lat * RAD); return { x: (lon + 180) / 360 * n, y: (0.5 - Math.log((1 + s) / (1 - s)) / (4 * Math.PI)) * n }; };
+async function googleTileSession() {
+  if (SAT.gSession && SAT.gSession.exp > Date.now()) return SAT.gSession.token;
+  const r = await fetch(`https://tile.googleapis.com/v1/createSession?key=${encodeURIComponent(G().key)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mapType: 'satellite', language: 'th-TH', region: 'TH' }) });
+  if (!r.ok) throw new Error('session ' + r.status); const j = await r.json();
+  SAT.gSession = { token: j.session, exp: Date.now() + 10 * 3600e3 }; return j.session;
+}
+function loadImg(src) { return new Promise((res, rej) => { const im = new Image(); im.crossOrigin = 'anonymous'; im.onload = () => res(im); im.onerror = rej; im.src = src; setTimeout(() => rej(new Error('timeout')), 15000); }); }
+async function satMosaic(bb, z, src) {
+  const a = merc(bb.n, bb.w, z), b = merc(bb.s, bb.e, z), tx0 = Math.floor(a.x / 256), ty0 = Math.floor(a.y / 256), tx1 = Math.floor(b.x / 256), ty1 = Math.floor(b.y / 256);
+  const cw = (tx1 - tx0 + 1) * 256, ch = (ty1 - ty0 + 1) * 256, cv = document.createElement('canvas'); cv.width = cw; cv.height = ch; const x = cv.getContext('2d');
+  x.fillStyle = '#7d8a5a'; x.fillRect(0, 0, cw, ch);
+  let tok = null; if (src === 'google') tok = await googleTileSession();
+  const url = (tx, ty) => src === 'google' ? `https://tile.googleapis.com/v1/2dtiles/${z}/${tx}/${ty}?session=${tok}&key=${encodeURIComponent(G().key)}`
+    : `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${ty}/${tx}`;
+  const jobs = []; let ok = 0;
+  for (let ty = ty0; ty <= ty1; ty++) for (let tx = tx0; tx <= tx1; tx++) jobs.push(loadImg(url(tx, ty)).then(im => { x.drawImage(im, (tx - tx0) * 256, (ty - ty0) * 256); ok++; }).catch(() => {}));
+  await Promise.all(jobs);
+  if (ok < jobs.length * 0.6) throw new Error('tiles');
+  // canvas must stay CORS-clean for WebGL; getImageData throws if it is tainted
+  x.getImageData(0, 0, 1, 1);
+  const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8; tex.minFilter = THREE.LinearMipmapLinearFilter;
+  return { tex, z, ox: tx0 * 256, oy: ty0 * 256, w: cw, h: ch, src };
+}
+async function buildSatGround(g) {
+  if (!SAT.on || !L || !L.tf) return;
+  const span = Math.max(L.W, L.H), ext = Math.min(1600, span + 2 * Math.max(160, span * 0.8)), cx = L.W / 2, cy = L.H / 2;
+  const corners = [[cx - ext / 2, cy - ext / 2], [cx + ext / 2, cy - ext / 2], [cx + ext / 2, cy + ext / 2], [cx - ext / 2, cy + ext / 2]].map(([x, y]) => sceneToLL(x, y));
+  const bb = { n: Math.max(...corners.map(p => p.lat)), s: Math.min(...corners.map(p => p.lat)), e: Math.max(...corners.map(p => p.lon)), w: Math.min(...corners.map(p => p.lon)) };
+  const mpp = 2 * ext / (R.quality === 'high' ? 3072 : 2048), z = clamp(Math.floor(Math.log2(156543.03 * Math.cos(L.lat0 * RAD) / mpp)), 13, 19);
+  const src = useG('maps') ? 'google' : 'esri', key = [src, L.lat0.toFixed(5), L.lon0.toFixed(5), Math.round(ext), z].join('|');
+  let mos = SAT.cache[key];
+  if (!mos) {
+    SAT.state = 'loading'; renderHUD();
+    try { mos = await satMosaic(bb, z, src); }
+    catch (e) { if (src === 'google') { try { mos = await satMosaic(bb, z, 'esri'); } catch (e2) {} } }
+    if (!mos) { SAT.state = 'fail'; renderHUD(); return; }
+    SAT.cache[key] = mos;
+  }
+  if (g !== R.group) return; // the scene was rebuilt meanwhile
+  const N = 110, pos = new Float32Array((N + 1) * (N + 1) * 3), uv = new Float32Array((N + 1) * (N + 1) * 2), idx = [];
+  for (let j = 0; j <= N; j++) for (let i = 0; i <= N; i++) {
+    const x = cx - ext / 2 + ext * i / N, y = cy - ext / 2 + ext * j / N, k = j * (N + 1) + i, ll = sceneToLL(x, y), m = merc(ll.lat, ll.lon, mos.z);
+    const inGrid = x > L.G.x0 && y > L.G.y0 && x < L.G.x0 + (L.G.nx - 1) * L.G.cs && y < L.G.y0 + (L.G.ny - 1) * L.G.cs;
+    pos.set([x, (inGrid ? hz(x, y) : hz(clamp(x, L.G.x0, L.G.x0 + (L.G.nx - 1) * L.G.cs), clamp(y, L.G.y0, L.G.y0 + (L.G.ny - 1) * L.G.cs))) - 0.04, -y], k * 3);
+    uv.set([(m.x - mos.ox) / mos.w, 1 - (m.y - mos.oy) / mos.h], k * 2);
+  }
+  for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) { const a = j * (N + 1) + i, b = a + 1, c2 = a + N + 1, d = c2 + 1; idx.push(a, b, c2, b, d, c2); }
+  const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(pos, 3)); geo.setAttribute('uv', new THREE.BufferAttribute(uv, 2)); geo.setIndex(idx); geo.computeVertexNormals();
+  const mat = new THREE.MeshStandardMaterial({ map: mos.tex, roughness: 1, metalness: 0, envMapIntensity: 0.4 });
+  const mesh = new THREE.Mesh(geo, mat); mesh.receiveShadow = true; mesh.userData.satGround = true; mesh.userData.sharedTex = true;
+  if (R.satMesh) { R.satMesh.parent && R.satMesh.parent.remove(R.satMesh); R.satMesh.geometry.dispose(); }
+  R.satMesh = mesh; g.add(mesh); SAT.state = 'ok'; SAT.src = mos.src; applySatVisibility(); renderHUD();
+}
+function applySatVisibility() {
+  const on = SAT.on && R.satMesh && SAT.state === 'ok';
+  if (R.satMesh) R.satMesh.visible = !!on;
+  (R.fakeScenery || []).forEach(o => o.visible = !on);
+  $('#tSat') && $('#tSat').classList.toggle('on', !!on);
+}
+
 /* ================= boot ================= */
 init3D(); bindSettings(); updateFieldStats(); setMeasureMode(measureMode);
 $$('#modeSw button').forEach(b => b.classList.toggle('on', b.dataset.mode === S.mode));
@@ -4035,6 +4108,7 @@ setSpeed('real');
 if (S.closed) { computeLayout(); if (L) { renderBOM(); renderZoneSelect(); initSim(); } else S.closed = false; }
 drawGPS(); renderLog();
 loadWeather(true);
+if (S.ui && S.ui.sat === false) SAT.on = false;
 go(0); renderGStatus(); if (S.ui && S.ui.big) setBigText(true); $('#rowAngWrap').style.display = S.set.rowDir === 'custom' ? '' : 'none';
 $('#hWater').addEventListener('click', () => { if (SIM.active || SIM.queue.length) { stopAll(); toast('■ ปิดน้ำแล้ว'); } else { quickStart(); R.follow = false; } renderHome(); });
 setTimeout(() => { $('#splash').classList.add('off'); if (!(S.ui && S.ui.intro) && !S.closed) setTimeout(showIntro, 400); }, 900);

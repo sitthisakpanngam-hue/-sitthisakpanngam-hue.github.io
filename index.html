@@ -83,6 +83,11 @@ body.arxr #view{background:transparent}
 .cdRet i:after{content:'';position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px;border-radius:50%;background:#ffd23f}
 .cdRet span{background:rgba(10,20,14,.65);color:#fff;border-radius:99px;padding:3px 10px;font-size:13px;font-weight:600;white-space:nowrap;margin-top:44px}
 .cd.xr .cdRet i{display:none}
+.cdModes{position:absolute;left:10px;right:10px;top:calc(env(safe-area-inset-top) + 92px);display:grid;grid-template-columns:1fr 1fr;gap:8px;z-index:3}
+.cdModes button{border:0;border-radius:14px;background:rgba(255,255,255,.82);color:#16241a;font:600 13px 'Prompt',sans-serif;padding:7px 6px;display:flex;flex-direction:column;align-items:center;line-height:1.3}
+.cdModes button small{font-weight:400;font-size:11px;color:#5d6b60}.cdModes button.on{background:#ffd23f;color:#3a2c00}.cdModes button.on small{color:#5c4a00}
+.cd.xr .cdModes{display:none}
+.cdRet span{pointer-events:auto}
 #cdMap{position:absolute;right:10px;bottom:calc(env(safe-area-inset-bottom) + 160px);width:130px;height:130px;border-radius:16px;background:rgba(10,20,14,.55);z-index:2}
 .cdBar{position:absolute;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom) + 14px);display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:10px;z-index:3}
 .cdBar button{border:0;border-radius:18px;background:rgba(255,255,255,.93);color:#16241a;font:600 13px 'Prompt',sans-serif;padding:8px 4px;min-height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
@@ -2104,7 +2109,7 @@ function afterPts() { save(); updateFieldStats(); drawGPS(); }
 function closeField() {
   if (S.pts.length < 3) { toast('ต้องมีอย่างน้อย 3 จุด'); return; }
   stopGPS(); computeLayout();
-  if (!L || L.area < 100) { toast('พื้นที่เล็กเกินไป ตรวจสอบเส้นทางอีกครั้ง'); return; }
+  if (!L || L.area < 2) { toast('พื้นที่เล็กเกินไป ตรวจสอบเส้นทางอีกครั้ง'); return; }
   S.closed = true; save(); gpsUI('off', 'ปิดแปลงเรียบร้อย'); updateFieldStats(); drawGPS(); onLayoutChanged();
   toast(`ปิดแปลงแล้ว ${areaThai(L.area)}` + (L.elevOK ? ` · ต่างระดับ ${f(L.dz, 1)} ม.` : '') + ' — กำลังแสดงภาพ 3D');
   if (!R.noAutoGo) setTimeout(() => go(2), 450);
@@ -2329,7 +2334,7 @@ function renderMapInfo() {
 function showVtxMenu(i) { const t = $('#vtxMenu'); t.style.display = 'flex'; t.querySelector('b').textContent = `มุมที่ ${i + 1}`; }
 function finishMap() {
   const pts = S.mpts || []; if (pts.length < 3) { toast('ต้องมีอย่างน้อย 3 มุม'); return; }
-  if (mPoly().area < 100) { toast('พื้นที่เล็กเกินไป'); return; }
+  if (mPoly().area < 2) { toast('พื้นที่เล็กเกินไป'); return; }
   S.pts = pts.map(p => ({ lat: p.lat, lon: p.lon, acc: 0, alt: null, t: Date.now() })); S.src = 'map'; S.hpts = [];
   closeField(); fetchDEM();
 }
@@ -4480,7 +4485,9 @@ function cdMsg(h, ms) { const m = $('#cdMsg'); m.innerHTML = h; m.style.display 
 function camStart() {
   if (S.closed) { if (!confirm('มีแปลงอยู่แล้ว — วาดแปลงใหม่ด้วยกล้องแทนไหม?')) return; reopen(); }
   const pOri = (typeof DeviceOrientationEvent !== 'undefined' && DeviceOrientationEvent.requestPermission) ? DeviceOrientationEvent.requestPermission().catch(() => 'denied') : Promise.resolve('granted');
-  Object.assign(CD, { on: true, corners: [], fixes: [], path: [], ori: null, absH: null, gps: null, xr: null, done: false });
+  Object.assign(CD, { on: true, corners: [], stations: [], fixes: [], path: [], ori: null, absH: null, q: null, yaw: null, hasAbs: false, gps: null, xr: null, done: false,
+    mode: (S.ui && S.ui.cdMode) || 'walk', eye: (S.ui && S.ui.cdEye) || 1.4 });
+  $$('#cdModes button').forEach(b => b.classList.toggle('on', b.dataset.cm === CD.mode));
   stopGPS(); $('#cd').style.display = ''; $('#cdAR').style.display = 'none'; $('#cd').classList.remove('xr');
   CD.ol = e => camOri(e); window.addEventListener('deviceorientationabsolute', CD.ol); window.addEventListener('deviceorientation', CD.ol);
   if (navigator.geolocation) CD.watch = navigator.geolocation.watchPosition(p => {
@@ -4489,7 +4496,7 @@ function camStart() {
   }, e => { CD.gpsErr = e.code === 1 ? 'ไม่ได้อนุญาตตำแหน่ง' : 'หา GPS ไม่เจอ'; }, { enableHighAccuracy: true, maximumAge: 0, timeout: 30000 });
   else CD.gpsErr = 'ไม่มี GPS';
   pOri.then(r => CD.oriPerm = r);
-  if (CD.canXR) camXR(); else camVideo();
+  if (CD.canXR) camXR(); else { camVideo(); cdOverlay(); }
   clearInterval(CD.iv); CD.iv = setInterval(camUI, 300); camUI();
 }
 function camVideo() {
@@ -4499,11 +4506,16 @@ function camVideo() {
 }
 function camOri(e) {
   if (e.alpha == null && e.beta == null) return;
-  const q = oriQuat({ a: e.alpha || 0, b: e.beta || 0, g: e.gamma || 0 }, new THREE.Quaternion()), hh = qHeading(q);
   const abs = e.type === 'deviceorientationabsolute' || (e.absolute && e.webkitCompassHeading == null);
-  CD.tilt = hh.up;                          // sin(elevation) of the camera axis
-  if (e.webkitCompassHeading != null) CD.absH = e.webkitCompassHeading; else if (abs) CD.absH = hh.h;
-  CD.oriT = performance.now();
+  if (abs) CD.hasAbs = true; else if (CD.hasAbs) return;          // Android: use the absolute (north-referenced) stream
+  const q = oriQuat({ a: e.alpha || 0, b: e.beta || 0, g: e.gamma || 0 }, new THREE.Quaternion());
+  if (!abs) {                                                      // iPhone: relative gyro + compass offset (sampled while fairly upright)
+    const hr = qHeading(q);
+    if (e.webkitCompassHeading != null && Math.abs(hr.up) < 0.6) { const off = angDiff(e.webkitCompassHeading, hr.h); CD.yaw = CD.yaw == null ? off : CD.yaw + angDiff(off, CD.yaw) * 0.08; }
+    q.premultiply(new THREE.Quaternion().setFromAxisAngle(_arY, -(CD.yaw || 0) * RAD));
+    CD.noNorth = CD.yaw == null;
+  }
+  CD.q = q; const hh = qHeading(q); CD.tilt = hh.up; CD.absH = CD.noNorth ? null : hh.h; CD.oriT = performance.now();
 }
 /* GPS averaged over the last seconds while standing still */
 function gpsAvg(sec = 20) {
@@ -4520,9 +4532,9 @@ function gpsAvg(sec = 20) {
 function aimPoint() {
   if (CD.tilt == null) return { d: 0, mode: 'feet' };
   const el = Math.asin(clamp(CD.tilt, -1, 1)) / RAD;   // negative = looking down
-  if (el > -6) return { d: null, mode: 'high' };
-  if (el < -62) return { d: 0, mode: 'feet' };
-  const d = 1.4 / Math.tan(-el * RAD); return d > 20 ? { d: null, mode: 'far' } : { d, mode: 'aim', h: CD.absH };
+  if (el > -4) return { d: null, mode: 'high' };
+  if (el < -80) return { d: 0, mode: 'feet' };
+  const d = CD.eye / Math.tan(-el * RAD); return d > 20 ? { d: null, mode: 'far' } : { d, mode: 'aim', h: CD.absH };
 }
 function camUI() {
   if (!CD.on) return;
@@ -4531,10 +4543,12 @@ function camUI() {
   let ready = false, where = '';
   if (CD.xr) { ready = !!CD.xr.hit && !!g; $('#cdDist').textContent = CD.xr.hit ? 'เล็งได้ — ปักได้เลย' : 'ส่องพื้นช้า ๆ ให้วงเป้าขึ้น'; }
   else { const a = aimPoint(); ready = !!g && g.still && g.n >= 3 && a.d != null && (a.mode === 'feet' || a.h != null);
-    $('#cdDist').textContent = a.mode === 'high' ? 'ก้มกล้องลงหาพื้น / โคนเสา' : a.mode === 'far' ? 'ไกลเกิน 20 ม. — เดินเข้าไปใกล้อีก' : a.mode === 'feet' ? 'ตรงที่ยืน' : `เล็งห่าง ${f(a.d, 1)} ม.`;
-    where = g ? (g.still ? `GPS ${g.n} ค่า · ±${f(g.sig, 1)} ม.` : 'ยืนนิ่ง ๆ ก่อน… GPS ยังแกว่ง') : (CD.gpsErr || 'กำลังหา GPS…'); }
+    $('#cdDist').textContent = (a.mode === 'high' ? 'ก้มกล้องลงหาพื้น / โคนเสา' : a.mode === 'far' ? 'ไกลเกิน 20 ม. — เดินเข้าไปใกล้อีก' : a.mode === 'feet' ? 'ตรงที่ยืน' : `เล็งห่าง ${f(a.d, a.d < 10 ? 2 : 1)} ม.`) + ` · มือถือสูง ${f(CD.eye, 1)} ม.`;
+    if (CD.mode === 'spot' && CD.stations.length) ready = !!g && a.d != null && (a.mode === 'feet' || a.h != null);
+    where = g ? (g.still ? `GPS ${g.n} ค่า · ±${f(g.sig, 1)} ม.` : 'ยืนนิ่ง ๆ ก่อน… GPS ยังแกว่ง') : (CD.gpsErr || 'กำลังหา GPS…');
+    if (CD.mode === 'spot') where = '🎯 ยืนจุดเดิม เล็งทีละมุม · ' + where; if (CD.noNorth && CD.q) where += ' · หมุนมือถือตั้งตรงให้เข็มทิศจับทิศ'; }
   if (CD.xr) where = g ? `GPS ±${f(CD.gps.acc)} ม. · เส้นทาง ${CD.path.length} จุด` : (CD.gpsErr || 'กำลังหา GPS…');
-  $('#cdInfo').innerHTML = `<b>${n ? `ปักแล้ว ${n} มุม` : 'ยืนที่มุมแปลงแรก'}${n >= 3 ? ' · ' + areaThai(area) : ''}</b><br><small>${CD.xr ? '🟢 AR ติดพื้น (ARCore) · ' : ''}${where}${CD.camErr ? '<br>' + CD.camErr : ''}</small>`;
+  $('#cdInfo').innerHTML = `<b>${n ? `ปักแล้ว ${n} มุม` : 'ยืนที่มุมแปลงแรก'}${n >= 3 ? ' · ' + areaThai(area) + (area < 1600 ? ` (${f(area, area < 100 ? 1 : 0)} ตร.ม.)` : '') : ''}</b><br><small>${CD.xr ? '🟢 AR ติดพื้น (ARCore) · ' : ''}${where}${CD.camErr ? '<br>' + CD.camErr : ''}</small>`;
   const pb = $('#cdPin'); pb.classList.toggle('wait', !ready); pb.innerHTML = ready ? '<b>📍</b>ปักมุม' : '<b>⏳</b>รอสักครู่';
   $('#cdDone').disabled = n < 3; $('#cdUndo').disabled = !n;
   camMap();
@@ -4560,20 +4574,75 @@ $('#cdPin').addEventListener('click', () => {
     if (!g) return cdMsg('ยังไม่มีสัญญาณ GPS — ออกไปที่โล่งแล้วรอสักครู่');
     if (!g.still) return cdMsg('ยืนนิ่ง ๆ อีกสักครู่ ให้ GPS นิ่งก่อน');
     if (a.d == null) return cdMsg(a.mode === 'far' ? 'จุดที่เล็งไกลเกิน 20 ม.' : 'ก้มกล้องลงเล็งที่พื้นหรือโคนเสา');
-    let ll = { lat: g.lat, lon: g.lon };
-    if (a.mode === 'aim') { const e = Math.sin(a.h * RAD) * a.d, nn = Math.cos(a.h * RAD) * a.d; ll = LLof(e, nn, ll); }
-    CD.corners.push({ ll, sig: g.sig, d: a.d });
+    // one standing spot = one "station"; corners aimed from it share its (ever better averaged) GPS position, so GPS wander can't bend a small plot
+    let st = CD.mode === 'spot' ? CD.stations[0] : null;
+    if (!st) { st = { ll: { lat: g.lat, lon: g.lon }, sig: g.sig, t: Date.now() }; CD.stations.push(st); }
+    else if (g.still) { st.ll = { lat: g.lat, lon: g.lon }; st.sig = Math.min(st.sig, g.sig); }
+    const e = a.mode === 'aim' ? Math.sin(a.h * RAD) * a.d : 0, nn = a.mode === 'aim' ? Math.cos(a.h * RAD) * a.d : 0;
+    CD.corners.push({ st, e, n: nn, ll: LLof(e, nn, st.ll), sig: g.sig, d: a.d });
+    CD.corners.forEach(c => { if (c.st) c.ll = LLof(c.e, c.n, c.st.ll); });
   }
   const n = CD.corners.length; if (navigator.vibrate) navigator.vibrate(30);
-  cdMsg(`📍 มุมที่ ${n} แล้ว${n >= 3 ? ' — เดินไปมุมถัดไป หรือกด ✔ ปิดแปลง' : ' — เดินไปมุมถัดไปตามขอบแปลง'}`, 2200); camUI();
+  const nx = CD.mode === 'spot' && !CD.xr ? 'เล็งมุมถัดไป' : 'เดินไปมุมถัดไป'; cdMsg(`📍 มุมที่ ${n} แล้ว${n >= 3 ? ` — ${nx} หรือกด ✔ ปิดแปลง` : ` — ${nx}ตามขอบแปลง`}`, 2200); camUI();
 });
-$('#cdUndo').addEventListener('click', () => { if (!CD.corners.length) return; const c = CD.corners.pop(); if (c.mesh && CD.xr) { CD.xr.scene.remove(c.mesh); } camXRline(); camUI(); });
+$('#cdModes').addEventListener('click', e => { const b = e.target.closest('button[data-cm]'); if (!b) return;
+  if (CD.corners.length && b.dataset.cm !== CD.mode) return cdMsg('เปลี่ยนวิธีได้ก่อนปักมุมแรก — ลบมุมออกก่อน', 2200);
+  CD.mode = b.dataset.cm; S.ui = { ...(S.ui || {}), cdMode: CD.mode }; save(); $$('#cdModes button').forEach(x => x.classList.toggle('on', x === b));
+  cdMsg(CD.mode === 'spot' ? '🎯 ยืนตรงกลางแปลง (หรือจุดที่มองเห็นทุกมุม)<br>ไม่ต้องเดิน — เล็งวงเป้าไปที่แต่ละมุมแล้วกดปัก' : '🚶 เดินไปยืนที่มุม หรือเล็งมุมที่ห่างไม่เกิน 20 ม.', 3200); camUI(); });
+$('#cdDist').addEventListener('click', () => { const H = [1.0, 1.2, 1.4, 1.6]; CD.eye = H[(H.indexOf(CD.eye) + 1) % H.length]; S.ui = { ...(S.ui || {}), cdEye: CD.eye }; save();
+  CD.corners.forEach(c => { if (c.st && c.d) { const k = CD.eye / (c.eye || 1.4); c.e *= k; c.n *= k; c.d *= k; } c.eye = CD.eye; }); CD.corners.forEach(c => { if (c.st) c.ll = LLof(c.e, c.n, c.st.ll); });
+  cdMsg(`ความสูงมือถือจากพื้น ${f(CD.eye, 1)} ม.<br><small>ยืน ≈ 1.4 ม. · นั่ง/ย่อ ≈ 1.0 ม.</small>`, 1800); camUI(); });
+/* camera overlay (no ARCore): pins + edges + a line from the last pin to where you aim */
+function cdOverlay() {
+  if (CD.ov) return;
+  const rd = new THREE.WebGLRenderer({ antialias: true, alpha: true }); rd.setPixelRatio(Math.min(2, devicePixelRatio)); rd.setClearColor(0x000000, 0);
+  const el = $('#cd3'); el.innerHTML = ''; el.appendChild(rd.domElement);
+  const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(60, 1, 0.03, 600);
+  scene.add(new THREE.HemisphereLight('#ffffff', '#8a7a5a', 2.6));
+  const bm = (c, o) => new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: o, side: THREE.DoubleSide, depthWrite: false, toneMapped: false });
+  const band = new THREE.Mesh(new THREE.BufferGeometry(), bm('#ffd23f', 0.95)), rub = new THREE.Mesh(new THREE.BufferGeometry(), bm('#ffffff', 0.75)), shut = new THREE.Mesh(new THREE.BufferGeometry(), bm('#ffd23f', 0.4));
+  const pins = new THREE.Group(); scene.add(band, rub, shut, pins);
+  CD.ov = { rd, scene, cam, band, rub, shut, pins, el };
+  const loop = () => { if (!CD.on || CD.xr || !CD.ov) return; requestAnimationFrame(loop); cdOvFrame(); }; loop();
+}
+function ribbon(mesh, segs, camP) {   // flat ground strips, wider when far so they stay visible
+  const pos = [];
+  segs.forEach(([a, b]) => { const dx = b[0] - a[0], dz = b[1] - a[1], L0 = Math.hypot(dx, dz); if (L0 < 1e-3) return; const nx = -dz / L0, nz = dx / L0;
+    const n = Math.max(1, Math.ceil(L0 / 1.5));
+    for (let k = 0; k < n; k++) { const t0 = k / n, t1 = (k + 1) / n, p0 = [a[0] + dx * t0, a[1] + dz * t0], p1 = [a[0] + dx * t1, a[1] + dz * t1];
+      const w0 = clamp(Math.hypot(p0[0] - camP.x, p0[1] - camP.z) * 0.006, 0.02, 0.35), w1 = clamp(Math.hypot(p1[0] - camP.x, p1[1] - camP.z) * 0.006, 0.02, 0.35);
+      pos.push(p0[0] + nx * w0, 0.01, p0[1] + nz * w0, p0[0] - nx * w0, 0.01, p0[1] - nz * w0, p1[0] + nx * w1, 0.01, p1[1] + nz * w1,
+               p0[0] - nx * w0, 0.01, p0[1] - nz * w0, p1[0] - nx * w1, 0.01, p1[1] - nz * w1, p1[0] + nx * w1, 0.01, p1[1] + nz * w1); } });
+  mesh.geometry.dispose(); mesh.geometry = new THREE.BufferGeometry(); mesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+}
+function cdOvFrame() {
+  const O = CD.ov, W = O.el.clientWidth, H = O.el.clientHeight; if (!W || !H) return;
+  if (O.w !== W || O.h !== H) { O.rd.setSize(W, H); O.cam.aspect = W / H; O.w = W; O.h = H; }
+  const v = $('#cdVid'), vw = v.videoWidth, vh = v.videoHeight;
+  let fov = W < H ? 62 : 44; if (vw && vh) { const fl = (Math.max(vw, vh) / 2) / Math.tan(66 * RAD / 2), sc = Math.max(W / vw, H / vh); fov = 2 * Math.atan((H / 2 / sc) / fl) / RAD; }
+  if (Math.abs(O.cam.fov - fov) > 0.2) O.cam.fov = fov; O.cam.updateProjectionMatrix();
+  // where am I: in "spot" mode the station; otherwise the current averaged GPS
+  const g = gpsAvg(), here = CD.mode === 'spot' && CD.stations[0] ? CD.stations[0].ll : (g || CD.gps); if (!here || !CD.q) { O.rd.clear(); return; }
+  O.cam.position.set(0, CD.eye, 0); O.cam.quaternion.copy(CD.q);
+  const P = CD.corners.map(c => { const d = ENU(c.ll.lat, c.ll.lon, here); return [d.e, -d.n]; });
+  while (O.pins.children.length < P.length) { const gp = new THREE.Group(); const post = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 1, 10), new THREE.MeshBasicMaterial({ color: '#ffd23f', toneMapped: false })); post.position.y = 0.5;
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.07, 14, 10), new THREE.MeshBasicMaterial({ color: '#e74c3c', toneMapped: false })); head.position.y = 1.02; const ring = new THREE.Mesh(new THREE.RingGeometry(0.1, 0.16, 28).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: '#ffd23f', side: THREE.DoubleSide, toneMapped: false })); ring.position.y = 0.012;
+    gp.add(post, head, ring); O.pins.add(gp); }
+  O.pins.children.forEach((gp, i) => { gp.visible = i < P.length; if (i < P.length) { gp.position.set(P[i][0], 0, P[i][1]); const s2 = clamp(Math.hypot(P[i][0], P[i][1]) * 0.05, 0.6, 3); gp.scale.set(s2, 1, s2); } });
+  const cp = { x: 0, z: 0 }, segs = []; for (let i = 1; i < P.length; i++) segs.push([P[i - 1], P[i]]); ribbon(O.band, segs, cp);
+  const a = aimPoint(); let aimP = null; if (a.d != null && (a.mode === 'feet' || a.h != null)) aimP = a.mode === 'feet' ? [0, 0] : [Math.sin(a.h * RAD) * a.d, -Math.cos(a.h * RAD) * a.d];
+  ribbon(O.rub, P.length && aimP && !CD.done ? [[P[P.length - 1], aimP]] : [], cp);
+  ribbon(O.shut, P.length >= 3 ? [[P[P.length - 1], P[0]]] : [], cp);
+  O.rd.render(O.scene, O.cam);
+}
+$('#cdUndo').addEventListener('click', () => { if (!CD.corners.length) return; const c = CD.corners.pop(); if (c.st && !CD.corners.some(k => k.st === c.st)) CD.stations = CD.stations.filter(x => x !== c.st); if (c.mesh && CD.xr) { CD.xr.scene.remove(c.mesh); } camXRline(); camUI(); });
 $('#cdX').addEventListener('click', () => camStop());
 function camStop() {
   CD.on = false; clearInterval(CD.iv); window.removeEventListener('deviceorientationabsolute', CD.ol); window.removeEventListener('deviceorientation', CD.ol);
   if (CD.watch != null) navigator.geolocation.clearWatch(CD.watch); CD.watch = null;
   if (CD.stream) CD.stream.getTracks().forEach(t => t.stop()); CD.stream = null; $('#cdVid').srcObject = null;
   if (CD.xr && CD.xr.sess) { const s0 = CD.xr.sess; CD.xr.sess = null; s0.end().catch(() => {}); }
+  if (CD.ov) { CD.ov.rd.dispose(); CD.ov = null; $('#cd3').innerHTML = ''; }
   $('#cd').style.display = 'none';
 }
 /* fit the AR path + corners to GPS: rotation + shift (metric scale kept) */
@@ -4597,7 +4666,7 @@ function camFuse() {
 async function camXR() {
   let sess;
   try { sess = await navigator.xr.requestSession('immersive-ar', { requiredFeatures: ['local-floor', 'hit-test'], optionalFeatures: ['dom-overlay'], domOverlay: { root: $('#cd') } }); }
-  catch (e) { CD.canXR = false; cdMsg('เปิด AR ติดพื้นไม่ได้ — ใช้กล้อง + GPS แทน', 2500); return camVideo(); }
+  catch (e) { CD.canXR = false; cdMsg('เปิด AR ติดพื้นไม่ได้ — ใช้กล้อง + GPS แทน', 2500); camVideo(); return cdOverlay(); }
   $('#cd').classList.add('xr');
   const rd = new THREE.WebGLRenderer({ antialias: true, alpha: true }); rd.setPixelRatio(Math.min(2, devicePixelRatio)); rd.setSize(innerWidth, innerHeight); rd.xr.enabled = true; rd.xr.setReferenceSpaceType('local-floor');
   $('#cd3').innerHTML = ''; $('#cd3').appendChild(rd.domElement);
@@ -4607,7 +4676,7 @@ async function camXR() {
   CD.xr = { sess, rd, scene, cam, ret, hit: null, pose: null, hdg: null };
   await rd.xr.setSession(sess);
   const ref = rd.xr.getReferenceSpace(), vs = await sess.requestReferenceSpace('viewer'), hs = await sess.requestHitTestSource({ space: vs });
-  sess.addEventListener('end', () => { rd.setAnimationLoop(null); hs.cancel && hs.cancel(); if (CD.on) { CD.canXR = false; $('#cd').classList.remove('xr'); camVideo(); } CD.xr = null; });
+  sess.addEventListener('end', () => { rd.setAnimationLoop(null); hs.cancel && hs.cancel(); CD.xr = null; if (CD.on) { CD.canXR = false; $('#cd').classList.remove('xr'); camVideo(); CD.ov = null; cdOverlay(); } });
   rd.setAnimationLoop((t, frame) => {
     if (!frame || !CD.xr) return;
     const hr = frame.getHitTestResults(hs);
@@ -4638,7 +4707,7 @@ $('#cdDone').addEventListener('click', () => {
   const C = CD.corners.filter(c => c.ll); if (C.length < 3) return cdMsg('ต้องปักอย่างน้อย 3 มุม');
   if (CD.xr) camFuse();
   const pts = C.map(c => c.ll);
-  if (polyArea(project(pts).xy) < 100) return cdMsg('พื้นที่เล็กเกินไป (ต่ำกว่า 100 ตร.ม.)');
+  if (polyArea(project(pts).xy) < 2) return cdMsg('พื้นที่เล็กเกินไป (ต่ำกว่า 2 ตร.ม.)');
   S.mpts = pts.map(p => ({ ...p })); S.pts = pts.map(p => ({ lat: p.lat, lon: p.lon, acc: 0, alt: null, t: Date.now() })); S.src = 'cam'; S.hpts = []; S.closed = false;
   R.noAutoGo = true; closeField(); R.noAutoGo = false; fetchDEM();
   if (!L) return cdMsg('ปิดแปลงไม่สำเร็จ ลองปักมุมใหม่');
@@ -4910,6 +4979,7 @@ requestAnimationFrame(frame);
   <video id="cdVid" playsinline muted autoplay></video>
   <div id="cd3"></div>
   <div class="cdTop"><button class="arX" id="cdX">✕</button><div class="arInfo" id="cdInfo">กำลังเปิดกล้อง…</div></div>
+  <div class="cdModes" id="cdModes"><button data-cm="walk">🚶 เดินไปทีละมุม<small>แปลงใหญ่</small></button><button data-cm="spot">🎯 ยืนจุดเดียว เล็งรอบตัว<small>แปลงเล็ก ≤ 20 ม.</small></button></div>
   <div class="cdRet" id="cdRet"><i></i><span id="cdDist"></span></div>
   <canvas id="cdMap" width="300" height="300"></canvas>
   <div class="arMsg" id="cdMsg" style="display:none"></div>

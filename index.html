@@ -489,6 +489,28 @@ input,select,textarea{border-radius:12px!important}
 .medot{width:16px;height:16px;border-radius:50%;background:#1f6fd1;border:3px solid #fff;box-shadow:0 0 0 6px rgba(31,111,209,.25);transform:translateY(8px)}
 .vtx{cursor:grab}
 @media (max-width:920px){.gbtn span{display:none}.gbtn{padding:8px;margin-left:auto}.devpill{margin-left:6px}}
+/* ---- row orientation + sun ---- */
+.rowtop{display:grid;grid-template-columns:200px 1fr;gap:14px;align-items:center}
+.compass{width:200px;height:200px}
+.compass .cl{font:600 13px 'Prompt',sans-serif;fill:#7a8274}.compass .cl.n{fill:#d2402f;font-size:15px}
+.rbk{font-size:12.5px;color:var(--muted)}.rbv{font:600 21px 'Prompt',sans-serif;color:var(--leaf);line-height:1.3;margin:2px 0 4px}
+.rleg{display:flex;flex-wrap:wrap;gap:12px;font-size:11.5px;color:var(--ink2);margin:10px 0 6px}.rleg i{display:inline-block;width:14px;height:4px;border-radius:2px;margin-right:5px;vertical-align:middle}
+.rwhy{list-style:none;padding:0;margin:8px 0 0;font-size:13px;line-height:1.55}.rwhy li{padding:7px 0;border-bottom:1px dashed var(--line)}
+.ropt{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:14px;background:#f4f7f2;margin-bottom:8px}
+.ropt.on{background:var(--leaf-2);box-shadow:inset 0 0 0 2px #9fd3b6}
+.rot{flex:1;min-width:0}.rot b{font-size:14px}.rot span{display:block;font-size:11.5px;color:var(--muted)}
+.rbar{height:6px;border-radius:3px;background:#e2e8de;margin-top:6px;overflow:hidden}.rbar i{display:block;height:100%;background:var(--grad)}
+.ros{display:flex;flex-direction:column;align-items:flex-end;gap:4px}.ros b{font-size:18px}.ros small{color:var(--good);font-weight:600}
+.suncard{padding:14px}
+.sunsvg{width:100%;height:auto;display:block;border-radius:14px}.sunsvg .st{font:600 11px 'IBM Plex Mono',monospace;fill:#2f4a22}
+.suninfo{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px;text-align:center}
+.suninfo div{background:#fff8e6;border-radius:12px;padding:6px 2px}.suninfo span{display:block;font-size:11px;color:#9a7a2a}.suninfo b{font:600 14px 'Prompt',sans-serif}
+.hrow{display:flex;gap:8px;margin:-6px 2px 14px}
+.hrow button{border:0;background:#fff;border-radius:12px;padding:8px 12px;box-shadow:var(--sh);font-weight:600;font-size:13px;display:inline-flex;gap:6px;align-items:center;color:var(--ink2)}
+.hrow button.on{background:var(--ink);color:#fff}
+.stat.st-ok{background:linear-gradient(160deg,#ffffff 55%,#e7f6ec)}.stat.st-warn{background:linear-gradient(160deg,#ffffff 55%,#fdf1d9)}.stat.st-bad{background:linear-gradient(160deg,#ffffff 50%,#fde3df)}.stat.st-run{background:linear-gradient(160deg,#ffffff 50%,#e2efff)}
+html.bigtext .panel{zoom:1.14}html.bigtext .steps{zoom:1.08}html.bigtext .chip{zoom:1.1}
+@media (max-width:920px){.rowtop{grid-template-columns:1fr}.compass{margin:0 auto;width:230px;height:230px}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <style>/* required styles */
@@ -1189,6 +1211,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
   <symbol id="i-ruler" viewBox="0 0 24 24"><path d="m3.5 16.5 13-13 4 4-13 13z"/><path d="m7 13 1.8 1.8M9.5 10.5l1.8 1.8M12 8l1.8 1.8M14.5 5.5l1.8 1.8"/></symbol>
   <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></symbol>
+  <symbol id="i-sunpath" viewBox="0 0 24 24"><path d="M3 18h18"/><path d="M5 18a7 7 0 0 1 14 0" stroke-dasharray="2 2.2"/><circle cx="15.5" cy="11.5" r="2.2"/></symbol>
+  <symbol id="i-text" viewBox="0 0 24 24"><path d="M4 19 9 5l5 14M5.8 14h6.4M15 19l3-8 3 8M15.9 16.5h4.2"/></symbol>
   <symbol id="i-list" viewBox="0 0 24 24"><path d="M8.5 6.5h12M8.5 12h12M8.5 17.5h12M4 6.5h.01M4 12h.01M4 17.5h.01"/></symbol>
 </svg>
 <div id="splash"><div class="spl">
@@ -1251,6 +1276,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <button id="tZones" title="สีแบ่งโซน"><svg class="ic"><use href="#i-palette"/></svg><span>โซน</span></button>
       <button id="tPlants" title="ซ่อน/แสดงต้นมัน"><svg class="ic"><use href="#i-leaf"/></svg><span>ต้นมัน</span></button>
       <button id="tDay" title="ล็อกแสงกลางวัน"><svg class="ic"><use href="#i-sun"/></svg><span>กลางวัน</span></button>
+      <button id="tSun" title="เส้นทางดวงอาทิตย์"><svg class="ic"><use href="#i-sunpath"/></svg><span>ดวงอาทิตย์</span></button>
       <button id="tRain" title="ดูตัวอย่างฝนตก"><svg class="ic"><use href="#i-rain"/></svg><span>ฝน</span></button>
       <button id="tSound" title="เสียงน้ำ"><svg class="ic"><use href="#i-mute"/></svg><span>เสียง</span></button>
       <button id="tQ" title="คุณภาพภาพ"><svg class="ic"><use href="#i-gear"/></svg><span>คุณภาพ</span></button>
@@ -1264,6 +1290,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div><div class="gdate" id="hDate">—</div><h1 id="hTitle">สวัสดีครับ 👋</h1></div>
         <div class="wxmini" id="hWx"></div>
       </div>
+      <div class="hrow"><button id="hBig"><svg class="ic sm"><use href="#i-text"/></svg>ตัวอักษรใหญ่</button><button id="hSpeak"><svg class="ic sm"><use href="#i-vol"/></svg>อ่านให้ฟัง</button></div>
       <div id="hNew">
         <div class="card banner">
           <div><b>เริ่มต้นใช้งานใน 3 ขั้นตอน</b><span>วัดแปลง → ดูไร่ 3D พร้อมระบบน้ำหยด → ให้น้ำอัตโนมัติ</span></div>
@@ -1288,6 +1315,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <div class="hprog" id="hProg" style="display:none"><i id="hProgBar"></i></div>
           <button class="btn water xl big" id="hWater"><svg class="ic"><use href="#i-drop"/></svg><span class="bt"><b id="hWaterT">เปิดน้ำตอนนี้</b><small id="hWaterS"></small></span></button>
         </div>
+        <div class="card suncard"><div class="minih"><span class="ti t-or sm"><svg class="ic"><use href="#i-sun"/></svg></span>ดวงอาทิตย์วันนี้ <span class="small" style="margin-left:auto;font-weight:400">ตามตำแหน่งจริงของแปลง</span></div><div id="hSun"></div></div>
         <div class="grid2">
           <div class="card mini" data-go="grow"><div class="minih"><span class="ti t-gr sm"><svg class="ic"><use href="#i-sprout"/></svg></span>การเติบโต</div>
             <div class="minibig" id="hAge">—</div><div class="small" id="hStage">—</div><div class="pbar"><i id="hAgeBar"></i></div><div class="small" id="hHarvest">—</div></div>
@@ -1405,6 +1433,15 @@ svg.leaflet-image-layer.leaflet-interactive path {
             <option value="sand">ทราย</option><option value="lsand">ร่วนปนทราย</option><option value="loam">ร่วน</option><option value="clay">ร่วนเหนียว / เหนียว</option></select></label>
         </div>
       </div>
+      <div class="card rowcard" id="rowCard">
+        <h3><svg class="ic sm"><use href="#i-compass"/></svg> แนวร่องปลูก</h3>
+        <div class="rowtop"><div id="rowCompass"></div><div id="rowBest"></div></div>
+        <div class="rleg"><span><i style="background:#2f7d3c"></i>แนวร่อง</span><span><i style="background:#f2b33d"></i>ทางเดินดวงอาทิตย์วันนี้</span><span><i style="background:#1f6fd1"></i>ทิศน้ำไหล (ลาดลง)</span></div>
+        <ul class="rwhy" id="rowWhy"></ul>
+        <div class="sect" style="margin:14px 0 8px">เปรียบเทียบแนวอื่น</div>
+        <div id="rowOpts"></div>
+        <p class="small" style="margin:10px 0 0">คะแนนรวมจาก ความลาด (กันดินพัง/แรงดันน้ำ), แสงแดดตลอดปีจากตำแหน่งดวงอาทิตย์จริงของพิกัดนี้, จำนวนหัวท้ายร่อง และความยาวเทปน้ำหยด — น้ำหนักเรื่องความลาดเพิ่มขึ้นอัตโนมัติเมื่อพื้นลาดมาก</p>
+      </div>
       <div class="card">
         <h3>สรุประบบ</h3>
         <div class="stats" id="bom"></div>
@@ -1434,7 +1471,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <label>ประสิทธิภาพระบบ <span class="u">%</span><input type="number" id="sEff" step="1" min="60" max="98"></label>
           <label>อายุเก็บเกี่ยว <span class="u">วัน</span><input type="number" id="sHarvest" step="10" min="240" max="420"></label>
           <label>ชนิดเทปน้ำหยด<select id="sTape"><option value="std">ธรรมดา</option><option value="pc">ชดเชยแรงดัน (PC)</option></select></label>
-          <label class="wide">แนวแถวปลูก<select id="sRowDir"><option value="contour">ขวางความลาด (ตามแนวระดับ)</option><option value="edge">ขนานขอบแปลงที่ยาวที่สุด</option></select></label>
+          <label class="wide">แนวร่องปลูก<select id="sRowDir"><option value="best">ดีที่สุดอัตโนมัติ (แนะนำ)</option><option value="contour">ขวางความลาด (ตามแนวระดับ)</option><option value="edge">ขนานขอบแปลงที่ยาวที่สุด</option><option value="custom">กำหนดทิศเอง</option></select></label>
+          <label id="rowAngWrap">ทิศร่อง <span class="u">องศาจากทิศเหนือ (0 = เหนือ–ใต้, 90 = ตะวันออก–ตะวันตก)</span><input type="number" id="sRowAng" min="0" max="179" step="1"></label>
+          <label>เทปยาวสุดที่ยอมรับ <span class="u">ม. (ตามสเปกเทป)</span><input type="number" id="sTapeMax" min="30" max="300" step="10"></label>
         </div>
       </details>
       <button class="btn primary block xl" id="bNext2">ไปขั้นต่อไป: ให้น้ำ →</button>
@@ -1639,10 +1678,10 @@ function areaThai(m2) { const rai = Math.floor(m2 / 1600), ngan = Math.floor((m2
 
 /* ================= state ================= */
 const DEF = { rowSp: 1.0, plantSp: 0.8, emSp: 0.3, emQ: 1.5, pumpQ: 10, eff: 90, soil: 'lsand', harvest: 300,
-  plantDate: isoOf(Date.now() - 115 * DAY), maxAcc: 15, minDist: 2, startHour: 6, trigger: 50, rowDir: 'contour', tape: 'std', ymax: 6 };
+  plantDate: isoOf(Date.now() - 115 * DAY), maxAcc: 15, minDist: 2, startHour: 6, trigger: 50, rowDir: 'best', rowAng: 0, tapeMax: 120, tape: 'std', ymax: 6 };
 let S = { pts: [], hpts: [], closed: false, set: { ...DEF }, mode: 'auto', step: 1 };
 try { const s = JSON.parse(localStorage.getItem('raidrop-v1')); if (s && s.set) { S = { ...S, ...s, set: { ...DEF, ...s.set } }; } } catch (e) {}
-function save() { try { localStorage.setItem('raidrop-v1', JSON.stringify({ g: S.g, pts: S.pts, hpts: S.hpts, meas: S.meas, mpts: S.mpts, src: S.src, elevSrc: S.elevSrc, closed: S.closed, set: S.set, mode: S.mode })); } catch (e) {} }
+function save() { try { localStorage.setItem('raidrop-v1', JSON.stringify({ ui: S.ui, g: S.g, pts: S.pts, hpts: S.hpts, meas: S.meas, mpts: S.mpts, src: S.src, elevSrc: S.elevSrc, closed: S.closed, set: S.set, mode: S.mode })); } catch (e) {} }
 
 /* ================= geometry ================= */
 function project(pts) {
@@ -1699,6 +1738,76 @@ function elevPoints(P) {
   return E;
 }
 
+/* ================= real sun position (NOAA-style approximation, ~1°) ================= */
+const RAD = Math.PI / 180;
+function sunPos(t, lat, lon) {
+  const n = t / 86400000 + 2440587.5 - 2451545.0;
+  const Lm = (280.46 + 0.9856474 * n) % 360, g = ((357.528 + 0.9856003 * n) % 360) * RAD;
+  const lam = (Lm + 1.915 * Math.sin(g) + 0.020 * Math.sin(2 * g)) * RAD, eps = (23.439 - 0.0000004 * n) * RAD;
+  const ra = Math.atan2(Math.cos(eps) * Math.sin(lam), Math.cos(lam)), dec = Math.asin(Math.sin(eps) * Math.sin(lam));
+  const gmst = ((18.697374558 + 24.06570982441908 * n) % 24 + 24) % 24, ha = (gmst * 15 + lon) * RAD - ra, la = lat * RAD;
+  const el = Math.asin(Math.sin(la) * Math.sin(dec) + Math.cos(la) * Math.cos(dec) * Math.cos(ha));
+  const az = (Math.atan2(-Math.sin(ha), Math.tan(dec) * Math.cos(la) - Math.sin(la) * Math.cos(ha)) / RAD + 360) % 360;
+  return { el: el / RAD, az, dec: dec / RAD };
+}
+function sunDay(t, lat, lon) {
+  const d0 = new Date(t); d0.setHours(0, 0, 0, 0); let rise = null, set = null, maxEl = -90, noon = null, prev = null, hot0 = null, hot1 = null;
+  for (let m = 0; m <= 1440; m += 4) {
+    const tt = d0.getTime() + m * 60000, p = sunPos(tt, lat, lon), e = p.el + 0.833;
+    if (prev != null) { if (prev < 0 && e >= 0) rise = tt - 240000 * e / (e - prev); if (prev >= 0 && e < 0) set = tt - 240000 * e / (e - prev); }
+    prev = e; if (p.el > maxEl) { maxEl = p.el; noon = tt; } if (p.el >= 60) { if (hot0 == null) hot0 = tt; hot1 = tt; }
+  }
+  return { rise, set, noon, maxEl, len: rise && set ? (set - rise) / 60000 : 0, hot0, hot1 };
+}
+const DIR8 = ['เหนือ', 'ตะวันออกเฉียงเหนือ', 'ตะวันออก', 'ตะวันออกเฉียงใต้', 'ใต้', 'ตะวันตกเฉียงใต้', 'ตะวันตก', 'ตะวันตกเฉียงเหนือ'];
+const dirName = az => DIR8[Math.round(((az % 360) + 360) % 360 / 45) % 8];
+function rowName(th) {
+  th = Math.round(((th % 180) + 180) % 180); const d0 = Math.min(th, 180 - th), d90 = Math.abs(th - 90);
+  if (d0 <= 8) return 'เหนือ–ใต้'; if (d90 <= 8) return 'ตะวันออก–ตะวันตก';
+  if (Math.abs(th - 45) <= 8) return 'ตะวันออกเฉียงเหนือ–ตะวันตกเฉียงใต้'; if (Math.abs(th - 135) <= 8) return 'ตะวันตกเฉียงเหนือ–ตะวันออกเฉียงใต้';
+  return d0 < d90 ? `เหนือ–ใต้ เอียงไปทาง${th < 90 ? 'ตะวันออก' : 'ตะวันตก'} ${d0}°` : `ตะวันออก–ตะวันตก เอียง ${d90}°`;
+}
+
+/* ================= best row orientation ================= */
+function rowsFor(poly, ang, rowSp) {
+  const c = Math.cos(-ang), s = Math.sin(-ang); let rp = poly.map(([x, y]) => [x * c - y * s, x * s + y * c]);
+  const minX = Math.min(...rp.map(p => p[0])), minY = Math.min(...rp.map(p => p[1])); rp = rp.map(([x, y]) => [x - minX, y - minY]);
+  const H = Math.max(...rp.map(p => p[1])), inset = 0.5; let nseg = 0, len = 0, maxLen = 0, rows = 0;
+  for (let y = inset + rowSp / 2; y < H - inset * 0.5; y += rowSp) {
+    const xs = []; rp.forEach((a, i) => { const b = rp[(i + 1) % rp.length]; if ((a[1] <= y && b[1] > y) || (b[1] <= y && a[1] > y)) xs.push(a[0] + (y - a[1]) * (b[0] - a[0]) / (b[1] - a[1])); });
+    xs.sort((a, b) => a - b); let any = false;
+    for (let i = 0; i + 1 < xs.length; i += 2) { const l = xs[i + 1] - xs[i] - 2 * inset; if (l > 1.5) { nseg++; len += l; maxLen = Math.max(maxLen, l); any = true; } }
+    if (any) rows++;
+  }
+  return { nseg, len, maxLen, rows };
+}
+const azToAng = th => Math.atan2(Math.cos(th * RAD), Math.sin(th * RAD)); // row azimuth (from north, clockwise) -> angle in projected x/y frame
+const angToAz = a => ((Math.atan2(Math.cos(a), Math.sin(a)) / RAD) % 180 + 180) % 180;
+function rowAnalysis(poly, pl, lat, lon, edgeAz) {
+  const st = S.set, yr = new Date(SIM.t || Date.now()).getFullYear(), sun = [];
+  for (let m = 0; m < 12; m++) for (let h = 6; h <= 18.01; h += 0.5) { const t = new Date(yr, m, 15, Math.floor(h), (h % 1) * 60).getTime(), p = sunPos(t, lat, lon); if (p.el > 3) sun.push({ m, w: Math.sin(p.el * RAD), az: p.az, ce: Math.cos(p.el * RAD) }); }
+  const slopeAll = pl ? Math.hypot(pl[0], pl[1]) * 100 : 0, tapeMax = st.tapeMax || 120, res = [];
+  for (let th = 0; th < 180; th += 5) {
+    const g = rowsFor(poly, azToAng(th), st.rowSp); if (!g.nseg) continue;
+    const along = pl ? Math.abs(pl[0] * Math.sin(th * RAD) + pl[1] * Math.cos(th * RAD)) * 100 : 0;
+    let Bsum = 0, Bn = 0, pn = 0, pd = 0;
+    for (let m = 0; m < 12; m++) { let a = 0, b = 0; sun.forEach(s => { if (s.m !== m) return; const p = s.ce * Math.sin((s.az - th) * RAD); a += s.w * p; b += s.w * Math.abs(p); }); if (b > 0) { Bsum += Math.abs(a) / b; Bn++; } }
+    sun.forEach(s => { pn += s.w * s.ce * Math.abs(Math.cos((s.az - th) * RAD)); pd += s.w * s.ce; });
+    res.push({ th, ...g, along, B: Bn ? Bsum / Bn : 0, Pn: pd ? pn / pd : 0 });
+  }
+  const minEnds = Math.min(...res.map(r => r.nseg));
+  const ws = slopeAll >= 1.5 ? 0.4 : slopeAll >= 0.6 ? 0.28 : 0.12, rest = 1 - ws;
+  res.forEach(r => {
+    r.sSlope = clamp(1 - r.along / 2.5, 0, 1); r.sSun = clamp(0.65 * (1 - r.B) + 0.35 * r.Pn, 0, 1);
+    r.sWork = minEnds / r.nseg; r.sHyd = r.maxLen <= tapeMax ? 1 : tapeMax / r.maxLen;
+    r.score = ws * r.sSlope + rest * (0.36 * r.sSun + 0.4 * r.sWork + 0.24 * r.sHyd);
+  });
+  const sorted = res.slice().sort((a, b) => b.score - a.score), best = sorted[0];
+  const near = th => res.reduce((a, r) => Math.abs(((r.th - th + 90) % 180 + 180) % 180 - 90) < Math.abs(((a.th - th + 90) % 180 + 180) % 180 - 90) ? r : a, res[0]);
+  const contourAz = pl && slopeAll > 0.3 ? angToAz(Math.atan2(pl[0], -pl[1])) : null;
+  return { res, best, sorted, slopeAll, ws, tapeMax, near, contourAz, edgeAz, downAz: pl ? (Math.atan2(-pl[0], -pl[1]) / RAD + 360) % 360 : null };
+}
+
 let L = null; // layout
 function computeLayout() {
   if (S.pts.length < 3) { L = null; return; }
@@ -1710,7 +1819,10 @@ function computeLayout() {
   let best = 0, ang = 0;
   poly.forEach((p, i) => { const q = poly[(i + 1) % poly.length]; const d = dist(p, q); if (d > best) { best = d; ang = Math.atan2(q[1] - p[1], q[0] - p[0]); } });
   const slopeAll = pl0 ? Math.hypot(pl0[0], pl0[1]) : 0;
-  if (st.rowDir === 'contour' && pl0 && slopeAll > 0.003) ang = Math.atan2(pl0[0], -pl0[1]);
+  const rowA = rowAnalysis(poly, pl0, P.lat0, P.lon0, angToAz(ang));
+  if (st.rowDir === 'best' && rowA.best) ang = azToAng(rowA.best.th);
+  else if (st.rowDir === 'custom') ang = azToAng(+st.rowAng || 0);
+  else if (st.rowDir === 'contour' && pl0 && slopeAll > 0.003) ang = Math.atan2(pl0[0], -pl0[1]);
   const c = Math.cos(-ang), s = Math.sin(-ang), rot = ([x, y]) => [x * c - y * s, x * s + y * c];
   let rp = poly.map(rot);
   const minX = Math.min(...rp.map(p => p[0])), minY = Math.min(...rp.map(p => p[1]));
@@ -1768,7 +1880,7 @@ function computeLayout() {
   L = { poly: rp, W, H, rows, zones, tape, em, plants, sub, subLen, pump, mainLen, area: polyArea(poly), perim: polyPerim(poly),
     cropArea, flowAll: em * st.emQ, appRate: st.emQ / (st.emSp * st.rowSp), lat0: P.lat0, lon0: P.lon0, verts: poly.length, ang,
     G, elevOK, nElev: E.length, dz: zmax - zmin, zBase: zmin, slopeRow: ns ? sdx / ns * 100 : 0, slopeAcross: ns ? sdy / ns * 100 : 0,
-    slopeAll: slopeAll * 100, unif, head, lift };
+    slopeAll: slopeAll * 100, unif, head, lift, rowA, rowAz: angToAz(ang) };
 }
 const effF = () => S.set.eff / 100 * (L ? L.unif : 1);
 
@@ -2504,6 +2616,7 @@ function build3D() {
   R.pondPt = V(pc[0] + 5.5, pch + 0.06, -(pc[1] - 1));
   R.lastAct = -2;
   R.envHour = -99; updateLighting(true);
+  buildSunPath();
   fitCamera('overview');
 }
 function buildPlants() {
@@ -2572,13 +2685,9 @@ function paintRidges(force) {
 /* sun, sky and haze follow the clock (or locked to mid-morning) */
 function updateLighting(force) {
   if (!R.ok || !L) return;
-  const d = new Date(SIM.t), H = R.dayLock ? 9.5 : d.getHours() + d.getMinutes() / 60;
-  const doy = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / DAY), decl = -23.44 * Math.cos(2 * Math.PI * (doy + 10) / 365);
-  const maxEl = 90 - Math.abs(L.lat0 - decl), k = (H - 6.1) / 11.8;
-  let el = (k > -0.12 && k < 1.12) ? maxEl * Math.sin(Math.PI * k) : -20; el = Math.max(el, -20);
-  const A = (90 + 180 * clamp(k, 0, 1)) * Math.PI / 180, er = el * Math.PI / 180;
-  const c = Math.cos(-L.ang), s = Math.sin(-L.ang), north = V(-s, 0, -c), east = V(c, 0, -s);
-  const dir = east.clone().multiplyScalar(Math.sin(A)).add(north.clone().multiplyScalar(Math.cos(A))).multiplyScalar(Math.cos(er)).add(V(0, Math.sin(er), 0)).normalize();
+  const tt = R.dayLock ? (() => { const x = new Date(SIM.t); x.setHours(9, 30, 0, 0); return x.getTime(); })() : SIM.t, H = tt / 3600000;
+  const sp = sunPos(tt, L.lat0, L.lon0), el = Math.max(sp.el, -20);
+  const dir = sunDir3(sp.az, el);
   R.sky.material.uniforms.sunPosition.value.copy(dir); R.skyEnv.material.uniforms.sunPosition.value.copy(dir);
   const day = clamp((el + 4) / 16, 0, 1), low = clamp(el / 25, 0, 1), night = 1 - day, rk = R.rainK || 0;
   const span = R.span || 100, tgt = R.sun.target.position;
@@ -2614,6 +2723,7 @@ function fitCamera(mode) {
     const r = L.rows[Math.floor(L.rows.length / 2)], y = r.y + S.set.rowSp / 2, x0 = r.segs[0].x1 - 2.5;
     R.camera.position.set(x0, hz(x0, y) + 1.6, -y); R.controls.target.set(x0 + 20, hz(x0 + 20, y) + 0.9, -y);
   } else if (mode === 'top') { R.controls.target.copy(t); R.camera.position.set(t.x, t.y + span * 1.35, t.z + 0.01); }
+  else if (mode === 'sun' && R.sunPathRad) { const r = R.sunPathRad, c = R.sunPathCtr; R.controls.target.set(c.x, c.y + r * 0.3, c.z); R.camera.position.set(c.x - r * 0.9, c.y + r * 0.75, c.z + r * 2.1); }
   else { R.controls.target.copy(t); R.camera.position.set(t.x - span * 0.62, t.y + span * 0.36, t.z + span * 0.92); }
   R.controls.update();
 }
@@ -2748,7 +2858,7 @@ function frame(now) {
       R.drops.instanceMatrix.needsUpdate = true; R.dropsOn = az;
     }
     R.flags && R.flags.forEach((fl, i) => { fl.position.y = fl.userData.h + 1.9 + (i === az ? Math.sin(now / 200) * 0.05 : 0); fl.scale.x = i === az ? 1.25 : 1; });
-    rainFrame(dt, now); paintRidges(false); updateLighting(false); fxFrame(dt, now); tweenStep(now);
+    rainFrame(dt, now); sunPathFrame(); paintRidges(false); updateLighting(false); fxFrame(dt, now); tweenStep(now);
     R.controls.update(); R.renderer.render(R.scene, R.camera);
   }
   audioFrame(dt);
@@ -2964,8 +3074,8 @@ function renderBOM() {
   ].map(([l, v, c]) => `<div class="${c || ''}"><div class="l">${l}</div><div class="v mono">${v}</div></div>`).join('');
   $('#zoneTable').innerHTML = `<tr><th>โซน</th><th class="r">แถว</th><th class="r">พื้นที่</th><th class="r">อัตราไหล</th><th class="r">ต่างระดับ</th></tr>` +
     L.zones.map(z => `<tr><td><span class="zd" style="background:${ZC[z.id % ZC.length]}"></span>โซน ${z.id + 1}</td><td class="r mono">${z.rows.length}</td><td class="r mono">${f(z.area / 1600, 2)} ไร่</td><td class="r mono">${f(z.flow / 1000, 1)} ลบ.ม./ชม.</td><td class="r mono" style="color:${z.dz > 2 && st.tape !== 'pc' ? 'var(--bad)' : 'inherit'}">${f(z.dz, 1)} ม.</td></tr>`).join('');
-  renderTerrain();
-  $('#layoutNote').innerHTML = `${st.rowDir === 'contour' && L.elevOK && L.slopeAll > 0.3 ? 'แถวปลูกวางขวางความลาด (ตามแนวระดับ) ลดการชะหน้าดินและแรงดันในเทปสม่ำเสมอขึ้น' : 'แนวแถวขนานกับขอบแปลงด้านที่ยาวที่สุด'} · ปั๊ม ${f(st.pumpQ)} ลบ.ม./ชม. จ่ายน้ำได้ครั้งละ 1 โซน จึงแบ่งเป็น <b>${L.zones.length} โซน</b> เปิดทีละโซนตามลำดับ` +
+  renderTerrain(); renderRowCard();
+  $('#layoutNote').innerHTML = `ร่องแนว <b>${rowName(L.rowAz)}</b> (${f(L.rowAz)}°) ${st.rowDir === 'best' ? '— ระบบเลือกแนวที่ดีที่สุดให้อัตโนมัติ' : st.rowDir === 'contour' ? '— ขวางความลาด' : st.rowDir === 'edge' ? '— ขนานขอบแปลงยาว' : '— กำหนดเอง'} · ปั๊ม ${f(st.pumpQ)} ลบ.ม./ชม. จ่ายน้ำได้ครั้งละ 1 โซน จึงแบ่งเป็น <b>${L.zones.length} โซน</b> เปิดทีละโซนตามลำดับ` +
     (L.zones.length > 6 ? '<br><b>หมายเหตุ:</b> โซนเยอะ ใช้เวลานาน ควรพิจารณาปั๊มใหญ่ขึ้น' : '');
 }
 function renderTerrain() {
@@ -3296,15 +3406,16 @@ function onLayoutChanged() {
   if (W.lat == null || geoDist({ lat: W.lat, lon: W.lon }, { lat: L.lat0, lon: L.lon0 }) > 2000) loadWeather(true);
 }
 function bindSettings() {
-  const map = { sRow: 'rowSp', sPlant: 'plantSp', sEm: 'emSp', sQ: 'emQ', sPump: 'pumpQ', sEff: 'eff', sSoil: 'soil', sHarvest: 'harvest', sPlantDate: 'plantDate', sMaxAcc: 'maxAcc', sMinDist: 'minDist', sTrig: 'trigger', sStartHour: 'startHour', sRowDir: 'rowDir', sTape: 'tape', sYmax: 'ymax' };
+  const map = { sRow: 'rowSp', sPlant: 'plantSp', sEm: 'emSp', sQ: 'emQ', sPump: 'pumpQ', sEff: 'eff', sSoil: 'soil', sHarvest: 'harvest', sPlantDate: 'plantDate', sMaxAcc: 'maxAcc', sMinDist: 'minDist', sTrig: 'trigger', sStartHour: 'startHour', sRowDir: 'rowDir', sTape: 'tape', sYmax: 'ymax', sRowAng: 'rowAng', sTapeMax: 'tapeMax' };
   $('#sStartHour').innerHTML = Array.from({ length: 24 }, (_, h) => `<option value="${h}">${pad(h)}:00</option>`).join('');
   Object.entries(map).forEach(([id, k]) => {
     const el = $('#' + id); el.value = S.set[k];
     el.addEventListener('change', () => {
       const v = el.type === 'number' || id === 'sStartHour' ? +el.value : el.value;
-      if (el.type === 'number' && (!isFinite(v) || v <= 0)) { el.value = S.set[k]; return; }
+      if (el.type === 'number' && (!isFinite(v) || v < 0 || (v === 0 && k !== 'rowAng'))) { el.value = S.set[k]; return; }
       S.set[k] = v; save();
-      if (['rowSp', 'plantSp', 'emSp', 'emQ', 'pumpQ', 'rowDir', 'tape'].includes(k) && S.closed) onLayoutChanged();
+      if (k === 'rowDir') $('#rowAngWrap').style.display = v === 'custom' ? '' : 'none';
+      if (['rowSp', 'plantSp', 'emSp', 'emQ', 'pumpQ', 'rowDir', 'tape', 'rowAng', 'tapeMax'].includes(k) && S.closed) onLayoutChanged();
       else if (['soil', 'harvest', 'plantDate', 'eff', 'trigger'].includes(k) && L) { initSim(); }
       if (S.step === 3) renderControl();
       if (S.step === 4) renderGrowth();
@@ -3362,6 +3473,10 @@ $('#tOver').addEventListener('click', () => { R.follow = false; fitCamera('overv
 $('#tDay').addEventListener('click', () => { R.dayLock = !R.dayLock; $('#tDay').classList.toggle('on', R.dayLock); R.envHour = -99; updateLighting(true); });
 const qLbl = () => { $('#tQ').innerHTML = '<svg class="ic"><use href="#i-gear"/></svg><span>' + (R.quality === 'high' ? 'สูง' : 'ประหยัด') + '</span>'; };
 $('#tSound').addEventListener('click', audioToggle);
+$('#tSun').addEventListener('click', () => { R.showSun = !R.showSun; $('#tSun').classList.toggle('on', R.showSun); buildSunPath(); if (R.showSun) { fitCamera('sun'); const sd = sunDay(SIM.t, L.lat0, L.lon0); toast(`☀ ขึ้น ${hm(sd.rise)} · ตก ${hm(sd.set)} · สูงสุด ${f(sd.maxEl)}°`); } });
+$('#rowOpts').addEventListener('click', e => { const b = e.target.closest('button[data-row]'); if (!b) return; S.set.rowDir = 'custom'; S.set.rowAng = +b.dataset.row; $('#sRowDir').value = 'custom'; $('#sRowAng').value = S.set.rowAng; $('#rowAngWrap').style.display = ''; save(); onLayoutChanged(); toast('เปลี่ยนแนวร่องเป็น ' + rowName(S.set.rowAng)); });
+$('#hBig').addEventListener('click', () => setBigText(!(S.ui && S.ui.big)));
+$('#hSpeak').addEventListener('click', speakSummary);
 $('#tQ').addEventListener('click', () => { R.quality = R.quality === 'high' ? 'eco' : 'high'; qLbl(); if (R.ok && L) build3D(); }); qLbl();
 $$('#modeSw button').forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
 $$('#speedBtns button').forEach(b => b.addEventListener('click', () => setSpeed(b.dataset.sp)));
@@ -3425,6 +3540,8 @@ function renderHome() {
   else if (D >= trig) v = '💧 ถึงเวลาให้น้ำ';
   else v = '✅ ดินชื้นพอ ไม่ต้องให้น้ำ';
   $('#hVerdict').textContent = v;
+  $('#hField .stat').className = 'card stat ' + (SIM.active ? 'st-run' : D > n.raw ? 'st-bad' : D >= trig ? 'st-warn' : 'st-ok');
+  if (!R._sunT || Date.now() - R._sunT > 20000 || R._sunS !== SIM.t >> 22) { R._sunT = Date.now(); R._sunS = SIM.t >> 22; $('#hSun').innerHTML = sunCardHTML(L.lat0, L.lon0); }
   const nx = new Date(SIM.t + minutesTo(st.startHour) * 60000);
   $('#hNext').textContent = SIM.active ? `เหลือ ${dur([SIM.active, ...SIM.queue].reduce((a, b) => a + b.rem, 0))} · ใช้น้ำแล้ว ${f(SIM.today.vol / 1000, 1)} ลบ.ม.`
     : S.mode === 'auto' ? `อัตโนมัติ · ตรวจรอบถัดไป ${dShort(nx)} ${pad(st.startHour)}:00 น.` : 'โหมดสั่งเอง · กดปุ่มด้านล่างเพื่อให้น้ำ';
@@ -3504,6 +3621,122 @@ $('#gSave').addEventListener('click', async () => {
 $('#gClear').addEventListener('click', () => { S.g = {}; save(); GST.maps = GST.elev = GST.wx = '—'; GST.err = ''; $('#gKey').value = ''; renderGStatus(); loadWeather(true); if (S.step === 1 && measureMode === 'map') initMap(); toast('ลบ key แล้ว — ใช้ข้อมูลฟรี'); });
 document.addEventListener('click', e => { if (e.target.id === 'reElev') { e.preventDefault(); fetchDEM(true); } });
 
+/* ---- best row orientation card ---- */
+function compassSVG(A) {
+  const P = project(S.pts), poly = dpClosed(P.xy, 1.6), cx0 = poly.reduce((a, p) => a + p[0], 0) / poly.length, cy0 = poly.reduce((a, p) => a + p[1], 0) / poly.length;
+  const R0 = Math.max(...poly.map(p => Math.hypot(p[0] - cx0, p[1] - cy0))), k = 78 / R0, C = 130;
+  const pts = poly.map(([x, y]) => [C + (x - cx0) * k, C - (y - cy0) * k]), path = 'M' + pts.map(p => p.map(v => v.toFixed(1)).join(' ')).join('L') + 'Z';
+  const th = L.rowAz, dx = Math.sin(th * RAD), dy = -Math.cos(th * RAD), nx = -dy, ny = dx; let lines = '';
+  const gap = Math.max(4, S.set.rowSp * k * 3);
+  for (let o = -120; o <= 120; o += gap) lines += `<line x1="${C + nx * o - dx * 130}" y1="${C + ny * o - dy * 130}" x2="${C + nx * o + dx * 130}" y2="${C + ny * o + dy * 130}"/>`;
+  let s = `<svg viewBox="0 0 260 260" class="compass" role="img" aria-label="แผนผังทิศของแปลงและแนวร่อง"><defs><clipPath id="fclip"><path d="${path}"/></clipPath><radialGradient id="cg" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fbfdf8"/><stop offset="1" stop-color="#eef4ea"/></radialGradient></defs>`;
+  s += `<circle cx="${C}" cy="${C}" r="118" fill="url(#cg)" stroke="#dfe7da"/>`;
+  for (let a = 0; a < 360; a += 15) { const r1 = a % 90 ? 112 : 106, x1 = C + Math.sin(a * RAD) * r1, y1 = C - Math.cos(a * RAD) * r1, x2 = C + Math.sin(a * RAD) * 118, y2 = C - Math.cos(a * RAD) * 118; s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#c9d3c4" stroke-width="${a % 90 ? 1 : 2}"/>`; }
+  [['น', 0], ['ออ', 90], ['ต', 180], ['ตก', 270]].forEach(([t, a]) => s += `<text x="${C + Math.sin(a * RAD) * 96}" y="${C - Math.cos(a * RAD) * 96 + 5}" text-anchor="middle" class="cl${a ? '' : ' n'}">${t}</text>`);
+  // today's sun track on the sky dome (projected)
+  const sd = sunDay(SIM.t, L.lat0, L.lon0); let sp = '';
+  if (sd.rise && sd.set) for (let t = sd.rise; t <= sd.set; t += 20 * 60000) { const p = sunPos(t, L.lat0, L.lon0), r = 118 * (1 - Math.max(0, p.el) / 90); sp += `${sp ? 'L' : 'M'}${(C + Math.sin(p.az * RAD) * r).toFixed(1)} ${(C - Math.cos(p.az * RAD) * r).toFixed(1)}`; }
+  s += `<path d="${path}" fill="#d9bf9a" stroke="#8a5a3b" stroke-width="2"/><g clip-path="url(#fclip)" stroke="#2f7d3c" stroke-width="1.6" opacity=".85">${lines}</g>`;
+  if (sp) s += `<path d="${sp}" fill="none" stroke="#f2a51d" stroke-width="2.5" stroke-dasharray="5 4"/>`;
+  if (A.downAz != null && A.slopeAll > 0.3) { const a = A.downAz * RAD, l = 34; s += `<g stroke="#1f6fd1" stroke-width="3" fill="#1f6fd1"><line x1="${C - Math.sin(a) * l / 2}" y1="${C + Math.cos(a) * l / 2}" x2="${C + Math.sin(a) * l / 2}" y2="${C - Math.cos(a) * l / 2}"/><circle cx="${C + Math.sin(a) * l / 2}" cy="${C - Math.cos(a) * l / 2}" r="4"/></g>`; }
+  const pn = sunPos(SIM.t, L.lat0, L.lon0); if (pn.el > 0) { const r = 118 * (1 - pn.el / 90); s += `<circle cx="${C + Math.sin(pn.az * RAD) * r}" cy="${C - Math.cos(pn.az * RAD) * r}" r="8" fill="#ffc83d" stroke="#fff" stroke-width="2"/>`; }
+  return s + '</svg>';
+}
+function renderRowCard() {
+  const A = L && L.rowA; if (!A || !A.best) return;
+  const b = A.best, cur = A.near(L.rowAz), isBest = Math.abs(((cur.th - b.th + 90) % 180 + 180) % 180 - 90) < 3;
+  $('#rowCompass').innerHTML = compassSVG(A);
+  $('#rowBest').innerHTML = `<div class="rbk">แนวร่องที่ดีที่สุดสำหรับแปลงนี้</div><div class="rbv">${rowName(b.th)}</div><div class="small">ทิศ ${f(b.th)}° จากทิศเหนือ · คะแนน ${f(b.score * 100)}/100${isBest ? ' · <b style="color:var(--good)">✓ ใช้แนวนี้อยู่</b>' : ''}</div>`;
+  const ok = v => v >= 0.8 ? '✅' : v >= 0.5 ? '🟡' : '⚠️';
+  $('#rowWhy').innerHTML = [
+    `${ok(b.sSlope)} <b>ความลาดตามร่อง ${f(b.along, 1)}%</b> — ${A.slopeAll < 0.6 ? 'พื้นค่อนข้างราบ เรื่องนี้มีผลน้อย' : b.along < 1 ? 'ร่องเกือบขนานแนวระดับ ลดน้ำไหลบ่า ดินไม่ถูกชะ แรงดันในเทปสม่ำเสมอ' : 'ยังลาดตามร่องอยู่บ้าง'}`,
+    `${ok(b.sSun)} <b>แสงแดดทั้งปี</b> — สองข้างร่องได้แดดสมดุล ${f((1 - b.B) * 100)}% ${b.th <= 25 || b.th >= 155 ? '(แนวเหนือ–ใต้: เช้าแดดส่องฝั่งตะวันออก บ่ายส่องฝั่งตะวันตก ต้นมันได้แสงเท่ากัน)' : ''}`,
+    `${ok(b.sWork)} <b>การทำงานในแปลง</b> — ${f(b.rows)} ร่อง ยาวเฉลี่ย ${f(b.len / Math.max(1, b.nseg))} ม. หัว–ท้ายร่อง ${f(b.nseg * 2)} จุด (ยิ่งน้อย รถไถเลี้ยวกลับน้อย ข้อต่อเทปน้อย)`,
+    `${ok(b.sHyd)} <b>ความยาวเทปน้ำหยด</b> — ยาวสุด ${f(b.maxLen)} ม. ${b.maxLen <= A.tapeMax ? `(ไม่เกิน ${A.tapeMax} ม. น้ำถึงปลายเทปสม่ำเสมอ)` : `(เกิน ${A.tapeMax} ม. ควรวางท่อย่อยกลางแปลงแล้วแยกเทปไปสองข้าง)`}`,
+  ].map(t => `<li>${t}</li>`).join('');
+  const opts = [['แนะนำ', b], ['เหนือ–ใต้', A.near(0)], ['ตะวันออก–ตะวันตก', A.near(90)]];
+  if (A.contourAz != null) opts.push(['ตามแนวระดับ', A.near(A.contourAz)]);
+  if (A.edgeAz != null) opts.push(['ขนานขอบแปลงยาว', A.near(A.edgeAz)]);
+  const seen = new Set();
+  $('#rowOpts').innerHTML = opts.filter(([, r]) => { if (seen.has(r.th)) return false; seen.add(r.th); return true; }).map(([n, r]) => {
+    const on = Math.abs(((r.th - L.rowAz + 90) % 180 + 180) % 180 - 90) < 3;
+    return `<div class="ropt${on ? ' on' : ''}"><div class="rot"><b>${n}</b><span>${rowName(r.th)} · ${f(r.th)}° · ลาดตามร่อง ${f(r.along, 1)}% · ${f(r.rows)} ร่อง</span><div class="rbar"><i style="width:${r.score * 100}%"></i></div></div><div class="ros"><b class="mono">${f(r.score * 100)}</b>${on ? '<small>ใช้อยู่</small>' : `<button class="btn sm" data-row="${r.th}">ใช้แนวนี้</button>`}</div></div>`;
+  }).join('');
+}
+/* ---- sun card (home) ---- */
+function sunCardHTML(lat, lon) {
+  const now = SIM.t || Date.now(), sd = sunDay(now, lat, lon), p = sunPos(now, lat, lon);
+  if (!sd.rise || !sd.set) return '';
+  const W = 320, Hh = 132, base = 112, x0 = 26, x1 = W - 26, top = 18 + (90 - sd.maxEl) * 0.5;
+  const fx = t => x0 + (x1 - x0) * (t - sd.rise) / (sd.set - sd.rise);
+  const yAt = t => { const q = sunPos(t, lat, lon); return base - Math.max(0, q.el) / sd.maxEl * (base - top); };
+  let arc = '', done = '';
+  for (let t = sd.rise; t <= sd.set + 1; t += (sd.set - sd.rise) / 48) { const seg = `${arc ? 'L' : 'M'}${fx(t).toFixed(1)} ${yAt(t).toFixed(1)}`; arc += seg; if (t <= now) done += seg; }
+  const day = now >= sd.rise && now <= sd.set, sx = clamp(fx(now), x0, x1), sy = day ? yAt(now) : base;
+  let s = `<svg viewBox="0 0 ${W} ${Hh}" class="sunsvg" aria-hidden="true"><defs><linearGradient id="skyg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${day ? '#cfe8ff' : '#26324d'}"/><stop offset="1" stop-color="${day ? '#fff6dc' : '#3a4a6b'}"/></linearGradient><radialGradient id="sung"><stop offset="0" stop-color="#fff3b0"/><stop offset=".5" stop-color="#ffc83d"/><stop offset="1" stop-color="#ffb02e" stop-opacity="0"/></radialGradient></defs>`;
+  s += `<rect width="${W}" height="${base}" rx="14" fill="url(#skyg)"/><rect y="${base}" width="${W}" height="${Hh - base}" fill="#8fbf6a"/><path d="M0 ${base} Q ${W / 4} ${base - 8} ${W / 2} ${base} T ${W} ${base}" fill="#7bb257"/>`;
+  s += `<path d="${arc}" fill="none" stroke="${day ? '#e9a72b' : '#8da0c8'}" stroke-width="2" stroke-dasharray="5 5"/>`;
+  if (done && day) s += `<path d="${done}" fill="none" stroke="#f0a020" stroke-width="3"/>`;
+  if (day) s += `<circle cx="${sx}" cy="${sy}" r="22" fill="url(#sung)"/><circle cx="${sx}" cy="${sy}" r="9" fill="#ffc83d" stroke="#fff" stroke-width="2"/>`;
+  else s += `<g transform="translate(${W / 2} 40)"><circle r="11" fill="#f4f1d8"/><circle cx="5" cy="-4" r="10" fill="#2c3a58"/></g>`;
+  s += `<text x="${x0}" y="${Hh - 4}" class="st">${hm(sd.rise)}</text><text x="${x1}" y="${Hh - 4}" text-anchor="end" class="st">${hm(sd.set)}</text></svg>`;
+  const dl = Math.round(sd.len), hot = sd.hot0 ? `แดดแรงมาก (สูงเกิน 60°) ${hm(sd.hot0)}–${hm(sd.hot1)} น.` : 'วันนี้ดวงอาทิตย์ไม่สูงเกิน 60°';
+  return s + `<div class="suninfo"><div><span>ขึ้น</span><b>${hm(sd.rise)}</b></div><div><span>เที่ยงสุริยะ</span><b>${hm(sd.noon)}</b></div><div><span>ตก</span><b>${hm(sd.set)}</b></div><div><span>กลางวัน</span><b>${Math.floor(dl / 60)} ชม. ${dl % 60} น.</b></div></div>
+    <div class="small" style="margin-top:6px">${day ? `ตอนนี้ดวงอาทิตย์อยู่ทิศ<b>${dirName(p.az)}</b> สูง ${f(p.el)}° · ` : 'ตอนนี้กลางคืน · '}สูงสุดวันนี้ ${f(sd.maxEl)}° · ${hot}<br>💡 ให้น้ำช่วงเช้าก่อน ${hm(sd.rise + 3 * 3600000)} น. น้ำระเหยน้อยที่สุด</div>`;
+}
+/* ---- 3D sun path ---- */
+function sunDir3(az, el) {
+  const c = Math.cos(-L.ang), s = Math.sin(-L.ang), north = V(-s, 0, -c), east = V(c, 0, -s), er = el * RAD, a = az * RAD;
+  return east.multiplyScalar(Math.sin(a)).add(north.multiplyScalar(Math.cos(a))).multiplyScalar(Math.cos(er)).add(V(0, Math.sin(er), 0)).normalize();
+}
+function labelSprite(text, col = '#5a3d00') {
+  const c = document.createElement('canvas'); c.width = 96; c.height = 48; const x = c.getContext('2d');
+  x.fillStyle = 'rgba(255,248,225,.92)'; x.beginPath(); x.roundRect ? x.roundRect(4, 6, 88, 36, 12) : x.rect(4, 6, 88, 36); x.fill();
+  x.fillStyle = col; x.font = '600 24px Prompt, sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(text, 48, 25);
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), depthTest: false, transparent: true })); sp.renderOrder = 5; return sp;
+}
+function buildSunPath() {
+  if (R.sunPathG) { disposeGroup(R.sunPathG); R.sunPathG = null; }
+  if (!R.showSun || !L || !R.group) return;
+  const g = new THREE.Group(); R.sunPathG = g; R.scene.add(g);
+  const sd = sunDay(SIM.t, L.lat0, L.lon0); if (!sd.rise) return;
+  const rad = Math.max(L.W, L.H) * 0.75 + 15, ctr = V(L.W / 2, 0, -L.H / 2), pts = [];
+  for (let t = sd.rise; t <= sd.set; t += 10 * 60000) { const p = sunPos(t, L.lat0, L.lon0); pts.push(ctr.clone().add(sunDir3(p.az, Math.max(0, p.el)).multiplyScalar(rad))); }
+  const lg = new THREE.BufferGeometry().setFromPoints(pts);
+  g.add(new THREE.Line(lg, new THREE.LineDashedMaterial({ color: '#ffb52e', dashSize: 3, gapSize: 2, depthTest: false, transparent: true })).computeLineDistances());
+  const d0 = new Date(sd.rise); d0.setMinutes(0, 0, 0);
+  for (let t = d0.getTime() + 3600000; t < sd.set; t += 3600000) { const p = sunPos(t, L.lat0, L.lon0); if (p.el < 2) continue; const pos = ctr.clone().add(sunDir3(p.az, p.el).multiplyScalar(rad));
+    const dot = new THREE.Mesh(new THREE.SphereGeometry(rad * 0.012, 10, 8), new THREE.MeshBasicMaterial({ color: '#ffcf5a', toneMapped: false })); dot.position.copy(pos); g.add(dot);
+    const lb = labelSprite(pad(new Date(t).getHours()) + ':00'); lb.position.copy(pos).add(V(0, rad * 0.045, 0)); lb.scale.set(rad * 0.08, rad * 0.04, 1); g.add(lb); }
+  R.sunBall = new THREE.Mesh(new THREE.SphereGeometry(rad * 0.035, 20, 16), new THREE.MeshBasicMaterial({ color: '#ffd84a', toneMapped: false })); g.add(R.sunBall);
+  const glow = labelSprite('☀', '#c47a00'); glow.scale.set(rad * 0.07, rad * 0.035, 1); R.sunTag = glow; g.add(glow);
+  [['น', 0], ['ออ', 90], ['ต', 180], ['ตก', 270]].forEach(([t, a]) => { const sp = labelSprite(t, '#1d261b'); sp.position.copy(ctr.clone().add(sunDir3(a, 0).multiplyScalar(rad * 1.04)).add(V(0, 2, 0))); sp.scale.set(rad * 0.08, rad * 0.04, 1); g.add(sp); });
+  R.sunPathRad = rad; R.sunPathCtr = ctr; R.sunPathDay = isoOf(SIM.t);
+}
+function sunPathFrame() {
+  if (!R.sunPathG || !R.sunBall) return;
+  if (R.sunPathDay !== isoOf(SIM.t)) { buildSunPath(); return; }
+  const p = sunPos(SIM.t, L.lat0, L.lon0); R.sunBall.visible = R.sunTag.visible = p.el > 0;
+  R.sunBall.position.copy(R.sunPathCtr).add(sunDir3(p.az, Math.max(0, p.el)).multiplyScalar(R.sunPathRad));
+  R.sunTag.position.copy(R.sunBall.position).add(V(0, R.sunPathRad * 0.08, 0));
+}
+/* ---- farmer-friendly helpers ---- */
+function setBigText(on) { S.ui = { ...(S.ui || {}), big: on }; document.documentElement.classList.toggle('bigtext', on); $('#hBig').classList.toggle('on', on); save(); }
+function speakSummary() {
+  if (!('speechSynthesis' in window)) { toast('อุปกรณ์นี้อ่านออกเสียงไม่ได้'); return; }
+  speechSynthesis.cancel();
+  const parts = [$('#hTitle').textContent.replace(/[^฀-๿\s]/g, '')];
+  if (S.closed && L && SIM.today) {
+    const c = crop(SIM.t), w = wx(isoOf(SIM.t));
+    parts.push(`ความชื้นดิน ${Math.round(swNow())} เปอร์เซ็นต์`, $('#hVerdict').textContent.replace(/[^฀-๿0-9\s/]/g, ''));
+    parts.push(`วันนี้อุณหภูมิสูงสุด ${Math.round(w.tmax)} องศา ฝน ${Math.round(w.rain)} มิลลิเมตร โอกาสฝน ${Math.round(w.prob)} เปอร์เซ็นต์`);
+    if (c.dap >= 0) parts.push(`มันสำปะหลังอายุ ${c.dap} วัน อยู่ในระยะ${stageOf(c.dap).n} อีก ${Math.max(0, S.set.harvest - c.dap)} วันเก็บเกี่ยว`);
+  } else parts.push('ยังไม่มีแปลง กดวัดที่บนแผนที่ หรือเดินวัดที่ เพื่อเริ่มต้น');
+  const u = new SpeechSynthesisUtterance(parts.join(' . ')); u.lang = 'th-TH'; u.rate = 0.95;
+  const v = speechSynthesis.getVoices().find(v => /^th/i.test(v.lang)); if (v) u.voice = v;
+  speechSynthesis.speak(u); toast('🔊 กำลังอ่านสรุปวันนี้');
+}
+
 /* ================= boot ================= */
 init3D(); bindSettings(); updateFieldStats(); setMeasureMode(measureMode);
 $$('#modeSw button').forEach(b => b.classList.toggle('on', b.dataset.mode === S.mode));
@@ -3511,7 +3744,7 @@ setSpeed('real');
 if (S.closed) { computeLayout(); if (L) { renderBOM(); renderZoneSelect(); initSim(); } else S.closed = false; }
 drawGPS(); renderLog();
 loadWeather(true);
-go(0); renderGStatus();
+go(0); renderGStatus(); if (S.ui && S.ui.big) setBigText(true); $('#rowAngWrap').style.display = S.set.rowDir === 'custom' ? '' : 'none';
 $('#hWater').addEventListener('click', () => { if (SIM.active || SIM.queue.length) { stopAll(); toast('■ ปิดน้ำแล้ว'); } else { quickStart(); R.follow = false; } renderHome(); });
 setTimeout(() => $('#splash').classList.add('off'), 900);
 requestAnimationFrame(frame);

@@ -531,6 +531,24 @@ html.bigtext .panel{zoom:1.14}html.bigtext .steps{zoom:1.08}html.bigtext .chip{z
 #introBtns{display:flex;flex-direction:column;gap:8px}
 details.homemore{margin-top:4px}
 @media (max-width:920px){.hcomp{right:10px;top:10px;width:54px;height:54px}.chip .t3{display:none}.hud .chip{padding:7px 11px}}
+/* ---- farm diary ---- */
+.dstatus{background:linear-gradient(135deg,#e6f5ec,#f3faf5);border-radius:16px;padding:12px 14px}.dstatus b{display:block;font:600 16px 'Prompt',sans-serif}.dstatus span{font-size:12.5px;color:var(--ink2)}
+.dtodo{display:flex;flex-direction:column;gap:8px}
+.dtodo button{border:0;background:#f4f7f2;border-radius:14px;padding:12px;display:flex;gap:10px;align-items:center;text-align:left;font-size:14px;color:var(--ink)}
+.dtodo button.hot{background:#fff4dd;box-shadow:inset 0 0 0 2px #f3d08a}
+.dtodo button span{font-size:22px}.dtodo button i{margin-left:auto;font-style:normal;color:var(--muted);font-size:20px}
+.dtiles{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.dtiles button{border:0;background:#fff;border-radius:14px;box-shadow:0 2px 8px rgba(16,40,24,.08);padding:10px 2px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11.5px;color:var(--ink2)}
+.dtiles button span{font-size:24px}
+.dlist>div{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid #f0f2ee;font-size:13px}.dlist .di{font-size:20px}
+.dform h4{font:600 18px 'Prompt',sans-serif;margin:4px 0 8px}
+.feel{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.feel button{border:2px solid var(--line);background:#fff;border-radius:16px;padding:14px 10px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.feel button span{font-size:30px}.feel button b{font:600 16px 'Prompt',sans-serif}.feel button small{font-size:12px;color:var(--muted)}
+.feel button:active{border-color:var(--leaf);background:var(--leaf-2)}
+.htodo{display:flex;gap:10px;align-items:center;cursor:pointer;background:#fff8e6}
+.htodo.hot{box-shadow:inset 0 0 0 2px #f3d08a,var(--sh)}.htodo .hb{flex:1}.htodo b{display:block;font-size:14px}.htodo span{font-size:12.5px;color:var(--ink2)}
+@media (max-width:520px){.dtiles{grid-template-columns:repeat(4,1fr)}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <style>/* required styles */
@@ -1335,8 +1353,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
             <div class="statmain"><div class="statk" id="hFieldName">—</div><div class="verdict" id="hVerdict">—</div><div class="small" id="hNext">—</div></div>
           </div>
           <div class="hprog" id="hProg" style="display:none"><i id="hProgBar"></i></div>
+          <button class="btn primary xl big" id="hPlant" style="display:none"><svg class="ic"><use href="#i-sprout"/></svg><span class="bt"><b>บันทึกวันปลูก</b><small>เมื่อปลูกเสร็จ กดเพื่อเริ่มนับอายุและให้น้ำอัตโนมัติ</small></span></button>
           <button class="btn water xl big" id="hWater"><svg class="ic"><use href="#i-drop"/></svg><span class="bt"><b id="hWaterT">เปิดน้ำตอนนี้</b><small id="hWaterS"></small></span></button>
         </div>
+        <div class="card htodo" id="hTodo"><span style="font-size:26px">📒</span><div class="hb"><b>สมุดไร่</b><span id="hTodoT">—</span></div><span class="link">เปิด ›</span></div>
         <div class="card suncard"><div class="minih"><span class="ti t-or sm"><svg class="ic"><use href="#i-sun"/></svg></span>ดวงอาทิตย์วันนี้ <span class="small" style="margin-left:auto;font-weight:400">ตามตำแหน่งจริงของแปลง</span></div><div id="hSun"></div></div>
         <div class="grid2">
           <div class="card mini" data-go="grow"><div class="minih"><span class="ti t-gr sm"><svg class="ic"><use href="#i-sprout"/></svg></span>การเติบโต</div>
@@ -1349,7 +1369,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <button class="qa" data-go="3d"><span class="ti t-gr"><svg class="ic"><use href="#i-cube"/></svg></span>ไร่ 3D</button>
           <button class="qa" data-go="water"><span class="ti t-bl"><svg class="ic"><use href="#i-drop"/></svg></span>ให้น้ำ</button>
           <button class="qa" data-go="grow"><span class="ti t-li"><svg class="ic"><use href="#i-sprout"/></svg></span>เติบโต</button>
-          <button class="qa" data-go="measure"><span class="ti t-or"><svg class="ic"><use href="#i-ruler"/></svg></span>บันทึกความสูง</button>
+          <button class="qa" data-go="diary"><span class="ti t-or"><svg class="ic"><use href="#i-list"/></svg></span>สมุดไร่</button>
         </div>
         <details class="card more homemore"><summary>เพิ่มเติม <span class="small">กราฟ · ตั้งค่า · กิจกรรม · แหล่งข้อมูล</span></summary>
         <div class="tiles4" style="margin-top:12px">
@@ -1676,6 +1696,19 @@ svg.leaflet-image-layer.leaflet-interactive path {
 </div></div>
 
 <div id="intro"><div class="introbox"><button class="skip" id="iSkip">ข้าม</button><div id="introBody"></div><div id="introBtns"></div></div></div>
+<div class="sheet" id="dSheet" style="display:none"><div class="sheetbg" data-close></div><div class="sheetbox">
+  <div class="sheeth"><span class="ti t-gr sm"><svg class="ic"><use href="#i-list"/></svg></span><b>สมุดไร่</b><button class="xbtn" data-close aria-label="ปิด">✕</button></div>
+  <div id="dMain">
+    <div class="dstatus" id="dStatus"></div>
+    <div class="sect" style="margin:12px 2px 8px">ควรทำ / ควรบันทึกเร็ว ๆ นี้</div>
+    <div class="dtodo" id="dTodo"></div>
+    <div class="sect" style="margin:16px 2px 8px">บันทึกใหม่</div>
+    <div class="dtiles" id="dTiles"></div>
+    <div class="sect" style="margin:16px 2px 8px">ประวัติ</div>
+    <div class="dlist" id="dList"></div>
+  </div>
+  <div id="dForm" class="dform" style="display:none"></div>
+</div></div>
 <div class="toast" id="toast"></div>
 
 <script type="module">
@@ -1708,7 +1741,8 @@ const DEF = { rowSp: 1.0, plantSp: 0.8, emSp: 0.3, emQ: 1.5, pumpQ: 10, eff: 90,
   plantDate: isoOf(Date.now() - 115 * DAY), maxAcc: 15, minDist: 2, startHour: 6, trigger: 50, rowDir: 'best', rowAng: 0, tapeMax: 120, tape: 'std', ymax: 6 };
 let S = { pts: [], hpts: [], closed: false, set: { ...DEF }, mode: 'auto', step: 1 };
 try { const s = JSON.parse(localStorage.getItem('raidrop-v1')); if (s && s.set) { S = { ...S, ...s, set: { ...DEF, ...s.set } }; } } catch (e) {}
-function save() { try { localStorage.setItem('raidrop-v1', JSON.stringify({ ui: S.ui, g: S.g, pts: S.pts, hpts: S.hpts, meas: S.meas, mpts: S.mpts, src: S.src, elevSrc: S.elevSrc, closed: S.closed, set: S.set, mode: S.mode })); } catch (e) {} }
+if (!S.crop) S.crop = { status: S.closed ? 'planted' : 'none' };
+function save() { try { localStorage.setItem('raidrop-v1', JSON.stringify({ crop: S.crop, obs: S.obs, diary: S.diary, ui: S.ui, g: S.g, pts: S.pts, hpts: S.hpts, meas: S.meas, mpts: S.mpts, src: S.src, elevSrc: S.elevSrc, closed: S.closed, set: S.set, mode: S.mode })); } catch (e) {} }
 
 /* ================= geometry ================= */
 function project(pts) {
@@ -2002,6 +2036,7 @@ function updateFieldStats() {
 let demoTimer = null;
 function runDemo() {
   stopGPS(); clearInterval(demoTimer); go(1); S.pts = []; S.closed = false; L = null;
+  S.crop = { status: 'planted', variety: 'ระยอง 72', offset: 0, germ: null }; S.set.plantDate = isoOf(Date.now() - 115 * DAY);
   const corners = [[0, 0], [86, -8], [98, 38], [74, 70], [22, 76], [-6, 36]];
   const lat0 = 15.0712, lon0 = 102.2451, kx = 111320 * Math.cos(lat0 * Math.PI / 180), ky = 110540;
   const r = rng(42), g = () => (r() + r() + r() - 1.5) * 1.1;
@@ -2673,12 +2708,13 @@ function buildPlants() {
 // rescale every plant for a crop age (today, or the age chosen on the growth slider)
 function updatePlantGrowth() {
   if (!R.pMeshes || !L) return;
-  const dap = R.viewDap != null ? R.viewDap : crop(SIM.t).dap;
-  if (dap === R.plantDap) return; R.plantDap = dap;
-  const h = dap < 0 ? 0 : Math.max(0.16, heightAt(dap)), m = new THREE.Matrix4(), q = new THREE.Quaternion(), Y = V(0, 1, 0), zero = new THREE.Matrix4().makeScale(0, 0, 0);
+  const cc = crop(SIM.t), dap = R.viewDap != null ? R.viewDap : cc.dap, key = dap + ':' + (S.crop && S.crop.germ) + ':' + (S.crop && S.crop.offset);
+  if (key === R.plantDap) return; R.plantDap = key;
+  const germ = R.viewDap == null && planted() && S.crop.germ != null ? S.crop.germ / 100 : 1;
+  const h = dap < 0 || (R.viewDap == null && cc.notPlanted) ? 0 : Math.max(0.16, R.viewDap != null ? heightAt(dap) : cc.height), m = new THREE.Matrix4(), q = new THREE.Quaternion(), Y = V(0, 1, 0), zero = new THREE.Matrix4().makeScale(0, 0, 0);
   R.pMeshes.forEach(({ st1, lf, inst }) => {
     inst.forEach((p, i) => {
-      if (h <= 0) { st1.setMatrixAt(i, zero); lf.setMatrixAt(i, zero); return; }
+      if (h <= 0 || (p.g ?? (p.g = Math.random())) > germ) { st1.setMatrixAt(i, zero); lf.setMatrixAt(i, zero); return; }
       const s = h * p.s; q.setFromAxisAngle(Y, p.yaw); m.compose(V(p.x, p.base, -p.y), q, V(s * p.sx, s, s * p.sz));
       st1.setMatrixAt(i, m); lf.setMatrixAt(i, m);
     });
@@ -2903,20 +2939,24 @@ function frame(now) {
 /* ================= crop · soil · weather model ================= */
 const SOILS = { sand: { n: 'ทราย', taw: 70 }, lsand: { n: 'ร่วนปนทราย', taw: 100 }, loam: { n: 'ร่วน', taw: 140 }, clay: { n: 'ร่วนเหนียว/เหนียว', taw: 170 } };
 function crop(t) {
-  const st = S.set, dap = Math.floor((parseIso(isoOf(t)) - parseIso(st.plantDate)) / DAY), H = st.harvest;
+  const st = S.set, cr = S.crop || {};
+  if (cr.status === 'none' || cr.status === 'harvested') return { dap: -1, dEff: -1, stage: cr.status === 'harvested' ? 'เก็บเกี่ยวแล้ว (รอปลูกรอบใหม่)' : 'ยังไม่ปลูก (เตรียมแปลง)', kc: 0, zr: 0.3, gc: 0, kr: 0.5, noIrr: true, height: 0, notPlanted: true };
+  const real = Math.floor((parseIso(isoOf(t)) - parseIso(st.plantDate)) / DAY), H = st.harvest;
+  const dap = real < 0 ? real : Math.max(0, real + (cr.offset || 0)); // physiological age (calibrated by measured heights)
   let stage, kc, noIrr = false;
   if (dap < 0) { stage = 'ยังไม่ถึงวันปลูก'; kc = 0; noIrr = true; }
   else if (dap <= 30) { stage = 'งอกและตั้งตัว'; kc = 0.35; }
   else if (dap <= 90) { stage = 'เจริญทางลำต้นและใบ'; kc = 0.35 + (dap - 30) / 60 * 0.45; }
   else if (dap <= 180) { stage = 'สร้างและขยายหัว'; kc = 0.8 + (dap - 90) / 90 * 0.25; }
   else if (dap <= H - 60) { stage = 'สะสมแป้ง'; kc = 1.05 - (dap - 180) / Math.max(1, H - 240) * 0.25; }
-  else if (dap <= H) { stage = 'ก่อนเก็บเกี่ยว'; kc = 0.6; noIrr = dap > H - 30; }
+  else if (real <= H) { stage = 'ก่อนเก็บเกี่ยว'; kc = 0.6; noIrr = real > H - 30; }
   else { stage = 'เลยกำหนดเก็บเกี่ยว'; kc = 0.4; noIrr = true; }
+  if (real >= 0 && real > H - 30) noIrr = true;
   const zr = 0.25 + Math.min(Math.max(dap, 0), 150) / 150 * 0.55;
   let gc = clamp(dap / 140, 0.05, 0.95); if (dap > H - 60) gc *= 0.8;
   const kr = Math.min(1, gc + 0.5 * (1 - gc));
   const height = heightAt(dap);
-  return { dap, stage, kc, zr, gc, kr, noIrr, height };
+  return { dap: real, dEff: dap, stage, kc, zr, gc, kr, noIrr, height };
 }
 // climatology (central NE Thailand – Nakhon Ratchasima), used when live forecast is unavailable
 const CL = { tmax: [31, 33, 35, 36, 34, 33, 32, 32, 31, 30, 30, 29], tmin: [17, 20, 23, 25, 25, 25, 24, 24, 24, 22, 19, 16],
@@ -2932,7 +2972,7 @@ function climDay(iso) {
   return { tmax: CL.tmax[m] + (r() - 0.5) * 3 - (rainy ? 2 : 0), tmin: CL.tmin[m] + (r() - 0.5) * 2, rain, prob,
     et0: CL.et0[m] * (rainy ? 0.72 : 1.04) * (0.92 + r() * 0.16), rh: CL.rh[m] + (rainy ? 10 : 0) + (r() - 0.5) * 6, wind: CL.wind[m] * (0.7 + r() * 0.6), src: 'clim' };
 }
-const wx = iso => W.days[iso] || climDay(iso);
+const wx = iso => { const b = W.days[iso] || climDay(iso), o = S.obs && S.obs[iso]; return o && o.rain != null ? { ...b, rain: o.rain, prob: o.rain > 0 ? 100 : 0, obs: true } : b; };
 const peff = rain => rain < 5 ? 0 : rain * 0.8;
 /* ---- Google Weather (optional) ---- */
 function hargreaves(tmax, tmin, lat, iso) {
@@ -2997,20 +3037,25 @@ function need(t) {
 /* ================= irrigation simulator ================= */
 const SIM = { t: Date.now(), speed: 'real', Dr: 0, today: null, hist: [], queue: [], active: null, log: [], decided: null };
 function log(msg, k = '') { SIM.log.unshift({ t: SIM.t, msg, k }); SIM.log.length = Math.min(SIM.log.length, 80); renderLog(); }
-function initSim() {
+function initSim(keep) {
   if (!L) return;
-  const now = Date.now(); SIM.t = now - now % 1000; SIM.queue = []; SIM.active = null; SIM.hist = []; SIM.log = [];
+  const kept = keep && SIM.today ? { q: SIM.queue, a: SIM.active, log: SIM.log, irr: SIM.today.irr, vol: SIM.today.vol, t: SIM.t } : null;
+  const now = Date.now(); SIM.t = kept ? kept.t : now - now % 1000; SIM.queue = []; SIM.active = null; SIM.hist = []; SIM.log = [];
   // spin-up: 30 days of history using the automatic policy
   let Dr = need(SIM.t - 30 * DAY).raw * 0.4;
   for (let k = 30; k >= 1; k--) {
     const t = parseIso(isoOf(SIM.t - k * DAY)) + 12 * 3600e3, n = need(t);
     let irr = 0;
     if (!n.c.noIrr && Dr >= n.raw * S.set.trigger / 100 && !(n.w.prob >= 60 && n.pe >= Dr * 0.5)) irr = Dr;
+    const ob = S.obs && S.obs[n.iso]; if (ob && ob.irrMm) irr += ob.irrMm;
     let D = Dr + n.etc - n.pe - irr, dp = 0; if (D < 0) { dp = -D; D = 0; } D = Math.min(D, n.taw);
+    if (ob && ob.soil != null) D = n.taw * (1 - ob.soil);
     SIM.hist.push({ iso: n.iso, t, etc: n.etc, rain: n.w.rain, pe: n.pe, irr, dp, sw: 100 * (1 - D / n.taw), thr: 100 * (1 - n.raw / n.taw), wsrc: n.w.src, ks: n.c.dap >= 0 ? (D <= n.raw ? 1 : clamp((n.taw - D) / (n.taw - n.raw), 0, 1)) : null });
     Dr = D;
   }
-  SIM.Dr = Dr; SIM.today = { iso: isoOf(SIM.t), irr: 0, vol: 0 }; SIM.decided = null;
+  SIM.Dr = Dr; SIM.today = { iso: isoOf(SIM.t), irr: kept ? kept.irr : 0, vol: kept ? kept.vol : 0 }; SIM.decided = null;
+  { const ob = S.obs && S.obs[SIM.today.iso]; if (ob && ob.soil != null) setSoilNow(ob.soil); }
+  if (kept) { SIM.queue = kept.q; SIM.active = kept.a; SIM.log = kept.log; renderCharts(); return; }
   log(`เริ่มระบบ · ความชื้นดินปัจจุบัน ${f(swNow(), 0)}%`, '');
   if (S.mode === 'auto' && new Date(SIM.t).getHours() >= S.set.startHour) autoDecide(true);
   if (R.group) buildPlants();
@@ -3041,7 +3086,7 @@ function stopAll() { if (SIM.active || SIM.queue.length) log('ปิดน้ำ
 function autoDecide(initial) {
   const n = need(SIM.t), D = depNow(), trig = n.raw * S.set.trigger / 100;
   SIM.decided = n.iso;
-  if (n.c.noIrr) return log(n.c.dap < 0 ? 'ยังไม่ถึงวันปลูก — ไม่ให้น้ำ' : 'งดให้น้ำ: 30 วันก่อนเก็บเกี่ยว เพื่อเพิ่มเปอร์เซ็นต์แป้ง', 'skip');
+  if (n.c.noIrr) return log(n.c.notPlanted ? 'ยังไม่ได้บันทึกการปลูก — ระบบอัตโนมัติจะเริ่มเมื่อบันทึกวันปลูกในสมุดไร่' : n.c.dap < 0 ? 'ยังไม่ถึงวันปลูก — ไม่ให้น้ำ' : 'งดให้น้ำ: 30 วันก่อนเก็บเกี่ยว เพื่อเพิ่มเปอร์เซ็นต์แป้ง', 'skip');
   if (D < trig) return log(`ไม่ต้องให้น้ำ — ดินขาดน้ำ ${f(D, 1)} มม. ยังไม่ถึงเกณฑ์ ${f(trig, 1)} มม.`, 'skip');
   if (n.w.prob >= 60 && n.pe >= D * 0.5) return log(`เลื่อนการให้น้ำ — พยากรณ์ฝน ${f(n.w.rain, 1)} มม. (โอกาส ${f(n.w.prob)}%) เพียงพอ`, 'skip');
   let items = plan(D); const total = items.reduce((a, b) => a + b.min, 0), cap = 20 * 60;
@@ -3241,7 +3286,8 @@ function renderLog() { $('#log').innerHTML = SIM.log.map(l => `<div><span class=
 /* ================= growth model & tracking ================= */
 const heightAt = dap => dap <= 0 ? 0 : 2.4 / (1 + Math.exp(-(dap - 95) / 28));
 function growthAt(dap) {
-  const H = S.set.harvest, ymax = S.set.ymax;
+  if (planted() && dap > 0) dap = Math.max(0, dap + (S.crop.offset || 0));
+  const H = S.set.harvest, ymax = S.set.ymax * (planted() && S.crop.germ != null ? Math.min(1, S.crop.germ / 95) : 1);
   const h = heightAt(dap);
   const lai = dap <= 0 ? 0 : 3.3 / (1 + Math.exp(-(dap - 75) / 18)) * (dap > 200 ? Math.max(0.4, 1 - (dap - 200) / Math.max(60, H - 140) * 0.6) : 1);
   const y = dap <= 60 ? 0 : ymax / (1 + Math.exp(-(dap - 210) / 42));
@@ -3442,7 +3488,7 @@ function bindSettings() {
     el.addEventListener('change', () => {
       const v = el.type === 'number' || id === 'sStartHour' ? +el.value : el.value;
       if (el.type === 'number' && (!isFinite(v) || v < 0 || (v === 0 && k !== 'rowAng'))) { el.value = S.set[k]; return; }
-      S.set[k] = v; save();
+      S.set[k] = v; if (k === 'plantDate' && v) S.crop = { ...(S.crop || {}), status: 'planted' }; save();
       if (k === 'rowDir') $('#rowAngWrap').style.display = v === 'custom' ? '' : 'none';
       if (['rowSp', 'plantSp', 'emSp', 'emQ', 'pumpQ', 'rowDir', 'tape', 'rowAng', 'tapeMax'].includes(k) && S.closed) onLayoutChanged();
       else if (['soil', 'harvest', 'plantDate', 'eff', 'trigger'].includes(k) && L) { initSim(); }
@@ -3491,7 +3537,7 @@ $('#vClose').addEventListener('click', () => { $('#vtxMenu').style.display = 'no
 $('#cGo').addEventListener('click', coordGo);
 $('#fImport').addEventListener('change', e => { const fl = e.target.files[0]; if (fl) importFile(fl); e.target.value = ''; });
 $('#bUndo').addEventListener('click', () => { if (measureMode === 'map') { $('#mUndo').click(); return; } if (S.closed) { S.closed = false; L = null; R.group && (disposeGroup(R.group), R.group = null); } S.pts.pop(); afterPts(); });
-$('#bClear').addEventListener('click', () => { stopGPS(); clearInterval(demoTimer); S.pts = []; S.hpts = []; S.mpts = []; S.src = null; S.elevSrc = null; if (MAP.m) drawMapPoly(); S.closed = false; L = null; lastFix = null; if (R.group) { disposeGroup(R.group); R.group = null; } save(); updateFieldStats(); drawGPS(); gpsUI('off', 'ยังไม่เริ่ม'); $('#gpsAcc').textContent = ''; });
+$('#bClear').addEventListener('click', () => { stopGPS(); clearInterval(demoTimer); S.crop = { status: 'none' }; S.obs = {}; S.diary = []; S.meas = []; S.pts = []; S.hpts = []; S.mpts = []; S.src = null; S.elevSrc = null; if (MAP.m) drawMapPoly(); S.closed = false; L = null; lastFix = null; if (R.group) { disposeGroup(R.group); R.group = null; } save(); updateFieldStats(); drawGPS(); gpsUI('off', 'ยังไม่เริ่ม'); $('#gpsAcc').textContent = ''; });
 $('#bNext1').addEventListener('click', () => go(2));
 $('#bNext2').addEventListener('click', () => go(3));
 $('#tPlants').addEventListener('click', () => { R.showPlants = !R.showPlants; if (R.plantG) R.plantG.visible = R.showPlants; $('#tPlants').classList.toggle('on', !R.showPlants); });
@@ -3502,6 +3548,15 @@ $('#tOver').addEventListener('click', () => { R.follow = false; fitCamera('overv
 $('#tDay').addEventListener('click', () => { R.dayLock = !R.dayLock; $('#tDay').classList.toggle('on', R.dayLock); R.envHour = -99; updateLighting(true); });
 const qLbl = () => { $('#tQ').innerHTML = '<svg class="ic"><use href="#i-gear"/></svg><span>' + (R.quality === 'high' ? 'สูง' : 'ประหยัด') + '</span>'; };
 $('#tSound').addEventListener('click', audioToggle);
+$('#dSheet').addEventListener('click', e => {
+  if (e.target.closest('[data-close]')) { closeDiary(); return; }
+  const kb = e.target.closest('#dTodo [data-k], #dTiles [data-k]'); if (kb) { diaryForm(kb.dataset.k); return; }
+  const fb = e.target.closest('.feel [data-f]'); if (fb) { saveDiary('soil', +fb.dataset.f); return; }
+  if (e.target.id === 'fSave') saveDiary(e.target.dataset.k);
+  if (e.target.id === 'fCancel') { $('#dForm').style.display = 'none'; $('#dMain').style.display = ''; }
+});
+$('#hPlant').addEventListener('click', () => openDiary('plant'));
+$('#hTodo').addEventListener('click', () => { const t = diaryTodos()[0]; openDiary(t ? t.k : null); });
 $('#tMore').addEventListener('click', () => { const v = $('#vtools'); v.classList.toggle('open'); $('#tMore').classList.toggle('on', v.classList.contains('open')); });
 $('#hcomp').addEventListener('click', faceNorth);
 $('#iSkip').addEventListener('click', closeIntro);
@@ -3569,6 +3624,7 @@ function renderHome() {
   $('#hFieldName').textContent = `ไร่มันสำปะหลัง · ${areaThai(L.area)}`;
   let v;
   if (SIM.active) v = `💧 กำลังให้น้ำ โซน ${SIM.active.z + 1}/${L.zones.length}`;
+  else if (c.notPlanted) v = S.crop.status === 'harvested' ? '🚜 เก็บเกี่ยวแล้ว — รอปลูกรอบใหม่' : '🟫 ยังไม่ได้ปลูกมัน';
   else if (rn && !R.rain_.demo) v = '🌧 ฝนกำลังตก';
   else if (c.noIrr && c.dap >= 0) v = '🌾 งดน้ำช่วงก่อนเก็บเกี่ยว';
   else if (D > n.raw) v = '⚠️ มันเริ่มขาดน้ำ';
@@ -3579,14 +3635,16 @@ function renderHome() {
   if (!R._sunT || Date.now() - R._sunT > 20000 || R._sunS !== SIM.t >> 22) { R._sunT = Date.now(); R._sunS = SIM.t >> 22; $('#hSun').innerHTML = sunCardHTML(L.lat0, L.lon0); }
   const nx = new Date(SIM.t + minutesTo(st.startHour) * 60000);
   $('#hNext').textContent = SIM.active ? `เหลือ ${dur([SIM.active, ...SIM.queue].reduce((a, b) => a + b.rem, 0))} · ใช้น้ำแล้ว ${f(SIM.today.vol / 1000, 1)} ลบ.ม.`
-    : S.mode === 'auto' ? `อัตโนมัติ · ตรวจรอบถัดไป ${dShort(nx)} ${pad(st.startHour)}:00 น.` : 'โหมดสั่งเอง · กดปุ่มด้านล่างเพื่อให้น้ำ';
+    : c.notPlanted ? 'ให้น้ำเตรียมดินได้ · ระบบอัตโนมัติเริ่มหลังบันทึกวันปลูก' : S.mode === 'auto' ? `อัตโนมัติ · ตรวจรอบถัดไป ${dShort(nx)} ${pad(st.startHour)}:00 น.` : 'โหมดสั่งเอง · กดปุ่มด้านล่างเพื่อให้น้ำ';
   $('#hProg').style.display = running ? '' : 'none';
   if (running) { const all = [SIM.active, ...SIM.queue].filter(Boolean), tot = all.reduce((a, b) => a + b.tot, 0) + (SIM.doneMin || 0), rem = all.reduce((a, b) => a + b.rem, 0); $('#hProgBar').style.width = (tot ? (1 - rem / tot) * 100 : 0) + '%'; }
   const hw = $('#hWater'); hw.classList.toggle('water', !running); hw.classList.toggle('danger', running);
-  $('#hWaterT').textContent = running ? 'หยุดให้น้ำ' : 'เปิดน้ำตอนนี้'; $('#hWaterS').textContent = running ? 'แตะเพื่อปิดทุกโซน' : `โซนละ ${dur(recMinutes())} × ${L.zones.length} โซน`;
+  $('#hPlant').style.display = c.notPlanted && !running ? '' : 'none';
+  { const td = diaryTodos(); $('#hTodoT').textContent = td.length ? td[0].t : 'บันทึกการดูแลแปลง ให้ระบบคำนวณแม่นยำขึ้น'; $('#hTodo').classList.toggle('hot', !!(td[0] && td[0].hot)); }
+  $('#hWaterT').textContent = running ? 'หยุดให้น้ำ' : c.notPlanted ? 'ให้น้ำเตรียมดิน' : 'เปิดน้ำตอนนี้'; $('#hWaterS').textContent = running ? 'แตะเพื่อปิดทุกโซน' : `โซนละ ${dur(recMinutes())} × ${L.zones.length} โซน`;
   // growth
   const H = st.harvest, g = growthAt(Math.max(0, c.dap));
-  $('#hAge').textContent = c.dap < 0 ? 'ยังไม่ปลูก' : `${c.dap} วัน`;
+  $('#hAge').textContent = c.notPlanted ? 'ยังไม่ปลูก' : c.dap < 0 ? 'ยังไม่ถึงวันปลูก' : `${c.dap} วัน`;
   $('#hStage').textContent = c.dap < 0 ? '' : `ระยะ${stageOf(c.dap).n} · สูง ~${f(g.h * 100)} ซม.`;
   $('#hAgeBar').style.width = clamp(c.dap / H * 100, 0, 100) + '%';
   $('#hHarvest').textContent = c.dap < 0 ? '' : H - c.dap > 0 ? `อีก ${H - c.dap} วันเก็บเกี่ยว` : 'ถึงกำหนดเก็บเกี่ยว';
@@ -3602,6 +3660,7 @@ function homeGo(k) {
   switch (k) {
     case 'map': case 'walk': case 'coord': go(1); setMeasureMode(k); break;
     case 'demo': runDemo(); break;
+    case 'diary': openDiary(); break;
     case 'google': openG(); break;
     case 'newfield': go(1); setMeasureMode('map'); toast('กด “เริ่มใหม่” เพื่อล้างแปลงเดิม แล้ววัดใหม่'); break;
     case '3d': if (need3()) go(2); break;
@@ -3830,6 +3889,7 @@ function loadDemoInstant() {
   const dz = (x, y) => 186 + 0.038 * x - 0.022 * y + 1.6 * Math.exp(-((x - 28) ** 2 + (y - 52) ** 2) / 420) - 0.9 * Math.exp(-((x - 70) ** 2 + (y - 18) ** 2) / 300);
   S.hpts = [[25, 20], [50, 22], [72, 30], [30, 50], [55, 48], [75, 55], [45, 68], [15, 40], [85, 20]].map(([x, y]) => ({ lat: lat0 + y / ky, lon: lon0 + x / kx, alt: dz(x, y) }));
   corners.forEach((a, i) => { const b = corners[(i + 1) % corners.length], n = Math.ceil(dist(a, b) / 3); for (let k = 0; k < n; k++) { const t = k / n, x = a[0] + (b[0] - a[0]) * t, y = a[1] + (b[1] - a[1]) * t; S.pts.push({ lat: lat0 + y / ky, lon: lon0 + x / kx, acc: 3, alt: dz(x, y) + (r() - 0.5) * 0.6, t: Date.now() }); } });
+  S.crop = { status: 'planted', variety: 'ระยอง 72', offset: 0, germ: null }; S.set.plantDate = isoOf(Date.now() - 115 * DAY); S.diary = [{ d: S.set.plantDate, type: 'plant', text: 'ปลูกระยอง 72 (แปลงตัวอย่าง)', t: 1 }];
   R.noAutoGo = true; closeField(); R.noAutoGo = false; go(0);
   setTimeout(() => { $('#hWater').classList.add('pulse'); toast('👆 ลองแตะปุ่ม “เปิดน้ำตอนนี้” ดูได้เลย'); }, 600);
 }
@@ -3846,6 +3906,126 @@ function renderIntro() {
   $('#introBody').innerHTML = `<div class="ti ${it.c} introic"><svg class="ic"><use href="#${it.ic}"/></svg></div><h2>${it.h}</h2><p>${it.p}</p><div class="idots">${INTRO.map((_, i) => `<i class="${i === introI ? 'on' : ''}"></i>`).join('')}</div>`;
   $('#introBtns').innerHTML = last ? `<button class="btn primary xl" id="iDemo"><svg class="ic"><use href="#i-play"/></svg>ลองเล่นเลย (แปลงตัวอย่าง)</button><button class="btn xl" id="iMine"><svg class="ic"><use href="#i-map"/></svg>วัดแปลงของฉัน</button>`
     : `<button class="btn primary xl" id="iNext">ถัดไป</button>`;
+}
+
+/* ================= farm diary: farmer updates keep the model accurate ================= */
+const VARIETIES = ['ระยอง 72', 'ระยอง 9', 'ระยอง 11', 'เกษตรศาสตร์ 50', 'ห้วยบง 60', 'CMR', 'อื่น ๆ'];
+const planted = () => S.crop && S.crop.status === 'planted';
+function todayIso() { return isoOf(SIM.t || Date.now()); }
+function addDiary(type, text, d) { S.diary = (S.diary || []).concat({ d: d || todayIso(), type, text, t: Date.now() }); save(); }
+function setSoilNow(fr) { // farmer's hand-feel test → reset simulated root-zone depletion
+  if (!SIM.today || !L) return; const n = need(SIM.t), d = new Date(SIM.t), frac = (d.getHours() * 60 + d.getMinutes()) / 1440;
+  SIM.Dr = Math.max(0, n.taw * (1 - fr) - (n.etc - n.pe) * frac + SIM.today.irr);
+}
+// height measurements → how many days ahead/behind the standard curve this field grows
+function calibrateFromHeights() {
+  const pd = parseIso(S.set.plantDate), offs = (S.meas || []).slice(-2).map(m => { const h = m.h / 100, real = Math.round((parseIso(m.date) - pd) / DAY); if (real < 15 || h <= 0.05 || h >= 2.35) return null; return 95 - 28 * Math.log(2.4 / h - 1) - real; }).filter(v => v != null);
+  if (!offs.length || !S.crop) return null;
+  S.crop.offset = Math.round(clamp(offs.reduce((a, b) => a + b, 0) / offs.length, -45, 45)); save(); return S.crop.offset;
+}
+const SOILFEEL = [
+  { f: 0.2, ic: '🏜️', h: 'แห้ง', p: 'กำแล้วร่วนเป็นผง ไม่จับตัว' },
+  { f: 0.45, ic: '🟫', h: 'ชื้นน้อย', p: 'กำแล้วจับเป็นก้อน แต่แตกง่ายเมื่อกด' },
+  { f: 0.75, ic: '🟤', h: 'ชื้นพอดี', p: 'ปั้นเป็นก้อนได้ ผิวเป็นมัน ไม่เปื้อนมือมาก' },
+  { f: 1, ic: '💧', h: 'แฉะ', p: 'บีบแล้วมีน้ำซึม เปื้อนมือ' }];
+function diaryTodos() {
+  const out = [], cr = S.crop || {}, last = type => (S.diary || []).filter(e => e.type === type).map(e => parseIso(e.d)).sort((a, b) => b - a)[0];
+  const daysSince = t => t ? Math.floor((parseIso(todayIso()) - t) / DAY) : 999;
+  if (!planted()) {
+    if (cr.status === 'harvested') out.push({ k: 'plant', t: 'เริ่มฤดูใหม่: บันทึกวันปลูกรอบถัดไป' });
+    else { out.push({ k: 'plant', t: 'ปลูกเสร็จแล้ว? บันทึกวันปลูกเพื่อเริ่มนับอายุและให้น้ำอัตโนมัติ', hot: 1 }); out.push({ k: 'soil', t: 'ก่อนปลูก 1–2 วัน กำดินดูความชื้น ถ้าแห้งให้น้ำเตรียมดินก่อน' }); }
+    return out;
+  }
+  const dap = crop(SIM.t).dap, H = S.set.harvest;
+  if (dap >= 14 && dap <= 45 && cr.germ == null) out.push({ k: 'germ', t: `อายุ ${dap} วัน: นับต้นที่งอก เพื่อรู้จำนวนต้นจริง`, hot: 1 });
+  const lm = (S.meas || []).map(m => parseIso(m.date)).sort((a, b) => b - a)[0];
+  if (dap >= 30 && daysSince(lm) >= 28) out.push({ k: 'height', t: 'วัดความสูงต้นมัน (เดือนละครั้ง) ให้ระบบปรับอายุต้นให้ตรง', hot: daysSince(lm) > 40 ? 1 : 0 });
+  if (daysSince(last('soil')) >= 7) out.push({ k: 'soil', t: 'กำดินดูความชื้น (สัปดาห์ละครั้ง) เทียบกับที่ระบบคำนวณ' });
+  const nf = (S.diary || []).filter(e => e.type === 'fert').length;
+  if (dap >= 25 && dap <= 70 && nf === 0) out.push({ k: 'fert', t: 'ช่วงใส่ปุ๋ยครั้งแรก (1–2 เดือนหลังปลูก)' });
+  else if (dap >= 60 && dap <= 120 && nf === 1) out.push({ k: 'fert', t: 'ช่วงใส่ปุ๋ยครั้งที่ 2 (2–4 เดือน)' });
+  if (dap >= 20 && dap <= 120 && daysSince(last('weed')) >= 30) out.push({ k: 'weed', t: 'ตรวจและกำจัดวัชพืช' });
+  const yd = isoOf(SIM.t - DAY), yw = wx(yd); if (yw.rain >= 3 && !(S.obs && S.obs[yd] && S.obs[yd].rain != null)) out.push({ k: 'rain', t: `เมื่อวานพยากรณ์ว่าฝนตก ~${f(yw.rain)} มม. ถ้ามีกระบอกวัดฝน จดค่าจริงไว้` });
+  if (dap >= H - 30 && dap < H) out.push({ k: 'harvest', t: 'ใกล้เก็บเกี่ยว: งดน้ำแล้ว เตรียมรถขุดและลานรับซื้อ' });
+  if (dap >= H - 5) out.push({ k: 'harvest', t: 'ขุดแล้ว? บันทึกผลผลิตและเปอร์เซ็นต์แป้ง เพื่อใช้ฤดูหน้า', hot: 1 });
+  return out;
+}
+const DTYPES = [
+  ['plant', '🌱', 'วันปลูก'], ['soil', '✋', 'กำดินดูความชื้น'], ['rain', '🌧', 'ฝนที่วัดได้'], ['irr', '💧', 'ให้น้ำเอง'], ['germ', '🌿', 'นับต้นงอก'],
+  ['height', '📏', 'ความสูง'], ['fert', '🧪', 'ใส่ปุ๋ย'], ['weed', '🌾', 'กำจัดวัชพืช'], ['pest', '🐛', 'โรค / แมลง'], ['harvest', '🚜', 'เก็บเกี่ยว']];
+function openDiary(k) { renderDiary(); $('#dSheet').style.display = 'block'; requestAnimationFrame(() => $('#dSheet').classList.add('on')); if (k) diaryForm(k); }
+function closeDiary() { $('#dSheet').classList.remove('on'); setTimeout(() => $('#dSheet').style.display = 'none', 250); }
+function renderDiary() {
+  const cr = S.crop || {}, c = planted() ? crop(SIM.t) : null;
+  $('#dStatus').innerHTML = planted() ? `<b>🌱 ปลูกแล้ว ${c.dap} วัน</b><span>${cr.variety || ''} · ปลูก ${dShort(parseIso(S.set.plantDate))} · ระยะ${stageOf(c.dap).n}${cr.offset ? ` · ปรับตามที่วัดจริง ${cr.offset > 0 ? 'โตเร็วกว่า' : 'โตช้ากว่า'}มาตรฐาน ${Math.abs(cr.offset)} วัน` : ''}${cr.germ != null ? ` · งอก ${cr.germ}%` : ''}</span>`
+    : cr.status === 'harvested' ? `<b>🚜 เก็บเกี่ยวแล้ว</b><span>ผลผลิต ${f(cr.yield || 0, 1)} ตัน/ไร่${cr.starch ? ` · แป้ง ${cr.starch}%` : ''}</span>` : '<b>🟫 ยังไม่ได้ปลูก (เตรียมแปลง)</b><span>บันทึกวันปลูกเมื่อปลูกเสร็จ ระบบจะเริ่มนับอายุ คำนวณน้ำ และแสดงต้นมันใน 3D</span>';
+  const td = diaryTodos();
+  $('#dTodo').innerHTML = td.length ? td.map(t => `<button data-k="${t.k}" class="${t.hot ? 'hot' : ''}"><span>${DTYPES.find(x => x[0] === t.k)[1]}</span>${t.t}<i>›</i></button>`).join('') : '<div class="small">ตอนนี้ยังไม่มีอะไรต้องบันทึก 👍</div>';
+  $('#dTiles').innerHTML = DTYPES.map(([k, ic, n]) => `<button data-k="${k}"><span>${ic}</span>${n}</button>`).join('');
+  const ent = (S.diary || []).map(e => ({ ...e })).concat((S.meas || []).map(m => ({ d: m.date, type: 'height', text: `สูง ${f(m.h)} ซม.${m.note ? ' · ' + m.note : ''}` })));
+  ent.sort((a, b) => (b.d > a.d ? 1 : b.d < a.d ? -1 : (b.t || 0) - (a.t || 0)));
+  $('#dList').innerHTML = ent.slice(0, 30).map(e => `<div><span class="di">${(DTYPES.find(x => x[0] === e.type) || ['', '📝'])[1]}</span><div><b>${(DTYPES.find(x => x[0] === e.type) || ['', '', 'บันทึก'])[2]}</b> · <span class="small">${dShort(parseIso(e.d))} ${new Date(parseIso(e.d)).getFullYear() + 543}</span><div>${String(e.text).replace(/[<>&]/g, '')}</div></div></div>`).join('') || '<div class="small">ยังไม่มีบันทึก</div>';
+}
+function diaryForm(k) {
+  const box = $('#dForm'), td = todayIso(), dateF = `<label class="fld">วันที่<input type="date" id="fD" value="${td}" max="${td}"></label>`;
+  let h = '';
+  if (k === 'plant') h = `<h4>🌱 บันทึกการปลูก</h4>${dateF.replace('วันที่', 'วันที่ปลูก (ถ้าปลูกหลายวัน ใส่วันที่ปลูกเสร็จครึ่งแปลง)')}
+    <label class="fld">พันธุ์<select id="fVar">${VARIETIES.map(v => `<option>${v}</option>`).join('')}</select></label>
+    <label class="fld">ตั้งใจเก็บเกี่ยวที่อายุ<select id="fAge"><option value="240">8 เดือน</option><option value="270">9 เดือน</option><option value="300" selected>10 เดือน</option><option value="330">11 เดือน</option><option value="360">12 เดือน</option></select></label>
+    <div class="form"><label>ระยะระหว่างแถวจริง <span class="u">ม.</span><input type="number" id="fRow" step="0.1" value="${S.set.rowSp}"></label><label>ระยะระหว่างต้นจริง <span class="u">ม.</span><input type="number" id="fPl" step="0.1" value="${S.set.plantSp}"></label></div>`;
+  else if (k === 'soil') h = `<h4>✋ กำดินดูความชื้น</h4><p class="small">ขุดลึกประมาณ 1 คืบ (15–20 ซม.) ข้างต้นมัน ห่างหัวหยด 1 ฝ่ามือ กำดินแล้วเลือกข้อที่ตรงที่สุด ทำ 2–3 จุดในแปลง</p>
+    <div class="feel">${SOILFEEL.map((x, i) => `<button data-f="${i}"><span>${x.ic}</span><b>${x.h}</b><small>${x.p}</small></button>`).join('')}</div>`;
+  else if (k === 'rain') h = `<h4>🌧 ฝนที่วัดได้จริง</h4><p class="small">อ่านค่าจากกระบอกวัดฝน (มม.) ทุกเช้า 7 โมง แล้วเทน้ำทิ้ง · ถ้าไม่มีกระบอก ใช้กระป๋องทรงกระบอกปากตรง วัดความสูงน้ำเป็นมิลลิเมตร</p>${dateF}<label class="fld">ปริมาณฝน <span class="u">มม.</span><input type="number" id="fRain" min="0" max="400" step="0.5" inputmode="decimal"></label>`;
+  else if (k === 'irr') h = `<h4>💧 ให้น้ำเอง (เปิดวาล์วด้วยมือ ไม่ผ่านแอป)</h4>${dateF}<label class="fld">เปิดน้ำทุกโซน โซนละกี่ชั่วโมง<input type="number" id="fHr" min="0.1" max="24" step="0.25" value="1" inputmode="decimal"></label>`;
+  else if (k === 'germ') h = `<h4>🌿 นับต้นงอก (อายุ 2–4 สัปดาห์)</h4><p class="small">สุ่ม 3 จุดทั่วแปลง จุดละ 10 ต้นตามแนวร่อง นับว่าแตกยอดกี่ต้น</p><div class="form"><label>ท่อนที่ปักทั้งหมด<input type="number" id="fN" value="30" min="1"></label><label>งอกแล้ว<input type="number" id="fG" min="0" inputmode="numeric"></label></div>`;
+  else if (k === 'height') h = `<h4>📏 วัดความสูง</h4><p class="small">วัดจากโคนถึงยอด 5–10 ต้นกระจายทั่วแปลง ใส่ค่าเฉลี่ย ระบบจะปรับอายุทางสรีระของต้นมันให้ตรง (โตเร็ว/ช้ากว่ามาตรฐาน)</p>${dateF}<label class="fld">ความสูงเฉลี่ย <span class="u">ซม.</span><input type="number" id="fH" min="5" max="400" inputmode="numeric"></label>`;
+  else if (k === 'fert') h = `<h4>🧪 ใส่ปุ๋ย</h4>${dateF}<div class="form"><label>สูตร<input type="text" id="fF" placeholder="เช่น 15-15-15"></label><label>ปริมาณ <span class="u">กก./ไร่</span><input type="number" id="fKg" min="0" step="1"></label></div><label class="fld">วิธี<select id="fHow"><option>หว่าน/โรยข้างต้น</option><option>ผสมไปกับน้ำหยด</option><option>ฉีดพ่นทางใบ</option></select></label>`;
+  else if (k === 'weed') h = `<h4>🌾 กำจัดวัชพืช</h4>${dateF}<label class="fld">วิธี<select id="fW"><option>ใช้แรงงาน/จอบ</option><option>รถไถพรวนระหว่างร่อง</option><option>ยาคุม/ยาฆ่าหญ้า</option></select></label>`;
+  else if (k === 'pest') h = `<h4>🐛 พบโรคหรือแมลง</h4>${dateF}<label class="fld">ที่พบ<select id="fP"><option>เพลี้ยแป้ง</option><option>ไรแดง</option><option>แมลงหวี่ขาว</option><option>โรคใบด่าง</option><option>โรคใบไหม้</option><option>หนอน/ปลวก</option><option>อื่น ๆ</option></select></label><label class="fld">ความรุนแรง<select id="fSev"><option>น้อย (ไม่กี่ต้น)</option><option>ปานกลาง (เป็นหย่อม)</option><option>มาก (ลามทั้งแปลง)</option></select></label>`;
+  else if (k === 'harvest') h = `<h4>🚜 บันทึกการเก็บเกี่ยว</h4>${dateF}<div class="form"><label>ผลผลิตหัวสด <span class="u">ตัน/ไร่</span><input type="number" id="fY" step="0.1" min="0" inputmode="decimal"></label><label>เปอร์เซ็นต์แป้ง <span class="u">%</span><input type="number" id="fS" step="0.5" min="0" max="40" inputmode="decimal"></label></div><label class="chk"><input type="checkbox" id="fNext" checked> ใช้ผลผลิตนี้เป็นค่าศักยภาพของฤดูหน้า</label>`;
+  h += `<label class="fld">หมายเหตุ (ไม่บังคับ)<input type="text" id="fNote" maxlength="80"></label>`;
+  if (k !== 'soil') h += `<button class="btn primary xl" id="fSave" data-k="${k}">บันทึก</button>`;
+  h += `<button class="btn block" id="fCancel" style="margin-top:8px">ยกเลิก</button>`;
+  box.innerHTML = h; box.style.display = 'block'; $('#dMain').style.display = 'none'; box.scrollIntoView({ block: 'start' });
+}
+function saveDiary(k, extra) {
+  const v = id => { const e = $('#' + id); return e ? e.value : ''; }, d = v('fD') || todayIso(), note = v('fNote').trim(), nn = note ? ' · ' + note : '';
+  S.obs = S.obs || {};
+  if (k === 'plant') {
+    S.crop = { status: 'planted', variety: v('fVar'), offset: 0, germ: null };
+    S.set.plantDate = d; S.set.harvest = +v('fAge'); const rs = +v('fRow'), ps = +v('fPl'); const relayout = rs > 0 && ps > 0 && (rs !== S.set.rowSp || ps !== S.set.plantSp); if (rs > 0) S.set.rowSp = rs; if (ps > 0) S.set.plantSp = ps;
+    $('#sPlantDate').value = d; $('#sHarvest').value = S.set.harvest; $('#sRow').value = S.set.rowSp; $('#sPlant').value = S.set.plantSp;
+    addDiary('plant', `ปลูก${S.crop.variety} · เก็บเกี่ยวอายุ ${S.set.harvest} วัน${nn}`, d); log(`บันทึกการปลูก ${dShort(parseIso(d))} — เริ่มนับอายุและคำนวณน้ำ`, 'irr');
+    if (relayout) onLayoutChanged(); else { initSim(true); R.plantDap = null; updatePlantGrowth(); }
+    toast('🌱 บันทึกการปลูกแล้ว');
+  } else if (k === 'soil') {
+    const x = SOILFEEL[extra]; (S.obs[todayIso()] = S.obs[todayIso()] || {}).soil = x.f; const before = Math.round(swNow());
+    setSoilNow(x.f); addDiary('soil', `ดิน${x.h} (ระบบเดิมคำนวณไว้ ${before}% → ปรับเป็น ${Math.round(x.f * 100)}%)${nn}`);
+    toast(`ปรับความชื้นดินตามที่กำจริง: ${Math.round(x.f * 100)}%`);
+  } else if (k === 'rain') {
+    const mm = +v('fRain'); if (!(mm >= 0) || v('fRain') === '') { toast('ใส่ปริมาณฝน (มม.)'); return; }
+    (S.obs[d] = S.obs[d] || {}).rain = mm; addDiary('rain', `ฝน ${f(mm, 1)} มม. (จากกระบอกวัดฝน)${nn}`, d); if (d !== todayIso()) initSim(true); toast('บันทึกฝนแล้ว ระบบใช้ค่านี้แทนพยากรณ์');
+  } else if (k === 'irr') {
+    const hr = +v('fHr'); if (!(hr > 0) || !L) return; const mm = hr * L.appRate * effF(), m3 = hr * L.flowAll / 1000 * (1 / Math.max(1, L.zones.length)) * L.zones.length;
+    if (d === todayIso()) { SIM.today.irr += mm; SIM.today.vol += m3 * 1000; } else { (S.obs[d] = S.obs[d] || {}).irrMm = ((S.obs[d] || {}).irrMm || 0) + mm; initSim(true); }
+    addDiary('irr', `ให้น้ำเอง โซนละ ${hr} ชม. (≈${f(mm, 1)} มม. · ${f(m3, 1)} ลบ.ม.)${nn}`, d); toast('บันทึกการให้น้ำแล้ว');
+  } else if (k === 'germ') {
+    const n = +v('fN'), g = +v('fG'); if (!(n > 0) || !(g >= 0) || g > n) { toast('ตรวจตัวเลขอีกครั้ง'); return; }
+    S.crop.germ = Math.round(g / n * 100); addDiary('germ', `งอก ${g}/${n} ต้น = ${S.crop.germ}%${S.crop.germ < 85 ? ' — ควรปลูกซ่อมจุดที่ไม่งอก' : ''}${nn}`, d); R.plantDap = null; updatePlantGrowth();
+    toast(S.crop.germ < 85 ? `งอก ${S.crop.germ}% — ควรปลูกซ่อม` : `งอก ${S.crop.germ}% ดีมาก`);
+  } else if (k === 'height') {
+    const hcm = +v('fH'); if (!(hcm > 0)) { toast('ใส่ความสูง (ซม.)'); return; }
+    S.meas = (S.meas || []).concat({ date: d, h: hcm, note }).sort((a, b) => a.date < b.date ? -1 : 1); const off = calibrateFromHeights(); save();
+    R.plantDap = null; updatePlantGrowth(); toast(off ? `ปรับแล้ว: ต้นมัน${off > 0 ? 'โตเร็วกว่า' : 'โตช้ากว่า'}มาตรฐาน ${Math.abs(off)} วัน` : 'บันทึกความสูงแล้ว');
+  } else if (k === 'fert') addDiary('fert', `${v('fF') || 'ปุ๋ย'} ${v('fKg') ? v('fKg') + ' กก./ไร่' : ''} · ${v('fHow')}${nn}`, d);
+  else if (k === 'weed') addDiary('weed', `${v('fW')}${nn}`, d);
+  else if (k === 'pest') addDiary('pest', `${v('fP')} · ${v('fSev')}${nn}`, d);
+  else if (k === 'harvest') {
+    const y = +v('fY'), sp = +v('fS'); S.crop = { ...S.crop, status: 'harvested', harvestDate: d, yield: y, starch: sp || null };
+    if ($('#fNext').checked && y > 0) { S.set.ymax = y; $('#sYmax').value = y; }
+    addDiary('harvest', `ผลผลิต ${f(y, 1)} ตัน/ไร่${sp ? ` · แป้ง ${sp}%` : ''}${nn}`, d); initSim(true); R.plantDap = null; updatePlantGrowth(); toast('🚜 บันทึกการเก็บเกี่ยวแล้ว');
+  }
+  save(); $('#dForm').style.display = 'none'; $('#dMain').style.display = ''; renderDiary(); if (S.step === 0) renderHome();
 }
 
 /* ================= boot ================= */

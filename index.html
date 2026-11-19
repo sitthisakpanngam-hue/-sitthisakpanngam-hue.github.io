@@ -5748,7 +5748,7 @@ $('#stSimple').addEventListener('change', e => { closeSettings(); setSimple(e.ta
 if ('serviceWorker' in navigator && location.protocol === 'https:' && /github\.io$/.test(location.hostname)) navigator.serviceWorker.register('sw.js').catch(() => {});
 /* ================= หมอมัน AI: cassava drip-irrigation assistant ================= */
 const AI = { busy: false, img: null };
-const AI_PROXY = '';   // ลิงก์ Cloudflare Worker ของเจ้าของเว็บ (ไม่ใช่ความลับ) — ดู worker/README.md · คีย์อยู่ที่ Worker เท่านั้น
+const AI_PROXY = 'https://bitter-term-3e08.sitthisakpanngam.workers.dev';   // ลิงก์ Cloudflare Worker ของเจ้าของเว็บ (ไม่ใช่ความลับ) — ดู worker/README.md · คีย์อยู่ที่ Worker เท่านั้น
 function farmCtx() {
   if (!L || !SIM.today) return { field: 'ยังไม่ได้วัดแปลง' };
   const n = need(SIM.t), c = n.c, st = S.set, D = depNow(), trig = n.raw * st.trigger / 100, w = wx(isoOf(SIM.t));

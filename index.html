@@ -126,6 +126,20 @@ body.arxr #view{background:transparent}
 .bar{height:6px;border-radius:99px;background:#e9ede6;overflow:hidden;margin-top:3px}.bar i{display:block;height:100%;background:var(--leaf)}.bar i.warn{background:#e6a23c}.bar i.bad{background:#d9534f}
 .insheet>h3:first-child{display:none}.dzfig svg text{font-family:'Prompt',sans-serif}
 .insheet{border:0!important;box-shadow:none!important;padding:0!important;margin:0!important;background:none!important}
+.stsec{margin:16px 2px 6px;font-size:12.5px;font-weight:700;color:var(--muted)}
+.stgrp{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.strow{display:flex;align-items:center;gap:12px;padding:11px 14px;border:0;border-top:1px solid var(--line);background:none;width:100%;text-align:left;font:inherit;color:inherit;min-height:56px}
+.stgrp>.strow:first-child{border-top:0}.strow.sub{min-height:0;padding-top:0;border-top:0}.strow.sub input{flex:1}
+.strow .sti{width:34px;height:34px;border-radius:10px;background:var(--leaf-2);display:grid;place-items:center;font-size:17px;flex:none}
+.strow .sti{color:var(--leaf)}.strow .sti .ic{width:18px;height:18px}.strow .sti.bad{background:var(--bad-2);color:var(--bad)}
+.strow .stt{flex:1;min-width:0}.strow .stt b{display:block;font-size:14.5px;font-weight:600}.strow .stt small{display:block;color:var(--muted);font-size:12px;line-height:1.4}
+.strow select{border:1px solid var(--line);border-radius:10px;padding:7px 8px;font:inherit;background:var(--paper)}
+.strow.link2{cursor:pointer}.strow .chev{color:var(--muted);font-size:20px}.strow.danger b{color:var(--bad)}
+.strow input[type=range]{accent-color:var(--leaf)}
+.sw{appearance:none;-webkit-appearance:none;width:48px;height:28px;border-radius:99px;background:#d4dbd0;position:relative;flex:none;cursor:pointer;transition:background .2s}
+.sw:after{content:'';position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s}
+.sw:checked{background:var(--leaf)}.sw:checked:after{transform:translateX(20px)}
+.seg.mini{display:flex;gap:2px;padding:3px;border-radius:10px}.seg.mini button{padding:6px 10px;font-size:13px}
 .arCal{position:absolute;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom) + 86px);background:rgba(255,255,255,.95);border-radius:18px;padding:12px;pointer-events:auto;color:#16241a}
 .arCalT{font-size:13px;margin-bottom:8px;text-align:center}.arCalT small{color:#5d6b60}
 .arRow{display:flex;gap:6px;justify-content:center;align-items:center;margin-top:6px}.arRow button{flex:1;border:1px solid #d6ddd3;background:#f4f7f2;border-radius:12px;padding:9px 4px;font-size:13px;font-weight:600}
@@ -1400,7 +1414,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <button data-step="2"><svg class="ic"><use href="#i-cube"/></svg><span class="lg">ไร่ 3D</span><span class="sh">ไร่ 3D</span></button>
     <button data-step="4"><svg class="ic"><use href="#i-sprout"/></svg><span class="lg">การเติบโต</span><span class="sh">เติบโต</span></button>
   </nav>
-  <button class="gbtn" id="gOpen" title="แหล่งข้อมูล / เชื่อมต่อ Google"><svg class="ic"><use href="#i-gear"/></svg><span id="gBadge">Google</span></button>
+  <button class="gbtn" id="gOpen" title="ตั้งค่า"><svg class="ic"><use href="#i-gear"/></svg><span id="gBadge">Google</span></button>
   <button class="devpill" id="devpill" title="ยังไม่ได้เชื่อมต่อตัวควบคุมจริง"><i></i>จำลอง</button>
 </header>
 
@@ -1875,6 +1889,42 @@ svg.leaflet-image-layer.leaflet-interactive path {
 </div></div>
 
 <div id="intro"><div class="introbox"><button class="skip" id="iSkip">ข้าม</button><div id="introBody"></div><div id="introBtns"></div></div></div>
+<div class="sheet" id="stSheet" style="display:none"><div class="sheetbg" data-close></div><div class="sheetbox">
+  <div class="sheeth"><span class="ti t-gr sm"><svg class="ic"><use href="#i-gear"/></svg></span><b>ตั้งค่า</b><button class="xbtn" data-close aria-label="ปิด">✕</button></div>
+  <div class="stsec">เสียง</div>
+  <div class="stgrp">
+    <label class="strow"><span class="sti"><svg class="ic"><use href="#i-vol"/></svg></span><span class="stt"><b>เพลงชาวไร่</b><small>ดนตรีพื้นบ้านเบา ๆ (แคน พิณ ฉิ่ง) แต่งขึ้นใหม่ในแอป</small></span><input type="checkbox" class="sw" id="stMusic"></label>
+    <div class="strow sub"><span class="stt"><small>ความดังเพลง</small></span><input type="range" id="stMusicVol" min="0" max="100" step="5"></div>
+    <label class="strow"><span class="sti"><svg class="ic"><use href="#i-drop"/></svg></span><span class="stt"><b>เสียงน้ำไหล</b><small>เล่นตอนเปิดน้ำในภาพ 3D</small></span><input type="checkbox" class="sw" id="stWater"></label>
+    <label class="strow"><span class="sti"><svg class="ic"><use href="#i-bell"/></svg></span><span class="stt"><b>สั่นเมื่อกดปุ่ม</b><small>สำหรับมือถือที่รองรับ</small></span><input type="checkbox" class="sw" id="stVib"></label>
+  </div>
+  <div class="stsec">การแสดงผล</div>
+  <div class="stgrp">
+    <label class="strow"><span class="sti"><svg class="ic"><use href="#i-text"/></svg></span><span class="stt"><b>ตัวอักษรใหญ่</b><small>อ่านง่ายขึ้นทั้งแอป</small></span><input type="checkbox" class="sw" id="stBig"></label>
+    <label class="strow"><span class="sti"><svg class="ic"><use href="#i-spark"/></svg></span><span class="stt"><b>ภาพ 3D คุณภาพสูง</b><small>สวยขึ้น แต่ใช้แบตมากขึ้น · ปิดไว้สำหรับมือถือรุ่นเก่า</small></span><input type="checkbox" class="sw" id="stHi"></label>
+    <label class="strow"><span class="sti"><svg class="ic"><use href="#i-list"/></svg></span><span class="stt"><b>แสดงกล่องข้อมูลบนภาพ 3D</b><small>มุมซ้ายบนของภาพ</small></span><input type="checkbox" class="sw" id="stHud"></label>
+  </div>
+  <div class="stsec">ระบบให้น้ำ</div>
+  <div class="stgrp">
+    <div class="strow"><span class="sti"><svg class="ic"><use href="#i-play"/></svg></span><span class="stt"><b>โหมดให้น้ำ</b></span><div class="seg mini" id="stMode"><button data-v="auto">อัตโนมัติ</button><button data-v="manual">สั่งเอง</button></div></div>
+    <div class="strow"><span class="sti"><svg class="ic"><use href="#i-clock"/></svg></span><span class="stt"><b>เวลาเริ่มให้น้ำ</b><small>ระบบอัตโนมัติเริ่มคำนวณทุกวัน</small></span><select id="stStart"></select></div>
+    <div class="strow"><span class="sti"><svg class="ic"><use href="#i-rain"/></svg></span><span class="stt"><b>รอฝนถ้าจะตกภายใน</b></span><select id="stRain"><option value="0">ไม่รอ</option><option value="1">1 ชม.</option><option value="2">2 ชม.</option><option value="3">3 ชม.</option><option value="4">4 ชม.</option><option value="6">6 ชม.</option></select></div>
+    <button class="strow link2" id="stDesign"><span class="sti"><svg class="ic"><use href="#i-ruler"/></svg></span><span class="stt"><b>ออกแบบระบบ (ระยะร่อง หัวหยด โซน ปั๊ม)</b></span><span class="chev">›</span></button>
+  </div>
+  <div class="stsec">ข้อมูลของฉัน</div>
+  <div class="stgrp">
+    <button class="strow link2" id="stBackup"><span class="sti"><svg class="ic"><use href="#i-layers"/></svg></span><span class="stt"><b>สำรองข้อมูล</b><small>บันทึกแปลง สมุดไร่ จุดวัดระดับ เป็นไฟล์ / ส่งเข้า LINE</small></span><span class="chev">›</span></button>
+    <label class="strow link2"><span class="sti"><svg class="ic"><use href="#i-map"/></svg></span><span class="stt"><b>กู้คืนจากไฟล์สำรอง</b><small>ใช้ย้ายไปมือถือเครื่องใหม่</small></span><span class="chev">›</span><input type="file" id="stRestore" accept=".json,application/json" style="display:none"></label>
+    <button class="strow link2" id="stGoogle"><span class="sti"><svg class="ic"><use href="#i-globe"/></svg></span><span class="stt"><b>แหล่งข้อมูล & Google</b><small id="stGoogleS">แผนที่ ความสูง อากาศ</small></span><span class="chev">›</span></button>
+    <button class="strow link2 danger" id="stReset"><span class="sti bad"><svg class="ic"><use href="#i-gear"/></svg></span><span class="stt"><b>ล้างข้อมูลทั้งหมด</b><small>เริ่มใหม่ (ควรสำรองก่อน)</small></span><span class="chev">›</span></button>
+  </div>
+  <div class="stsec">เกี่ยวกับ</div>
+  <div class="stgrp">
+    <button class="strow link2" id="stIntro"><span class="sti"><svg class="ic"><use href="#i-eye"/></svg></span><span class="stt"><b>ดูวิธีใช้อีกครั้ง</b></span><span class="chev">›</span></button>
+    <div class="strow"><span class="sti"><svg class="ic"><use href="#i-sprout"/></svg></span><span class="stt"><b>ไร่หยด</b><small>ข้อมูลเก็บในเครื่องนี้เท่านั้น · ค่าที่คำนวณเป็นค่าประมาณ ควรตรวจกับแปลงจริง</small></span></div>
+  </div>
+  <div style="height:10px"></div>
+</div></div>
 <div class="sheet" id="dzSheet" style="display:none"><div class="sheetbg" data-close></div><div class="sheetbox dzbox">
   <div class="sheeth"><span class="ti t-gr sm" id="dzIco">📐</span><b id="dzTitle">ออกแบบ</b><button class="xbtn" data-close aria-label="ปิด">✕</button></div>
   <div id="dzBody"></div>
@@ -3200,7 +3250,7 @@ function renderFab() {
 }
 function startEffects() {
   R.follow = true; R.lastAct = -2;
-  try { navigator.vibrate && navigator.vibrate(60); } catch (e) {}
+  try { (S.ui && S.ui.vib === false) || (navigator.vibrate && navigator.vibrate(60)); } catch (e) {}
   toast(SIM.speed === 'real' ? '💧 เปิดน้ำแล้ว — กด “⏩ เร่ง” เพื่อดูผลเร็วขึ้น' : '💧 เปิดน้ำแล้ว');
 }
 /* water sound (synthesised, off by default) */
@@ -5207,6 +5257,105 @@ function dzMap() {
     if (Math.abs(b - lastB) < 26) return; lastB = b;
     x.fillStyle = 'rgba(255,255,255,.9)'; x.beginPath(); x.arc(a, b, 13, 0, 7); x.fill(); x.fillStyle = '#1b1f22'; x.fillText(z.id + 1, a, b + 1); });
 }
+/* ================= gentle farm music (original, generated live: khaen drone, phin pluck, ching) ================= */
+const MUS = { on: false, ctx: null };
+function musPrefs() { const u = S.ui || {}; return { on: u.music !== false, vol: u.musicVol ?? 35 }; }
+function musStart() {
+  try {
+    if (!MUS.ctx) MUS.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const c = MUS.ctx; if (c.state === 'suspended') c.resume();
+    if (MUS.on) return; MUS.on = true;
+    MUS.out = c.createGain(); MUS.out.gain.value = 0; MUS.out.connect(c.destination);
+    MUS.out.gain.linearRampToValueAtTime(musPrefs().vol / 100 * 0.16, c.currentTime + 3);
+    // soft room echo
+    const dl = c.createDelay(1), fb = c.createGain(), wet = c.createGain(); dl.delayTime.value = 0.36; fb.gain.value = 0.28; wet.gain.value = 0.22; dl.connect(fb); fb.connect(dl); dl.connect(wet); wet.connect(MUS.out); MUS.fx = dl;
+    // khaen-like drone: reedy saws, low-passed, slow breathing
+    const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 900; lp.Q.value = 0.4; const dg = c.createGain(); dg.gain.value = 0.16; lp.connect(dg); dg.connect(MUS.out);
+    const lfo = c.createOscillator(), lg = c.createGain(); lfo.frequency.value = 0.18; lg.gain.value = 0.06; lfo.connect(lg); lg.connect(dg.gain); lfo.start();
+    MUS.drone = [110, 164.81, 220.5].map(fq => { const o = c.createOscillator(); o.type = 'sawtooth'; o.frequency.value = fq; const g = c.createGain(); g.gain.value = fq > 200 ? 0.25 : 0.5; o.connect(g); g.connect(lp); o.start(); return o; }); MUS.lfo = lfo;
+    MUS.beat = 0; MUS.next = c.currentTime + 0.3; MUS.deg = 2; MUS.bpm = 84;
+    MUS.iv = setInterval(musTick, 90);
+  } catch (e) { MUS.on = false; }
+}
+function musStop() {
+  if (!MUS.on || !MUS.ctx) return; MUS.on = false; clearInterval(MUS.iv); const c = MUS.ctx, t = c.currentTime;
+  MUS.out.gain.cancelScheduledValues(t); MUS.out.gain.setValueAtTime(MUS.out.gain.value, t); MUS.out.gain.linearRampToValueAtTime(0, t + 1.2);
+  const ds = MUS.drone, lf = MUS.lfo, o = MUS.out; setTimeout(() => { try { ds.forEach(x => x.stop()); lf.stop(); o.disconnect(); } catch (e) {} }, 1400);
+}
+function musVol(v) { if (MUS.on && MUS.ctx) MUS.out.gain.setTargetAtTime(v / 100 * 0.16, MUS.ctx.currentTime, 0.3); }
+const PENTA = [220, 246.94, 277.18, 329.63, 369.99, 440, 493.88, 554.37, 659.25];   // A major pentatonic (lai yai flavour)
+function musTick() {
+  const c = MUS.ctx; if (!c || !MUS.on) return; const sp = 60 / MUS.bpm / 2;   // eighth notes
+  while (MUS.next < c.currentTime + 0.35) {
+    const t = MUS.next, b = MUS.beat % 16;
+    if (b % 8 === 0) musDrum(t, 0.5); if (b % 8 === 4) musDrum(t, 0.25); if (b % 4 === 2) musChing(t, b % 8 === 6);
+    const play = b % 2 === 0 ? Math.random() < 0.85 : Math.random() < 0.35;
+    if (play) { MUS.deg = clamp(MUS.deg + [-2, -1, -1, 0, 1, 1, 2][Math.floor(Math.random() * 7)], 0, PENTA.length - 1); if (b === 14) MUS.deg = [0, 3, 5][Math.floor(Math.random() * 3)]; musPluck(t, PENTA[MUS.deg], b % 4 === 0 ? 0.9 : 0.6); if (Math.random() < 0.18) musPluck(t + sp / 2, PENTA[clamp(MUS.deg + 1, 0, 8)], 0.4); }
+    MUS.next += sp; MUS.beat++;
+  }
+}
+function musPluck(t, fq, a) {   // phin: bright pluck with fast decay
+  const c = MUS.ctx, o = c.createOscillator(), o2 = c.createOscillator(), g = c.createGain(), f = c.createBiquadFilter();
+  o.type = 'triangle'; o2.type = 'square'; o.frequency.value = fq; o2.frequency.value = fq * 2.003; f.type = 'lowpass'; f.frequency.setValueAtTime(3200, t); f.frequency.exponentialRampToValueAtTime(700, t + 0.4);
+  const g2 = c.createGain(); g2.gain.value = 0.08; o2.connect(g2); g2.connect(f); o.connect(f); f.connect(g); g.connect(MUS.out); g.connect(MUS.fx);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.35 * a, t + 0.008); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.9);
+  o.start(t); o2.start(t); o.stop(t + 1); o2.stop(t + 1);
+}
+function musChing(t, closed) {   // small cymbals: short filtered noise
+  const c = MUS.ctx, n = c.createBufferSource(), len = c.sampleRate * 0.25, buf = c.createBuffer(1, len, c.sampleRate), d = buf.getChannelData(0); for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+  n.buffer = buf; const f = c.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = closed ? 7200 : 5600; f.Q.value = 6; const g = c.createGain();
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(closed ? 0.05 : 0.08, t + 0.004); g.gain.exponentialRampToValueAtTime(0.0001, t + (closed ? 0.08 : 0.22)); n.connect(f); f.connect(g); g.connect(MUS.out); n.start(t); n.stop(t + 0.25);
+}
+function musDrum(t, a) {   // klong: soft low thump
+  const c = MUS.ctx, o = c.createOscillator(), g = c.createGain(); o.frequency.setValueAtTime(120, t); o.frequency.exponentialRampToValueAtTime(62, t + 0.25);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.5 * a, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.45); o.connect(g); g.connect(MUS.out); o.start(t); o.stop(t + 0.5);
+}
+// browsers allow sound only after a tap: start on the first touch if enabled
+['pointerdown', 'keydown'].forEach(ev => window.addEventListener(ev, () => { if (musPrefs().on && !MUS.on && !document.hidden) musStart(); }, { capture: true }));
+document.addEventListener('visibilitychange', () => { if (document.hidden) musStop(); });
+/* ================= settings ================= */
+function openSettings() {
+  const u = S.ui || {}, mp = musPrefs();
+  $('#stMusic').checked = mp.on; $('#stMusicVol').value = mp.vol; $('#stWater').checked = !!AUD.on; $('#stVib').checked = u.vib !== false;
+  $('#stBig').checked = !!u.big; $('#stHi').checked = R.quality === 'high'; $('#stHud').checked = !u.hudMin;
+  $$('#stMode button').forEach(b => b.classList.toggle('on', b.dataset.v === S.mode));
+  $('#stStart').innerHTML = Array.from({ length: 24 }, (_, h) => `<option value="${h}">${pad(h)}:00</option>`).join(''); $('#stStart').value = S.set.startHour; $('#stRain').value = S.set.rainWait ?? 3;
+  $('#stGoogleS').textContent = G().key ? 'เชื่อมต่อ Google แล้ว' : 'ใช้แหล่งฟรี (Open-Meteo, Esri) · แตะเพื่อเชื่อม Google';
+  const sh = $('#stSheet'); sh.style.display = 'block'; requestAnimationFrame(() => sh.classList.add('on'));
+}
+function closeSettings() { const sh = $('#stSheet'); sh.classList.remove('on'); setTimeout(() => sh.style.display = 'none', 250); }
+$('#gOpen').addEventListener('click', e => { e.stopImmediatePropagation(); openSettings(); }, true);
+$('#stSheet').addEventListener('click', e => { if (e.target.closest('[data-close]')) closeSettings(); });
+const setUI = (k, v) => { S.ui = { ...(S.ui || {}), [k]: v }; save(); };
+$('#stMusic').addEventListener('change', e => { setUI('music', e.target.checked); e.target.checked ? musStart() : musStop(); });
+$('#stMusicVol').addEventListener('input', e => { setUI('musicVol', +e.target.value); musVol(+e.target.value); if (!MUS.on && musPrefs().on) musStart(); });
+$('#stWater').addEventListener('change', e => { if (e.target.checked !== !!AUD.on) audioToggle(); });
+$('#stVib').addEventListener('change', e => setUI('vib', e.target.checked));
+$('#stBig').addEventListener('change', e => setBigText(e.target.checked));
+$('#stHi').addEventListener('change', e => { R.quality = e.target.checked ? 'high' : 'eco'; setUI('quality', R.quality); qLbl(); if (R.ok && L) build3D(); });
+$('#stHud').addEventListener('change', e => { setUI('hudMin', !e.target.checked); renderHUD(); });
+$('#stMode').addEventListener('click', e => { const b = e.target.closest('[data-v]'); if (!b) return; const m = document.querySelector(`#modeSw [data-mode="${b.dataset.v}"]`); if (m) m.click(); else { S.mode = b.dataset.v; save(); } $$('#stMode button').forEach(x => x.classList.toggle('on', x === b)); });
+$('#stStart').addEventListener('change', e => { S.set.startHour = +e.target.value; if ($('#sStartHour')) $('#sStartHour').value = S.set.startHour; save(); toast(`ระบบอัตโนมัติจะเริ่ม ${pad(S.set.startHour)}:00 ทุกวัน`); });
+$('#stRain').addEventListener('change', e => { S.set.rainWait = +e.target.value; if ($('#sRainWait')) $('#sRainWait').value = S.set.rainWait; save(); });
+$('#stDesign').addEventListener('click', () => { closeSettings(); if (!S.closed) return toast('วัดแปลงก่อน'); go(2); setTimeout(() => $('#dzCard').scrollIntoView({ behavior: 'smooth', block: 'start' }), 200); });
+$('#stGoogle').addEventListener('click', () => { closeSettings(); setTimeout(openG, 260); });
+$('#stIntro').addEventListener('click', () => { closeSettings(); setTimeout(showIntro, 260); });
+$('#stBackup').addEventListener('click', async () => {
+  save(); const raw = localStorage.getItem('raidrop-v1') || '{}', d = new Date(), name = `raidrop-backup-${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}.json`;
+  const data = JSON.parse(raw); if (data.g) delete data.g.key;   // never put the API key in a shared file
+  const blob = new Blob([JSON.stringify({ app: 'raidrop', v: 1, at: d.toISOString(), data })], { type: 'application/json' }), file = new File([blob], name, { type: 'application/json' });
+  try { if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'สำรองข้อมูลไร่หยด' }); return toast('ส่งไฟล์สำรองแล้ว'); } } catch (e) { if (e.name === 'AbortError') return; }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500); toast('บันทึกไฟล์สำรองแล้ว: ' + name);
+});
+$('#stRestore').addEventListener('change', e => {
+  const fl = e.target.files && e.target.files[0]; if (!fl) return; const rd = new FileReader();
+  rd.onload = () => { try { const j = JSON.parse(rd.result), data = j.app === 'raidrop' ? j.data : j; if (!data || typeof data !== 'object' || !('set' in data || 'pts' in data)) throw 0;
+      if (!confirm('กู้คืนข้อมูลจากไฟล์นี้? ข้อมูลปัจจุบันในเครื่องจะถูกแทนที่')) return; const key = G().key; if (key) data.g = { ...(data.g || {}), key };
+      localStorage.setItem('raidrop-v1', JSON.stringify(data)); toast('กู้คืนแล้ว กำลังเปิดใหม่…'); setTimeout(() => location.reload(), 700); }
+    catch (er) { toast('ไฟล์นี้ไม่ใช่ไฟล์สำรองของไร่หยด'); } };
+  rd.readAsText(fl); e.target.value = '';
+});
+$('#stReset').addEventListener('click', () => { if (!confirm('ล้างข้อมูลทั้งหมดในเครื่องนี้? (แปลง สมุดไร่ จุดวัดระดับ การตั้งค่า)')) return; if (!confirm('ยืนยันอีกครั้ง — ย้อนกลับไม่ได้')) return; localStorage.removeItem('raidrop-v1'); location.reload(); });
 function arMsg(html, ms) { const m = $('#arMsg'); m.innerHTML = html; m.style.display = ''; clearTimeout(AR.msgTO); AR.msgTO = setTimeout(() => { m.style.display = 'none'; }, ms || 3000); }
 /* hide the model ground and scenery; add bright overlays that read well over a camera picture */
 function arScene() {
@@ -5445,6 +5594,7 @@ if (S.closed) { computeLayout(); if (L) { renderBOM(); renderZoneSelect(); initS
 drawGPS(); renderLog();
 loadWeather(true);
 if (S.ui && S.ui.sat === false) SAT.on = false;
+if (S.ui && S.ui.quality) { R.quality = S.ui.quality; qLbl(); }
 go(0); renderGStatus(); if (S.ui && S.ui.big) setBigText(true); $('#rowAngWrap').style.display = S.set.rowDir === 'custom' ? '' : 'none';
 $('#hWater').addEventListener('click', () => { if (SIM.active || SIM.queue.length) { stopAll(); toast('■ ปิดน้ำแล้ว'); } else { quickStart(); R.follow = false; } renderHome(); });
 setTimeout(() => { $('#splash').classList.add('off'); if (!(S.ui && S.ui.intro) && !S.closed) setTimeout(showIntro, 400); }, 900);

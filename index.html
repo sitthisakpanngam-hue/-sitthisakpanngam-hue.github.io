@@ -1921,7 +1921,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <div class="stsec">เกี่ยวกับ</div>
   <div class="stgrp">
     <button class="strow link2" id="stIntro"><span class="sti"><svg class="ic"><use href="#i-eye"/></svg></span><span class="stt"><b>ดูวิธีใช้อีกครั้ง</b></span><span class="chev">›</span></button>
-    <div class="strow"><span class="sti"><svg class="ic"><use href="#i-sprout"/></svg></span><span class="stt"><b>ไร่หยด</b><small>ข้อมูลเก็บในเครื่องนี้เท่านั้น · ค่าที่คำนวณเป็นค่าประมาณ ควรตรวจกับแปลงจริง</small></span></div>
+    <div class="strow"><span class="sti"><svg class="ic"><use href="#i-sprout"/></svg></span><span class="stt"><b>ไร่หยด · เวอร์ชัน 19 พ.ย. 69 (ตั้งค่า+เพลง)</b><small>ข้อมูลเก็บในเครื่องนี้เท่านั้น · ค่าที่คำนวณเป็นค่าประมาณ ควรตรวจกับแปลงจริง</small></span></div>
   </div>
   <div style="height:10px"></div>
 </div></div>
@@ -4148,7 +4148,8 @@ function homeGo(k) {
     case 'measure': if (need3()) { go(4); setTimeout(() => { $('#mH').scrollIntoView({ behavior: 'smooth', block: 'center' }); $('#mH').focus(); }, 150); } break;
     case 'chart': if (need3()) { go(3); setTimeout(() => { const d = document.querySelector('.chartbox'); d.open = true; d.scrollIntoView({ behavior: 'smooth' }); renderCharts(); }, 150); } break;
     case 'log': if (need3()) { go(3); setTimeout(() => { const d = $('#log').closest('details'); d.open = true; d.scrollIntoView({ behavior: 'smooth' }); }, 150); } break;
-    case 'settings': if (need3()) { go(2); setTimeout(() => { const d = $('#sRow').closest('details'); d.open = true; d.scrollIntoView({ behavior: 'smooth' }); }, 150); } break;
+    case 'settings': openSettings(); break;
+    case 'settings_old': if (need3()) { go(2); setTimeout(() => { const d = $('#sRow').closest('details'); d.open = true; d.scrollIntoView({ behavior: 'smooth' }); }, 150); } break;
     case 'wx': if (need3()) { go(3); setTimeout(() => $('#wxStats').scrollIntoView({ behavior: 'smooth', block: 'center' }), 150); } break;
   }
 }
@@ -4173,7 +4174,7 @@ function srcSummary() {
   parts.push('อากาศ: ' + (W.src === 'google' ? 'Google Weather' : W.src === 'live' ? 'Open-Meteo (ฟรี)' : 'ค่าเฉลี่ยรายเดือน'));
   return parts.join(' · ');
 }
-$('#gOpen').addEventListener('click', openG);
+$('#gOpen').addEventListener('click', () => openSettings());
 $('#hSrc').addEventListener('click', openG);
 $('#gSheet').addEventListener('click', e => { if (e.target.closest('[data-close]')) closeG(); });
 $('#gSave').addEventListener('click', async () => {
@@ -5324,7 +5325,6 @@ function openSettings() {
   const sh = $('#stSheet'); sh.style.display = 'block'; requestAnimationFrame(() => sh.classList.add('on'));
 }
 function closeSettings() { const sh = $('#stSheet'); sh.classList.remove('on'); setTimeout(() => sh.style.display = 'none', 250); }
-$('#gOpen').addEventListener('click', e => { e.stopImmediatePropagation(); openSettings(); }, true);
 $('#stSheet').addEventListener('click', e => { if (e.target.closest('[data-close]')) closeSettings(); });
 const setUI = (k, v) => { S.ui = { ...(S.ui || {}), [k]: v }; save(); };
 $('#stMusic').addEventListener('change', e => { setUI('music', e.target.checked); e.target.checked ? musStart() : musStop(); });

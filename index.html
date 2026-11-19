@@ -657,6 +657,27 @@ button.devpill{cursor:pointer;font-family:inherit}
 .hudx{pointer-events:auto;align-self:flex-start;border:0;background:rgba(255,255,255,.92);border-radius:10px;padding:4px 10px;font:600 12px 'Prompt',sans-serif;color:var(--ink2);box-shadow:0 2px 8px rgba(16,40,24,.12)}
 .hudpill{pointer-events:auto;border:0;background:rgba(255,255,255,.94);border-radius:99px;padding:7px 12px;font:600 13px 'Prompt',sans-serif;color:var(--ink);box-shadow:0 4px 14px rgba(16,40,24,.16);display:inline-flex;align-items:center;gap:6px;align-self:flex-start}
 .hudpill small{font:400 10px 'IBM Plex Sans Thai',sans-serif;color:var(--muted)}.hudpill b{color:var(--leaf);font-size:16px;line-height:1}
+
+/* ===== unified colour system: one brand green, blue only for water, amber/red only for status ===== */
+:root{--leaf:#1a7f4e;--leaf-2:#e4f2e9;--leaf-3:#c9e6d4;--water:#1f6fd1;--water-2:#e5effb;--warn:#a8650f;--warn-2:#fdf1dc;--bad:#b8322a;--bad-2:#fbe6e3;
+  --grad:linear-gradient(180deg,#1f8b56 0%,#17744a 100%);--gradw:linear-gradient(180deg,#2a7be0 0%,#1b63c6 100%)}
+.ti,.t-gr,.t-or,.t-pu,.t-li,.t-te,.t-gy{background:var(--leaf-2)!important;color:var(--leaf)!important}
+.t-bl{background:var(--water-2)!important;color:var(--water)!important}
+.t-rd{background:var(--bad-2)!important;color:var(--bad)!important}
+.ti .ic{stroke:currentColor}
+.dzrow .ico{background:var(--leaf-2)!important;color:var(--leaf)}.dzrow .ico.w{background:var(--water-2)!important;color:var(--water)}.dzrow .ico .ic{width:22px;height:22px}
+.btn.primary{background:var(--grad);box-shadow:0 4px 12px rgba(26,127,78,.22)}
+.btn.water{background:var(--gradw);box-shadow:0 4px 12px rgba(31,111,209,.22)}
+.banner{background:var(--leaf-2)!important}
+.chips button.rec:after{background:var(--leaf-3);color:var(--leaf)}
+.st.info{background:var(--leaf-2);color:var(--leaf)}
+.tag.live{background:var(--leaf-2);color:var(--leaf)}
+.vtools button.arbtn{background:var(--leaf)!important}
+.arBar button.w{background:var(--water)}
+.cdBar button.pin{background:var(--leaf)}
+.camcap{background:var(--leaf-2);color:var(--leaf)}
+.lvlList .lv b.n{background:var(--soil)}.lvlList .lv b.n.ref{background:var(--leaf)}
+.dzrec{background:var(--leaf-2)}.dzrec.warn{background:var(--warn-2)}.dzrec.bad{background:var(--bad-2)}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <style>/* required styles */
@@ -5068,7 +5089,8 @@ function renderDZ() {
   const el = $('#dzList'); if (!el) return;
   if (!L) { el.innerHTML = '<div class="small" style="padding:8px 0">วัดแปลงก่อน แล้วระบบจะออกแบบให้</div>'; $('#dzScore').textContent = '—'; return; }
   const st = S.set, Z = dzStatus(), e = Z.e;
-  const row = (k, ico, bg, t, v, s2) => `<button class="dzrow" data-dz="${k}"><span class="ico" style="background:${bg}">${ico}</span><span class="tx"><b>${t}</b><span>${v}</span></span><span class="st ${s2[0]}">${s2[1]}</span><span class="chev">›</span></button>`;
+  const IC = { row: 'i-compass', space: 'i-ruler', emit: 'i-drop', zone: 'i-layers', lvl: 'i-top', bom: 'i-list' };
+  const row = (k, ico, bg, t, v, s2) => `<button class="dzrow" data-dz="${k}"><span class="ico${k === 'emit' ? ' w' : ''}"><svg class="ic"><use href="#${IC[k]}"/></svg></span><span class="tx"><b>${t}</b><span>${v}</span></span><span class="st ${s2[0]}">${s2[1]}</span><span class="chev">›</span></button>`;
   el.innerHTML = row('row', '🧭', '#eaf1fb', 'แนวร่อง', `${rowName(L.rowAz)} · ${f(L.rowAz)}°`, Z.rw)
     + row('space', '↔️', '#eef4ec', 'ระยะร่อง × ระยะต้น', `${f(st.rowSp, 2)} × ${f(st.plantSp, 2)} ม. · ${f(e.plantsRai)} ต้น/ไร่`, Z.sp)
     + row('emit', '💧', '#e6f1fb', 'ระยะหัวหยด', `ทุก ${f(st.emSp * 100)} ซม. · ${f(st.emQ, 1)} ลิตร/ชม. · ${f(e.app, 1)} มม./ชม.`, Z.em)
@@ -5081,8 +5103,8 @@ function renderDZ() {
 $('#dzList').addEventListener('click', e => { const b = e.target.closest('[data-dz]'); if (b) dzOpen(b.dataset.dz); });
 function dzOpen(k) {
   DZ.k = k; DZ.d = { rowSp: S.set.rowSp, plantSp: S.set.plantSp, emSp: S.set.emSp, emQ: S.set.emQ, pumpQ: S.set.pumpQ, mech: S.set.mech, canopy: S.set.canopy };
-  const T = { row: ['🧭', 'แนวร่องปลูก'], space: ['↔️', 'ระยะร่อง × ระยะต้น'], emit: ['💧', 'ระยะหัวหยด & อัตราไหล'], zone: ['🧩', 'การแบ่งโซน & ปั๊มน้ำ'], lvl: ['📏', 'ระดับพื้น & ความลาด'], bom: ['🧾', 'รายการอุปกรณ์'] }[k];
-  $('#dzIco').textContent = T[0]; $('#dzTitle').textContent = T[1];
+  const T = { row: ['i-compass', 'แนวร่องปลูก'], space: ['i-ruler', 'ระยะร่อง × ระยะต้น'], emit: ['i-drop', 'ระยะหัวหยด & อัตราไหล'], zone: ['i-layers', 'การแบ่งโซน & ปั๊มน้ำ'], lvl: ['i-top', 'ระดับพื้น & ความลาด'], bom: ['i-list', 'รายการอุปกรณ์'] }[k];
+  $('#dzIco').innerHTML = `<svg class="ic"><use href="#${T[0]}"/></svg>`; $('#dzTitle').textContent = T[1];
   // reuse the existing cards for orientation and levels
   ['rowCard', 'lvlCard', 'terrBox'].forEach(id => { const c = $('#' + id); if (c && c.parentElement !== $('#dzHold')) { c.classList.add('insheet'); $('#dzHold').appendChild(c); } c.style.display = 'none'; });
   if (k === 'row') { $('#rowCard').style.display = ''; renderRowCard(); }

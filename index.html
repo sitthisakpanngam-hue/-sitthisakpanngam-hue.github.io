@@ -151,6 +151,22 @@ body.simple .app,body.simple .steps{display:none!important}body.simple{padding-b
 @media (max-width:920px){.smtog{margin-left:6px!important;padding:8px 10px!important}.smtog span{display:none!important}header .gbtn#gOpen span{font-size:13px}}
 html.bigtext .smans{font-size:34px}html.bigtext .smhow{font-size:19px}
 #stSnapList{padding:4px 14px 10px;border-top:1px solid var(--line)}#stSnapList button{display:flex;justify-content:space-between;width:100%;border:0;background:var(--paper);border-radius:10px;padding:9px 12px;margin-top:6px;font:inherit;color:inherit}
+.aibtn{background:var(--leaf-2)!important;color:var(--leaf)!important}
+@media (max-width:920px){.aibtn{margin-left:auto!important;padding:8px 10px!important}.aibtn span{display:none!important}#gOpen{margin-left:6px!important}}
+.smtodo.ai{background:var(--leaf-2)}
+.aibox{display:flex;flex-direction:column;height:92vh;max-height:92vh;padding-bottom:calc(10px + var(--sab))}
+.aibox .sheeth b{display:flex;flex-direction:column;line-height:1.2}.aibox .sheeth b small{font:400 11.5px 'IBM Plex Sans Thai',sans-serif;color:var(--muted)}
+.aicfg{background:var(--paper);border-radius:14px;padding:10px 12px;margin-bottom:8px;font-size:13px}
+.aimsgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:6px 2px}
+.aim{max-width:88%;padding:10px 13px;border-radius:18px;font-size:15px;line-height:1.55;white-space:pre-wrap;word-break:break-word}
+.aim.u{align-self:flex-end;background:var(--leaf);color:#fff;border-bottom-right-radius:6px}.aim.a{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:6px}
+.aim.a b{color:var(--leaf)}.aim img{max-width:100%;border-radius:12px;display:block;margin-bottom:6px}.aim .src{display:block;font-size:11px;color:var(--muted);margin-top:6px}
+.aim.typing{color:var(--muted)}.aim.typing:after{content:'…';animation:pulse 1s infinite}
+.aichips{display:flex;gap:6px;overflow-x:auto;padding:6px 0;scrollbar-width:none}.aichips::-webkit-scrollbar{display:none}.aichips button{flex:none;border:1px solid var(--line);background:var(--card);border-radius:99px;padding:7px 12px;font:600 13px 'Prompt',sans-serif;color:var(--ink2)}
+.aiin{display:flex;align-items:flex-end;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:6px}
+.aiin textarea{flex:1;border:0;resize:none;font:15px 'IBM Plex Sans Thai',sans-serif;padding:8px 4px;max-height:110px;background:none;outline:none}
+.aiin button,.aicam{border:0;background:var(--paper);width:40px;height:40px;border-radius:50%;font-size:18px;display:grid;place-items:center;flex:none;cursor:pointer}.aiin .send{background:var(--leaf);color:#fff}
+.aiin #aiMic.on{background:#c0392b;color:#fff}.aiprev img{height:40px;border-radius:8px;display:block}
 .stsec{margin:16px 2px 6px;font-size:12.5px;font-weight:700;color:var(--muted)}
 .stgrp{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
 .strow{display:flex;align-items:center;gap:12px;padding:11px 14px;border:0;border-top:1px solid var(--line);background:none;width:100%;text-align:left;font:inherit;color:inherit;min-height:56px}
@@ -1457,6 +1473,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <button data-step="4"><svg class="ic"><use href="#i-sprout"/></svg><span class="lg">การเติบโต</span><span class="sh">เติบโต</span></button>
   </nav>
   <button class="gbtn" id="gOpen" title="ตั้งค่า"><svg class="ic"><use href="#i-gear"/></svg><span id="gBadge">ตั้งค่า</span></button>
+  <button class="gbtn aibtn" id="aiOpen" title="ถามผู้เชี่ยวชาญ AI">🤖<span>ถาม AI</span></button>
   <button class="gbtn smtog" id="smTog" style="display:none" title="กลับโหมดง่าย">🏠<span>โหมดง่าย</span></button>
   <button class="devpill" id="devpill" title="ยังไม่ได้เชื่อมต่อตัวควบคุมจริง"><i></i>จำลอง</button>
 </header>
@@ -1957,11 +1974,25 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="smmini"><span id="smWxI">☀️</span><b id="smWx">—</b><small id="smWxS">—</small></div>
       <div class="smmini"><span>🌱</span><b id="smAge">—</b><small id="smAgeS">—</small></div>
     </div>
+    <button class="smtodo ai" id="smAI"><span>🤖</span><span class="t"><b>ถามหมอมัน AI</b><small>ถามเรื่องน้ำ ปุ๋ย โรค แมลง หรือถ่ายรูปใบมันให้ดู</small></span><span>›</span></button>
     <button class="smtodo" id="smTodo"><span>📒</span><span class="t"><b id="smTodoT">—</b><small>แตะเพื่อบันทึก</small></span><span>›</span></button>
     <button class="smtodo bk" id="smBk" style="display:none"><span>💾</span><span class="t"><b>สำรองข้อมูลส่งเข้า LINE</b><small id="smBkS">ไม่ได้สำรองนานแล้ว · กันข้อมูลหายเมื่อเปลี่ยนมือถือ</small></span><span>›</span></button>
     <button class="smfull" id="smFull">ดูไร่ 3D · ออกแบบ · กล้อง AR · กราฟ <b>เปิดโหมดละเอียด ›</b></button>
   </div>
 </div>
+<div class="sheet" id="aiSheet" style="display:none"><div class="sheetbg" data-close></div><div class="sheetbox aibox">
+  <div class="sheeth"><span class="ti t-gr sm">🤖</span><b>หมอมัน AI<small id="aiMode">—</small></b><button class="xbtn" id="aiCfgBtn" aria-label="ตั้งค่า AI" style="margin-left:auto">⚙︎</button><button class="xbtn" data-close aria-label="ปิด">✕</button></div>
+  <div class="aicfg" id="aiCfg" style="display:none">
+    <div class="small">ตอบได้ทันทีโดยไม่ต้องตั้งค่า (คำตอบพื้นฐานจากข้อมูลไร่ของคุณ) · ใส่คีย์ AI เพื่อถามได้ทุกเรื่องและดูรูปถ่ายใบมันได้</div>
+    <div class="seg mini" id="aiProv" style="margin:8px 0"><button data-p="gemini">Google Gemini (มีแบบฟรี)</button><button data-p="claude">Claude</button></div>
+    <label class="fld">API key<input type="password" id="aiKey" placeholder="วางคีย์ที่นี่" autocomplete="off" spellcheck="false"></label>
+    <div class="row" style="gap:8px;margin-top:8px"><button class="btn primary" id="aiSave" style="flex:1">บันทึก</button><button class="btn" id="aiClear">ไม่ใช้คีย์</button></div>
+    <details class="more2" open><summary>ขอคีย์ Gemini ฟรี (ไม่ต้องใช้บัตร)</summary><ol class="how"><li>เข้า <b>aistudio.google.com</b> ด้วยบัญชี Gmail</li><li>กด <b>Get API key → Create API key</b></li><li>คัดลอกคีย์มาวางด้านบน แล้วกดบันทึก</li></ol><p class="small">แบบฟรีมีโควตาจำกัดต่อวัน ถ้าเกินจะตอบไม่ได้ชั่วคราว · คีย์เก็บในเครื่องนี้เท่านั้น ไม่ติดไปกับไฟล์สำรอง · คำถามและข้อมูลไร่จะถูกส่งไปที่ผู้ให้บริการ AI ที่เลือก</p></details>
+  </div>
+  <div class="aimsgs" id="aiMsgs"></div>
+  <div class="aichips" id="aiChips"></div>
+  <div class="aiin"><label class="aicam" title="ถ่ายรูป/เลือกรูป">📷<input type="file" accept="image/*" capture="environment" id="aiImg" style="display:none"></label><div class="aiprev" id="aiPrev"></div><textarea id="aiText" rows="1" placeholder="พิมพ์คำถาม เช่น ใบเหลืองเกิดจากอะไร"></textarea><button id="aiMic" title="พูด">🎤</button><button id="aiSend" class="send">➤</button></div>
+</div></div>
 <div class="sheet" id="stSheet" style="display:none"><div class="sheetbg" data-close></div><div class="sheetbox">
   <div class="sheeth"><span class="ti t-gr sm"><svg class="ic"><use href="#i-gear"/></svg></span><b>ตั้งค่า</b><button class="xbtn" data-close aria-label="ปิด">✕</button></div>
   <div class="stsec">เสียง</div>
@@ -2083,7 +2114,8 @@ let S = { pts: [], hpts: [], closed: false, set: { ...DEF }, mode: 'auto', step:
 try { const s = JSON.parse(localStorage.getItem('raidrop-v1')); if (s && s.set) { S = { ...S, ...s, set: { ...DEF, ...s.set } }; } } catch (e) {}
 if (!S.crop) S.crop = { status: S.closed ? 'planted' : 'none' };
 if (!Array.isArray(S.lvl)) S.lvl = [];
-function save() { try { localStorage.setItem('raidrop-v1', JSON.stringify({ crop: S.crop, obs: S.obs, diary: S.diary, ui: S.ui, g: S.g, pts: S.pts, hpts: S.hpts, lvl: S.lvl, meas: S.meas, mpts: S.mpts, src: S.src, elevSrc: S.elevSrc, closed: S.closed, set: S.set, mode: S.mode })); } catch (e) {} }
+if (!S.ai) S.ai = { prov: 'gemini', key: '', hist: [] };
+function save() { try { localStorage.setItem('raidrop-v1', JSON.stringify({ crop: S.crop, obs: S.obs, diary: S.diary, ui: S.ui, g: S.g, ai: S.ai, pts: S.pts, hpts: S.hpts, lvl: S.lvl, meas: S.meas, mpts: S.mpts, src: S.src, elevSrc: S.elevSrc, closed: S.closed, set: S.set, mode: S.mode })); } catch (e) {} }
 
 /* ================= geometry ================= */
 function project(pts) {
@@ -5420,7 +5452,7 @@ $('#stGoogle').addEventListener('click', () => { closeSettings(); setTimeout(ope
 $('#stIntro').addEventListener('click', () => { closeSettings(); setTimeout(showIntro, 260); });
 $('#stBackup').addEventListener('click', async () => {
   save(); const raw = localStorage.getItem('raidrop-v1') || '{}', d = new Date(), name = `raidrop-backup-${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}.json`;
-  const data = JSON.parse(raw); if (data.g) delete data.g.key;   // never put the API key in a shared file
+  const data = JSON.parse(raw); if (data.g) delete data.g.key; if (data.ai) delete data.ai.key;   // never put the API key in a shared file
   setUI('lastBackup', Date.now());
   const blob = new Blob([JSON.stringify({ app: 'raidrop', v: 1, at: d.toISOString(), data })], { type: 'application/json' }), file = new File([blob], name, { type: 'application/json' });
   try { if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'สำรองข้อมูลไร่หยด' }); return toast('ส่งไฟล์สำรองแล้ว'); } } catch (e) { if (e.name === 'AbortError') return; }
@@ -5666,6 +5698,119 @@ $('#stSnapList').addEventListener('click', async e => { const b = e.target.close
 $('#stSimple').addEventListener('change', e => { closeSettings(); setSimple(e.target.checked); if (!e.target.checked) go(0); });
 /* offline: service worker (only on the real website, not inside previews) */
 if ('serviceWorker' in navigator && location.protocol === 'https:' && /github\.io$/.test(location.hostname)) navigator.serviceWorker.register('sw.js').catch(() => {});
+/* ================= หมอมัน AI: cassava drip-irrigation assistant ================= */
+const AI = { busy: false, img: null };
+function farmCtx() {
+  if (!L || !SIM.today) return { field: 'ยังไม่ได้วัดแปลง' };
+  const n = need(SIM.t), c = n.c, st = S.set, D = depNow(), trig = n.raw * st.trigger / 100, w = wx(isoOf(SIM.t));
+  const days = Array.from({ length: 5 }, (_, i) => { const iso = isoOf(SIM.t + i * DAY), x = wx(iso); return `${iso}: ${f(x.tmin)}–${f(x.tmax)}°C ฝน ${f(x.rain, 1)} มม. (${f(x.prob)}%)`; });
+  const obs = Object.entries(S.obs || {}).slice(-5).map(([d, o]) => `${d}: ${JSON.stringify(o)}`);
+  return {
+    'วันที่': new Date(SIM.t).toLocaleString('th-TH'), 'พื้นที่': areaThai(L.area), 'ดิน': SOILS[st.soil].n, 'พันธุ์': (S.crop && S.crop.variety) || '-',
+    'สถานะ': c.notPlanted ? 'ยังไม่ปลูก' : `ปลูกแล้ว ${c.dap} วัน (ระยะ${stageOf(c.dap).n}) เก็บเกี่ยวที่ ${st.harvest} วัน`,
+    'ระยะปลูก': `${st.rowSp} × ${st.plantSp} ม.`, 'ระบบน้ำ': `เทปหัวหยดทุก ${f(st.emSp * 100)} ซม. ${st.emQ} ลิตร/ชม. · ${L.zones.length} โซน · ปั๊ม ${st.pumpQ} ลบ.ม./ชม. · ${S.mode === 'auto' ? 'อัตโนมัติ' : 'สั่งเอง'} เริ่ม ${st.startHour}:00`,
+    'น้ำวันนี้': `ดินขาดน้ำ ${f(D, 1)} มม. (เกณฑ์ให้น้ำ ${f(trig, 1)} มม., จุดเครียด ${f(n.raw, 1)} มม.) ความชื้นดิน ${f(swNow())}% · มันใช้น้ำ ${f(n.etc, 1)} มม./วัน · ฝนวันนี้ ${f(rainToday(), 1)} มม. · ถ้าให้น้ำ เปิดโซนละ ${recMinutes()} นาที`,
+    'สถานะระบบ': SIM.active ? `กำลังให้น้ำโซน ${SIM.active.z + 1}` : SIM.wait ? 'รอฝน' : 'ปิดอยู่',
+    'ความลาด': L.elevOK ? `ต่างระดับ ${f(L.dz, 1)} ม. ลาด ${f(L.slopeAll, 1)}%` : 'ไม่ทราบ',
+    'พยากรณ์ 5 วัน': days.join(' | '), 'บันทึกล่าสุด': obs.join(' | ') || '-'
+  };
+}
+const AI_SYS = `คุณคือ "หมอมัน" ผู้เชี่ยวชาญมันสำปะหลังและระบบน้ำหยดสำหรับเกษตรกรไทย อยู่ในแอป "ไร่หยด"
+- ตอบภาษาไทยง่าย ๆ แบบคุยกับชาวไร่ สั้น กระชับ ได้ใจความ (ไม่เกิน 6–8 บรรทัด เว้นแต่ถูกขอให้อธิบายละเอียด) ใช้ข้อ ๆ เมื่อเป็นขั้นตอน
+- ใช้ข้อมูลไร่ของผู้ใช้ด้านล่างประกอบคำตอบเสมอ บอกตัวเลขที่ทำได้จริง (นาที ลิตร กก./ไร่ วัน)
+- เรื่องโรคและแมลง: บอกอาการที่น่าจะเป็น วิธีแยก และวิธีจัดการ ถ้าดูจากรูปไม่ชัดให้บอกตรง ๆ ว่าไม่แน่ใจ และแนะนำให้ส่งตัวอย่าง/ปรึกษาเกษตรอำเภอหรือศูนย์วิจัยพืชไร่ของกรมวิชาการเกษตร
+- สารเคมี: ให้ชื่อสามัญ อัตราตามฉลาก และเน้นอ่านฉลาก สวมอุปกรณ์ป้องกัน เว้นระยะก่อนเก็บเกี่ยว ห้ามแนะนำสารต้องห้ามหรือเกินอัตรา
+- ถ้าไม่รู้หรือไม่แน่ใจ ให้บอกว่าไม่แน่ใจ อย่าแต่งตัวเลขหรือแหล่งอ้างอิง
+- คุณสั่งเปิดปิดน้ำเองไม่ได้ ให้บอกผู้ใช้ว่ากดปุ่มไหนในแอปแทน`;
+function aiMode() { const k = S.ai && S.ai.key; return k ? (S.ai.prov === 'claude' ? 'Claude' : 'Gemini') : 'โหมดพื้นฐาน (ไม่ใช้เน็ต)'; }
+function aiOpen(q) {
+  const sh = $('#aiSheet'); sh.style.display = 'block'; requestAnimationFrame(() => sh.classList.add('on'));
+  $('#aiMode').textContent = aiMode() + (S.ai.key ? ' · ดูรูปได้' : ' · ใส่คีย์เพื่อถามได้ทุกเรื่อง');
+  if (!$('#aiMsgs').childElementCount) { (S.ai.hist || []).slice(-12).forEach(m => aiBubble(m.r, m.t)); if (!(S.ai.hist || []).length) aiBubble('a', `สวัสดีครับ ผม <b>หมอมัน</b> 🌱 ถามเรื่องไร่มันได้เลย เช่น วันนี้ต้องรดน้ำไหม ใส่ปุ๋ยอะไร ใบเหลืองเกิดจากอะไร หรือกด 📷 ถ่ายรูปใบมันให้ดู${S.ai.key ? '' : '<span class="src">ตอนนี้ตอบแบบพื้นฐานจากข้อมูลไร่ · กด ⚙︎ ใส่คีย์ AI (Gemini มีแบบฟรี) เพื่อถามได้ทุกเรื่อง</span>'}`); }
+  aiChips(); setTimeout(() => { $('#aiMsgs').scrollTop = 1e6; }, 50);
+  if (q) { $('#aiText').value = q; aiSend(); }
+}
+function aiClose() { const sh = $('#aiSheet'); sh.classList.remove('on'); setTimeout(() => sh.style.display = 'none', 250); }
+function aiChips() {
+  const c = L && SIM.today ? need(SIM.t).c : null;
+  const Q = ['วันนี้ต้องรดน้ำไหม', c && !c.notPlanted ? `อายุ ${c.dap} วัน ควรใส่ปุ๋ยอะไร` : 'เตรียมดินก่อนปลูกยังไง', 'ใบเหลือง ใบด่าง เกิดจากอะไร', 'เพลี้ยแป้งกำจัดยังไง', 'ฝนจะตกไหมสัปดาห์นี้', 'เมื่อไหร่เก็บเกี่ยว', 'ระบบน้ำหยดตันแก้ยังไง'];
+  $('#aiChips').innerHTML = Q.map(q => `<button>${q}</button>`).join('');
+}
+function aiBubble(r, html, img) { const d = document.createElement('div'); d.className = 'aim ' + r; d.innerHTML = (img ? `<img src="${img}">` : '') + html; $('#aiMsgs').appendChild(d); $('#aiMsgs').scrollTop = 1e6; return d; }
+const esc = t => String(t).replace(/[&<>]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[ch]));
+const mdLite = t => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/^#+\s*(.+)$/gm, '<b>$1</b>').replace(/^\s*[-*]\s+/gm, '• ');
+function aiRemember(r, t) { S.ai.hist = [...(S.ai.hist || []), { r, t, at: Date.now() }].slice(-30); save(); }
+async function aiSend() {
+  const q = $('#aiText').value.trim(), img = AI.img; if ((!q && !img) || AI.busy) return;
+  $('#aiText').value = ''; aiAutoH(); AI.img = null; $('#aiPrev').innerHTML = '';
+  aiBubble('u', esc(q || 'ช่วยดูรูปนี้หน่อย'), img && img.url); aiRemember('u', esc(q || '📷 (รูป)'));
+  const wait = aiBubble('a typing', 'กำลังคิด'); AI.busy = true;
+  let ans;
+  try { ans = S.ai.key && navigator.onLine !== false ? await aiCloud(q || 'ช่วยดูรูปใบ/ต้นมันสำปะหลังนี้ ว่ามีปัญหาอะไร และควรทำอย่างไร', img) : aiLocal(q, !!img); }
+  catch (e) { ans = aiLocal(q, !!img) + `<span class="src">⚠ ต่อ AI ไม่ได้ (${esc(e.message || e)}) — ตอบแบบพื้นฐานแทน</span>`; }
+  AI.busy = false; wait.className = 'aim a'; wait.innerHTML = ans; $('#aiMsgs').scrollTop = 1e6; aiRemember('a', ans);
+}
+async function aiCloud(q, img) {
+  const ctx = 'ข้อมูลไร่ของผู้ใช้ตอนนี้:\n' + Object.entries(farmCtx()).map(([k, v]) => `- ${k}: ${v}`).join('\n');
+  const hist = (S.ai.hist || []).slice(-9, -1).filter(m => !m.t.includes('typing')).map(m => ({ role: m.r === 'u' ? 'user' : 'assistant', text: m.t.replace(/<[^>]+>/g, '') }));
+  if (S.ai.prov === 'claude') {
+    const content = []; if (img) content.push({ type: 'image', source: { type: 'base64', media_type: img.mime, data: img.b64 } }); content.push({ type: 'text', text: q });
+    const r = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'content-type': 'application/json', 'x-api-key': S.ai.key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({ model: 'claude-haiku-5-5', max_tokens: 900, system: AI_SYS + '\n\n' + ctx, messages: [...hist.map(h => ({ role: h.role, content: h.text })), { role: 'user', content }] }) });
+    const j = await r.json(); if (!r.ok) throw new Error(j.error ? j.error.message : r.status);
+    return mdLite(j.content.map(c => c.text || '').join('')) + '<span class="src">ตอบโดย Claude · ควรตรวจสอบกับแปลงจริง</span>';
+  }
+  const parts = []; if (img) parts.push({ inline_data: { mime_type: img.mime, data: img.b64 } }); parts.push({ text: q });
+  const body = { system_instruction: { parts: [{ text: AI_SYS + '\n\n' + ctx }] }, contents: [...hist.map(h => ({ role: h.role === 'user' ? 'user' : 'model', parts: [{ text: h.text }] })), { role: 'user', parts }], generationConfig: { maxOutputTokens: 900, temperature: 0.4 } };
+  let lastErr;
+  for (const model of ['gemini-flash-latest', 'gemini-2.5-flash', 'gemini-flash-lite-latest']) {
+    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, { method: 'POST', headers: { 'content-type': 'application/json', 'x-goog-api-key': S.ai.key }, body: JSON.stringify(body) });
+    const j = await r.json().catch(() => ({}));
+    if (r.ok) { const t = (j.candidates && j.candidates[0] && j.candidates[0].content && j.candidates[0].content.parts || []).map(p => p.text || '').join(''); if (t) return mdLite(t) + '<span class="src">ตอบโดย Google Gemini · ควรตรวจสอบกับแปลงจริง</span>'; }
+    lastErr = (j.error && j.error.message) || r.status; if (r.status === 400 || r.status === 401 || r.status === 403) break;
+  }
+  throw new Error(lastErr);
+}
+/* offline expert: answers from the app's own numbers and farm guidance */
+function aiLocal(q, hasImg) {
+  q = (q || '').toLowerCase(); const has = (...w) => w.some(x => q.includes(x)); const src = t => `<span class="src">${t}</span>`;
+  if (hasImg && !S.ai.key) return 'ดูรูปได้เมื่อใส่คีย์ AI ครับ กด ⚙︎ ด้านบน (Gemini มีแบบฟรี ไม่ต้องใช้บัตร)';
+  if (!L || !SIM.today) return 'ยังไม่ได้วัดแปลงครับ วัดแปลงก่อน แล้วผมจะตอบจากข้อมูลไร่ของคุณได้';
+  const n = need(SIM.t), c = n.c, D = depNow(), trig = n.raw * S.set.trigger / 100, mins = recMinutes(), nz = L.zones.length;
+  if (has('รด', 'น้ำ', 'เปิด', 'นาที', 'ให้น้ำ') && !has('ตัน', 'อุดตัน', 'น้ำหยดตัน')) {
+    if (c.notPlanted) return `ยังไม่ได้ปลูกครับ ถ้าจะปลูกเร็ว ๆ นี้ ให้น้ำเตรียมดินโซนละ ${mins} นาที ให้ดินชื้นพอปักท่อน\nปลูกแล้วกด "บันทึกวันปลูก" ระบบจะคำนวณให้ทุกวัน`;
+    if (SIM.active) return `ตอนนี้กำลังให้น้ำโซน <b>${SIM.active.z + 1}</b> อยู่ครับ เหลืออีก ${dur([SIM.active, ...SIM.queue].reduce((a, b) => a + b.rem, 0))} ระบบจะปิดเอง`;
+    if (D > n.raw) return `<b>ควรให้น้ำวันนี้เลยครับ</b> มันเริ่มขาดน้ำ (ดินขาด ${f(D, 1)} มม.)\n• เปิดโซนละ <b>${dur(mins)}</b> × ${nz} โซน\n• ช่วงเช้ามืดดีที่สุด น้ำระเหยน้อย`;
+    if (D >= trig) return `<b>วันนี้ควรให้น้ำครับ</b>\n• เปิดโซนละ <b>${dur(mins)}</b> × ${nz} โซน${rainToday() > 1 ? `\n• ฝนตกแล้ว ${f(rainToday(), 0)} มม. คิดรวมให้แล้ว` : ''}${S.mode === 'auto' ? `\n• โหมดอัตโนมัติจะเปิดเองตอน ${pad(S.set.startHour)}:00` : ''}`;
+    return `<b>วันนี้ยังไม่ต้องให้น้ำครับ</b> ดินยังชื้นพอ (ขาด ${f(D, 1)} จากเกณฑ์ ${f(trig, 1)} มม.)\nมันใช้น้ำวันละ ~${f(n.etc, 1)} มม. น่าจะต้องให้น้ำอีกประมาณ ${Math.max(1, Math.round((trig - D) / Math.max(0.5, n.etc)))} วัน`;
+  }
+  if (has('ฝน', 'อากาศ', 'พยากรณ์')) { const L5 = Array.from({ length: 5 }, (_, i) => { const iso = isoOf(SIM.t + i * DAY), x = wx(iso), d = new Date(parseIso(iso)); return `• ${i ? TH_DL[d.getDay()] : 'วันนี้'}: ${f(x.tmax)}° ฝน ${f(x.rain, 0)} มม. (โอกาส ${f(x.prob)}%)`; }); return `พยากรณ์ 5 วันครับ\n${L5.join('\n')}\nถ้ามีฝน ระบบจะรอฝนก่อน แล้วเติมเฉพาะส่วนที่ขาด` + src(W.src === 'live' ? 'ข้อมูลจาก Open-Meteo' : W.src === 'google' ? 'ข้อมูลจาก Google Weather' : 'ค่าเฉลี่ยตามฤดู (ไม่มีเน็ต)'); }
+  if (has('ปุ๋ย', 'ธาตุอาหาร')) { const dap = c.dap; return (c.notPlanted ? 'ก่อนปลูก: ใส่ปุ๋ยคอก/ปุ๋ยหมักรองพื้นตอนเตรียมดินครับ\n' : `อายุ ${dap} วัน (ระยะ${stageOf(dap).n})\n`) + `• ใส่ปุ๋ยเคมีช่วงอายุ <b>1–3 เดือน</b> ขณะดินมีความชื้น\n• ดินร่วน–ดินทราย ประมาณ <b>100 กก./ไร่</b> · ดินเหนียว ประมาณ <b>50 กก./ไร่</b>\n• มันชอบโพแทสเซียมสูง (เช่น สูตร 15-7-18 ที่ใช้ในงานวิจัยมันสำปะหลัง)\n• มีน้ำหยดอยู่แล้ว แบ่งใส่ทางท่อทีละน้อยได้ ได้ผลดีกว่าใส่ครั้งเดียว${dap > 120 ? '\n• อายุเกิน 4 เดือนแล้ว ใส่เพิ่มได้ผลน้อย เน้นดูแลน้ำ' : ''}` + src('อ้างอิง: คู่มือปลูกมันสำปะหลัง สวทช. · ควรตรวจดินเพื่อปรับสูตร'); }
+  if (has('ใบด่าง', 'ด่าง')) return '<b>โรคใบด่างมันสำปะหลัง</b> (ใบด่างเหลือง ใบหงิกเสียรูป ต้นแคระ)\n• ถอนต้นที่เป็นโรค ฝังหรือเผาทำลาย อย่าเอาไปทำพันธุ์\n• ใช้ท่อนพันธุ์สะอาดหรือพันธุ์ต้านทาน (เช่น กลุ่มพันธุ์อิทธิ)\n• กำจัดแมลงหวี่ขาวซึ่งเป็นพาหะ\n• แจ้งเกษตรอำเภอเพื่อยืนยันโรค' + src('ใส่คีย์ AI แล้วถ่ายรูปใบให้ดู จะช่วยแยกอาการได้ละเอียดขึ้น');
+  if (has('เพลี้ย')) return '<b>เพลี้ยแป้ง</b> (ยอดหงิก เป็นพุ่ม มีปุยขาวใต้ใบ)\n• ป้องกันตั้งแต่ปลูก: แช่ท่อนพันธุ์ใน ไทอะมีโทแซม <b>4 กรัม ต่อน้ำ 20 ลิตร</b> นาน 5–10 นาที\n• ตัดยอดที่เป็น เผาทำลาย\n• ช่วงแล้งระบาดมาก การให้น้ำหยดช่วยให้ต้นแข็งแรง\n• ใช้สารเคมีตามฉลาก สวมอุปกรณ์ป้องกัน' + src('อ้างอิง: คู่มือปลูกมันสำปะหลัง สวทช.');
+  if (has('เหลือง', 'โรค', 'แมลง', 'หนอน', 'ไร')) return 'อาการที่พบบ่อยครับ\n• <b>ใบล่างเหลืองทั้งใบ</b>: ขาดไนโตรเจน หรือขาดน้ำ\n• <b>ขอบใบเหลือง/ไหม้</b>: ขาดโพแทสเซียม\n• <b>ใบด่างหงิกเสียรูป</b>: อาจเป็นโรคใบด่าง ต้องรีบแยกถอน\n• <b>ยอดหงิกเป็นพุ่ม</b>: เพลี้ยแป้ง\n• <b>ใบเหลืองซีดจุดเล็ก ๆ ใยบาง ๆ</b>: ไรแดง (ช่วงแล้ง)' + src('ถ่ายรูปให้ดูได้เมื่อใส่คีย์ AI · ยืนยันโรคกับเกษตรอำเภอ');
+  if (has('เก็บเกี่ยว', 'ขุด')) return c.notPlanted ? 'ยังไม่ได้ปลูกครับ ส่วนใหญ่เก็บเกี่ยวที่อายุ 10–12 เดือน' : `อายุตอนนี้ ${c.dap} วัน ตั้งไว้เก็บที่ ${S.set.harvest} วัน → อีก <b>${Math.max(0, S.set.harvest - c.dap)} วัน</b>\n• <b>งดให้น้ำ 1 เดือนก่อนเก็บเกี่ยว</b> แป้งจะสูงขึ้น (ระบบทำให้อัตโนมัติ)\n• เก็บที่ 10–12 เดือนได้ผลผลิตและแป้งดี` + src('อ้างอิง: คู่มือปลูกมันสำปะหลัง สวทช.');
+  if (has('ตัน', 'อุด', 'หยดไม่ออก', 'ไม่ไหล')) return '<b>น้ำหยดตัน/ไหลไม่เท่ากัน</b>\n• ล้างไส้กรองทุกสัปดาห์ (หรือเมื่อแรงดันตกเกิน 0.3 บาร์)\n• เปิดปลายเทปทุกเส้นปล่อยน้ำล้างตะกอน เดือนละครั้ง\n• น้ำบ่อ/บาดาลมีตะกอนสนิม ใช้กรองดิสก์ 120 mesh\n• ตรวจแรงดันหัวโซน ปกติเทปทั่วไป 0.5–1 บาร์\n• ใส่ปุ๋ยทางท่อแล้วให้น้ำเปล่าล้างต่ออีก 15–20 นาที';
+  if (has('ระยะ', 'ปลูก', 'ร่อง')) { const r = recSpacing(S.set); return `แปลงคุณ (ดิน${SOILS[S.set.soil].n}) แนะนำ <b>${f(r.row, 1)} × ${f(r.plant, 1)} ม.</b>\n• ระยะแถว 100–120 ซม. ระยะต้น 80–100 ซม.\n• ดินดีปลูกห่าง ดินเลวปลูกถี่\n• ยกร่องสูง 25–30 ซม. ขวางความลาด\n• ปักท่อนพันธุ์ตั้งตรง ลึก 5–15 ซม.` + src('อ้างอิง: สวทช. · กรมส่งเสริมการเกษตร · ปรับได้ที่ ไร่ 3D → ออกแบบ'); }
+  return `ผมตอบแบบพื้นฐานได้เรื่อง: <b>การให้น้ำวันนี้ · ฝน · ปุ๋ย · โรค/แมลง · ระยะปลูก · เก็บเกี่ยว · น้ำหยดตัน</b>\nลองกดคำถามด้านล่าง หรือใส่คีย์ AI (⚙︎ ด้านบน) เพื่อถามได้ทุกเรื่องครับ`;
+}
+function aiAutoH() { const t = $('#aiText'); t.style.height = 'auto'; t.style.height = Math.min(110, t.scrollHeight) + 'px'; }
+$('#aiText').addEventListener('input', aiAutoH);
+$('#aiText').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); aiSend(); } });
+$('#aiSend').addEventListener('click', aiSend);
+$('#aiChips').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { $('#aiText').value = b.textContent; aiSend(); } });
+$('#aiSheet').addEventListener('click', e => { if (e.target.closest('[data-close]')) aiClose(); });
+$('#aiOpen').addEventListener('click', () => aiOpen());
+$('#smAI').addEventListener('click', () => aiOpen());
+$('#aiCfgBtn').addEventListener('click', () => { const c = $('#aiCfg'); c.style.display = c.style.display === 'none' ? '' : 'none'; $('#aiKey').value = S.ai.key || ''; $$('#aiProv button').forEach(b => b.classList.toggle('on', b.dataset.p === (S.ai.prov || 'gemini'))); });
+$('#aiProv').addEventListener('click', e => { const b = e.target.closest('[data-p]'); if (!b) return; S.ai.prov = b.dataset.p; $$('#aiProv button').forEach(x => x.classList.toggle('on', x === b)); });
+$('#aiSave').addEventListener('click', () => { S.ai.key = $('#aiKey').value.trim(); save(); $('#aiCfg').style.display = 'none'; $('#aiMode').textContent = aiMode(); toast(S.ai.key ? 'บันทึกคีย์แล้ว ลองถามได้เลย' : 'ใช้โหมดพื้นฐาน'); });
+$('#aiClear').addEventListener('click', () => { S.ai.key = ''; save(); $('#aiKey').value = ''; $('#aiCfg').style.display = 'none'; $('#aiMode').textContent = aiMode(); });
+$('#aiImg').addEventListener('change', e => { const fl = e.target.files && e.target.files[0]; if (!fl) return; const im = new Image(), rd = new FileReader();
+  rd.onload = () => { im.onload = () => { const m = 1024, k = Math.min(1, m / Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = im.width * k; c.height = im.height * k; c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+    const url = c.toDataURL('image/jpeg', 0.82); AI.img = { url, mime: 'image/jpeg', b64: url.split(',')[1] }; $('#aiPrev').innerHTML = `<img src="${url}">`; if (!$('#aiText').value) $('#aiText').placeholder = 'บอกอาการเพิ่มได้ หรือกดส่งเลย'; }; im.src = rd.result; }; rd.readAsDataURL(fl); e.target.value = ''; });
+$('#aiMic').addEventListener('click', () => { const SR = window.SpeechRecognition || window.webkitSpeechRecognition; if (!SR) return toast('เครื่องนี้ยังพูดแทนพิมพ์ไม่ได้ ลองใช้ไมค์บนคีย์บอร์ดแทน');
+  const r = new SR(); r.lang = 'th-TH'; r.interimResults = false; $('#aiMic').classList.add('on'); r.onresult = ev => { $('#aiText').value = ev.results[0][0].transcript; aiAutoH(); }; r.onend = () => { $('#aiMic').classList.remove('on'); if ($('#aiText').value.trim()) aiSend(); }; r.onerror = () => $('#aiMic').classList.remove('on'); r.start(); });
 function arMsg(html, ms) { const m = $('#arMsg'); m.innerHTML = html; m.style.display = ''; clearTimeout(AR.msgTO); AR.msgTO = setTimeout(() => { m.style.display = 'none'; }, ms || 3000); }
 /* hide the model ground and scenery; add bright overlays that read well over a camera picture */
 function arScene() {

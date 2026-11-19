@@ -140,6 +140,19 @@ body.arxr #view{background:transparent}
 .sw:after{content:'';position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s}
 .sw:checked{background:var(--leaf)}.sw:checked:after{transform:translateX(20px)}
 .seg.mini{display:flex;gap:2px;padding:3px;border-radius:10px}.seg.mini button{padding:6px 10px;font-size:13px}
+.dsp{position:absolute;left:8px;right:8px;bottom:10px;z-index:8;background:rgba(255,255,255,.97);border-radius:18px;box-shadow:0 8px 28px rgba(16,40,24,.22);padding:10px 12px 10px;font-family:'Prompt',sans-serif}
+.dsph{display:flex;align-items:center;gap:8px}.dsph b{font-size:14.5px;white-space:nowrap}.dsph .small{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dspx{border:0;background:var(--paper);width:30px;height:30px;border-radius:50%;font-size:14px;flex:none}
+.dspk{display:flex;gap:6px;overflow-x:auto;padding:8px 0 6px;scrollbar-width:none}.dspk::-webkit-scrollbar{display:none}
+.dspk button{flex:none;border:1px solid var(--line);background:var(--card);border-radius:99px;padding:6px 11px;font:600 12.5px 'Prompt',sans-serif;color:var(--ink2)}
+.dspk button.on{background:var(--leaf);border-color:var(--leaf);color:#fff}
+.dspv{display:flex;align-items:center;gap:10px;min-height:46px}.dspv .stp{width:44px;height:44px;border-radius:12px;border:0;background:var(--leaf-2);color:var(--leaf);font-size:22px;font-weight:700;flex:none}
+.dspv .val{flex:1;text-align:center}.dspv .val b{font:700 22px 'IBM Plex Mono',monospace}.dspv .val small{display:block;font-size:11.5px;color:var(--muted)}
+.dspv input[type=range]{width:100%;accent-color:var(--leaf)}.dspv .opt{display:flex;gap:6px;flex:1}.dspv .opt button{flex:1;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 6px;font:600 13px 'Prompt',sans-serif}.dspv .opt button.on{background:var(--leaf-2);border-color:var(--leaf);color:var(--leaf)}
+.dspt{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px}.dspt button{border:0;background:var(--paper);border-radius:10px;padding:7px 2px;font:600 11.5px 'Prompt',sans-serif;color:var(--ink2)}.dspt button.on{background:var(--leaf-2);color:var(--leaf)}
+body.designing .vtools,body.designing #fab,body.designing #legend3d{display:none!important}
+body.designing #hud{display:none!important}
+@media (max-width:920px){body.designing .view{height:74vh!important;min-height:420px}.dsp{padding:8px 10px}.dspv .val small{font-size:11px;line-height:1.3}.dspv .val b{font-size:19px}.dspk{padding:6px 0 4px}}
 .arCal{position:absolute;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom) + 86px);background:rgba(255,255,255,.95);border-radius:18px;padding:12px;pointer-events:auto;color:#16241a}
 .arCalT{font-size:13px;margin-bottom:8px;text-align:center}.arCalT small{color:#5d6b60}
 .arRow{display:flex;gap:6px;justify-content:center;align-items:center;margin-top:6px}.arRow button{flex:1;border:1px solid #d6ddd3;background:#f4f7f2;border-radius:12px;padding:9px 4px;font-size:13px;font-weight:600}
@@ -1484,6 +1497,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
     </div>
     <div class="hint" id="hint3d" style="display:none">ลากเพื่อหมุน · ถ่างสองนิ้วเพื่อซูม</div>
     <button class="hcomp" id="hcomp" style="display:none" title="แตะเพื่อหันไปทีละทิศ"><div class="rose"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="47" fill="#fff" stroke="#e1e7dd" stroke-width="2"/><path d="M50 8 61 50 50 44 39 50z" fill="#d2402f"/><path d="M50 92 61 50 50 56 39 50z" fill="#9aa59f"/><text x="50" y="27" text-anchor="middle" font-family="Prompt,sans-serif" font-weight="700" font-size="0">N</text><circle cx="50" cy="50" r="5" fill="#fff" stroke="#9aa59f" stroke-width="2"/><text x="50" y="21" text-anchor="middle" font-family="Prompt,sans-serif" font-weight="700" font-size="14" fill="#fff">น</text></svg></div><span id="hcompT">เหนือ</span></button>
+    <div class="dsp" id="dsp" style="display:none">
+      <div class="dsph"><b>🛠 ออกแบบแปลงเอง</b><span class="small" id="dspSum"></span><button class="dspx" id="dspX">✕</button></div>
+      <div class="dspk" id="dspK"></div>
+      <div class="dspv" id="dspV"></div>
+      <div class="dspt"><button id="dspDim" class="on">📏 แสดงขนาด</button><button id="dspMeas">📐 วัดระยะ</button><button id="dspZoom">🔍 ดูใกล้</button><button id="dspReset">↺ ค่าเดิม</button></div>
+    </div>
     <div class="vtools" id="vtools" style="display:none">
       <button id="tOver" title="มุมมองรวม"><svg class="ic"><use href="#i-globe"/></svg><span>ภาพรวม</span></button>
       <button id="tSat" title="ภาพดาวเทียมพื้นที่จริงรอบไร่" class="on more"><svg class="ic"><use href="#i-map"/></svg><span>แผนที่จริง</span></button>
@@ -1491,6 +1510,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <button id="tEye" title="ยืนในไร่" class="more"><svg class="ic"><use href="#i-eye"/></svg><span>ยืนในไร่</span></button>
       <button id="tSun" title="เส้นทางดวงอาทิตย์" class="more"><svg class="ic"><use href="#i-sunpath"/></svg><span>ดวงอาทิตย์</span></button>
       <button id="tRain" title="ดูตัวอย่างฝนตก" class="more"><svg class="ic"><use href="#i-rain"/></svg><span>ฝน</span></button>
+      <button id="tDesign" title="ออกแบบแปลงเอง + ดูขนาด"><svg class="ic"><use href="#i-ruler"/></svg><span>ออกแบบ</span></button>
       <button id="tMore" title="ปุ่มเพิ่มเติม"><svg class="ic"><use href="#i-list"/></svg><span>เพิ่มเติม</span></button>
       <button id="tTop" title="มุมมองด้านบน" class="more"><svg class="ic"><use href="#i-top"/></svg><span>ด้านบน</span></button>
       <button id="tZones" title="สีแบ่งโซน" class="more"><svg class="ic"><use href="#i-palette"/></svg><span>โซน</span></button>
@@ -2001,7 +2021,7 @@ function rng(seed) { let a = seed; return () => { a |= 0; a = a + 0x6D2B79F5 | 0
 function areaThai(m2) { const rai = Math.floor(m2 / 1600), ngan = Math.floor((m2 - rai * 1600) / 400), wa = Math.round((m2 - rai * 1600 - ngan * 400) / 4); return `${rai} ไร่ ${ngan} งาน ${wa} ตร.วา`; }
 
 /* ================= state ================= */
-const DEF = { mech: 'small', canopy: 'mid', rowSp: 1.0, plantSp: 0.8, emSp: 0.3, emQ: 1.5, pumpQ: 10, eff: 90, soil: 'lsand', harvest: 300,
+const DEF = { inset: 0.5, ridgeW: null, ridgeH: 0.16, subSide: 'left', pumpLL: null, mech: 'small', canopy: 'mid', rowSp: 1.0, plantSp: 0.8, emSp: 0.3, emQ: 1.5, pumpQ: 10, eff: 90, soil: 'lsand', harvest: 300,
   plantDate: isoOf(Date.now() - 115 * DAY), maxAcc: 15, minDist: 2, startHour: 6, trigger: 50, rainWait: 3, rowDir: 'best', rowAng: 0, tapeMax: 120, tape: 'std', ymax: 6 };
 let S = { pts: [], hpts: [], closed: false, set: { ...DEF }, mode: 'auto', step: 1 };
 try { const s = JSON.parse(localStorage.getItem('raidrop-v1')); if (s && s.set) { S = { ...S, ...s, set: { ...DEF, ...s.set } }; } } catch (e) {}
@@ -2171,7 +2191,7 @@ function computeLayout() {
       G.data[j * G.nx + i] = pl[0] * x + pl[1] * y + pl[2] + sr / sw;
     }
   }
-  const inset = 0.5, rows = [];
+  const inset = st.inset ?? 0.5, rows = [];
   for (let y = inset + st.rowSp / 2; y < H - inset * 0.5; y += st.rowSp) {
     const xs = [];
     rp.forEach((a, i) => { const b = rp[(i + 1) % rp.length]; if ((a[1] <= y && b[1] > y) || (b[1] <= y && a[1] > y)) xs.push(a[0] + (y - a[1]) * (b[0] - a[0]) / (b[1] - a[1])); });
@@ -2197,9 +2217,10 @@ function computeLayout() {
     z.unif = st.tape === 'pc' ? 0.97 : clamp(1 - 0.03 * z.dz, 0.7, 0.98); });
   const tape = rows.reduce((a, r) => a + r.len, 0), em = rows.reduce((a, r) => a + r.em, 0);
   const plants = rows.reduce((a, r) => a + r.segs.reduce((b, g) => b + Math.floor(g.len / st.plantSp) + 1, 0), 0);
-  const sub = rows.map(r => [r.segs[0].x1 - 0.4, r.y]);
+  const right = st.subSide === 'right', sub = rows.map(r => [right ? r.segs[r.segs.length - 1].x2 + 0.4 : r.segs[0].x1 - 0.4, r.y]);
   let subLen = 0; for (let i = 1; i < sub.length; i++) subLen += dist(sub[i], sub[i - 1]);
-  const pump = sub.length ? [sub[0][0] - 9, sub[0][1] - 7] : [-9, -7];
+  let pump = sub.length ? [sub[0][0] + (right ? 9 : -9), sub[0][1] - 7] : [-9, -7];
+  if (st.pumpLL) { const px = (st.pumpLL.lon - P.lon0) * P.kx, py = (st.pumpLL.lat - P.lat0) * P.ky; pump = [px * c - py * s - minX, px * s + py * c - minY]; }
   const mainLen = sub.length ? Math.abs(sub[0][0] - pump[0]) + Math.abs(sub[0][1] - pump[1]) + 4 : 0;
   const cropArea = tape * st.rowSp;
   const unif = zones.reduce((a, z) => a + z.unif * z.area, 0) / Math.max(1, cropArea);
@@ -2894,7 +2915,7 @@ function build3D() {
   const chunks = [];
   const rowStep = R.rowStep = Math.max(1, Math.ceil(L.tape / 4 / 16000)), chunkLen = Math.max(3, Math.min(6, L.tape / rowStep / 16000)); L.rows.forEach((r, ri) => ri % rowStep ? 0 : r.segs.forEach(s => { const n = Math.max(1, Math.ceil(s.len / chunkLen)); for (let k = 0; k < n; k++) { const xa = s.x1 + s.len * k / n, xb = s.x1 + s.len * (k + 1) / n; chunks.push({ xa, xb, y: r.y, zone: r.zone, ha: hz(xa, r.y), hb: hz(xb, r.y) }); } }));
   R.chunks = chunks;
-  const ridgeGeo = ridgeGeoReal(), rw = st.rowSp * 0.62, rh = 0.16, tOff = Math.min(0.1, rw * 0.3), tY = rh * 2 * ridgeGeo.userData.yAt(tOff / rw) - 0.004;
+  const ridgeGeo = ridgeGeoReal(), rw = Math.min(st.ridgeW || st.rowSp * 0.62, st.rowSp * 0.95), rh = st.ridgeH ?? 0.16, tOff = Math.min(0.1, rw * 0.3), tY = rh * 2 * ridgeGeo.userData.yAt(tOff / rw) - 0.004;
   R.tapeY = tY; R.tapeOff = tOff;
   const tapeGeo = new THREE.CylinderGeometry(0.008, 0.008, 1, 8).rotateZ(Math.PI / 2); tapeGeo.scale(1, 0.45, 2.4);   // flat-lying thin-wall tape
   const ridge = new THREE.InstancedMesh(ridgeGeo, STD({ map: R.tex.soil, bumpMap: R.tex.soilBump, bumpScale: 3, vertexColors: true, roughness: 0.97 }), chunks.length);
@@ -2928,7 +2949,8 @@ function build3D() {
   L.rows.forEach((r, ri) => { if (ri % R.rowStep) return; for (let k = 1; k < r.segs.length; k++) groundPipe(g, [r.segs[k - 1].x2, r.y - tOff], [r.segs[k].x1, r.y - tOff], 0.01, '#15191d', 0.05); });
   for (let i = 1; i < L.sub.length; i++) groundPipe(g, L.sub[i - 1], L.sub[i], 0.045, PIPE, 0.05);
   const tkM = STD({ color: '#15191d', roughness: 0.4 });
-  L.rows.forEach((r, ri) => ri % R.rowStep ? 0 : pipe(g, V(r.segs[0].x1 - 0.4, hz(r.segs[0].x1 - 0.4, r.y) + 0.05, -r.y), V(r.segs[0].x1, hz(r.segs[0].x1, r.y) + tY, -(r.y - tOff)), 0.01, null, tkM));
+  const rgt = st.subSide === 'right', tEnd = r => rgt ? r.segs[r.segs.length - 1].x2 : r.segs[0].x1, sX = r => tEnd(r) + (rgt ? 0.4 : -0.4);
+  L.rows.forEach((r, ri) => ri % R.rowStep ? 0 : pipe(g, V(sX(r), hz(sX(r), r.y) + 0.05, -r.y), V(tEnd(r), hz(tEnd(r), r.y) + tY, -(r.y - tOff)), 0.01, null, tkM));
   // pond + pump house + fertiliser tank
   const [px, py] = L.pump, ph = hz(px, py), th = hz(px - 4, py);
   const pc = [px - 16, py + 2], pch = Math.min(hz(pc[0], pc[1]), hz(pc[0] - 6, pc[1]), hz(pc[0] + 6, pc[1])) + 0.05;
@@ -2953,7 +2975,7 @@ function build3D() {
   const zStep = Math.max(1, Math.ceil(L.zones.length / 60));
   L.zones.forEach(z => {
     if (z.id % zStep) return;
-    const r = L.rows[z.rows[0]]; const x = r.segs[0].x1 - 0.4, y = r.y - st.rowSp / 2, h = hz(x, y);
+    const r = L.rows[z.rows[0]]; const x = sX(r), y = r.y - st.rowSp / 2, h = hz(x, y);
     const box = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.35, 0.4), STD({ color: '#3a3f44' })); box.position.set(x, h + 0.05, -y); g.add(box);
     const v = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.3, 14), STD({ color: '#d03a2c', roughness: 0.4 })); v.position.set(x, h + 0.35, -y); v.castShadow = true; g.add(v); R.valves[z.id] = v;
     pipe(g, V(x - 1.2, h, -y), V(x - 1.2, h + 2.2, -y), 0.025, '#cfcabd');
@@ -3013,8 +3035,8 @@ function build3D() {
   R.lastAct = -2;
   R.envHour = -99; updateLighting(true);
   buildSunPath(); R.satMesh = null; buildSatGround(g);
-  R.lvG = null; lvMarkers();
-  fitCamera('overview');
+  R.lvG = null; lvMarkers(); R.dimG = null; if (R.dimOn) buildDims(); R.measG = null;
+  if (!R.keepCam) fitCamera('overview'); R.keepCam = false;
 }
 function buildPlants() {
   if (!R.group || !L) return;
@@ -4658,7 +4680,7 @@ async function arQuickLook() {
 }
 /* true-scale model of the drip system around a point, in field-scene coordinates */
 function buildNearModel(me, RR, withPlants, marks) {
-  const st = S.set, rw = st.rowSp * 0.62, rh = 0.16, tOff = R.tapeOff || 0, tY = R.tapeY || 0.15;
+  const st = S.set, rw = Math.min(st.ridgeW || st.rowSp * 0.62, st.rowSp * 0.95), rh = st.ridgeH ?? 0.16, tOff = R.tapeOff || 0, tY = R.tapeY || 0.15;
   const h0 = hz(me.x, me.y), near = (x, y, r) => (x - me.x) ** 2 + (y - me.y) ** 2 <= r * r;
   const geo = { ridge: [], tape: [], em: [], pipe: [], valve: [], post: [], band: [], stem: [], leaf: [], mark: [], arrow: [] };
   const P = (x, y, up = 0) => new THREE.Vector3(x, hz(x, y) + up, -y);
@@ -5356,6 +5378,116 @@ $('#stRestore').addEventListener('change', e => {
   rd.readAsText(fl); e.target.value = '';
 });
 $('#stReset').addEventListener('click', () => { if (!confirm('ล้างข้อมูลทั้งหมดในเครื่องนี้? (แปลง สมุดไร่ จุดวัดระดับ การตั้งค่า)')) return; if (!confirm('ยืนยันอีกครั้ง — ย้อนกลับไม่ได้')) return; localStorage.removeItem('raidrop-v1'); location.reload(); });
+/* ================= design-it-yourself in 3D: dimensions, measuring, live parameters ================= */
+const DS = { k: 'rowSp', meas: [], measOn: false, pumpPick: false };
+const DSP = {
+  rowSp: { t: 'ระยะร่อง', u: 'ซม.', min: 60, max: 200, step: 5, get: () => S.set.rowSp * 100, set: v => S.set.rowSp = v / 100, hint: 'ระยะจากกลางร่องถึงกลางร่องถัดไป (= เทป 1 เส้น/ร่อง)' },
+  plantSp: { t: 'ระยะต้น', u: 'ซม.', min: 40, max: 150, step: 5, get: () => S.set.plantSp * 100, set: v => S.set.plantSp = v / 100, hint: 'ระยะปลูกระหว่างต้นในร่องเดียวกัน' },
+  emSp: { t: 'หัวหยด', u: 'ซม.', min: 10, max: 100, step: 5, get: () => S.set.emSp * 100, set: v => S.set.emSp = v / 100, hint: 'ระยะระหว่างหัวหยดบนเทป' },
+  ridgeW: { t: 'กว้างร่อง', u: 'ซม.', min: 30, max: 190, step: 5, get: () => (S.set.ridgeW || S.set.rowSp * 0.62) * 100, set: v => S.set.ridgeW = Math.min(v / 100, S.set.rowSp * 0.95), hint: 'ความกว้างฐานสันร่อง (ต้องน้อยกว่าระยะร่อง)' },
+  ridgeH: { t: 'สูงร่อง', u: 'ซม.', min: 8, max: 50, step: 2, get: () => (S.set.ridgeH ?? 0.16) * 100, set: v => S.set.ridgeH = v / 100, hint: 'ความสูงสันร่องจากพื้นร่องน้ำ' },
+  inset: { t: 'เว้นขอบ', u: 'ม.', min: 0, max: 15, step: 0.5, get: () => S.set.inset ?? 0.5, set: v => S.set.inset = v, hint: 'ระยะเว้นจากขอบแปลงถึงปลายร่อง (ทางรถ/ทางเดิน)' },
+  rowAng: { t: 'แนวร่อง', u: '°', min: 0, max: 179, step: 1, get: () => Math.round(L ? L.rowAz : 0), set: v => { S.set.rowDir = 'custom'; S.set.rowAng = ((v % 180) + 180) % 180; }, hint: 'ทิศของแนวร่อง (0° = เหนือ–ใต้, 90° = ตะวันออก–ตะวันตก)' },
+  subSide: { t: 'ท่อย่อย', opt: [['left', 'ฝั่งซ้าย/ต้นร่อง'], ['right', 'ฝั่งขวา/ปลายร่อง']], get: () => S.set.subSide || 'left', set: v => S.set.subSide = v, hint: 'ท่อจ่ายน้ำเข้าเทปอยู่หัวร่องด้านไหน' },
+  pump: { t: 'ตำแหน่งปั๊ม', pick: true, hint: 'แตะ "ย้ายปั๊ม" แล้วแตะพื้นในภาพ 3D ตรงที่ตั้งปั๊มจริง' }
+};
+function dspOpen() {
+  if (!L || !R.ok) return toast('วัดแปลงก่อน'); if (S.step !== 2) go(2);
+  document.body.classList.add('designing'); $('#dsp').style.display = ''; R.dimOn = true; buildDims(); dspRender(); dspSum(); setTimeout(resize3D, 60);
+  $('#dspDim').classList.toggle('on', R.dimOn);
+}
+function dspClose() { document.body.classList.remove('designing'); setTimeout(resize3D, 60); $('#dsp').style.display = 'none'; DS.measOn = false; DS.pumpPick = false; $('#dspMeas').classList.remove('on'); }
+function dspSum() { if (L) $('#dspSum').textContent = `${areaThai(L.area)} · ${L.rows.length} ร่อง · ${L.zones.length} โซน · เทป ${f(L.tape)} ม.`; }
+function dspRender() {
+  $('#dspK').innerHTML = Object.entries(DSP).map(([k, d]) => `<button data-k="${k}" class="${k === DS.k ? 'on' : ''}">${d.t}</button>`).join('');
+  const d = DSP[DS.k], v = $('#dspV');
+  if (d.opt) v.innerHTML = `<div class="opt">${d.opt.map(([k, t]) => `<button data-o="${k}" class="${d.get() === k ? 'on' : ''}">${t}</button>`).join('')}</div>`;
+  else if (d.pick) v.innerHTML = `<div class="opt"><button data-pump="pick" class="${DS.pumpPick ? 'on' : ''}">📍 ย้ายปั๊ม (แตะพื้น)</button><button data-pump="auto">อัตโนมัติ</button></div>`;
+  else { const val = d.get(); v.innerHTML = `<button class="stp" data-st="-1">−</button><div class="val"><b>${f(val, d.step < 1 ? 1 : 0)}</b> ${d.u}<input type="range" min="${d.min}" max="${d.max}" step="${d.step}" value="${val}" id="dspR"><small>${d.hint}</small></div><button class="stp" data-st="1">+</button>`; return; }
+  v.insertAdjacentHTML('beforeend', '');
+}
+let dspT = 0;
+function dspApply(k, val) { DSP[k].set(val); save(); clearTimeout(dspT); dspT = setTimeout(() => { R.keepCam = true; onLayoutChanged(); dspSum(); renderDZ(); }, 350); }
+$('#dspK').addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (!b) return; DS.k = b.dataset.k; DS.pumpPick = false; dspRender(); });
+$('#dspV').addEventListener('click', e => {
+  const st = e.target.closest('[data-st]'), o = e.target.closest('[data-o]'), pm = e.target.closest('[data-pump]'), d = DSP[DS.k];
+  if (st) { const nv = clamp(Math.round((d.get() + d.step * +st.dataset.st) / d.step) * d.step, d.min, d.max); dspApply(DS.k, nv); dspRender(); }
+  if (o) { dspApply(DS.k, o.dataset.o); dspRender(); }
+  if (pm) { if (pm.dataset.pump === 'auto') { S.set.pumpLL = null; save(); R.keepCam = true; onLayoutChanged(); DS.pumpPick = false; toast('ปั๊มกลับไปตำแหน่งอัตโนมัติ'); } else { DS.pumpPick = !DS.pumpPick; DS.measOn = false; $('#dspMeas').classList.remove('on'); if (DS.pumpPick) toast('แตะพื้นในภาพ 3D ตรงที่จะตั้งปั๊ม'); } dspRender(); }
+});
+$('#dspV').addEventListener('input', e => { if (e.target.id !== 'dspR') return; const d = DSP[DS.k], v2 = +e.target.value; $('#dspV .val b').textContent = f(v2, d.step < 1 ? 1 : 0); dspApply(DS.k, v2); });
+$('#tDesign').addEventListener('click', dspOpen);
+$('#dspX').addEventListener('click', dspClose);
+$('#dspDim').addEventListener('click', () => { R.dimOn = !R.dimOn; $('#dspDim').classList.toggle('on', R.dimOn); R.dimOn ? buildDims() : clearDims(); });
+$('#dspMeas').addEventListener('click', () => { DS.measOn = !DS.measOn; DS.pumpPick = false; DS.meas = []; $('#dspMeas').classList.toggle('on', DS.measOn); drawMeas(); toast(DS.measOn ? 'แตะ 2 จุดบนพื้นเพื่อวัดระยะ' : 'ปิดการวัดระยะ'); });
+$('#dspReset').addEventListener('click', () => { if (!confirm('คืนค่าการออกแบบเป็นค่าเริ่มต้น?')) return; Object.assign(S.set, { rowSp: 1.0, plantSp: 0.8, emSp: 0.3, ridgeW: null, ridgeH: 0.16, inset: 0.5, subSide: 'left', pumpLL: null, rowDir: 'best' }); save(); R.keepCam = true; onLayoutChanged(); dspRender(); dspSum(); });
+$('#dspZoom').addEventListener('click', () => { const c = DS.call; if (!c) return; R.tween = null; const t = V(c.x, hz(c.x, c.y), -c.y), dir = V(Math.cos(0.9), 0, Math.sin(0.9)); R.camera.position.set(t.x - 3.2, t.y + 2.4, t.z + 3.2); R.controls.target.copy(t); R.controls.update(); });
+/* labels */
+function dimLabel(text, size, bg) {
+  const fs = 44, c = document.createElement('canvas'), x = c.getContext('2d'); x.font = `700 ${fs}px Prompt, sans-serif`; const w = Math.ceil(x.measureText(text).width) + 36; c.width = w; c.height = 72;
+  x.font = `700 ${fs}px Prompt, sans-serif`; x.fillStyle = bg || 'rgba(255,255,255,.95)'; x.beginPath(); x.roundRect ? x.roundRect(2, 4, w - 4, 64, 18) : x.rect(2, 4, w - 4, 64); x.fill();
+  x.fillStyle = bg ? '#fff' : '#1b2a1e'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(text, w / 2, 38);
+  const tx = new THREE.CanvasTexture(c); tx.colorSpace = THREE.SRGBColorSpace; const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tx, depthTest: false, toneMapped: false })); sp.renderOrder = 6; sp.scale.set(size * w / 72, size, 1); return sp;
+}
+function clearDims() { if (R.dimG) { disposeGroup(R.dimG); R.group && R.group.remove(R.dimG); R.dimG = null; } }
+const dimLine = (pts, col) => { const g = new THREE.BufferGeometry().setFromPoints(pts); return new THREE.Line(g, new THREE.LineBasicMaterial({ color: col || '#ffd23f', depthTest: false, toneMapped: false, transparent: true })); };
+function buildDims() {
+  clearDims(); if (!L || !R.group) return; const g = new THREE.Group(); R.dimG = g; const st = S.set, span = Math.max(L.W, L.H), big = clamp(span / 28, 1.2, 14);
+  // 1) every boundary edge with its length, drawn just outside the field
+  const cx = L.poly.reduce((a, p) => a + p[0], 0) / L.poly.length, cy = L.poly.reduce((a, p) => a + p[1], 0) / L.poly.length;
+  L.poly.forEach((a, i) => { const b = L.poly[(i + 1) % L.poly.length], len = dist(a, b); if (len < 1) return; const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2;
+    let nx = -(b[1] - a[1]) / len, ny = (b[0] - a[0]) / len; if ((mx - cx) * nx + (my - cy) * ny < 0) { nx = -nx; ny = -ny; } const o = big * 0.6;
+    const A = V(a[0] + nx * o, hz(a[0], a[1]) + 0.3, -(a[1] + ny * o)), B = V(b[0] + nx * o, hz(b[0], b[1]) + 0.3, -(b[1] + ny * o));
+    g.add(dimLine([V(a[0], hz(a[0], a[1]) + 0.3, -a[1]), A, B, V(b[0], hz(b[0], b[1]) + 0.3, -b[1])]));
+    const lb = dimLabel(len >= 100 ? `${f(len, 1)} ม.` : `${f(len, 2)} ม.`, big * 0.9); lb.position.set((A.x + B.x) / 2, (A.y + B.y) / 2 + big * 0.5, (A.z + B.z) / 2); g.add(lb); });
+  // 2) row lengths (first, middle, last)
+  [0, Math.floor(L.rows.length / 2), L.rows.length - 1].filter((v, i, a) => a.indexOf(v) === i).forEach(i => { const r = L.rows[i], gs = r.segs.reduce((a, b) => b.len > a.len ? b : a);
+    const lb = dimLabel(`ร่องที่ ${i + 1} ยาว ${f(r.len, 1)} ม.`, big * 0.55, 'rgba(26,127,78,.92)'); lb.position.set((gs.x1 + gs.x2) / 2, hz((gs.x1 + gs.x2) / 2, r.y) + big * 0.5, -r.y); g.add(lb); });
+  // 3) pump → field main pipe
+  if (L.sub.length) { const [px, py] = L.pump, s0 = L.sub[0]; g.add(dimLine([V(px, hz(px, py) + 0.4, -py), V(s0[0], hz(s0[0], py) + 0.4, -py), V(s0[0], hz(s0[0], s0[1]) + 0.4, -s0[1])], '#7fc4ff'));
+    const lb = dimLabel(`ท่อเมน ${f(L.mainLen, 1)} ม. · ท่อย่อย ${f(L.subLen, 1)} ม.`, big * 0.55, 'rgba(31,111,209,.92)'); lb.position.set((px + s0[0]) / 2, hz(px, py) + big * 0.6, -py); g.add(lb); }
+  // 4) close-up callout: ridge spacing, ridge size, plant & emitter spacing, headland
+  const mid = Math.floor(L.rows.length / 2), r0 = L.rows[Math.max(0, mid - 1)], r1 = L.rows[mid]; if (r0 && r1 && r0 !== r1) {
+    const seg = r1.segs[0], rgt = st.subSide === 'right', xs = rgt ? r1.segs[r1.segs.length - 1].x2 - 4 : seg.x1 + 4, ytop = (r, x) => hz(x, r.y) + (st.ridgeH ?? 0.16) + 0.02;
+    DS.call = { x: xs, y: (r0.y + r1.y) / 2 };
+    const sm = 0.16, rw = Math.min(st.ridgeW || st.rowSp * 0.62, st.rowSp * 0.95), rh = st.ridgeH ?? 0.16;
+    const pA = V(xs, ytop(r0, xs) + 0.25, -r0.y), pB = V(xs, ytop(r1, xs) + 0.25, -r1.y);
+    g.add(dimLine([V(xs, ytop(r0, xs), -r0.y), pA, pB, V(xs, ytop(r1, xs), -r1.y)], '#ff6b4a'));
+    let lb = dimLabel(`ระยะร่อง ${f(st.rowSp * 100)} ซม.`, sm, 'rgba(201,64,40,.95)'); lb.position.set(xs, pA.y + 0.12, (pA.z + pB.z) / 2); g.add(lb);
+    const xw = xs + 1.2, h0 = hz(xw, r1.y); g.add(dimLine([V(xw, h0 + 0.01, -(r1.y - rw / 2)), V(xw, h0 + 0.01, -(r1.y + rw / 2))], '#ffffff'), dimLine([V(xw, h0, -(r1.y + rw / 2) - 0.05), V(xw, h0 + rh, -(r1.y + rw / 2) - 0.05)], '#ffffff'));
+    lb = dimLabel(`ร่องกว้าง ${f(rw * 100)} · สูง ${f(rh * 100)} ซม.`, sm * 0.85); lb.position.set(xw, h0 + rh + 0.32, -r1.y); g.add(lb);
+    const xp = xs + 2.2, yp = r1.y; g.add(dimLine([V(xp, ytop(r1, xp) + 0.5, -yp), V(xp + st.plantSp, ytop(r1, xp) + 0.5, -yp)], '#5fd068'));
+    lb = dimLabel(`ระยะต้น ${f(st.plantSp * 100)} ซม.`, sm * 0.85, 'rgba(47,125,60,.95)'); lb.position.set(xp + st.plantSp / 2, ytop(r1, xp) + 0.68, -yp); g.add(lb);
+    const xe = xs - 0.2, ye = r0.y; for (let k = 0; k < 4; k++) { const xx = xe + k * st.emSp; const d0 = new THREE.Mesh(new THREE.SphereGeometry(0.018, 8, 6), new THREE.MeshBasicMaterial({ color: '#2a8cff', depthTest: false })); d0.renderOrder = 6; d0.position.set(xx, ytop(r0, xx), -(ye - 0.0)); g.add(d0); }
+    lb = dimLabel(`หัวหยดทุก ${f(st.emSp * 100)} ซม.`, sm * 0.85, 'rgba(31,111,209,.95)'); lb.position.set(xe + st.emSp * 1.5, ytop(r0, xe) + 0.2, -ye); g.add(lb);
+    const edgeX = rgt ? r1.segs[r1.segs.length - 1].x2 + (st.inset ?? 0.5) : seg.x1 - (st.inset ?? 0.5), endX = rgt ? r1.segs[r1.segs.length - 1].x2 : seg.x1;
+    if ((st.inset ?? 0.5) > 0.05) { g.add(dimLine([V(edgeX, hz(edgeX, yp) + 0.05, -yp), V(endX, hz(endX, yp) + 0.05, -yp)], '#ffd23f')); lb = dimLabel(`เว้นขอบ ${f(st.inset ?? 0.5, 1)} ม.`, sm * 0.85); lb.position.set((edgeX + endX) / 2, hz(endX, yp) + 0.3, -yp + 0.4); g.add(lb); }
+  }
+  R.group.add(g);
+}
+/* tap-to-measure + place-the-pump */
+function drawMeas() {
+  if (R.measG) { disposeGroup(R.measG); R.group && R.group.remove(R.measG); R.measG = null; } if (!DS.meas.length || !R.group) return;
+  const g = new THREE.Group(); R.measG = g; const P = DS.meas.map(m => V(m.x, m.h + 0.05, -m.y)), span = Math.max(L.W, L.H), s0 = clamp(span / 40, 0.3, 8);
+  const cd = p => clamp(R.camera.position.distanceTo(p) * 0.011, 0.02, 4);
+  P.forEach(p => { const d = new THREE.Mesh(new THREE.SphereGeometry(cd(p), 12, 8), new THREE.MeshBasicMaterial({ color: '#ff3b30', depthTest: false })); d.renderOrder = 7; d.position.copy(p); g.add(d); });
+  if (P.length === 2) { g.add(dimLine(P, '#ff3b30')); const a = DS.meas[0], b = DS.meas[1], dd = Math.hypot(b.x - a.x, b.y - a.y), dz = b.h - a.h;
+    const txt = dd < 10 ? `${f(dd * 100)} ซม.` : `${f(dd, 2)} ม. (${f(dd * 100)} ซม.)`; const lb = dimLabel(txt + (Math.abs(dz) > 0.02 ? ` · สูงต่าง ${f(Math.abs(dz) * 100)} ซม.` : ''), cd(P[0].clone().lerp(P[1], 0.5)) * 2.6, 'rgba(255,59,48,.95)');
+    lb.position.set((P[0].x + P[1].x) / 2, (P[0].y + P[1].y) / 2 + cd(P[0].clone().lerp(P[1], 0.5)) * 3, (P[0].z + P[1].z) / 2); g.add(lb); toast('ระยะ ' + txt); }
+  R.group.add(g);
+}
+{ let down = null; const ray = new THREE.Raycaster(), v2 = new THREE.Vector2();
+  $('#v3d').addEventListener('pointerdown', e => { if ((DS.measOn || DS.pumpPick) && !AR.on) down = { x: e.clientX, y: e.clientY }; });
+  $('#v3d').addEventListener('pointerup', e => {
+    if (!(DS.measOn || DS.pumpPick) || !down || AR.on || !R.group || !L) return; const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y); down = null; if (moved > 8) return;
+    const rc = R.renderer.domElement.getBoundingClientRect(); v2.set((e.clientX - rc.left) / rc.width * 2 - 1, -((e.clientY - rc.top) / rc.height) * 2 + 1); ray.setFromCamera(v2, R.camera);
+    const tg = []; R.group.traverse(o => { if (o.isMesh && (o.material === R.fieldMat || o.material === R.grassMat || o === R.satMesh || o === R.ridge)) tg.push(o); });
+    const hit = ray.intersectObjects(tg, false)[0]; if (!hit) return toast('แตะที่พื้น');
+    const p = { x: hit.point.x, y: -hit.point.z, h: hit.point.y };
+    if (DS.pumpPick) { S.set.pumpLL = sceneToLL(p.x, p.y); save(); DS.pumpPick = false; R.keepCam = true; onLayoutChanged(); dspRender(); dspSum(); toast(`ย้ายปั๊มแล้ว · ท่อเมนยาว ${f(L.mainLen, 1)} ม.`); return; }
+    if (DS.meas.length >= 2) DS.meas = []; DS.meas.push(p); drawMeas();
+  });
+}
 function arMsg(html, ms) { const m = $('#arMsg'); m.innerHTML = html; m.style.display = ''; clearTimeout(AR.msgTO); AR.msgTO = setTimeout(() => { m.style.display = 'none'; }, ms || 3000); }
 /* hide the model ground and scenery; add bright overlays that read well over a camera picture */
 function arScene() {

@@ -153,7 +153,25 @@ html.bigtext .smans{font-size:34px}html.bigtext .smhow{font-size:19px}
 #stSnapList{padding:4px 14px 10px;border-top:1px solid var(--line)}#stSnapList button{display:flex;justify-content:space-between;width:100%;border:0;background:var(--paper);border-radius:10px;padding:9px 12px;margin-top:6px;font:inherit;color:inherit}
 .aibtn{background:var(--leaf-2)!important;color:var(--leaf)!important}
 @media (max-width:920px){.aibtn{margin-left:auto!important;padding:8px 10px!important}.aibtn span{display:none!important}#gOpen{margin-left:6px!important}}
-.smtodo.ai{background:var(--leaf-2)}
+.smtodo.ai{background:var(--leaf-2)}.smtodo.pc{background:#eef4ea}
+.pcbox{max-height:94vh}.pcbox .sheeth b{display:flex;flex-direction:column;line-height:1.2}.pcbox .sheeth b small{font:400 11.5px 'IBM Plex Sans Thai',sans-serif;color:var(--muted)}
+.pctab{display:flex;margin:4px 0 10px}.pctab button{flex:1;padding:9px 6px;font-size:14px}
+.pcstart{display:flex;flex-direction:column;gap:8px}.pcshot{display:flex;flex-direction:column;align-items:center;gap:4px;padding:22px 14px;border:2px dashed #b9cfb0;border-radius:18px;background:var(--leaf-2);cursor:pointer;text-align:center}
+.pcshot .big{font-size:40px}.pcshot b{font:600 17px 'Prompt',sans-serif;color:var(--leaf)}.pcshot small{color:var(--ink2);font-size:13px;line-height:1.5}
+.pccv{position:relative;border-radius:14px;overflow:hidden;background:#111;touch-action:none}.pccv canvas#pcCv{display:block;margin:0 auto}
+.pcloupe{position:absolute;top:8px;left:8px;width:120px;height:120px;border-radius:50%;border:3px solid #fff;box-shadow:0 4px 14px rgba(0,0,0,.4);pointer-events:none}
+.pcstep{position:absolute;left:8px;right:8px;bottom:8px;background:rgba(10,20,14,.78);color:#fff;border-radius:12px;padding:8px 11px;font-size:14px;line-height:1.4;pointer-events:none}.pcstep:empty{display:none}
+.pcrow{display:flex;align-items:flex-end;gap:8px;margin:10px 0 6px}.pctog{flex:1;font-size:13.5px;display:flex;align-items:center;gap:6px}.btn.sm{padding:7px 10px;font-size:13px}
+.pcm{display:grid;grid-template-columns:1fr 1fr;gap:6px}.pcm .mt{background:var(--paper);border-radius:12px;padding:8px 10px}.pcm .mt b{font:600 18px 'IBM Plex Mono',monospace;display:block}.pcm .mt small{font-size:12px;color:var(--ink2)}
+.pcm .mt.warn{background:var(--warn-2)}.pcm .mt.warn b{color:var(--warn)}.pcm .mt.bad{background:var(--bad-2)}.pcm .mt.bad b{color:var(--bad)}.pcm .wide{grid-column:1/-1}.pcm .k{font-weight:600;color:var(--ink)}
+.pcai{margin-top:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;font-size:14.5px;line-height:1.55}.pcai:empty{display:none}
+.pcai .hd{display:flex;align-items:center;gap:10px;margin-bottom:6px}.pcai .sc{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font:700 16px 'IBM Plex Mono',monospace;color:#fff;background:var(--good);flex:none}
+.pcai .sc.warn{background:var(--warn)}.pcai .sc.bad{background:var(--bad)}.pcai .iss{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-top:1px solid var(--line)}
+.pcai .lv{font-size:11.5px;padding:2px 7px;border-radius:99px;white-space:nowrap;background:var(--paper);color:var(--ink2)}.pcai .lv.h{background:var(--bad-2);color:var(--bad)}.pcai .lv.m{background:var(--warn-2);color:var(--warn)}
+.pcai .src{display:block;font-size:11px;color:var(--muted);margin-top:6px}.pcai ul{margin:4px 0 0;padding-left:20px}
+.pcres{font-size:15px;line-height:1.5}.pcres .hv{font:700 28px 'Prompt',sans-serif;color:var(--leaf)}
+.pchist{margin-top:12px}.pchist .hi{display:flex;gap:10px;align-items:center;padding:7px 0;border-top:1px solid var(--line);font-size:13px}.pchist img{width:46px;height:46px;object-fit:cover;border-radius:9px;flex:none}.pchist .hi div{flex:1}
+.pchist h5{margin:0 0 4px;font:600 14px 'Prompt',sans-serif;color:var(--ink2)}
 .aibox{display:flex;flex-direction:column;height:92vh;max-height:92vh;padding-bottom:calc(10px + var(--sab))}
 .aibox .sheeth b{display:flex;flex-direction:column;line-height:1.2}.aibox .sheeth b small{font:400 11.5px 'IBM Plex Sans Thai',sans-serif;color:var(--muted)}
 .aicfg{background:var(--paper);border-radius:14px;padding:10px 12px;margin-bottom:8px;font-size:13px}
@@ -1975,6 +1993,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="smmini"><span>🌱</span><b id="smAge">—</b><small id="smAgeS">—</small></div>
     </div>
     <button class="smtodo ai" id="smAI"><span>🤖</span><span class="t"><b>ถามหมอมัน AI</b><small>ถามเรื่องน้ำ ปุ๋ย โรค แมลง หรือถ่ายรูปใบมันให้ดู</small></span><span>›</span></button>
+    <button class="smtodo pc" id="smPC"><span>📷</span><span class="t"><b>ตรวจต้นมันจากรูป</b><small>ดูโรค/เพลี้ยแป้ง และวัดความสูงต้นจากรูปถ่าย</small></span><span>›</span></button>
     <button class="smtodo" id="smTodo"><span>📒</span><span class="t"><b id="smTodoT">—</b><small>แตะเพื่อบันทึก</small></span><span>›</span></button>
     <button class="smtodo bk" id="smBk" style="display:none"><span>💾</span><span class="t"><b>สำรองข้อมูลส่งเข้า LINE</b><small id="smBkS">ไม่ได้สำรองนานแล้ว · กันข้อมูลหายเมื่อเปลี่ยนมือถือ</small></span><span>›</span></button>
     <button class="smfull" id="smFull">ดูไร่ 3D · ออกแบบ · กล้อง AR · กราฟ <b>เปิดโหมดละเอียด ›</b></button>
@@ -1993,6 +2012,30 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <div class="aimsgs" id="aiMsgs"></div>
   <div class="aichips" id="aiChips"></div>
   <div class="aiin"><label class="aicam" title="ถ่ายรูป/เลือกรูป">📷<input type="file" accept="image/*" capture="environment" id="aiImg" style="display:none"></label><div class="aiprev" id="aiPrev"></div><textarea id="aiText" rows="1" placeholder="พิมพ์คำถาม เช่น ใบเหลืองเกิดจากอะไร"></textarea><button id="aiMic" title="พูด">🎤</button><button id="aiSend" class="send">➤</button></div>
+</div></div>
+<div class="sheet" id="pcSheet" style="display:none"><div class="sheetbg" data-close></div><div class="sheetbox pcbox">
+  <div class="sheeth"><span class="ti t-gr sm">📷</span><b>ตรวจต้นมันจากรูป<small id="pcSub">คัดกรองโรค/แมลง และวัดความสูง</small></b><button class="xbtn" data-close aria-label="ปิด">✕</button></div>
+  <div class="seg mini pctab" id="pcTab"><button data-m="check" class="on">🩺 ตรวจโรค / แมลง</button><button data-m="height">📏 วัดความสูง</button></div>
+  <div id="pcStart" class="pcstart">
+    <label class="pcshot"><input type="file" accept="image/*" capture="environment" id="pcFile" style="display:none"><span class="big">📷</span><b>ถ่ายรูป</b><small id="pcHint">—</small></label>
+    <label class="btn block" style="justify-content:center"><input type="file" accept="image/*" id="pcFile2" style="display:none">🖼 เลือกรูปจากเครื่อง</label>
+  </div>
+  <div id="pcWork" style="display:none">
+    <div class="pccv"><canvas id="pcCv"></canvas><canvas id="pcLoupe" class="pcloupe" width="120" height="120" style="display:none"></canvas><div class="pcstep" id="pcStep"></div></div>
+    <div id="pcCheck">
+      <div class="row pcrow"><label class="pctog"><input type="checkbox" id="pcOv" checked> แสดงจุดที่พบบนรูป</label><button class="btn sm" id="pcNew">📷 รูปใหม่</button></div>
+      <div class="pcm" id="pcLocal"></div>
+      <div class="pcai" id="pcAI"></div>
+      <div class="row" style="gap:8px;margin-top:10px"><button class="btn primary" id="pcSave" style="flex:1">บันทึกลงสมุดไร่</button><button class="btn" id="pcAsk">🤖 ถามต่อ</button></div>
+    </div>
+    <div id="pcHeight" style="display:none">
+      <div class="row pcrow"><label class="fld" style="flex:1;margin:0">ไม้/สิ่งอ้างอิงยาว (ซม.)<input type="number" id="pcRef" min="10" max="500" inputmode="numeric" value="100"></label><button class="btn sm" id="pcUndo">↶ ย้อน</button><button class="btn sm" id="pcNew2">📷 รูปใหม่</button></div>
+      <div class="pcres" id="pcRes"></div>
+      <div class="row" style="gap:8px;margin-top:8px"><button class="btn" id="pcNext" style="flex:1" disabled>＋ วัดต้นถัดไปในรูปนี้</button><button class="btn primary" id="pcHSave" style="flex:1" disabled>บันทึกความสูง</button></div>
+    </div>
+  </div>
+  <details class="more2" id="pcHow"><summary>วิธีถ่ายให้แม่น</summary><div id="pcHowT" class="small"></div></details>
+  <div class="pchist" id="pcHist"></div>
 </div></div>
 <div class="sheet" id="stSheet" style="display:none"><div class="sheetbg" data-close></div><div class="sheetbox">
   <div class="sheeth"><span class="ti t-gr sm"><svg class="ic"><use href="#i-gear"/></svg></span><b>ตั้งค่า</b><button class="xbtn" data-close aria-label="ปิด">✕</button></div>
@@ -2029,7 +2072,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <div class="stsec">เกี่ยวกับ</div>
   <div class="stgrp">
     <button class="strow link2" id="stIntro"><span class="sti"><svg class="ic"><use href="#i-eye"/></svg></span><span class="stt"><b>ดูวิธีใช้อีกครั้ง</b></span><span class="chev">›</span></button>
-    <div class="strow"><span class="sti"><svg class="ic"><use href="#i-sprout"/></svg></span><span class="stt"><b>ไร่หยด · เวอร์ชัน 19 พ.ย. 69 (AI ฟรีไม่ต้องใช้คีย์)</b><small>ข้อมูลเก็บในเครื่องนี้เท่านั้น · ค่าที่คำนวณเป็นค่าประมาณ ควรตรวจกับแปลงจริง</small></span></div>
+    <div class="strow"><span class="sti"><svg class="ic"><use href="#i-sprout"/></svg></span><span class="stt"><b>ไร่หยด · เวอร์ชัน 19 พ.ย. 69 (ตรวจต้นมันจากรูป)</b><small>ข้อมูลเก็บในเครื่องนี้เท่านั้น · ค่าที่คำนวณเป็นค่าประมาณ ควรตรวจกับแปลงจริง</small></span></div>
   </div>
   <div style="height:10px"></div>
 </div></div>
@@ -2115,9 +2158,10 @@ let S = { pts: [], hpts: [], closed: false, set: { ...DEF }, mode: 'auto', step:
 try { const s = JSON.parse(localStorage.getItem('raidrop-v1')); if (s && s.set) { S = { ...S, ...s, set: { ...DEF, ...s.set } }; } } catch (e) {}
 if (!S.crop) S.crop = { status: S.closed ? 'planted' : 'none' };
 if (!Array.isArray(S.lvl)) S.lvl = [];
+if (!Array.isArray(S.pc)) S.pc = [];
 if (!S.ai) S.ai = { prov: 'free', key: '', hist: [] };
 if (!S.ai.key && (S.ai.prov === 'gemini' || S.ai.prov === 'claude')) S.ai.prov = 'free';
-function save() { try { localStorage.setItem('raidrop-v1', JSON.stringify({ crop: S.crop, obs: S.obs, diary: S.diary, ui: S.ui, g: S.g, ai: S.ai, pts: S.pts, hpts: S.hpts, lvl: S.lvl, meas: S.meas, mpts: S.mpts, src: S.src, elevSrc: S.elevSrc, closed: S.closed, set: S.set, mode: S.mode })); } catch (e) {} }
+function save() { try { localStorage.setItem('raidrop-v1', JSON.stringify({ crop: S.crop, obs: S.obs, diary: S.diary, ui: S.ui, g: S.g, ai: S.ai, pc: S.pc, pts: S.pts, hpts: S.hpts, lvl: S.lvl, meas: S.meas, mpts: S.mpts, src: S.src, elevSrc: S.elevSrc, closed: S.closed, set: S.set, mode: S.mode })); } catch (e) {} }
 
 /* ================= geometry ================= */
 function project(pts) {
@@ -4103,6 +4147,7 @@ $('#tSat').addEventListener('click', () => { SAT.on = !SAT.on; S.ui = { ...(S.ui
   if (SAT.on && !R.satMesh && R.group) buildSatGround(R.group); applySatVisibility();
   toast(SAT.on ? (SAT.state === 'fail' ? 'โหลดภาพดาวเทียมไม่ได้ (ต้องเปิดจากเว็บ https และมีอินเทอร์เน็ต)' : '🛰 แสดงภาพดาวเทียมพื้นที่จริงรอบไร่') : 'ซ่อนภาพดาวเทียม ใช้ภาพจำลอง'); });
 $('#dSheet').addEventListener('click', e => {
+  const pcb = e.target.closest('[data-pc]'); if (pcb) { closeDiary(); setTimeout(() => pcOpen(pcb.dataset.pc), 260); return; }
   if (e.target.closest('[data-close]')) { closeDiary(); return; }
   const kb = e.target.closest('#dTodo [data-k], #dTiles [data-k]'); if (kb) { diaryForm(kb.dataset.k); return; }
   const fb = e.target.closest('.feel [data-f]'); if (fb) { saveDiary('soil', +fb.dataset.f); return; }
@@ -4574,6 +4619,7 @@ function diaryForm(k) {
   else if (k === 'weed') h = `<h4>🌾 กำจัดวัชพืช</h4>${dateF}<label class="fld">วิธี<select id="fW"><option>ใช้แรงงาน/จอบ</option><option>รถไถพรวนระหว่างร่อง</option><option>ยาคุม/ยาฆ่าหญ้า</option></select></label>`;
   else if (k === 'pest') h = `<h4>🐛 พบโรคหรือแมลง</h4>${dateF}<label class="fld">ที่พบ<select id="fP"><option>เพลี้ยแป้ง</option><option>ไรแดง</option><option>แมลงหวี่ขาว</option><option>โรคใบด่าง</option><option>โรคใบไหม้</option><option>หนอน/ปลวก</option><option>อื่น ๆ</option></select></label><label class="fld">ความรุนแรง<select id="fSev"><option>น้อย (ไม่กี่ต้น)</option><option>ปานกลาง (เป็นหย่อม)</option><option>มาก (ลามทั้งแปลง)</option></select></label>`;
   else if (k === 'harvest') h = `<h4>🚜 บันทึกการเก็บเกี่ยว</h4>${dateF}<div class="form"><label>ผลผลิตหัวสด <span class="u">ตัน/ไร่</span><input type="number" id="fY" step="0.1" min="0" inputmode="decimal"></label><label>เปอร์เซ็นต์แป้ง <span class="u">%</span><input type="number" id="fS" step="0.5" min="0" max="40" inputmode="decimal"></label></div><label class="chk"><input type="checkbox" id="fNext" checked> ใช้ผลผลิตนี้เป็นค่าศักยภาพของฤดูหน้า</label>`;
+  if (k === 'height' || k === 'pest') h += `<button class="btn block pcbtn" data-pc="${k === 'height' ? 'height' : 'check'}" style="margin:6px 0;justify-content:center">📷 ${k === 'height' ? 'วัดความสูงจากรูปถ่าย' : 'ถ่ายรูปให้ AI ช่วยดู'}</button>`;
   h += `<label class="fld">หมายเหตุ (ไม่บังคับ)<input type="text" id="fNote" maxlength="80"></label>`;
   if (k !== 'soil') h += `<button class="btn primary xl" id="fSave" data-k="${k}">บันทึก</button>`;
   h += `<button class="btn block" id="fCancel" style="margin-top:8px">ยกเลิก</button>`;
@@ -5744,7 +5790,7 @@ function aiClose() { const sh = $('#aiSheet'); sh.classList.remove('on'); setTim
 function aiChips() {
   const c = L && SIM.today ? need(SIM.t).c : null;
   const Q = ['วันนี้ต้องรดน้ำไหม', c && !c.notPlanted ? `อายุ ${c.dap} วัน ควรใส่ปุ๋ยอะไร` : 'เตรียมดินก่อนปลูกยังไง', 'ใบเหลือง ใบด่าง เกิดจากอะไร', 'เพลี้ยแป้งกำจัดยังไง', 'ฝนจะตกไหมสัปดาห์นี้', 'เมื่อไหร่เก็บเกี่ยว', 'ระบบน้ำหยดตันแก้ยังไง'];
-  $('#aiChips').innerHTML = Q.map(q => `<button>${q}</button>`).join('');
+  $('#aiChips').innerHTML = '<button data-pc="check">📷 ตรวจต้นจากรูป</button>' + Q.map(q => `<button>${q}</button>`).join('');
 }
 function aiBubble(r, html, img) { const d = document.createElement('div'); d.className = 'aim ' + r; d.innerHTML = (img ? `<img src="${img}">` : '') + html; $('#aiMsgs').appendChild(d); $('#aiMsgs').scrollTop = 1e6; return d; }
 const esc = t => String(t).replace(/[&<>]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[ch]));
@@ -5760,25 +5806,27 @@ async function aiSend() {
   catch (e) { ans = aiLocal(q, !!img) + `<span class="src">⚠ ต่อ AI ไม่ได้ (${esc(e.message || e)}) — ตอบแบบพื้นฐานแทน</span>`; }
   AI.busy = false; wait.className = 'aim a'; wait.innerHTML = ans; $('#aiMsgs').scrollTop = 1e6; aiRemember('a', ans);
 }
-async function aiCloud(q, img) {
+async function aiCloud(q, img, opt = {}) {
   const ctx = 'ข้อมูลไร่ของผู้ใช้ตอนนี้:\n' + Object.entries(farmCtx()).map(([k, v]) => `- ${k}: ${v}`).join('\n');
-  const hist = (S.ai.hist || []).slice(-9, -1).filter(m => !m.t.includes('typing')).map(m => ({ role: m.r === 'u' ? 'user' : 'assistant', text: m.t.replace(/<[^>]+>/g, '') }));
+  const sysP = opt.sys || AI_SYS;
+  const hist = opt.noHist ? [] : (S.ai.hist || []).slice(-9, -1).filter(m => !m.t.includes('typing')).map(m => ({ role: m.r === 'u' ? 'user' : 'assistant', text: m.t.replace(/<[^>]+>/g, '') }));
   const prov = aiProv();
-  if (prov === 'free' || prov === 'puter') return aiFree(prov, q, img, ctx, hist);
+  if (prov === 'free' || prov === 'puter') return aiFree(prov, q, img, ctx, hist, opt);
   if (prov === 'claude') {
     const content = []; if (img) content.push({ type: 'image', source: { type: 'base64', media_type: img.mime, data: img.b64 } }); content.push({ type: 'text', text: q });
     const r = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'content-type': 'application/json', 'x-api-key': S.ai.key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
-      body: JSON.stringify({ model: 'claude-haiku-5-5', max_tokens: 900, system: AI_SYS + '\n\n' + ctx, messages: [...hist.map(h => ({ role: h.role, content: h.text })), { role: 'user', content }] }) });
+      body: JSON.stringify({ model: 'claude-haiku-5-5', max_tokens: 1200, system: sysP + '\n\n' + ctx, messages: [...hist.map(h => ({ role: h.role, content: h.text })), { role: 'user', content }] }) });
     const j = await r.json(); if (!r.ok) throw new Error(j.error ? j.error.message : r.status);
-    return mdLite(j.content.map(c => c.text || '').join('')) + '<span class="src">ตอบโดย Claude · ควรตรวจสอบกับแปลงจริง</span>';
+    const ct = j.content.map(c => c.text || '').join(''); if (opt.raw) return { text: ct, by: 'Claude' };
+    return mdLite(ct) + '<span class="src">ตอบโดย Claude · ควรตรวจสอบกับแปลงจริง</span>';
   }
   const parts = []; if (img) parts.push({ inline_data: { mime_type: img.mime, data: img.b64 } }); parts.push({ text: q });
-  const body = { system_instruction: { parts: [{ text: AI_SYS + '\n\n' + ctx }] }, contents: [...hist.map(h => ({ role: h.role === 'user' ? 'user' : 'model', parts: [{ text: h.text }] })), { role: 'user', parts }], generationConfig: { maxOutputTokens: 900, temperature: 0.4 } };
+  const body = { system_instruction: { parts: [{ text: sysP + '\n\n' + ctx }] }, contents: [...hist.map(h => ({ role: h.role === 'user' ? 'user' : 'model', parts: [{ text: h.text }] })), { role: 'user', parts }], generationConfig: { maxOutputTokens: 1200, temperature: opt.raw ? 0.2 : 0.4 } };
   let lastErr;
   for (const model of ['gemini-flash-latest', 'gemini-2.5-flash', 'gemini-flash-lite-latest']) {
     const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, { method: 'POST', headers: { 'content-type': 'application/json', 'x-goog-api-key': S.ai.key }, body: JSON.stringify(body) });
     const j = await r.json().catch(() => ({}));
-    if (r.ok) { const t = (j.candidates && j.candidates[0] && j.candidates[0].content && j.candidates[0].content.parts || []).map(p => p.text || '').join(''); if (t) return mdLite(t) + '<span class="src">ตอบโดย Google Gemini · ควรตรวจสอบกับแปลงจริง</span>'; }
+    if (r.ok) { const t = (j.candidates && j.candidates[0] && j.candidates[0].content && j.candidates[0].content.parts || []).map(p => p.text || '').join(''); if (t) return opt.raw ? { text: t, by: 'Gemini' } : mdLite(t) + '<span class="src">ตอบโดย Google Gemini · ควรตรวจสอบกับแปลงจริง</span>'; }
     lastErr = (j.error && j.error.message) || r.status; if (r.status === 400 || r.status === 401 || r.status === 403) break;
   }
   throw new Error(lastErr);
@@ -5791,13 +5839,13 @@ function puterLoad() {
 }
 const aiTO = (ms) => { const c = new AbortController(); setTimeout(() => c.abort(), ms); return c.signal; };
 const aiClean = t => String(t || '').replace(/\n+\s*-{3,}[\s\S]*?(pollinations|🌸)[\s\S]*$/i, '').replace(/^.*🌸.*Ad.*$/gim, '').trim();
-async function aiFree(prov, q, img, ctx, hist) {
-  const sys = AI_SYS + '\n\n' + ctx;
+async function aiFree(prov, q, img, ctx, hist, opt = {}) {
+  const sys = (opt.sys || AI_SYS) + '\n\n' + ctx;
   const user = img ? [{ type: 'text', text: q }, { type: 'image_url', image_url: { url: `data:${img.mime};base64,${img.b64}` } }] : q;
   const msgs = [{ role: 'system', content: sys }, ...hist.map(h => ({ role: h.role, content: h.text.slice(0, 1500) })), { role: 'user', content: user }];
   const tag = n => `<span class="src">ตอบโดย AI ฟรี (${n}) · ควรตรวจสอบกับแปลงจริง</span>`;
   const errs = [];
-  const tryOne = async (name, fn) => { try { const t = aiClean(await fn()); if (t.length > 3) return mdLite(t) + tag(name); errs.push(name + ': ว่าง'); } catch (e) { errs.push(name + ': ' + (e.name === 'AbortError' ? 'ช้าเกิน' : e.message)); } return null; };
+  const tryOne = async (name, fn) => { try { const t = aiClean(await fn()); if (t.length > 3) return opt.raw ? { text: t, by: 'AI ฟรี · ' + name } : mdLite(t) + tag(name); errs.push(name + ': ว่าง'); } catch (e) { errs.push(name + ': ' + (e.name === 'AbortError' ? 'ช้าเกิน' : e.message)); } return null; };
   const puterCall = async () => {
     const P = await puterLoad();
     const r = img ? await P.ai.chat(sys + '\n\nคำถาม: ' + q, `data:${img.mime};base64,${img.b64}`) : await P.ai.chat(msgs.filter(m => m.role !== 'system').map((m, i, a) => i === a.length - 1 ? { role: 'user', content: sys + '\n\nคำถาม: ' + q } : m));
@@ -5849,7 +5897,7 @@ function aiAutoH() { const t = $('#aiText'); t.style.height = 'auto'; t.style.he
 $('#aiText').addEventListener('input', aiAutoH);
 $('#aiText').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); aiSend(); } });
 $('#aiSend').addEventListener('click', aiSend);
-$('#aiChips').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { $('#aiText').value = b.textContent; aiSend(); } });
+$('#aiChips').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.pc) { aiClose(); setTimeout(() => pcOpen(b.dataset.pc), 260); return; } $('#aiText').value = b.textContent; aiSend(); });
 $('#aiSheet').addEventListener('click', e => { if (e.target.closest('[data-close]')) aiClose(); });
 $('#aiOpen').addEventListener('click', () => aiOpen());
 $('#smAI').addEventListener('click', () => aiOpen());
@@ -5872,6 +5920,217 @@ $('#aiImg').addEventListener('change', e => { const fl = e.target.files && e.tar
     const url = c.toDataURL('image/jpeg', 0.82); AI.img = { url, mime: 'image/jpeg', b64: url.split(',')[1] }; $('#aiPrev').innerHTML = `<img src="${url}">`; if (!$('#aiText').value) $('#aiText').placeholder = 'บอกอาการเพิ่มได้ หรือกดส่งเลย'; }; im.src = rd.result; }; rd.readAsDataURL(fl); e.target.value = ''; });
 $('#aiMic').addEventListener('click', () => { const SR = window.SpeechRecognition || window.webkitSpeechRecognition; if (!SR) return toast('เครื่องนี้ยังพูดแทนพิมพ์ไม่ได้ ลองใช้ไมค์บนคีย์บอร์ดแทน');
   const r = new SR(); r.lang = 'th-TH'; r.interimResults = false; $('#aiMic').classList.add('on'); r.onresult = ev => { $('#aiText').value = ev.results[0][0].transcript; aiAutoH(); }; r.onend = () => { $('#aiMic').classList.remove('on'); if ($('#aiText').value.trim()) aiSend(); }; r.onerror = () => $('#aiMic').classList.remove('on'); r.start(); });
+/* ================= ตรวจต้นมันจากรูป: on-device colour screening + AI vision + photo height ================= */
+const PC = { mode: 'check', img: null, an: null, ai: null, aiBusy: false, pts: [], hs: [], drag: -1, sc: 1, saved: false };
+const PC_HOW = {
+  check: 'ถ่ายใกล้ ๆ 30–50 ซม. ให้เห็นยอดและใบชัด · ถ้าสงสัยเพลี้ยแป้งหรือไรแดง ให้พลิกถ่ายใต้ใบและยอดด้วย · ถ่ายในที่สว่าง ไม่ย้อนแสง ไม่ใช้ซูม · อยากรู้ว่าใบคลุมดินเท่าไร ให้ยกมือถือถ่ายลงจากด้านบนตรง ๆ',
+  height: 'ปักไม้ที่รู้ความยาว (เช่น ไม้ 1 เมตร) ตั้งตรงชิดข้างต้นมัน ให้ห่างจากกล้องเท่ากับต้น · ถอยออก 2–3 เมตร ถือมือถือตรง ๆ ที่ระดับกลางต้น ให้เห็นไม้และต้นตั้งแต่โคนถึงยอด · ถ้าไม่มีไม้ ให้คนที่รู้ส่วนสูงยืนชิดต้นแทน แล้วใส่ส่วนสูงคนเป็นความยาวอ้างอิง · ถ้าไม้อยู่ใกล้หรือไกลกล้องกว่าต้น ค่าจะเพี้ยน'
+};
+const PC_HINT = { check: 'ถ่ายใกล้ ๆ ให้เห็นยอดและใบชัด แอปจะคัดกรองสีใบในเครื่อง แล้วให้ AI ช่วยดูโรคและแมลง', height: 'ตั้งไม้ 1 เมตรชิดข้างต้น ถอยออก 2–3 เมตร แล้วถ่ายให้เห็นทั้งต้น' };
+const PC_STEPS = ['แตะที่ <b style="color:#8fd0ff">โคนไม้อ้างอิง</b> (ตรงที่ติดพื้น)', 'แตะที่ <b style="color:#8fd0ff">ปลายไม้อ้างอิง</b>', 'แตะที่ <b style="color:#a6ec93">โคนต้นมัน</b> (ตรงที่ติดดิน)', 'แตะที่ <b style="color:#a6ec93">ยอดสูงสุดของต้น</b>'];
+const PC_SYS = `คุณคือนักโรคพืชและแมลงของมันสำปะหลังในประเทศไทย ดูรูปที่ได้รับแล้วตอบเป็น JSON อย่างเดียว ไม่มีข้อความอื่น รูปแบบ:
+{"ใช่มันสำปะหลัง":true,"ส่วนที่เห็น":"ใบ/ยอด/ใต้ใบ/ทั้งต้น/แปลง/หัว","สุขภาพ":0-100,"สรุป":"1 ประโยค ภาษาชาวบ้าน","ปัญหา":[{"ชื่อ":"","โอกาส":"สูง|กลาง|ต่ำ","เห็นอะไร":"สิ่งที่เห็นในรูปที่ทำให้คิดแบบนี้"}],"ทำต่อ":["ขั้นตอนสั้น ๆ ทำได้จริง"],"ถ่ายเพิ่ม":"ควรถ่ายมุมไหนเพิ่มเพื่อยืนยัน หรือเว้นว่าง"}
+สิ่งที่ต้องพิจารณา: เพลี้ยแป้ง (ปุยขาวที่ยอดหรือใต้ใบ ยอดหงิกเป็นพุ่ม ข้อถี่), โรคใบด่างมันสำปะหลัง (ใบด่างเหลืองสลับเขียว ใบหงิกเสียรูป ต้นแคระ), ไรแดง (จุดซีดเหลืองเล็ก ๆ ใยบางใต้ใบ ช่วงแล้ง), แมลงหวี่ขาว, โรคใบไหม้แบคทีเรีย (แผลฉ่ำน้ำเหลี่ยม ใบไหม้ ยอดเหี่ยว), โรคใบจุดสีน้ำตาล, ขาดไนโตรเจน (ใบล่างเหลืองทั้งใบ), ขาดโพแทสเซียม (ขอบใบเหลือง/ไหม้), ขาดแมกนีเซียม (เหลืองระหว่างเส้นใบ), ขาดน้ำ (ใบห่อ เหี่ยว ร่วง), วัชพืชแน่น
+กติกา: ถ้าในรูปไม่เห็นอาการชัด ให้ใส่โอกาส "ต่ำ" หรือไม่ต้องใส่ อย่าเดาเกินที่เห็น · ถ้ารูปไม่ชัดหรือไม่ใช่มันสำปะหลังให้บอกตรง ๆ · เรื่องสารเคมีให้บอกชื่อสามัญและย้ำทำตามฉลาก · ไม่ต้องแต่งแหล่งอ้างอิง`;
+function pcOpen(mode) { const sh = $('#pcSheet'); sh.style.display = 'block'; requestAnimationFrame(() => sh.classList.add('on')); pcMode(mode || PC.mode); pcHist(); }
+function pcClose() { const sh = $('#pcSheet'); sh.classList.remove('on'); setTimeout(() => sh.style.display = 'none', 250); }
+function pcMode(m) {
+  PC.mode = m; $$('#pcTab button').forEach(b => b.classList.toggle('on', b.dataset.m === m));
+  $('#pcHint').textContent = PC_HINT[m]; $('#pcHowT').textContent = PC_HOW[m]; $('#pcHow').open = m === 'height' && !PC.img;
+  $('#pcCheck').style.display = m === 'check' ? '' : 'none'; $('#pcHeight').style.display = m === 'height' ? '' : 'none';
+  $('#pcRef').value = (S.ui && S.ui.pcRef) || 100;
+  if (!PC.img) { $('#pcStart').style.display = ''; $('#pcWork').style.display = 'none'; return; }
+  if (m === 'check') { if (!PC.an) pcAnalyze(); if (!PC.ai && !PC.aiBusy) pcAI(); }
+  pcFit(); pcDraw(); pcHUI();
+}
+function pcLoad(fl) {
+  if (!fl) return; const rd = new FileReader();
+  rd.onload = () => { const im = new Image(); im.onload = () => {
+    const m = 1280, k = Math.min(1, m / Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+    c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+    Object.assign(PC, { img: c, an: null, ai: null, aiBusy: false, pts: [], hs: [], saved: false }); PC.tok = (PC.tok || 0) + 1;
+    $('#pcStart').style.display = 'none'; $('#pcWork').style.display = ''; $('#pcAI').innerHTML = ''; $('#pcHow').open = false; $('#pcSave').disabled = false; $('#pcSave').textContent = 'บันทึกลงสมุดไร่';
+    const cv = $('#pcCv'); cv.width = c.width; cv.height = c.height; pcFit();
+    if (PC.mode === 'check') { pcAnalyze(); pcAI(); }
+    pcDraw(); pcHUI();
+  }; im.onerror = () => toast('เปิดรูปนี้ไม่ได้ ลองรูปอื่น'); im.src = rd.result; }; rd.readAsDataURL(fl);
+}
+function pcFit() { const cv = $('#pcCv'); if (!PC.img) return; const W = cv.parentElement.clientWidth || 340, H = innerHeight * 0.5, s = Math.min(W / cv.width, H / cv.height); PC.sc = s; cv.style.width = Math.round(cv.width * s) + 'px'; cv.style.height = Math.round(cv.height * s) + 'px'; }
+/* colour screening — runs on the phone, no internet. Thresholds are rough screening rules, not a diagnosis. */
+function pcAnalyze() {
+  const src = PC.img, k = Math.min(1, 360 / Math.max(src.width, src.height)), w = Math.max(1, Math.round(src.width * k)), h = Math.max(1, Math.round(src.height * k)), N = w * h;
+  const c = document.createElement('canvas'); c.width = w; c.height = h; const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(src, 0, 0, w, h);
+  const d = x.getImageData(0, 0, w, h).data, cls = new Uint8Array(N);          // 1 green leaf · 2 yellow · 3 brown/dry · 4 white
+  for (let i = 0; i < N; i++) {
+    const r = d[i * 4] / 255, g = d[i * 4 + 1] / 255, b = d[i * 4 + 2] / 255, mx = Math.max(r, g, b), mn = Math.min(r, g, b), v = mx, s = mx ? (mx - mn) / mx : 0;
+    let hu = 0; if (mx > mn) { hu = mx === r ? 60 * (((g - b) / (mx - mn)) % 6) : mx === g ? 60 * ((b - r) / (mx - mn) + 2) : 60 * ((r - g) / (mx - mn) + 4); if (hu < 0) hu += 360; }
+    if (s < 0.14 && v > 0.8) cls[i] = 4;
+    else if (hu >= 72 && hu <= 170 && s > 0.15 && v > 0.12 && 2 * g - r - b > 0.05) cls[i] = 1;
+    else if (hu >= 44 && hu < 72 && s > 0.38 && v > 0.45) cls[i] = 2;
+    else if (hu >= 8 && hu < 44 && s > 0.35 && v > 0.15 && v < 0.6) cls[i] = 3;
+  }
+  const W1 = w + 1, I = new Float32Array(W1 * (h + 1));
+  for (let y = 0; y < h; y++) { let row = 0; for (let xx = 0; xx < w; xx++) { row += cls[y * w + xx] === 1 ? 1 : 0; I[(y + 1) * W1 + xx + 1] = I[y * W1 + xx + 1] + row; } }
+  const box = (x0, y0, x1, y1) => { x0 = Math.max(0, x0); y0 = Math.max(0, y0); x1 = Math.min(w, x1); y1 = Math.min(h, y1); const a = (x1 - x0) * (y1 - y0); return a > 0 ? (I[y1 * W1 + x1] - I[y0 * W1 + x1] - I[y1 * W1 + x0] + I[y0 * W1 + x0]) / a : 0; };
+  const R = Math.max(3, Math.round(Math.max(w, h) / 50)), r2 = Math.max(2, R >> 1);
+  const mask = document.createElement('canvas'); mask.width = w; mask.height = h; const mx2 = mask.getContext('2d'), md = mx2.createImageData(w, h), M = md.data;
+  let G = 0, Y = 0, B = 0, MO = 0; const wh = new Uint8Array(N);
+  for (let y = 0; y < h; y++) for (let xx = 0; xx < w; xx++) {
+    const i = y * w + xx, cl = cls[i]; if (!cl) continue;
+    if (cl === 1) { G++; continue; }
+    const fr = box(xx - R, y - R, xx + R + 1, y + R + 1); let col = null;
+    if (cl === 2 && fr >= 0.2) { Y++; const f2 = box(xx - r2, y - r2, xx + r2 + 1, y + r2 + 1); if (f2 >= 0.3 && f2 <= 0.85) { MO++; col = [214, 51, 200]; } else col = [255, 176, 0]; }
+    else if (cl === 3 && fr >= 0.45) { B++; col = [190, 60, 30]; }
+    else if (cl === 4 && fr >= 0.25) wh[i] = 1;
+    if (col) { M[i * 4] = col[0]; M[i * 4 + 1] = col[1]; M[i * 4 + 2] = col[2]; M[i * 4 + 3] = 205; }
+  }
+  mx2.putImageData(md, 0, 0);
+  // white specks on the plant → blobs (big white areas are sky/paper and are ignored)
+  const seen = new Uint8Array(N), blobs = [], maxA = N * 0.01, st = [];
+  for (let i = 0; i < N; i++) { if (!wh[i] || seen[i]) continue; let n = 0, sx = 0, sy = 0, x0 = 1e9, x1 = -1, y0 = 1e9, y1 = -1; st.push(i); seen[i] = 1;
+    while (st.length) { const j = st.pop(), jx = j % w, jy = (j / w) | 0; n++; sx += jx; sy += jy; x0 = Math.min(x0, jx); x1 = Math.max(x1, jx); y0 = Math.min(y0, jy); y1 = Math.max(y1, jy);
+      for (const q of [j - 1, j + 1, j - w, j + w]) { if (q < 0 || q >= N || seen[q] || !wh[q]) continue; if ((q === j - 1 && jx === 0) || (q === j + 1 && jx === w - 1)) continue; seen[q] = 1; st.push(q); } }
+    if (n >= 2 && n <= maxA) blobs.push({ x: sx / n / k, y: sy / n / k, r: (Math.max(x1 - x0, y1 - y0) / 2 + 3) / k });
+  }
+  const leaf = G + Y;
+  PC.an = { mask, blobs, leafPct: leaf / N * 100, yel: leaf ? Y / leaf * 100 : 0, mos: leaf ? MO / leaf * 100 : 0, brn: leaf + B ? B / (leaf + B) * 100 : 0, white: blobs.length };
+  pcLocalUI();
+}
+function pcLocalUI() {
+  const a = PC.an; if (!a) { $('#pcLocal').innerHTML = ''; return; }
+  const lvl = (v, w, b) => v >= b ? 'bad' : v >= w ? 'warn' : '';
+  const T = [
+    ['ใบในรูป', f(a.leafPct) + '%', 'ถ่ายจากบนลงล่าง = ใบคลุมดิน', ''],
+    ['ใบเหลือง / ซีด', f(a.yel) + '%', 'ของพื้นที่ใบ', lvl(a.yel, 15, 35)],
+    ['ลายด่างเหลืองสลับเขียว', f(a.mos, 1) + '%', 'สีม่วงบนรูป', lvl(a.mos, 6, 15)],
+    ['จุดขาวคล้ายปุย', a.white + ' จุด', 'วงแดงบนรูป', lvl(a.white, 2, 6)],
+    ['ส่วนแห้ง / สีน้ำตาล', f(a.brn) + '%', 'สีแดงอิฐ (อาจปนดิน)', lvl(a.brn, 15, 35)]
+  ];
+  const fl = [];
+  if (a.leafPct < 3) fl.push('แทบไม่เห็นใบในรูป ลองถ่ายใกล้ขึ้น');
+  if (a.white >= 2) fl.push('มี<span class="k">จุดขาว</span> ควรเปิดดูยอดและใต้ใบ อาจเป็นเพลี้ยแป้ง (หรือแค่แสงสะท้อน)');
+  if (a.mos >= 6) fl.push('มี<span class="k">ลายด่าง</span> ควรดูว่าใบหงิกเสียรูปไหม ถ้าใช่อาจเป็นโรคใบด่าง');
+  if (a.yel >= 15) fl.push('<span class="k">ใบเหลือง</span>มากกว่าปกติ ดูว่าเป็นใบล่าง (ขาดธาตุ/ขาดน้ำ) หรือใบยอด');
+  if (a.brn >= 15) fl.push('มี<span class="k">ส่วนแห้งสีน้ำตาล</span> ดูว่าเป็นใบแก่ร่วงตามธรรมชาติ หรือแผลใบไหม้');
+  $('#pcLocal').innerHTML = T.map((t, i) => `<div class="mt ${t[3]}${i === 0 ? ' wide' : ''}"><small>${t[0]}</small><b>${t[1]}</b><small>${t[2]}</small></div>`).join('') +
+    `<div class="mt wide">${fl.length ? '<small>ควรเข้าไปดูใกล้ ๆ</small><br>' + fl.map(x => '• ' + x).join('<br>') : 'สีใบโดยรวม <span class="k" style="color:var(--good)">ดูปกติ</span>'}<br><small>คัดกรองจากสีในเครื่อง (ไม่ใช้เน็ต) เป็นเกณฑ์คร่าว ๆ ไม่ใช่การวินิจฉัย · แดดจ้า เงา หรือดินในรูปทำให้ค่าเพี้ยนได้</small></div>`;
+}
+function pcB64(max) { const c = PC.img, k = Math.min(1, max / Math.max(c.width, c.height)), o = document.createElement('canvas'); o.width = Math.round(c.width * k); o.height = Math.round(c.height * k); o.getContext('2d').drawImage(c, 0, 0, o.width, o.height); const url = o.toDataURL('image/jpeg', max > 400 ? 0.82 : 0.6); return { url, mime: 'image/jpeg', b64: url.split(',')[1] }; }
+async function pcAI() {
+  const box = $('#pcAI'); if (!PC.img) return;
+  if (navigator.onLine === false) { box.innerHTML = 'ไม่มีเน็ต ตอนนี้ดูผลจากสีด้านบนก่อน · ต่อเน็ตแล้ว <button class="btn sm" data-retry>🤖 ให้ AI ดูรูป</button>'; return; }
+  const tok = PC.tok; PC.aiBusy = true; box.innerHTML = '<span class="aim typing" style="padding:0;border:0">🤖 AI กำลังดูรูป</span>';
+  const a = PC.an, hint = a ? `\nผลคัดกรองสีในเครื่อง (อาจคลาดเคลื่อน): ใบเหลือง ${f(a.yel)}% ลายด่าง ${f(a.mos, 1)}% จุดขาว ${a.white} จุด ส่วนน้ำตาล ${f(a.brn)}%` : '';
+  try {
+    const r = await aiCloud('ตรวจรูปต้นมันสำปะหลังนี้ ตอบเป็น JSON ตามรูปแบบ' + hint, pcB64(1024), { raw: true, noHist: true, sys: PC_SYS });
+    if (tok !== PC.tok) return; PC.aiBusy = false; const t = r.text || '', i0 = t.indexOf('{'), i1 = t.lastIndexOf('}'); let j = null;
+    try { j = JSON.parse(t.slice(i0, i1 + 1)); } catch (e) {}
+    if (!j) { PC.ai = { sum: t.slice(0, 200), iss: [], by: r.by }; box.innerHTML = mdLite(t) + `<span class="src">วิเคราะห์โดย ${esc(r.by)} · AI ดูจากรูปอาจผิดได้</span>`; return; }
+    const sc = Math.max(0, Math.min(100, Math.round(+j['สุขภาพ'] || 0))), iss = (j['ปัญหา'] || []).filter(p => p && p['ชื่อ']), ord = { 'สูง': 0, 'กลาง': 1, 'ต่ำ': 2 };
+    iss.sort((p, q) => (ord[p['โอกาส']] ?? 3) - (ord[q['โอกาส']] ?? 3));
+    PC.ai = { score: sc, sum: String(j['สรุป'] || ''), iss: iss.map(p => ({ n: String(p['ชื่อ']), p: String(p['โอกาส'] || '') })), by: r.by, notCas: j['ใช่มันสำปะหลัง'] === false };
+    const todo = (j['ทำต่อ'] || []).map(x => `<li>${esc(x)}</li>`).join(''), more = j['ถ่ายเพิ่ม'] ? `<div class="small" style="margin-top:6px">📷 ถ่ายเพิ่ม: ${esc(j['ถ่ายเพิ่ม'])}</div>` : '';
+    box.innerHTML = (PC.ai.notCas ? '<div class="note warn" style="margin-bottom:6px">AI คิดว่ารูปนี้ไม่ใช่ต้นมันสำปะหลัง หรือดูไม่ชัด</div>' : '') +
+      `<div class="hd"><div class="sc ${sc >= 75 ? '' : sc >= 50 ? 'warn' : 'bad'}">${sc}</div><div><b>${esc(PC.ai.sum)}</b><br><small class="small">คะแนนสุขภาพจากรูป (เต็ม 100) · เห็น${esc(j['ส่วนที่เห็น'] || '-')}</small></div></div>` +
+      (iss.length ? iss.map(p => `<div class="iss"><span class="lv ${p['โอกาส'] === 'สูง' ? 'h' : p['โอกาส'] === 'กลาง' ? 'm' : ''}">โอกาส${esc(p['โอกาส'] || '-')}</span><div><b>${esc(p['ชื่อ'])}</b><br><span class="small">${esc(p['เห็นอะไร'] || '')}</span></div></div>`).join('') : '<div class="iss">ไม่พบอาการผิดปกติชัดเจนในรูปนี้</div>') +
+      (todo ? `<div style="margin-top:6px"><b>ทำอะไรต่อ</b><ul>${todo}</ul></div>` : '') + more +
+      `<span class="src">วิเคราะห์โดย ${esc(r.by)} · AI ดูจากรูปอาจผิดได้ ถ้าสงสัยโรคให้ส่งตัวอย่างหรือรูปให้เกษตรอำเภอ/ศูนย์วิจัยพืชไร่ยืนยัน · สารเคมีใช้ตามฉลาก</span>`;
+  } catch (e) {
+    if (tok !== PC.tok) return; PC.aiBusy = false;
+    box.innerHTML = `AI ยังดูรูปไม่ได้ตอนนี้ (${esc(e.message || e)}) · ใช้ผลคัดกรองจากสีด้านบนไปก่อน <button class="btn sm" data-retry>ลองอีกครั้ง</button>`;
+  }
+}
+/* drawing: photo + screening overlay, or measuring lines */
+function pcDraw() {
+  const cv = $('#pcCv'), x = cv.getContext('2d'); if (!PC.img) return; x.drawImage(PC.img, 0, 0);
+  if (PC.mode === 'check' && PC.an && $('#pcOv').checked) {
+    x.imageSmoothingEnabled = false; x.drawImage(PC.an.mask, 0, 0, cv.width, cv.height); x.imageSmoothingEnabled = true;
+    x.lineWidth = Math.max(2, cv.width / 260); x.strokeStyle = '#ff2d55'; PC.an.blobs.forEach(b => { x.beginPath(); x.arc(b.x, b.y, Math.max(b.r, cv.width / 90), 0, 7); x.stroke(); });
+  }
+  if (PC.mode !== 'height') return;
+  const u = 1 / PC.sc, lw = 3 * u, pr = 7 * u;
+  const seg = (a, b, col, lbl) => {
+    x.lineWidth = lw + 2 * u; x.strokeStyle = 'rgba(0,0,0,.55)'; x.beginPath(); x.moveTo(a.x, a.y); x.lineTo(b.x, b.y); x.stroke();
+    x.lineWidth = lw; x.strokeStyle = col; x.beginPath(); x.moveTo(a.x, a.y); x.lineTo(b.x, b.y); x.stroke();
+    if (lbl) { x.font = `600 ${14 * u}px Prompt, sans-serif`; const tx = Math.max(a.x, b.x) + 10 * u, ty = (a.y + b.y) / 2, tw = x.measureText(lbl).width; x.fillStyle = 'rgba(0,0,0,.7)'; x.fillRect(tx - 4 * u, ty - 13 * u, tw + 8 * u, 19 * u); x.fillStyle = col; x.fillText(lbl, tx, ty + 1 * u); }
+  };
+  PC.hs.forEach((m, i) => seg(m.p[0], m.p[1], 'rgba(166,236,147,.75)', `ต้นที่ ${i + 1}: ${f(m.h)} ซม.`));
+  const P = PC.pts, ref = +$('#pcRef').value || 0;
+  if (P.length >= 2) seg(P[0], P[1], '#8fd0ff', `อ้างอิง ${f(ref)} ซม.`);
+  if (P.length >= 4) seg(P[2], P[3], '#a6ec93', `${f(pcCur())} ซม.`);
+  P.forEach((p, i) => { x.lineWidth = 2 * u; x.fillStyle = i < 2 ? '#8fd0ff' : '#a6ec93'; x.strokeStyle = '#000'; x.beginPath(); x.arc(p.x, p.y, pr, 0, 7); x.fill(); x.stroke(); x.beginPath(); x.moveTo(p.x - pr * 2, p.y); x.lineTo(p.x + pr * 2, p.y); x.stroke(); });
+}
+const pcD = (a, b) => Math.hypot(b.x - a.x, b.y - a.y);
+function pcCur() { const P = PC.pts, ref = +$('#pcRef').value || 0; return P.length >= 4 && pcD(P[0], P[1]) > 4 ? pcD(P[2], P[3]) / pcD(P[0], P[1]) * ref : 0; }
+function pcAll() { const a = PC.hs.map(m => m.h), c = pcCur(); if (c > 0) a.push(c); return a; }
+function pcHUI() {
+  const P = PC.pts, step = $('#pcStep');
+  if (PC.mode !== 'height' || !PC.img) { step.innerHTML = ''; return; }
+  step.innerHTML = P.length < 4 ? PC_STEPS[P.length] + (P.length ? ' · ลากจุดเพื่อขยับได้' : '') + (PC.hs.length && P.length === 2 ? ` · ต้นที่ ${PC.hs.length + 1}` : '') : '';
+  const all = pcAll(), cur = pcCur(), warn = [];
+  if (P.length >= 4) {
+    const tilt = (a, b) => Math.abs(Math.atan2(b.x - a.x, -(b.y - a.y)) * 180 / Math.PI);
+    if (pcD(P[0], P[1]) < 30 / PC.sc) warn.push('ไม้อ้างอิงในรูปสั้นไป ถ่ายให้ไม้ใหญ่ขึ้นจะแม่นกว่า');
+    if (tilt(P[0], P[1]) > 20 && tilt(P[0], P[1]) < 160) warn.push('ไม้อ้างอิงเอียงมาก ตรวจจุดหรือถ่ายใหม่ให้ไม้ตั้งตรง');
+    if (cur > 400 || cur < 5) warn.push('ค่าดูผิดปกติ ตรวจความยาวอ้างอิงและจุดอีกครั้ง');
+  }
+  let cmp = '';
+  if (all.length && L && SIM.today) { const c = need(SIM.t).c; if (c && !c.notPlanted) { const avg = all.reduce((s, v) => s + v, 0) / all.length, exp = heightAt(c.dap) * 100, df = avg - exp;
+    cmp = `<br><span class="small">อายุ ${c.dap} วัน ต้นมาตรฐานสูงราว ${f(exp)} ซม. → ${Math.abs(df) < exp * 0.1 ? 'โตตามปกติ' : df > 0 ? `สูงกว่า ${f(df)} ซม.` : `เตี้ยกว่า ${f(-df)} ซม.`}</span>`; } }
+  $('#pcRes').innerHTML = !all.length ? '<span class="small">แตะจุดบนรูปตามที่บอก 4 จุด (ไม้ 2 จุด ต้นมัน 2 จุด) · ใส่ความยาวไม้จริงด้านบน</span>' :
+    (cur ? `ต้นนี้สูง <span class="hv">${f(cur)}</span> ซม.` : '') + (all.length > 1 ? `<br>วัดแล้ว ${all.length} ต้น: ${all.map(v => f(v)).join(', ')} · <b>เฉลี่ย ${f(all.reduce((s, v) => s + v, 0) / all.length)} ซม.</b>` : '') + cmp +
+    (warn.length ? `<div class="note warn" style="margin-top:6px">${warn.join('<br>')}</div>` : '') + '<br><span class="small">วัดหลายต้นแล้วใช้ค่าเฉลี่ยจะแม่นกว่า (แนะนำ 5–10 ต้น)</span>';
+  $('#pcNext').disabled = !(cur > 0); $('#pcHSave').disabled = !all.length;
+}
+function pcLoupe(p, show) {
+  const lp = $('#pcLoupe'); if (!show) { lp.style.display = 'none'; return; }
+  const x = lp.getContext('2d'), r = 20 / PC.sc; x.imageSmoothingEnabled = false; x.clearRect(0, 0, 120, 120); x.drawImage($('#pcCv'), p.x - r, p.y - r, r * 2, r * 2, 0, 0, 120, 120);
+  x.strokeStyle = '#ff2d55'; x.lineWidth = 1.5; x.beginPath(); x.moveTo(60, 40); x.lineTo(60, 80); x.moveTo(40, 60); x.lineTo(80, 60); x.stroke();
+  const cv = $('#pcCv'), left = p.x / cv.width < 0.45 && p.y / cv.height < 0.45; lp.style.left = left ? 'auto' : '8px'; lp.style.right = left ? '8px' : 'auto'; lp.style.display = '';
+}
+function pcThumb() { const c = PC.img, k = 120 / Math.max(c.width, c.height), o = document.createElement('canvas'); o.width = Math.round(c.width * k); o.height = Math.round(c.height * k); o.getContext('2d').drawImage(c, 0, 0, o.width, o.height); return o.toDataURL('image/jpeg', 0.6); }
+function pcPush(e) { S.pc = [...(S.pc || []), { at: Date.now(), thumb: pcThumb(), ...e }].slice(-20); save(); pcHist(); }
+function pcHist() {
+  const H = (S.pc || []).slice().reverse().slice(0, 8);
+  $('#pcHist').innerHTML = H.length ? '<h5>ตรวจล่าสุด</h5>' + H.map(e => `<div class="hi"><img src="${e.thumb}" alt=""><div><b>${dShort(e.at)} ${hm(e.at)}</b><br>${e.kind === 'height' ? `📏 สูงเฉลี่ย ${f(e.h)} ซม. (${e.n} ต้น)` : e.ai && e.ai.sum ? `🩺 ${e.ai.score != null ? 'สุขภาพ ' + e.ai.score + ' · ' : ''}${esc(e.ai.sum).slice(0, 90)}` : `🩺 ${esc(e.txt || '')}`}</div></div>`).join('') : '';
+}
+function pcLocalText() { const a = PC.an; if (!a) return ''; const t = []; if (a.white >= 2) t.push(`จุดขาว ${a.white} จุด`); if (a.mos >= 6) t.push(`ลายด่าง ${f(a.mos, 1)}%`); if (a.yel >= 15) t.push(`ใบเหลือง ${f(a.yel)}%`); if (a.brn >= 15) t.push(`ส่วนแห้ง ${f(a.brn)}%`); return t.length ? 'สีผิดปกติ: ' + t.join(', ') : 'สีใบปกติ'; }
+$('#smPC').addEventListener('click', () => pcOpen('check'));
+$('#pcSheet').addEventListener('click', e => { if (e.target.closest('[data-close]')) return pcClose(); if (e.target.closest('[data-retry]')) pcAI(); });
+$('#pcTab').addEventListener('click', e => { const b = e.target.closest('[data-m]'); if (b) pcMode(b.dataset.m); });
+['#pcFile', '#pcFile2'].forEach(s => $(s).addEventListener('change', e => { pcLoad(e.target.files && e.target.files[0]); e.target.value = ''; }));
+['#pcNew', '#pcNew2'].forEach(s => $(s).addEventListener('click', () => $('#pcFile').click()));
+$('#pcOv').addEventListener('change', pcDraw);
+$('#pcRef').addEventListener('input', e => { const v = +e.target.value; if (v > 0) { const r = PC.pts.length >= 2 ? pcD(PC.pts[0], PC.pts[1]) : 0; if (r) PC.hs.forEach(m => m.h = pcD(m.p[0], m.p[1]) / r * v); setUI('pcRef', v); } pcDraw(); pcHUI(); });
+$('#pcUndo').addEventListener('click', () => { if (PC.pts.length > 2 || (PC.pts.length && !PC.hs.length)) PC.pts.pop(); else if (PC.hs.length) PC.pts.push(...PC.hs.pop().p); pcDraw(); pcHUI(); });
+$('#pcNext').addEventListener('click', () => { const h = pcCur(); if (!(h > 0)) return; PC.hs.push({ p: PC.pts.slice(2, 4), h }); PC.pts = PC.pts.slice(0, 2); pcDraw(); pcHUI(); toast(`เก็บต้นที่ ${PC.hs.length} แล้ว แตะโคนและยอดของต้นถัดไป`); });
+$('#pcHSave').addEventListener('click', () => {
+  const all = pcAll(); if (!all.length) return; const avg = Math.round(all.reduce((s, v) => s + v, 0) / all.length);
+  if (avg < 5 || avg > 400) return toast('ค่าดูผิดปกติ ตรวจจุดและความยาวอ้างอิงอีกครั้ง');
+  S.meas = (S.meas || []).concat({ date: todayIso(), h: avg, note: `วัดจากรูป ${all.length} ต้น` }).sort((a, b) => a.date < b.date ? -1 : 1);
+  let off = 0; try { off = calibrateFromHeights(); } catch (e) {} save(); try { R.plantDap = null; updatePlantGrowth(); renderGrowth(); } catch (e) {}
+  pcPush({ kind: 'height', h: avg, n: all.length }); PC.hs = []; PC.pts = PC.pts.slice(0, 2); pcDraw(); pcHUI();
+  toast(off ? `บันทึก ${avg} ซม. · ปรับแล้ว: ต้นมัน${off > 0 ? 'โตเร็วกว่า' : 'โตช้ากว่า'}มาตรฐาน ${Math.abs(off)} วัน` : `บันทึกความสูงเฉลี่ย ${avg} ซม. แล้ว`);
+});
+$('#pcSave').addEventListener('click', () => {
+  if (!PC.img || PC.saved) return; const ai = PC.ai, hi = ai && ai.iss.filter(p => p.p === 'สูง' || p.p === 'กลาง');
+  const txt = ai && ai.sum ? `ตรวจจากรูป: ${ai.sum}${hi && hi.length ? ' (สงสัย ' + hi.map(p => p.n).join(', ') + ')' : ''}` : 'ตรวจจากรูป: ' + pcLocalText();
+  addDiary('pest', txt.slice(0, 160)); pcPush({ kind: 'check', ai: ai ? { score: ai.score, sum: ai.sum, iss: ai.iss } : null, txt: pcLocalText(), loc: PC.an ? { y: +f(PC.an.yel), m: +f(PC.an.mos, 1), w: PC.an.white, b: +f(PC.an.brn) } : null });
+  PC.saved = true; $('#pcSave').disabled = true; $('#pcSave').textContent = 'บันทึกแล้ว ✓'; toast('บันทึกลงสมุดไร่แล้ว');
+});
+$('#pcAsk').addEventListener('click', () => {
+  if (!PC.img) return; const im = pcB64(1024), q = PC.ai && PC.ai.sum ? `จากรูปนี้ AI บอกว่า "${PC.ai.sum}" ควรจัดการยังไงต่อในไร่ของผม` : 'ช่วยดูรูปต้นมันนี้หน่อย มีปัญหาอะไรไหม';
+  pcClose(); setTimeout(() => { aiOpen(); AI.img = im; $('#aiPrev').innerHTML = `<img src="${im.url}">`; $('#aiText').value = q; aiAutoH(); $('#aiText').focus(); }, 260);
+});
+{ const cv = $('#pcCv'); const at = e => { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) / r.width * cv.width, y: (e.clientY - r.top) / r.height * cv.height }; };
+  cv.addEventListener('pointerdown', e => { if (PC.mode !== 'height' || !PC.img) return; e.preventDefault(); const p = at(e), hit = 26 / PC.sc;
+    let k = -1, best = hit; PC.pts.forEach((q, i) => { const d = pcD(p, q); if (d < best) { best = d; k = i; } });
+    if (k < 0) { if (PC.pts.length >= 4) return; PC.pts.push(p); k = PC.pts.length - 1; }
+    PC.drag = k; cv.setPointerCapture(e.pointerId); pcDraw(); pcLoupe(PC.pts[k], true); });
+  cv.addEventListener('pointermove', e => { if (PC.drag < 0) return; const p = at(e); p.x = clamp(p.x, 0, cv.width); p.y = clamp(p.y, 0, cv.height); PC.pts[PC.drag] = p; pcDraw(); pcLoupe(p, true); });
+  const up = () => { if (PC.drag < 0) return; PC.drag = -1; pcLoupe(null, false); pcDraw(); pcHUI(); };
+  cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+  addEventListener('resize', () => { if ($('#pcSheet').style.display === 'block') { pcFit(); pcDraw(); } }); }
 function arMsg(html, ms) { const m = $('#arMsg'); m.innerHTML = html; m.style.display = ''; clearTimeout(AR.msgTO); AR.msgTO = setTimeout(() => { m.style.display = 'none'; }, ms || 3000); }
 /* hide the model ground and scenery; add bright overlays that read well over a camera picture */
 function arScene() {

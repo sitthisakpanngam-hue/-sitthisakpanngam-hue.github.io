@@ -5748,6 +5748,7 @@ $('#stSimple').addEventListener('change', e => { closeSettings(); setSimple(e.ta
 if ('serviceWorker' in navigator && location.protocol === 'https:' && /github\.io$/.test(location.hostname)) navigator.serviceWorker.register('sw.js').catch(() => {});
 /* ================= หมอมัน AI: cassava drip-irrigation assistant ================= */
 const AI = { busy: false, img: null };
+const AI_PROXY = '';   // ลิงก์ Cloudflare Worker ของเจ้าของเว็บ (ไม่ใช่ความลับ) — ดู worker/README.md · คีย์อยู่ที่ Worker เท่านั้น
 function farmCtx() {
   if (!L || !SIM.today) return { field: 'ยังไม่ได้วัดแปลง' };
   const n = need(SIM.t), c = n.c, st = S.set, D = depNow(), trig = n.raw * st.trigger / 100, w = wx(isoOf(SIM.t));
@@ -5862,8 +5863,14 @@ async function aiFree(prov, q, img, ctx, hist, opt = {}) {
     const r = await fetch('https://text.pollinations.ai/' + encodeURIComponent(qq) + '?system=' + encodeURIComponent(sp), { signal: aiTO(35000) });
     if (!r.ok) throw new Error(r.status === 429 ? 'คนใช้เยอะ รอสักครู่' : 'HTTP ' + r.status); return r.text();
   };
+  const prox = async () => {
+    const r = await fetch(AI_PROXY, { method: 'POST', headers: { 'content-type': 'application/json' }, signal: aiTO(img ? 60000 : 35000),
+      body: JSON.stringify({ system: sys, messages: msgs.filter(m => m.role !== 'system').map(m => ({ role: m.role, content: typeof m.content === 'string' ? m.content : q })), image: img ? { mime: img.mime, data: img.b64 } : null, temp: opt.raw ? 0.2 : 0.4 }) });
+    const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error(r.status === 429 ? 'คนใช้เยอะ รอสักครู่' : (j.error || 'HTTP ' + r.status)); return j.text;
+  };
   const chain = [];
   if (prov === 'puter') chain.push(['Puter', puterCall]);
+  if (AI_PROXY) chain.push(['ไร่หยด AI', prox]);
   chain.push(['Pollinations', () => oai('https://text.pollinations.ai/openai', 'openai')]);
   chain.push(['LLM7', () => oai('https://api.llm7.io/v1/chat/completions', 'default', 'unused')]);
   if (!img) chain.push(['Pollinations', polGet]);

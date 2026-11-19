@@ -153,6 +153,44 @@ html.bigtext .smans{font-size:34px}html.bigtext .smhow{font-size:19px}
 #stSnapList{padding:4px 14px 10px;border-top:1px solid var(--line)}#stSnapList button{display:flex;justify-content:space-between;width:100%;border:0;background:var(--paper);border-radius:10px;padding:9px 12px;margin-top:6px;font:inherit;color:inherit}
 .aibtn{background:var(--leaf-2)!important;color:var(--leaf)!important}
 @media (max-width:920px){.aibtn{margin-left:auto!important;padding:8px 10px!important}.aibtn span{display:none!important}#gOpen{margin-left:6px!important}}
+.fm{position:fixed;inset:0;z-index:78;background:var(--paper);flex-direction:column}
+.fmtop{display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top)) 14px 8px;background:#fff;border-bottom:1px solid var(--line)}.fmtop b{font:600 18px 'Prompt',sans-serif;display:block}.fmtop small{font-size:12px;color:var(--muted)}
+.fmback{border:0;background:var(--leaf-2);color:var(--leaf);width:40px;height:40px;border-radius:12px;font-size:26px;line-height:1}
+.fmtabs{display:flex;gap:4px;padding:8px 10px;background:#fff;border-bottom:1px solid var(--line);overflow-x:auto}.fmtabs button{flex:1;min-width:0;border:0;background:transparent;border-radius:10px;padding:7px 4px;font-size:13px;color:var(--ink2);display:flex;flex-direction:column;align-items:center;gap:1px;white-space:nowrap}.fmtabs button.on{background:var(--leaf-2);color:var(--leaf);font-weight:600}
+.fmbody{flex:1;overflow-y:auto;padding:10px 12px calc(24px + var(--sab));max-width:760px;width:100%;margin:0 auto}
+.fmcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 13px;margin-bottom:10px}
+.fmh{display:flex;align-items:center;gap:8px;font:600 15px 'Prompt',sans-serif;margin-bottom:8px}.fmh small{margin-left:auto;font:400 12px 'IBM Plex Sans Thai',sans-serif;color:var(--muted)}.fmh .tag{margin-left:auto}
+.fmkpi{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}.fmkpi>div{background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px 9px;min-width:0}.fmkpi small{display:block;font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fmkpi b{display:block;font:600 15px 'Prompt',sans-serif;margin:1px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pid{width:100%;height:auto;display:block}.pv-t{font:11px 'IBM Plex Sans Thai',sans-serif;fill:var(--ink2)}.pv-t.b{font-weight:600;fill:var(--ink)}.pv-t.act{fill:var(--water);font-weight:600}.pv-t.q{fill:var(--warn)}.pv-t.done{fill:var(--good)}
+.pv-tank{fill:var(--water-2);stroke:var(--water);stroke-width:1.5}.pv-wave{fill:none;stroke:var(--water);stroke-width:1.5}
+.pv-pipe{stroke:#9aa59a;stroke-width:4;stroke-linecap:round}.pv-pipe.flow{stroke:var(--water);stroke-dasharray:6 5;animation:pvflow .7s linear infinite}@keyframes pvflow{to{stroke-dashoffset:-11}}
+.pv-pump{fill:#eef2ec;stroke:#7a8274;stroke-width:2}.pv-pump.on{fill:var(--water-2);stroke:var(--water)}.pv-imp{fill:#7a8274}.spin .pv-imp{fill:var(--water)}.spin{animation:pvspin 1s linear infinite}@keyframes pvspin{to{transform:rotate(360deg)}}
+.pv-filt{fill:#fff;stroke:#7a8274;stroke-width:1.5}.pv-fx{stroke:#b9c0b4;stroke-width:1}
+.pv-valve{stroke:#5c665a;stroke-width:1.2;fill:#d9ddd5}.pv-valve.act{fill:var(--water);stroke:var(--water)}.pv-valve.q{fill:var(--warn-2);stroke:var(--warn)}.pv-valve.done{fill:#cfe6d6;stroke:var(--good)}
+.pv-zone{fill:#fafaf6;stroke:var(--line)}.pv-zone.act{fill:var(--water-2);stroke:var(--water)}.pv-zone.q{fill:var(--warn-2);stroke:#efd9b1}.pv-zone.done{fill:#eef6f0;stroke:#cfe6d6}
+.pv-bar{fill:#eef2ec}.pv-barf{fill:var(--leaf)}.pv-barf.low{fill:var(--warn)}.pv-thr{stroke:var(--warn);stroke-width:2}
+.fmal{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:12px;margin-bottom:6px;background:var(--paper);font-size:14px;line-height:1.45}.fmal small{color:var(--ink2)}.fmal.bad{background:var(--bad-2)}.fmal.bad b{color:var(--bad)}.fmal.warn{background:var(--warn-2)}.fmal.warn b{color:var(--warn)}
+.fmtrend{width:100%;height:auto;display:block}.fmtrend .gl{stroke:#e8e3d6;stroke-width:1}.fmtrend .ax{font:10px 'IBM Plex Sans Thai',sans-serif;fill:var(--muted)}.fmtrend .sw{fill:none;stroke:var(--leaf);stroke-width:2;stroke-linejoin:round}.fmtrend .thr{fill:none;stroke:var(--warn);stroke-width:1.5;stroke-dasharray:4 3}.fmtrend .rn{fill:#8fb8de}.fmtrend .ir{fill:var(--water)}.fmtrend .pr{fill:none;stroke:var(--soil);stroke-width:2}.fmtrend .prd{fill:var(--soil);stroke:#fff;stroke-width:2}
+.fmleg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--ink2);margin-top:4px}.fmleg i{display:inline-block;vertical-align:middle;margin-right:4px}.fmleg .l{width:14px;height:0;border-top:2px solid var(--leaf)}.fmleg .l.thr{border-top:2px dashed var(--warn)}.fmleg .b{width:9px;height:9px;border-radius:2px;background:var(--water)}.fmleg .b.rn{background:#8fb8de}
+.fmlog div{display:flex;gap:8px;font-size:13px;padding:4px 0;border-top:1px solid #f0ece2}.fmlog .mono{color:var(--muted);font-size:11.5px;white-space:nowrap}
+.fmio{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.fmio div{background:var(--paper);border-radius:10px;padding:6px 8px;font-size:12.5px;position:relative}.fmio b{display:block}.fmio small{color:var(--muted);font-size:11px}.fmio i{position:absolute;top:5px;right:6px;font-style:normal;font-size:10px;color:var(--warn)}
+.fmgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.fmgrid div{background:var(--paper);border-radius:10px;padding:6px 8px;min-width:0}.fmgrid small{display:block;font-size:11.5px;color:var(--muted)}.fmgrid b{font-size:14px;display:block;overflow-wrap:anywhere}
+.fmstage{position:relative;display:flex;height:10px;border-radius:6px;overflow:hidden;margin-top:10px}.fmstage i{position:absolute;top:-2px;bottom:-2px;width:3px;background:var(--ink);border-radius:2px}.fmstn{display:flex;font-size:10px;color:var(--muted);margin-top:2px}.fmstn span{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding-right:2px}
+.fmev{display:flex;gap:10px;padding:7px 0;border-top:1px solid #f0ece2;font-size:14px;line-height:1.45}.fmev>span{font-size:18px;width:24px;text-align:center;flex:none}.fmev small{color:var(--muted);font-size:12px}
+.fmmon{font:600 13px 'Prompt',sans-serif;color:var(--leaf);margin:8px 0 2px}
+.fmtbl>div{display:grid;grid-template-columns:1.3fr 1fr 1fr 1.2fr;gap:4px;padding:6px 4px;border-top:1px solid #f0ece2;font-size:13.5px;align-items:center}.fmtbl>div span:not(:first-child){text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13px}.fmtbl .hd{color:var(--muted);font-size:12px;border-top:0}.fmtbl .hd span{font-family:inherit!important;font-size:12px!important}.fmtbl small{display:block;color:var(--muted);font-size:11px}.fmtbl .best{background:var(--leaf-2);border-radius:8px;font-weight:600}
+.fmbig{font-size:14px;color:var(--ink2);margin:2px 0 8px}.fmbig b{font:700 34px 'Prompt',sans-serif;color:var(--leaf)}.fmbig small{display:block;font-size:12.5px;color:var(--muted)}
+.fmcmp div{display:grid;grid-template-columns:96px 1fr 44px;align-items:center;gap:8px;font-size:12.5px;margin:4px 0}.fmcmp i{height:10px;border-radius:5px;background:var(--leaf);display:block}.fmcmp i.nat{background:#b9c0b4}.fmcmp b{font-family:'IBM Plex Mono',monospace;font-size:12.5px;text-align:right}
+.fmfac{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}.fmfac div{background:var(--paper);border-radius:10px;padding:6px 8px}.fmfac span{display:block;font-size:11.5px;color:var(--muted)}.fmfac b{font-size:14px}.fmfac small{display:block;font-size:11px;color:var(--ink2);overflow-wrap:anywhere}
+.fmref{margin-top:10px;background:var(--paper);border-radius:12px;padding:8px 10px;font-size:12.5px;line-height:1.5;color:var(--ink2)}
+.fmspark{margin-top:8px}
+.fmcat{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}.fmcat button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:6px 10px;font-size:13px}.fmcat button.on{background:var(--leaf);color:#fff;border-color:var(--leaf)}
+.fmbar{display:grid;grid-template-columns:118px 1fr 66px;gap:8px;align-items:center;font-size:12.5px;margin:4px 0}.fmbar i{height:10px;border-radius:5px;background:var(--soil);display:block;min-width:2px}.fmbar b{text-align:right;font-family:'IBM Plex Mono',monospace;font-size:12.5px}
+.fmli{display:flex;gap:8px;align-items:center;padding:7px 0;border-top:1px solid #f0ece2;font-size:13.5px}.fmli>span{width:22px;text-align:center}.fmli>div{flex:1;min-width:0}.fmli small{color:var(--muted)}.fmli b{font-family:'IBM Plex Mono',monospace;font-size:13px;white-space:nowrap}.fmli button{border:0;background:transparent;color:var(--muted);font-size:14px;padding:4px}
+.k-ok{color:var(--good)}
+.smtodo.fmc{background:#f3efe4}
+.fmzones{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:5px;margin-top:6px}.fmzones div{border-radius:9px;padding:5px 4px;text-align:center;background:#eef0ea;border:1px solid #dfe3da}.fmzones b{display:block;font:600 14px 'IBM Plex Mono',monospace}.fmzones small{font-size:10.5px;color:var(--ink2);white-space:nowrap}
+.fmzones .act{background:var(--water);border-color:var(--water)}.fmzones .act b,.fmzones .act small{color:#fff}.fmzones .q{background:var(--warn-2);border-color:#efd9b1}.fmzones .done{background:#e3f1e7;border-color:#bfe0c9}.fmzones .done small{color:var(--good)}
 .smtodo.ai{background:var(--leaf-2)}.smtodo.pc{background:#eef4ea}
 .pcbox{max-height:94vh}.pcbox .sheeth b{display:flex;flex-direction:column;line-height:1.2}.pcbox .sheeth b small{font:400 11.5px 'IBM Plex Sans Thai',sans-serif;color:var(--muted)}
 .pctab{display:flex;margin:4px 0 10px}.pctab button{flex:1;padding:9px 6px;font-size:14px}
@@ -1595,7 +1633,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div><div class="gdate" id="hDate">—</div><h1 id="hTitle">สวัสดีครับ 👋</h1></div>
         <div class="wxmini" id="hWx"></div>
       </div>
-      <div class="hrow"><button id="hBig"><svg class="ic sm"><use href="#i-text"/></svg>ตัวอักษรใหญ่</button><button id="hSpeak"><svg class="ic sm"><use href="#i-vol"/></svg>อ่านให้ฟัง</button></div>
+      <div class="hrow"><button id="hBig"><svg class="ic sm"><use href="#i-text"/></svg>ตัวอักษรใหญ่</button><button id="hSpeak"><svg class="ic sm"><use href="#i-vol"/></svg>อ่านให้ฟัง</button><button id="hFM">🏭 ศูนย์บริหารไร่</button></div>
       <div id="hNew">
         <div class="card banner">
           <div><b>เริ่มต้นใช้งานใน 3 ขั้นตอน</b><span>วัดแปลง → ดูไร่ 3D พร้อมระบบน้ำหยด → ให้น้ำอัตโนมัติ</span></div>
@@ -1993,6 +2031,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="smmini"><span>🌱</span><b id="smAge">—</b><small id="smAgeS">—</small></div>
     </div>
     <button class="smtodo ai" id="smAI"><span>🤖</span><span class="t"><b>ถามหมอมัน AI</b><small>ถามเรื่องน้ำ ปุ๋ย โรค แมลง หรือถ่ายรูปใบมันให้ดู</small></span><span>›</span></button>
+    <button class="smtodo fmc" id="smFM"><span>🏭</span><span class="t"><b>ศูนย์บริหารไร่</b><small>ผังระบบน้ำสด · ฤดูกาล · คาดผลผลิต · ราคาลานมัน · บัญชี</small></span><span>›</span></button>
     <button class="smtodo pc" id="smPC"><span>📷</span><span class="t"><b>ตรวจต้นมันจากรูป</b><small>ดูโรค/เพลี้ยแป้ง และวัดความสูงต้นจากรูปถ่าย</small></span><span>›</span></button>
     <button class="smtodo" id="smTodo"><span>📒</span><span class="t"><b id="smTodoT">—</b><small>แตะเพื่อบันทึก</small></span><span>›</span></button>
     <button class="smtodo bk" id="smBk" style="display:none"><span>💾</span><span class="t"><b>สำรองข้อมูลส่งเข้า LINE</b><small id="smBkS">ไม่ได้สำรองนานแล้ว · กันข้อมูลหายเมื่อเปลี่ยนมือถือ</small></span><span>›</span></button>
@@ -2013,6 +2052,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <div class="aichips" id="aiChips"></div>
   <div class="aiin"><label class="aicam" title="ถ่ายรูป/เลือกรูป">📷<input type="file" accept="image/*" capture="environment" id="aiImg" style="display:none"></label><div class="aiprev" id="aiPrev"></div><textarea id="aiText" rows="1" placeholder="พิมพ์คำถาม เช่น ใบเหลืองเกิดจากอะไร"></textarea><button id="aiMic" title="พูด">🎤</button><button id="aiSend" class="send">➤</button></div>
 </div></div>
+<div id="farm" class="fm" style="display:none">
+  <div class="fmtop"><button id="fmBack" class="fmback" aria-label="กลับ">‹</button><div><b>ศูนย์บริหารไร่</b><small id="fmClock" class="mono"></small></div></div>
+  <div class="fmtabs" id="fmTabs"><button data-t="scada" class="on">📟<span>ควบคุม</span></button><button data-t="season">📅<span>ฤดูกาล</span></button><button data-t="yield">📈<span>ผลผลิต·ราคา</span></button><button data-t="money">💰<span>บัญชี</span></button></div>
+  <div class="fmbody" id="fmBody"></div>
+</div>
 <div class="sheet" id="pcSheet" style="display:none"><div class="sheetbg" data-close></div><div class="sheetbox pcbox">
   <div class="sheeth"><span class="ti t-gr sm">📷</span><b>ตรวจต้นมันจากรูป<small id="pcSub">คัดกรองโรค/แมลง และวัดความสูง</small></b><button class="xbtn" data-close aria-label="ปิด">✕</button></div>
   <div class="seg mini pctab" id="pcTab"><button data-m="check" class="on">🩺 ตรวจโรค / แมลง</button><button data-m="height">📏 วัดความสูง</button></div>
@@ -2072,7 +2116,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <div class="stsec">เกี่ยวกับ</div>
   <div class="stgrp">
     <button class="strow link2" id="stIntro"><span class="sti"><svg class="ic"><use href="#i-eye"/></svg></span><span class="stt"><b>ดูวิธีใช้อีกครั้ง</b></span><span class="chev">›</span></button>
-    <div class="strow"><span class="sti"><svg class="ic"><use href="#i-sprout"/></svg></span><span class="stt"><b>ไร่หยด · เวอร์ชัน 19 พ.ย. 69 (ตรวจต้นมันจากรูป)</b><small>ข้อมูลเก็บในเครื่องนี้เท่านั้น · ค่าที่คำนวณเป็นค่าประมาณ ควรตรวจกับแปลงจริง</small></span></div>
+    <div class="strow"><span class="sti"><svg class="ic"><use href="#i-sprout"/></svg></span><span class="stt"><b>ไร่หยด · เวอร์ชัน 19 พ.ย. 69 (ศูนย์บริหารไร่)</b><small>ข้อมูลเก็บในเครื่องนี้เท่านั้น · ค่าที่คำนวณเป็นค่าประมาณ ควรตรวจกับแปลงจริง</small></span></div>
   </div>
   <div style="height:10px"></div>
 </div></div>
@@ -2161,7 +2205,7 @@ if (!Array.isArray(S.lvl)) S.lvl = [];
 if (!Array.isArray(S.pc)) S.pc = [];
 if (!S.ai) S.ai = { prov: 'free', key: '', hist: [] };
 if (!S.ai.key && (S.ai.prov === 'gemini' || S.ai.prov === 'claude')) S.ai.prov = 'free';
-function save() { try { localStorage.setItem('raidrop-v1', JSON.stringify({ crop: S.crop, obs: S.obs, diary: S.diary, ui: S.ui, g: S.g, ai: S.ai, pc: S.pc, pts: S.pts, hpts: S.hpts, lvl: S.lvl, meas: S.meas, mpts: S.mpts, src: S.src, elevSrc: S.elevSrc, closed: S.closed, set: S.set, mode: S.mode })); } catch (e) {} }
+function save() { try { localStorage.setItem('raidrop-v1', JSON.stringify({ crop: S.crop, obs: S.obs, diary: S.diary, ui: S.ui, g: S.g, ai: S.ai, pc: S.pc, costs: S.costs, sales: S.sales, prices: S.prices, digs: S.digs, seasons: S.seasons, mg: S.mg, pts: S.pts, hpts: S.hpts, lvl: S.lvl, meas: S.meas, mpts: S.mpts, src: S.src, elevSrc: S.elevSrc, closed: S.closed, set: S.set, mode: S.mode })); } catch (e) {} }
 
 /* ================= geometry ================= */
 function project(pts) {
@@ -3606,7 +3650,7 @@ function enqueue(items, src) {
   if (SIM.speed === 'pause') setSpeed('real');
 }
 function nextZone() {
-  const prev = SIM.active; if (prev) SIM.doneMin = (SIM.doneMin || 0) + prev.tot;  SIM.active = SIM.queue.shift() || null;
+  const prev = SIM.active; if (prev) { SIM.doneMin = (SIM.doneMin || 0) + prev.tot; (SIM.doneZ = SIM.doneZ || {})[prev.z] = SIM.today && SIM.today.iso; }  SIM.active = SIM.queue.shift() || null;
   if (!SIM.active) SIM.doneMin = 0;
   if (prev && !SIM.active) log(`ให้น้ำครบทุกโซน · วันนี้ใช้น้ำ ${f(SIM.today.vol / 1000, 1)} ลบ.ม.`, 'irr');
   if (SIM.active) log(`เปิดวาล์วโซน ${SIM.active.z + 1} · ${dur(SIM.active.tot)}`, 'irr');
@@ -5761,7 +5805,9 @@ function farmCtx() {
     'น้ำวันนี้': `ดินขาดน้ำ ${f(D, 1)} มม. (เกณฑ์ให้น้ำ ${f(trig, 1)} มม., จุดเครียด ${f(n.raw, 1)} มม.) ความชื้นดิน ${f(swNow())}% · มันใช้น้ำ ${f(n.etc, 1)} มม./วัน · ฝนวันนี้ ${f(rainToday(), 1)} มม. · ถ้าให้น้ำ เปิดโซนละ ${recMinutes()} นาที`,
     'สถานะระบบ': SIM.active ? `กำลังให้น้ำโซน ${SIM.active.z + 1}` : SIM.wait ? 'รอฝน' : 'ปิดอยู่',
     'ความลาด': L.elevOK ? `ต่างระดับ ${f(L.dz, 1)} ม. ลาด ${f(L.slopeAll, 1)}%` : 'ไม่ทราบ',
-    'พยากรณ์ 5 วัน': days.join(' | '), 'บันทึกล่าสุด': obs.join(' | ') || '-'
+    'พยากรณ์ 5 วัน': days.join(' | '), 'บันทึกล่าสุด': obs.join(' | ') || '-',
+    'ผลผลิตคาด': (() => { try { const Y = fmYield(); return `${f(Y.t, 1)} ตัน/ไร่ (${f(Y.lo, 1)}–${f(Y.hi, 1)}) ${Y.src === 'dig' ? 'จากขุดตัวอย่าง' : 'จากแบบจำลอง'}`; } catch (e) { return '-'; } })(),
+    'ราคา/ต้นทุน': (() => { try { const p = fmPrice(), c = fmCost(); return `${p ? `ราคาลานล่าสุด ${f(p.p, 2)} บ./กก. (แป้ง 25%) ${p.y || ''} ${p.d}` : 'ยังไม่ได้บันทึกราคาลาน'} · ต้นทุนฤดูนี้ ${baht(c.tot)} บาท`; } catch (e) { return '-'; } })()
   };
 }
 const AI_SYS = `คุณคือ "หมอมัน" ผู้เชี่ยวชาญมันสำปะหลังและระบบน้ำหยดสำหรับเกษตรกรไทย อยู่ในแอป "ไร่หยด"
@@ -6138,6 +6184,225 @@ $('#pcAsk').addEventListener('click', () => {
   const up = () => { if (PC.drag < 0) return; PC.drag = -1; pcLoupe(null, false); pcDraw(); pcHUI(); };
   cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
   addEventListener('resize', () => { if ($('#pcSheet').style.display === 'block') { pcFit(); pcDraw(); } }); }
+/* ================= ศูนย์บริหารไร่: SCADA overview · season record · yield forecast · yard prices · costs ================= */
+const FM = { tab: 'scada', sig: '', tmr: null };
+const COSTC = [['land', '🚜', 'ไถ/เตรียมดิน'], ['seed', '🌱', 'ท่อนพันธุ์'], ['plant', '👷', 'แรงงานปลูก'], ['fert', '🧪', 'ปุ๋ย'], ['chem', '🧴', 'ยา/สารเคมี'], ['weed', '🌾', 'กำจัดวัชพืช'], ['water', '💧', 'ค่าไฟ/น้ำมันสูบน้ำ'], ['drip', '🔧', 'อุปกรณ์น้ำหยด'], ['harv', '⛏', 'ขุด/เก็บเกี่ยว'], ['truck', '🚚', 'ขนส่ง'], ['rent', '📄', 'ค่าเช่าที่'], ['other', '•', 'อื่น ๆ']];
+const FM_REF = { p: 3.23, when: 'ต.ค.–พ.ย. 2569', what: 'ราคามันสำปะหลังสดคละ เฉลี่ยที่เกษตรกรขายได้ (สศก.)', nat: 3148, natWhen: 'ปี 2568/69 (สศก.)' };
+['costs', 'sales', 'prices', 'digs', 'seasons'].forEach(k => { if (!Array.isArray(S[k])) S[k] = []; });
+if (!S.mg) S.mg = { adj: null, yard: '', lastClose: null };
+const fmRai = () => L ? L.area / 1600 : 0;
+const fmFrom = () => { const pd = parseIso(S.set.plantDate) - 90 * DAY, lc = S.mg.lastClose ? parseIso(S.mg.lastClose) + DAY : 0; return Math.max(pd, lc); };
+const fmIn = e => parseIso(e.d) >= fmFrom();
+const baht = v => (Math.round(v) || 0).toLocaleString('th-TH');
+const fmDap = () => Math.round((parseIso(todayIso()) - parseIso(S.set.plantDate)) / DAY);
+function fmPrice() { const p = S.prices.slice().sort((a, b) => a.d < b.d ? -1 : 1).pop(); return p || null; }
+function fmPriceAt(starch) { const p = fmPrice(); if (!p) return null; const adj = +S.mg.adj || 0; return Math.max(0, p.p + adj * ((starch || 25) - 25)); }
+function fmCost() { const c = S.costs.filter(fmIn), by = {}; c.forEach(e => by[e.c] = (by[e.c] || 0) + e.a); return { tot: c.reduce((s, e) => s + e.a, 0), by, n: c.length }; }
+function fmSold() { const s = S.sales.filter(fmIn); return { kg: s.reduce((a, e) => a + e.kg, 0), thb: s.reduce((a, e) => a + e.kg * e.p, 0), n: s.length }; }
+function fmPest() { const p = (S.diary || []).filter(e => e.type === 'pest' && fmIn(e)); let f = 1, w = ''; p.forEach(e => { const k = /มาก/.test(e.text) ? 0.8 : /ปานกลาง/.test(e.text) ? 0.92 : /น้อย/.test(e.text) ? 0.98 : 1; if (k < f) { f = k; w = e.text; } }); return { f, w }; }
+/* yield forecast: app growth model × water sufficiency × reported pests, or a sample dig when there is one */
+function fmYield() {
+  const H = S.set.harvest, dap = fmDap(), wf = waterFactor(), pf = fmPest(), rai = fmRai(), pl = 1600 / (S.set.rowSp * S.set.plantSp);
+  const model = growthAt(H).y * wf.f * pf.f, starch = growthAt(H).starch;
+  const dg = S.digs.filter(fmIn).slice(-1)[0]; let dig = null;
+  if (dg) { const dd = Math.round((parseIso(dg.d) - parseIso(S.set.plantDate)) / DAY), stand = S.crop && S.crop.germ != null ? S.crop.germ / 100 : 0.95, now = dg.kg / dg.n * pl * stand / 1000, gNow = growthAt(dd).y;
+    if (dd >= 120 && gNow > 0.2) dig = { now, at: dd, proj: now * growthAt(H).y / gNow, kgp: dg.kg / dg.n, d: dg.d }; }
+  const t = dig ? dig.proj : model, sp = dig ? 0.12 : 0.25;
+  return { t, lo: t * (1 - sp), hi: t * (1 + sp), src: dig ? 'dig' : 'model', model, dig, wf, pf, starch, rai, pl, H, dap, ymax: S.set.ymax, germ: S.crop && S.crop.germ };
+}
+function fmOpen(tab) { const el = $('#farm'); el.style.display = 'flex'; document.body.classList.add('fmopen'); fmTab(tab || FM.tab); clearInterval(FM.tmr); FM.tmr = setInterval(() => { if (FM.tab === 'scada') fmScada(); }, 1500); }
+function fmClose() { $('#farm').style.display = 'none'; document.body.classList.remove('fmopen'); clearInterval(FM.tmr); }
+function fmTab(t) { FM.tab = t; FM.sig = ''; $$('#fmTabs button').forEach(b => b.classList.toggle('on', b.dataset.t === t)); $('#fmBody').scrollTop = 0; ({ scada: fmScada, season: fmSeason, yield: fmYieldUI, money: fmMoney })[t](); }
+const fmNoField = () => '<div class="fmcard"><b>ยังไม่ได้วัดแปลง</b><p class="small">วัดแปลงก่อน แล้วศูนย์บริหารจะแสดงสถานะระบบน้ำ ผลผลิต และบัญชีของไร่คุณ</p></div>';
+/* ---------- 📟 SCADA overview ---------- */
+function fmAlarms() {
+  const A = []; if (!L || !SIM.today) return A;
+  const n = need(SIM.t), D = depNow(), trig = n.raw * S.set.trigger / 100, c = n.c;
+  if (!c.notPlanted && !c.noIrr && D > n.raw && !SIM.active) A.push(['bad', 'ดินแห้งถึงจุดที่ต้นมันเครียด', `ดินขาดน้ำ ${f(D, 1)} มม. เกินจุดเครียด ${f(n.raw, 1)} มม.`]);
+  else if (!c.notPlanted && !c.noIrr && D >= trig && !SIM.active && !SIM.queue.length && !SIM.wait) A.push(['warn', 'ถึงเกณฑ์ให้น้ำแล้ว', S.mode === 'auto' ? `ระบบจะเปิดเองตอน ${S.set.startHour}:00` : 'โหมดสั่งเอง — กดเปิดน้ำในแอป']);
+  if (SIM.wait) A.push(['info', 'กำลังรอฝน', 'ระบบเลื่อนการให้น้ำ จะคำนวณใหม่เมื่อฝนหยุด']);
+  const w0 = wx(isoOf(SIM.t)), w1 = wx(isoOf(SIM.t + DAY));
+  if (Math.max(w0.rain, w1.rain) >= 30) A.push(['warn', 'พยากรณ์ฝนหนัก', `วันนี้ ${f(w0.rain)} มม. · พรุ่งนี้ ${f(w1.rain)} มม. ระวังน้ำขังในร่อง`]);
+  if (c.noIrr && !c.notPlanted) A.push(['info', 'ช่วงงดน้ำก่อนเก็บเกี่ยว', 'ระบบหยุดให้น้ำเพื่อเพิ่มเปอร์เซ็นต์แป้ง']);
+  const pf = fmPest(); if (pf.f <= 0.92) A.push([pf.f <= 0.8 ? 'bad' : 'warn', 'มีบันทึกโรค/แมลงรุนแรง', pf.w]);
+  (diaryTodos ? diaryTodos() : []).filter(t => t.hot).slice(0, 2).forEach(t => A.push(['info', 'งานที่ควรทำ', t.t]));
+  const lb = S.ui && S.ui.lastBackup; if (!lb || Date.now() - lb > 14 * DAY) A.push(['info', 'ยังไม่ได้สำรองข้อมูล', 'ตั้งค่า → สำรองข้อมูล กันข้อมูลหายเมื่อเปลี่ยนมือถือ']);
+  return A;
+}
+function fmPID() {
+  const Z = L.zones, many = Z.length > 8, n = many ? 1 : Z.length, rh = 40, top = 34, H = Math.max(many ? 92 : 150, top + n * rh + 14), run = !!SIM.active, q = new Set(SIM.queue.map(x => x.z)), done = SIM.doneZ || {}, sw = swNow(), thr = need(SIM.t);
+  const thrP = 100 * (1 - thr.raw * S.set.trigger / 100 / thr.taw);
+  let s = `<svg viewBox="0 0 360 ${H}" class="pid" role="img" aria-label="ผังระบบน้ำ">`;
+  const hy = top + 6, flowOn = run ? ' flow' : '';
+  s += `<rect x="6" y="${hy - 16}" width="42" height="32" rx="6" class="pv-tank"/><path d="M10 ${hy + 2} q8 -5 17 0 t17 0" class="pv-wave"/><text x="27" y="${hy + 30}" class="pv-t" text-anchor="middle">แหล่งน้ำ</text>`;
+  s += `<line x1="48" y1="${hy}" x2="70" y2="${hy}" class="pv-pipe${flowOn}"/>`;
+  s += `<circle cx="86" cy="${hy}" r="15" class="pv-pump ${run ? 'on' : ''}"/><g class="${run ? 'spin' : ''}" style="transform-origin:86px ${hy}px"><path d="M86 ${hy - 9} L91 ${hy} L86 ${hy + 9} L81 ${hy} Z" class="pv-imp"/></g><text x="86" y="${hy + 30}" class="pv-t" text-anchor="middle">ปั๊ม ${run ? 'ทำงาน' : 'หยุด'}</text>`;
+  s += `<line x1="101" y1="${hy}" x2="118" y2="${hy}" class="pv-pipe${flowOn}"/><rect x="118" y="${hy - 11}" width="22" height="22" rx="3" class="pv-filt"/><path d="M121 ${hy - 8} L137 ${hy + 8} M137 ${hy - 8} L121 ${hy + 8}" class="pv-fx"/><text x="129" y="${hy + 30}" class="pv-t" text-anchor="middle">กรอง</text>`;
+  s += `<line x1="140" y1="${hy}" x2="168" y2="${hy}" class="pv-pipe${flowOn}"/><line x1="168" y1="${hy}" x2="168" y2="${top + (n - 1) * rh + 18}" class="pv-pipe${flowOn}"/>`;
+  const zst = i => run && SIM.active.z === i ? 'act' : q.has(i) ? 'q' : done[i] === SIM.today.iso ? 'done' : 'idle';
+  if (many) {
+    const y = top + 18;
+    s += `<line x1="168" y1="${y}" x2="214" y2="${y}" class="pv-pipe${flowOn}"/><rect x="214" y="${y - 16}" width="140" height="32" rx="7" class="pv-zone ${run ? 'act' : 'idle'}"/><text x="222" y="${y - 3}" class="pv-t b">ท่อเมน → ${Z.length} โซน</text><text x="222" y="${y + 10}" class="pv-t ${run ? 'act' : ''}">${run ? `เปิดโซน ${SIM.active.z + 1} · รอคิว ${q.size}` : 'ปิดทุกโซน'}</text>`;
+    s += `<text x="6" y="14" class="pv-t">ความชื้นดิน</text><rect x="62" y="5" width="110" height="11" rx="5" class="pv-bar"/><rect x="62" y="5" width="${1.1 * clamp(sw, 0, 100)}" height="11" rx="5" class="pv-barf ${sw < thrP ? 'low' : ''}"/><line x1="${62 + 1.1 * thrP}" y1="2" x2="${62 + 1.1 * thrP}" y2="19" class="pv-thr"/><text x="178" y="14" class="pv-t b">${f(sw)}%</text><text x="214" y="14" class="pv-t">เส้นส้ม = เกณฑ์ให้น้ำ</text></svg>`;
+    const lab = { act: 'เปิด', q: 'รอคิว', done: 'ให้แล้ว', idle: 'ปิด' };
+    return s + `<div class="fmzones">${Z.map((z, i) => { const st = zst(i); return `<div class="${st}"><b>${i + 1}</b><small>${st === 'act' ? minTxt(SIM.active.rem) : lab[st]}</small></div>`; }).join('')}</div><div class="fmleg"><span><i class="b" style="background:var(--water)"></i>เปิดอยู่</span><span><i class="b" style="background:var(--warn)"></i>รอคิว</span><span><i class="b" style="background:var(--good)"></i>ให้น้ำวันนี้แล้ว</span><span><i class="b" style="background:#d9ddd5"></i>ปิด</span></div>`;
+  }
+  Z.forEach((z, i) => {
+    const y = top + i * rh + 18, act = run && SIM.active.z === i, st = act ? 'act' : q.has(i) ? 'q' : done[i] === SIM.today.iso ? 'done' : 'idle';
+    const lbl = act ? `เปิดอยู่ · เหลือ ${minTxt(SIM.active.rem)}` : st === 'q' ? 'รอคิว' : st === 'done' ? 'ให้น้ำวันนี้แล้ว' : 'ปิด';
+    s += `<line x1="168" y1="${y}" x2="188" y2="${y}" class="pv-pipe${act ? ' flow' : ''}"/><path d="M188 ${y - 7} L188 ${y + 7} L204 ${y - 7} L204 ${y + 7} Z" class="pv-valve ${st}"/><line x1="204" y1="${y}" x2="214" y2="${y}" class="pv-pipe${act ? ' flow' : ''}"/>`;
+    s += `<rect x="214" y="${y - 16}" width="140" height="32" rx="7" class="pv-zone ${st}"/><text x="222" y="${y - 3}" class="pv-t b">โซน ${i + 1}<tspan class="pv-t" dx="6">${f(z.area / 1600, 1)} ไร่</tspan></text><text x="222" y="${y + 10}" class="pv-t ${st}">${lbl}</text>`;
+  });
+  s += `<text x="6" y="14" class="pv-t">ความชื้นดิน</text><rect x="62" y="5" width="110" height="11" rx="5" class="pv-bar"/><rect x="62" y="5" width="${1.1 * clamp(sw, 0, 100)}" height="11" rx="5" class="pv-barf ${sw < thrP ? 'low' : ''}"/><line x1="${62 + 1.1 * thrP}" y1="2" x2="${62 + 1.1 * thrP}" y2="19" class="pv-thr"/><text x="178" y="14" class="pv-t b">${f(sw)}%</text><text x="214" y="14" class="pv-t">เส้นส้ม = เกณฑ์ให้น้ำ</text>`;
+  return s + '</svg>';
+}
+function fmTrend() {
+  const d = SIM.hist.slice(-30); if (d.length < 3) return '';
+  const W = 340, x = i => 34 + (W - 44) * i / (d.length - 1), y1 = v => 8 + 86 * (1 - v / 100), mx = Math.max(5, ...d.map(e => Math.max(e.rain || 0, e.irr || 0))), y2 = v => 172 - 52 * v / mx, bw = Math.max(2, (W - 44) / d.length / 2 - 1);
+  let s = `<svg viewBox="0 0 ${W} 196" class="fmtrend" role="img" aria-label="กราฟ 30 วัน: ความชื้นดิน ฝน และน้ำที่ให้">`;
+  [0, 50, 100].forEach(v => s += `<line x1="34" x2="${W - 10}" y1="${y1(v)}" y2="${y1(v)}" class="gl"/><text x="30" y="${y1(v) + 3}" class="ax" text-anchor="end">${v}%</text>`);
+  s += `<polyline points="${d.map((e, i) => `${x(i)},${y1(e.thr)}`).join(' ')}" class="thr"/><polyline points="${d.map((e, i) => `${x(i)},${y1(clamp(e.sw, 0, 100))}`).join(' ')}" class="sw"/>`;
+  s += `<line x1="34" x2="${W - 10}" y1="172" y2="172" class="gl"/><text x="30" y="${y2(mx) + 3}" class="ax" text-anchor="end">${f(mx)}</text><text x="30" y="175" class="ax" text-anchor="end">0</text>`;
+  d.forEach((e, i) => { if (e.rain > 0.2) s += `<rect x="${x(i) - bw - 0.5}" y="${y2(e.rain)}" width="${bw}" height="${172 - y2(e.rain)}" rx="1.5" class="rn"><title>${e.iso} ฝน ${f(e.rain, 1)} มม.</title></rect>`; if (e.irr > 0.2) s += `<rect x="${x(i) + 0.5}" y="${y2(e.irr)}" width="${bw}" height="${172 - y2(e.irr)}" rx="1.5" class="ir"><title>${e.iso} ให้น้ำ ${f(e.irr, 1)} มม.</title></rect>`; });
+  s += `<text x="34" y="190" class="ax">${dShort(d[0].t)}</text><text x="${W - 10}" y="190" class="ax" text-anchor="end">${dShort(d[d.length - 1].t)}</text><text x="${W / 2}" y="112" class="ax" text-anchor="middle">น้ำเข้าแปลงต่อวัน (มม.)</text></svg>`;
+  return s + `<div class="fmleg"><span><i class="l sw"></i>ความชื้นดิน</span><span><i class="l thr"></i>เกณฑ์ให้น้ำ</span><span><i class="b rn"></i>ฝน</span><span><i class="b ir"></i>น้ำหยด</span></div>`;
+}
+function fmScada() {
+  const b = $('#fmBody'); $('#fmClock').textContent = SIM.t ? `${dShort(SIM.t)} ${hm(SIM.t)}` : '';
+  if (!L || !SIM.today) { if (FM.sig !== 'nf') { b.innerHTML = fmNoField(); FM.sig = 'nf'; } return; }
+  const n = need(SIM.t), A = fmAlarms(), sw = swNow(), D = depNow(), c = n.c;
+  const sig = [SIM.active && SIM.active.z, SIM.active && Math.round(SIM.active.rem), SIM.queue.length, Math.round(sw), A.map(a => a[1]).join(), SIM.hist.length, Math.floor(SIM.t / 60000), SIM.wait ? 1 : 0].join('|');
+  if (sig === FM.sig) return; FM.sig = sig;
+  const stTxt = SIM.active ? `<b class="k-irr">● ให้น้ำ โซน ${SIM.active.z + 1}</b>` : SIM.wait ? '<b class="k-rain">● รอฝน</b>' : '<b>● ปิดอยู่</b>';
+  const kp = [['สถานะ', stTxt, SIM.active ? `${f(L.zones[SIM.active.z].flow / 1000, 1)} ลบ.ม./ชม.` : S.mode === 'auto' ? 'โหมดอัตโนมัติ' : 'โหมดสั่งเอง'], ['ความชื้นดิน', f(sw) + '%', `ขาดน้ำ ${f(D, 1)} มม.`], ['น้ำวันนี้', f(SIM.today.vol / 1000, 1) + ' ลบ.ม.', `ให้ ${f(SIM.today.irr, 1)} มม.`], ['ฝนวันนี้', f(rainToday(), 1) + ' มม.', `ใช้น้ำ ${f(n.etc, 1)} มม./วัน`],
+    ['อายุต้น', c.notPlanted ? 'ยังไม่ปลูก' : c.dap + ' วัน', c.notPlanted ? '' : 'ระยะ' + stageOf(c.dap).n], ['สัญญาณเตือน', A.filter(a => a[0] !== 'info').length + ' รายการ', A.length ? A.length + ' ทั้งหมด' : 'ปกติ']];
+  const ic = { bad: '⛔', warn: '⚠️', info: 'ℹ️' };
+  b.innerHTML = `<div class="fmkpi">${kp.map(k => `<div><small>${k[0]}</small><b>${k[1]}</b><small>${k[2]}</small></div>`).join('')}</div>
+  <div class="fmcard"><div class="fmh">ผังระบบน้ำ (สด)<span class="tag ${S.hw ? 'live' : 'off'}">${S.hw ? 'อุปกรณ์จริง' : 'จำลองจากแบบจำลอง'}</span></div>${fmPID()}
+    <div class="row" style="gap:8px;margin-top:8px"><button class="btn primary" data-fm="water" style="flex:1">💧 ${SIM.active ? 'ดูการให้น้ำ' : 'สั่งเปิดน้ำ'}</button>${SIM.active || SIM.queue.length ? '<button class="btn danger" data-fm="stop">■ ปิดทั้งหมด</button>' : ''}</div></div>
+  <div class="fmcard"><div class="fmh">สัญญาณเตือน</div>${A.length ? A.map(a => `<div class="fmal ${a[0]}"><span>${ic[a[0]]}</span><div><b>${esc(a[1])}</b><br><small>${esc(a[2])}</small></div></div>`).join('') : '<div class="small">✅ ทุกอย่างปกติ</div>'}</div>
+  <div class="fmcard"><div class="fmh">แนวโน้ม 30 วัน</div>${fmTrend()}</div>
+  <div class="fmcard"><div class="fmh">บันทึกเหตุการณ์</div><div class="fmlog">${SIM.log.slice(0, 8).map(l => `<div><span class="mono">${dShort(l.t)} ${hm(l.t)}</span><span class="k-${l.k}">${l.msg}</span></div>`).join('') || '<div class="small">—</div>'}</div></div>
+  <div class="fmcard"><div class="fmh">จุดต่ออุปกรณ์หน้างาน</div><div class="fmio">${[['ปั๊มน้ำ', 'รีเลย์เปิด/ปิด'], ['วาล์วโซน ×' + L.zones.length, 'โซลินอยด์วาล์ว'], ['ความชื้นดิน', 'เซนเซอร์ในร่อง'], ['มาตรวัดน้ำ', 'ลิตร/นาที'], ['เกจแรงดัน', 'บาร์'], ['เกจวัดฝน', 'มม.']].map(x => `<div><b>${x[0]}</b><small>${x[1]}</small><i>จำลอง</i></div>`).join('')}</div><p class="small" style="margin:6px 0 0">ตอนนี้ค่าทั้งหมดมาจากแบบจำลองน้ำ (FAO-56) + พยากรณ์อากาศ · ต่อบอร์ด ESP32 กับรีเลย์และเซนเซอร์ได้ภายหลัง แล้วช่องเหล่านี้จะเปลี่ยนเป็นค่าจริง</p></div>`;
+}
+/* ---------- 📅 season record ---------- */
+function fmSeason() {
+  const b = $('#fmBody'); if (!L) { b.innerHTML = fmNoField(); return; }
+  const H = S.set.harvest, pd = parseIso(S.set.plantDate), dap = fmDap(), cr = S.crop || {}, pl = cr.status === 'planted' || cr.status === 'harvested';
+  const ev = [];
+  (S.diary || []).filter(fmIn).forEach(e => { const t = DTYPES.find(x => x[0] === e.type) || ['', '📝', '']; ev.push({ d: e.d, i: t[1], t: e.text, k: t[2] }); });
+  (S.meas || []).filter(m => parseIso(m.date) >= fmFrom()).forEach(m => ev.push({ d: m.date, i: '📏', t: `สูง ${f(m.h)} ซม.${m.note ? ' · ' + m.note : ''}`, k: 'ความสูง' }));
+  S.costs.filter(fmIn).forEach(e => { const c = COSTC.find(x => x[0] === e.c) || COSTC[11]; ev.push({ d: e.d, i: '💸', t: `${c[2]} ${baht(e.a)} บาท${e.n ? ' · ' + e.n : ''}`, k: 'ต้นทุน' }); });
+  S.sales.filter(fmIn).forEach(e => ev.push({ d: e.d, i: '💰', t: `ขาย ${f(e.kg / 1000, 2)} ตัน · แป้ง ${f(e.s, 1)}% · ${f(e.p, 2)} บ./กก. = ${baht(e.kg * e.p)} บาท${e.y ? ' · ' + e.y : ''}`, k: 'รายได้' }));
+  S.digs.filter(fmIn).forEach(e => ev.push({ d: e.d, i: '⛏', t: `ขุดตัวอย่าง ${e.n} ต้น ได้ ${f(e.kg, 1)} กก. (${f(e.kg / e.n, 2)} กก./ต้น)`, k: 'ผลผลิต' }));
+  (S.pc || []).filter(e => e.at >= fmFrom()).forEach(e => { if (e.kind === 'check') ev.push({ d: isoOf(e.at), i: '📷', t: e.ai && e.ai.sum ? 'ตรวจจากรูป: ' + e.ai.sum : 'ตรวจจากรูป: ' + (e.txt || ''), k: 'ตรวจต้น' }); });
+  ev.sort((a, b) => a.d < b.d ? 1 : -1);
+  const up = []; if (pl && cr.status !== 'harvested') { const stopW = pd + (H - 30) * DAY, hv = pd + H * DAY; if (stopW > Date.now()) up.push(['🚱', dShort(stopW), 'เริ่มงดให้น้ำ (30 วันก่อนขุด) ระบบทำให้อัตโนมัติ']); up.push(['🚜', dShort(hv), `กำหนดเก็บเกี่ยว (อายุ ${H} วัน)`]); }
+  (diaryTodos ? diaryTodos() : []).slice(0, 3).forEach(t => up.unshift(['📌', 'ตอนนี้', t.t]));
+  const S5 = STAGES(), sg = pl ? stageOf(Math.max(0, dap)) : null, mo = {};
+  ev.forEach(e => { const k = e.d.slice(0, 7); (mo[k] = mo[k] || []).push(e); });
+  const past = S.seasons.slice().reverse();
+  b.innerHTML = `<div class="fmcard"><div class="fmh">ฤดูปลูกนี้${cr.status === 'harvested' ? '<span class="tag off">เก็บเกี่ยวแล้ว</span>' : pl ? '<span class="tag live">กำลังปลูก</span>' : '<span class="tag off">ยังไม่ปลูก</span>'}</div>
+    <div class="fmgrid">${[['วันปลูก', pl ? dShort(pd) + ' ' + (new Date(pd).getFullYear() + 543) : '—'], ['พันธุ์', esc(cr.variety || '—')], ['พื้นที่', areaThai(L.area)], ['อายุ', pl ? Math.max(0, dap) + ' วัน' : '—'], ['ระยะ', sg ? sg.n : '—'], ['เก็บเกี่ยว', pl ? dShort(pd + H * DAY) + (cr.status !== 'harvested' ? ` (อีก ${Math.max(0, H - dap)} วัน)` : '') : '—']].map(x => `<div><small>${x[0]}</small><b>${x[1]}</b></div>`).join('')}</div>
+    ${pl ? `<div class="fmstage">${S5.map(s => `<div style="flex:${Math.max(1, s.b - s.a)};background:${s.c}" title="${s.n}"></div>`).join('')}<i style="left:${clamp(dap / H * 100, 0, 100)}%"></i></div><div class="fmstn">${S5.map(s => `<span style="flex:${Math.max(1, s.b - s.a)}">${s.n}</span>`).join('')}</div>` : ''}
+    <div class="row" style="gap:8px;margin-top:10px"><button class="btn primary" data-fm="diary" style="flex:1">＋ บันทึกกิจกรรม</button><button class="btn" data-fm="pc">📷 ตรวจต้น</button></div></div>
+  ${up.length ? `<div class="fmcard"><div class="fmh">ถัดไป</div>${up.map(u => `<div class="fmev"><span>${u[0]}</span><div><small>${u[1]}</small><br>${esc(u[2])}</div></div>`).join('')}</div>` : ''}
+  <div class="fmcard"><div class="fmh">ไทม์ไลน์ตั้งแต่เตรียมดินถึงเก็บเกี่ยว<small>${ev.length} รายการ</small></div>${Object.keys(mo).length ? Object.entries(mo).map(([k, list]) => `<div class="fmmon">${TH_M[+k.slice(5, 7) - 1]} ${+k.slice(0, 4) + 543}</div>` + list.map(e => `<div class="fmev"><span>${e.i}</span><div><small>${dShort(parseIso(e.d))} · ${e.k}</small><br>${esc(e.t)}</div></div>`).join('')).join('') : '<p class="small">ยังไม่มีบันทึกในฤดูนี้ · กด "บันทึกกิจกรรม" เพื่อเริ่ม เช่น วันปลูก นับต้นงอก ใส่ปุ๋ย</p>'}</div>
+  <div class="fmcard"><div class="fmh">ฤดูที่ผ่านมา</div>${past.length ? `<div class="fmtbl"><div class="hd"><span>ฤดู</span><span>ตัน/ไร่</span><span>แป้ง</span><span>กำไร/ไร่</span></div>${past.map(s => `<div><span>${dShort(parseIso(s.plant))} ${(new Date(parseIso(s.plant)).getFullYear() + 543) % 100}<small>${esc(s.variety || '')}</small></span><span>${s.ty != null ? f(s.ty, 1) : '—'}</span><span>${s.starch ? f(s.starch, 1) + '%' : '—'}</span><span class="${s.profit < 0 ? 'k-warn' : ''}">${s.rai ? baht((s.rev - s.cost) / s.rai) : '—'}</span></div>`).join('')}</div>` : '<p class="small">ยังไม่มี · เมื่อเก็บเกี่ยวและขายเสร็จ กด "ปิดฤดูนี้" ข้อมูลจะมาสรุปตรงนี้ไว้เทียบปีต่อปี</p>'}
+    <button class="btn block" data-fm="close" style="margin-top:8px">📦 ปิดฤดูนี้ และเริ่มฤดูใหม่</button></div>`;
+}
+/* ---------- 📈 yield & yard price ---------- */
+function fmYieldUI() {
+  const b = $('#fmBody'); if (!L) { b.innerHTML = fmNoField(); return; }
+  const Y = fmYield(), p = fmPrice(), cost = fmCost(), rai = Y.rai, starch = S.mg.starch || 25, price = fmPriceAt(starch), totKg = Y.t * rai * 1000, rev = price != null ? totKg * price : null, be = Y.t > 0 && rai ? cost.tot / (Y.t * rai * 1000) : null;
+  const pf = Y.pf, wfP = Y.wf.f * 100, natT = FM_REF.nat / 1000;
+  const fac = [['ศักยภาพที่ตั้งไว้', f(Y.ymax, 1) + ' ตัน/ไร่', 'ปรับได้ที่หน้าการเติบโต'], ['ต้นงอก', Y.germ != null ? Y.germ + '%' : 'ยังไม่นับ', Y.germ != null ? 'นำมาคิดแล้ว' : 'นับต้นงอกเพื่อให้แม่นขึ้น'], ['น้ำพอเพียง', f(Y.wf.ks * 100) + '%', `→ ได้ ${f(wfP)}% ของศักยภาพ`], ['โรค/แมลงที่บันทึก', pf.f < 1 ? '−' + f((1 - pf.f) * 100) + '%' : 'ไม่มี', pf.f < 1 ? esc(pf.w) : ''], ['อายุเก็บเกี่ยว', Y.H + ' วัน', `${f(Y.H / 30.4, 1)} เดือน`]];
+  const opt = [270, 300, 330, 365].map(d => { const y = growthAt(d).y * Y.wf.f * pf.f; return { d, y, v: price != null ? y * rai * 1000 * price : null }; }), best = opt.reduce((a, o) => o.v != null && (a == null || o.v > a.v) ? o : a, null);
+  const ph = S.prices.slice().sort((a, b) => a.d < b.d ? -1 : 1).slice(-12);
+  const notPl = !(S.crop && (S.crop.status === 'planted' || S.crop.status === 'harvested'));
+  b.innerHTML = `<div class="fmcard"><div class="fmh">คาดการณ์ผลผลิต<small>${Y.src === 'dig' ? 'จากการขุดตัวอย่าง' : 'จากแบบจำลองของแอป'}</small></div>${notPl ? '<div class="note warn" style="margin-bottom:6px">ยังไม่ได้บันทึกวันปลูก ตัวเลขนี้เป็นค่าตามแผน (ดูแลน้ำได้ครบ) · บันทึกวันปลูกแล้วระบบจะคิดตามสภาพจริง</div>' : ''}
+    <div class="fmbig"><b>${f(Y.t, 1)}</b> ตัน/ไร่<small>ช่วงที่น่าจะเป็น ${f(Y.lo, 1)}–${f(Y.hi, 1)} ตัน/ไร่ · ทั้งแปลง ${f(Y.t * rai, 1)} ตัน (${f(rai, 2)} ไร่)</small></div>
+    <div class="fmcmp"><div><span>ไร่คุณ (คาด)</span><i style="width:${clamp(Y.t / Math.max(Y.hi, natT, 1) * 100, 2, 100)}%"></i><b>${f(Y.t, 1)}</b></div><div><span>เฉลี่ยทั้งประเทศ</span><i class="nat" style="width:${clamp(natT / Math.max(Y.hi, natT, 1) * 100, 2, 100)}%"></i><b>${f(natT, 2)}</b></div></div>
+    <p class="small" style="margin:4px 0 8px">ค่าเฉลี่ยทั้งประเทศ ${baht(FM_REF.nat)} กก./ไร่ ${FM_REF.natWhen}</p>
+    <div class="fmfac">${fac.map(x => `<div><span>${x[0]}</span><b>${x[1]}</b><small>${x[2]}</small></div>`).join('')}</div>
+    ${Y.dig ? `<p class="small">ขุดตัวอย่างวันที่ ${dShort(parseIso(Y.dig.d))} (อายุ ${Y.dig.at} วัน) ได้ ${f(Y.dig.kgp, 2)} กก./ต้น ≈ ${f(Y.dig.now, 1)} ตัน/ไร่ตอนนั้น แล้วคาดต่อถึงวันเก็บเกี่ยว</p>` : ''}
+    <details class="more2"><summary>⛏ ขุดตัวอย่างชั่งน้ำหนัก (แม่นที่สุด)</summary><p class="small">ตั้งแต่อายุ 6 เดือนขึ้นไป ขุดสุ่ม 5–10 ต้นจากหลายจุดในแปลง (หัวแปลง กลาง ท้าย) ชั่งเฉพาะหัวสด แล้วใส่ตัวเลขด้านล่าง</p>
+      <div class="form"><label>จำนวนต้นที่ขุด<input type="number" id="fmDN" min="1" max="200" inputmode="numeric" placeholder="เช่น 10"></label><label>น้ำหนักหัวรวม <span class="u">กก.</span><input type="number" id="fmDK" min="0" step="0.1" inputmode="decimal" placeholder="เช่น 42"></label></div><button class="btn primary block" data-fm="dig" style="margin-top:8px">บันทึกการขุดตัวอย่าง</button></details>
+    <p class="small" style="margin:8px 0 0">เป็นค่าประมาณ ไม่ใช่ผลผลิตที่รับประกัน · ยิ่งบันทึกต้นงอก ความสูง และขุดตัวอย่าง ยิ่งแม่น</p></div>
+  <div class="fmcard"><div class="fmh">ราคารับซื้อลานมัน</div>
+    ${p ? `<div class="fmbig"><b>${f(p.p, 2)}</b> บาท/กก.<small>หัวมันสด เชื้อแป้ง 25% · ${esc(p.y || 'ลานมัน')} · ${dShort(parseIso(p.d))}</small></div>` : '<p class="small">ยังไม่มีราคา · ถามลานมันใกล้บ้านแล้วใส่ด้านล่าง (ราคาต่างกันแต่ละลานและแต่ละวัน)</p>'}
+    <div class="form"><label>ราคาที่เชื้อแป้ง 25% <span class="u">บาท/กก.</span><input type="number" id="fmPP" min="0" max="20" step="0.01" inputmode="decimal" placeholder="เช่น 3.20"></label><label>ชื่อลาน/โรงแป้ง<input type="text" id="fmPY" maxlength="40" value="${esc(S.mg.yard || '')}" placeholder="เช่น ลานมัน ต.หนองบัว"></label>
+      <label>ลานบวก/หักต่อแป้ง 1% <span class="u">บาท/กก.</span><input type="number" id="fmPA" step="0.01" inputmode="decimal" value="${S.mg.adj ?? ''}" placeholder="ถามลาน เช่น 0.06"></label><label>แป้งที่คาดว่าจะได้ <span class="u">%</span><input type="number" id="fmPS" min="10" max="40" step="0.5" inputmode="decimal" value="${f(starch, 1)}"></label></div>
+    <button class="btn primary block" data-fm="price" style="margin-top:8px">บันทึกราคา</button>
+    ${ph.length > 1 ? `<div class="fmspark">${fmSpark(ph)}</div>` : ''}
+    <div class="fmref"><b>ราคาอ้างอิงล่าสุดที่หาได้:</b> ${FM_REF.what} <b>${f(FM_REF.p, 2)} บาท/กก.</b> (${FM_REF.when}) · ราคาจริงแต่ละพื้นที่และเปอร์เซ็นต์แป้งต่างกัน ดูรายงานราคาหัวมันสด 25% รายภาคได้ที่ สมาคมการค้ามันสำปะหลังไทย (ttta-tapioca.org) และ สศก. (oae.go.th)</div></div>
+  <div class="fmcard"><div class="fmh">รายได้และกำไรที่คาด</div>
+    ${price != null ? `<div class="fmgrid">${[['ราคาที่แป้ง ' + f(starch, 1) + '%', f(price, 2) + ' บ./กก.'], ['รายได้คาด', baht(rev) + ' บาท'], ['ต้นทุนบันทึกแล้ว', baht(cost.tot) + ' บาท'], ['กำไรคาด', `<span class="${rev - cost.tot < 0 ? 'k-warn' : ''}">${baht(rev - cost.tot)} บาท</span>`], ['ต่อไร่', baht((rev - cost.tot) / Math.max(rai, 0.01)) + ' บาท'], ['ราคาคุ้มทุน', be != null ? f(be, 2) + ' บ./กก.<small style="display:block;font-weight:400;font-size:11px;color:var(--muted)">จากต้นทุนที่บันทึก</small>' : '—']].map(x => `<div><small>${x[0]}</small><b>${x[1]}</b></div>`).join('')}</div>
+      <div class="fmtbl" style="margin-top:8px"><div class="hd"><span>ถ้าราคา</span><span>บาท/กก.</span><span>รายได้</span><span>กำไร</span></div>${[0.8, 1, 1.2].map(k => `<div><span>${k === 1 ? 'เท่าตอนนี้' : k < 1 ? 'ลง 20%' : 'ขึ้น 20%'}</span><span>${f(price * k, 2)}</span><span>${baht(rev * k)}</span><span class="${rev * k - cost.tot < 0 ? 'k-warn' : ''}">${baht(rev * k - cost.tot)}</span></div>`).join('')}</div>
+      <div class="fmh" style="margin-top:12px">ขุดตอนไหนได้เงินมากสุด<small>คิดที่ราคาเดียวกัน</small></div><div class="fmtbl"><div class="hd"><span>อายุ</span><span>ตัน/ไร่</span><span>เพิ่มขึ้น</span><span>รายได้</span></div>${opt.map((o, i) => `<div class="${best && o.d === best.d ? 'best' : ''}"><span>${f(o.d / 30.4, 0)} เดือน</span><span>${f(o.y, 1)}</span><span>${i ? '+' + baht(o.v - opt[i - 1].v) : '—'}</span><span>${o.v != null ? baht(o.v) : '—'}</span></div>`).join('')}</div><p class="small" style="margin:6px 0 0">ยิ่งปล่อยนาน หัวโตขึ้นแต่เพิ่มช้าลง ต้องชั่งกับค่าดูแลที่เพิ่มและราคาช่วงนั้น</p>
+      <p class="small" style="margin:6px 0 0">ช่วง ม.ค.–มี.ค. 2570 คาดว่าผลผลิตทั้งประเทศจะออกสู่ตลาดถึง 56% ราคามักถูกกดในช่วงที่ของออกมาก · ถ้าดูแลน้ำได้ การวางแผนขุดนอกช่วงนี้อาจได้ราคาดีกว่า</p>`
+      : '<p class="small">ใส่ราคาลานมันด้านบนก่อน แล้วแอปจะคำนวณรายได้ กำไร และราคาคุ้มทุนให้</p>'}</div>`;
+}
+function fmSpark(ph) {
+  const W = 320, H = 70, mn = Math.min(...ph.map(p => p.p)) * 0.95, mx = Math.max(...ph.map(p => p.p)) * 1.05, x = i => 10 + (W - 20) * i / (ph.length - 1), y = v => 8 + (H - 26) * (1 - (v - mn) / Math.max(0.01, mx - mn));
+  return `<svg viewBox="0 0 ${W} ${H}" class="fmtrend" role="img" aria-label="ราคาที่บันทึก"><polyline points="${ph.map((p, i) => `${x(i)},${y(p.p)}`).join(' ')}" class="pr"/>${ph.map((p, i) => `<circle cx="${x(i)}" cy="${y(p.p)}" r="3.5" class="prd"><title>${p.d} ${f(p.p, 2)} บาท/กก. ${p.y || ''}</title></circle>`).join('')}<text x="10" y="${H - 4}" class="ax">${dShort(parseIso(ph[0].d))} · ${f(ph[0].p, 2)}</text><text x="${W - 10}" y="${H - 4}" class="ax" text-anchor="end">${dShort(parseIso(ph[ph.length - 1].d))} · ${f(ph[ph.length - 1].p, 2)} บ.</text></svg>`;
+}
+/* ---------- 💰 costs & sales ---------- */
+function fmMoney() {
+  const b = $('#fmBody'); const c = fmCost(), so = fmSold(), rai = fmRai() || 0, td = todayIso();
+  const cats = COSTC.map(k => [k, c.by[k[0]] || 0]).filter(x => x[1] > 0).sort((a, b) => b[1] - a[1]), mx = Math.max(1, ...cats.map(x => x[1]));
+  const list = [...S.costs.map((e, i) => ({ ...e, kind: 'c', i })), ...S.sales.map((e, i) => ({ ...e, kind: 's', i }))].filter(fmIn).sort((a, b) => a.d < b.d ? 1 : -1);
+  b.innerHTML = `<div class="fmkpi">${[['ต้นทุนฤดูนี้', baht(c.tot) + ' บ.', rai ? baht(c.tot / rai) + ' บ./ไร่' : ''], ['ขายแล้ว', baht(so.thb) + ' บ.', so.kg ? f(so.kg / 1000, 2) + ' ตัน' : 'ยังไม่ขาย'], ['กำไรตอนนี้', `<span class="${so.thb - c.tot < 0 ? 'k-warn' : ''}">${baht(so.thb - c.tot)} บ.</span>`, rai ? baht((so.thb - c.tot) / rai) + ' บ./ไร่' : '']].map(k => `<div><small>${k[0]}</small><b>${k[1]}</b><small>${k[2]}</small></div>`).join('')}</div>
+  <div class="fmcard"><div class="fmh">บันทึกค่าใช้จ่าย</div>
+    <div class="fmcat" id="fmCat">${COSTC.map((k, i) => `<button data-c="${k[0]}" class="${i === 0 ? 'on' : ''}">${k[1]} ${k[2]}</button>`).join('')}</div>
+    <div class="form"><label>จำนวนเงิน <span class="u">บาท</span><input type="number" id="fmCA" min="0" step="1" inputmode="numeric" placeholder="เช่น 1200"></label><label>วันที่<input type="date" id="fmCD" value="${td}" max="${td}"></label><label class="wide">หมายเหตุ<input type="text" id="fmCN" maxlength="60" placeholder="เช่น ปุ๋ย 15-7-18 2 กระสอบ"></label></div>
+    <button class="btn primary block" data-fm="cost" style="margin-top:8px">＋ บันทึกค่าใช้จ่าย</button></div>
+  <div class="fmcard"><div class="fmh">บันทึกการขายหัวมัน</div>
+    <div class="form"><label>น้ำหนักสุทธิ <span class="u">กก.</span><input type="number" id="fmSK" min="0" step="1" inputmode="numeric" placeholder="ตามใบชั่ง เช่น 12500"></label><label>เชื้อแป้ง <span class="u">%</span><input type="number" id="fmSS" min="10" max="40" step="0.1" inputmode="decimal" placeholder="เช่น 26"></label>
+      <label>ราคาที่ได้ <span class="u">บาท/กก.</span><input type="number" id="fmSP" min="0" step="0.01" inputmode="decimal" placeholder="ราคาจริงในใบชั่ง"></label><label>ลานที่ขาย<input type="text" id="fmSY" maxlength="40" value="${esc(S.mg.yard || '')}"></label><label>วันที่<input type="date" id="fmSD" value="${td}" max="${td}"></label></div>
+    <button class="btn primary block" data-fm="sale" style="margin-top:8px">＋ บันทึกการขาย</button></div>
+  ${cats.length ? `<div class="fmcard"><div class="fmh">ต้นทุนแยกหมวด</div>${cats.map(([k, v]) => `<div class="fmbar"><span>${k[1]} ${k[2]}</span><i style="width:${v / mx * 100}%"></i><b>${baht(v)}</b></div>`).join('')}</div>` : ''}
+  <div class="fmcard"><div class="fmh">รายการฤดูนี้<small>${list.length} รายการ</small></div>${list.length ? list.map(e => { const c2 = COSTC.find(x => x[0] === e.c) || COSTC[11]; return `<div class="fmli"><span>${e.kind === 'c' ? c2[1] : '💰'}</span><div><small>${dShort(parseIso(e.d))}</small><br>${e.kind === 'c' ? `${c2[2]}${e.n ? ' · ' + esc(e.n) : ''}` : `ขาย ${f(e.kg / 1000, 2)} ตัน · แป้ง ${f(e.s, 1)}% · ${f(e.p, 2)} บ./กก.${e.y ? ' · ' + esc(e.y) : ''}`}</div><b class="${e.kind === 'c' ? 'k-warn' : 'k-ok'}">${e.kind === 'c' ? '−' + baht(e.a) : '+' + baht(e.kg * e.p)}</b><button data-del="${e.kind}:${e.i}" aria-label="ลบ">✕</button></div>`; }).join('') : '<p class="small">ยังไม่มีรายการ</p>'}
+    <button class="btn block" data-fm="csv" style="margin-top:8px">⬇ ส่งออกบัญชี (CSV เปิดใน Excel ได้)</button></div>`;
+}
+function fmCSV() {
+  const rows = [['วันที่', 'ประเภท', 'หมวด', 'รายละเอียด', 'น้ำหนัก(กก.)', 'แป้ง(%)', 'ราคา(บ./กก.)', 'จำนวนเงิน(บาท)']];
+  S.costs.forEach(e => rows.push([e.d, 'รายจ่าย', (COSTC.find(x => x[0] === e.c) || COSTC[11])[2], e.n || '', '', '', '', -e.a]));
+  S.sales.forEach(e => rows.push([e.d, 'รายรับ', 'ขายหัวมัน', e.y || '', e.kg, e.s, e.p, Math.round(e.kg * e.p)]));
+  const csv = '﻿' + rows.sort((a, b) => a[0] === 'วันที่' ? -1 : b[0] === 'วันที่' ? 1 : a[0] < b[0] ? -1 : 1).map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' }), name = `raidrop-account-${todayIso()}.csv`, file = new File([blob], name, { type: 'text/csv' });
+  (async () => { try { if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'บัญชีไร่มัน' }); return; } } catch (e) { if (e.name === 'AbortError') return; }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500); toast('บันทึกไฟล์แล้ว: ' + name); })();
+}
+$('#fmBack').addEventListener('click', fmClose);
+$('#smFM').addEventListener('click', () => fmOpen('scada')); $('#hFM').addEventListener('click', () => fmOpen('scada'));
+$('#fmTabs').addEventListener('click', e => { const b = e.target.closest('[data-t]'); if (b) fmTab(b.dataset.t); });
+$('#fmBody').addEventListener('click', e => {
+  const cb = e.target.closest('#fmCat button'); if (cb) { $$('#fmCat button').forEach(x => x.classList.toggle('on', x === cb)); return; }
+  const del = e.target.closest('[data-del]'); if (del) { const [k, i] = del.dataset.del.split(':'); if (!confirm('ลบรายการนี้?')) return; (k === 'c' ? S.costs : S.sales).splice(+i, 1); save(); fmMoney(); return; }
+  const b = e.target.closest('[data-fm]'); if (!b) return; const a = b.dataset.fm, v = id => ($('#' + id) || {}).value;
+  if (a === 'water') { fmClose(); go(3); }
+  else if (a === 'stop') { stopAll(); FM.sig = ''; fmScada(); }
+  else if (a === 'diary') { fmClose(); openDiary(); }
+  else if (a === 'pc') { fmClose(); pcOpen('check'); }
+  else if (a === 'dig') { const n = +v('fmDN'), kg = +v('fmDK'); if (!(n > 0) || !(kg > 0)) return toast('ใส่จำนวนต้นและน้ำหนัก'); S.digs.push({ d: todayIso(), n, kg }); save(); toast(`บันทึกแล้ว: ${f(kg / n, 2)} กก./ต้น`); fmYieldUI(); }
+  else if (a === 'price') {
+    const p = +v('fmPP'), y = (v('fmPY') || '').trim(), adj = v('fmPA'), st = +v('fmPS');
+    S.mg.yard = y; S.mg.adj = adj === '' ? null : +adj; if (st >= 10 && st <= 40) S.mg.starch = st;
+    if (p > 0) { if (p > 20) return toast('ราคาดูสูงผิดปกติ ใส่เป็นบาทต่อกิโลกรัม'); S.prices.push({ d: todayIso(), p, y }); toast('บันทึกราคาแล้ว'); } else toast('บันทึกค่าแล้ว');
+    save(); fmYieldUI();
+  }
+  else if (a === 'cost') { const amt = +v('fmCA'), c = ($('#fmCat button.on') || {}).dataset; if (!(amt > 0)) return toast('ใส่จำนวนเงิน'); S.costs.push({ d: v('fmCD') || todayIso(), c: c ? c.c : 'other', a: amt, n: (v('fmCN') || '').trim() }); save(); toast('บันทึกค่าใช้จ่ายแล้ว'); fmMoney(); }
+  else if (a === 'sale') { const kg = +v('fmSK'), s = +v('fmSS'), p = +v('fmSP'), y = (v('fmSY') || '').trim(); if (!(kg > 0) || !(p > 0)) return toast('ใส่น้ำหนักและราคา'); if (p > 20) return toast('ราคาใส่เป็นบาทต่อกิโลกรัม');
+    S.sales.push({ d: v('fmSD') || todayIso(), kg, s: s || 25, p, y }); if (y) S.mg.yard = y; save(); toast(`บันทึกการขาย ${baht(kg * p)} บาท`); fmMoney(); }
+  else if (a === 'csv') fmCSV();
+  else if (a === 'close') {
+    if (!confirm('ปิดฤดูนี้? ข้อมูลจะสรุปเก็บไว้ในฤดูที่ผ่านมา แล้วเริ่มนับต้นทุน/รายได้ของฤดูใหม่')) return;
+    const c = fmCost(), so = fmSold(), rai = fmRai(), cr = S.crop || {};
+    S.seasons.push({ plant: S.set.plantDate, end: todayIso(), variety: cr.variety || '', rai, ty: cr.yield != null ? cr.yield : so.kg && rai ? so.kg / 1000 / rai : null, starch: cr.starch || (so.kg ? S.sales.filter(fmIn).reduce((s2, e) => s2 + e.s * e.kg, 0) / so.kg : null), cost: c.tot, rev: so.thb, profit: so.thb - c.tot });
+    S.mg.lastClose = todayIso(); save(); toast('ปิดฤดูแล้ว · บันทึกวันปลูกใหม่เมื่อปลูกฤดูหน้า'); fmSeason();
+  }
+});
 function arMsg(html, ms) { const m = $('#arMsg'); m.innerHTML = html; m.style.display = ''; clearTimeout(AR.msgTO); AR.msgTO = setTimeout(() => { m.style.display = 'none'; }, ms || 3000); }
 /* hide the model ground and scenery; add bright overlays that read well over a camera picture */
 function arScene() {

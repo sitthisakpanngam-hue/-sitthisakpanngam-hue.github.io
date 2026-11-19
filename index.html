@@ -3035,7 +3035,7 @@ function build3D() {
   R.lastAct = -2;
   R.envHour = -99; updateLighting(true);
   buildSunPath(); R.satMesh = null; buildSatGround(g);
-  R.lvG = null; lvMarkers(); R.dimG = null; if (R.dimOn) buildDims(); R.measG = null;
+  R.lvG = null; lvMarkers(); R.dimG = null; if (R.dimOn) { buildDims(); if (document.body.classList.contains('designing')) dimEmph(DS.k); } R.measG = null;
   if (!R.keepCam) fitCamera('overview'); R.keepCam = false;
 }
 function buildPlants() {
@@ -5393,9 +5393,25 @@ const DSP = {
 };
 function dspOpen() {
   if (!L || !R.ok) return toast('วัดแปลงก่อน'); if (S.step !== 2) go(2);
-  document.body.classList.add('designing'); $('#dsp').style.display = ''; R.dimOn = true; buildDims(); dspRender(); dspSum(); setTimeout(resize3D, 60);
+  document.body.classList.add('designing'); $('#dsp').style.display = ''; R.dimOn = true; buildDims(); dspRender(); dspSum(); setTimeout(resize3D, 60); setTimeout(() => dspFocus(DS.k, 1.8), 120);
   $('#dspDim').classList.toggle('on', R.dimOn);
 }
+/* fly the camera to where the chosen value can be seen, with its numbers */
+function dspFocus(k, dur = 1.4) {
+  const c = DS.call, sp = DS.spots; if (!L) return; const st = S.set, rh = st.ridgeH ?? 0.16, H = (x, y) => hz(x, y);
+  if (!c || !sp || ['rowAng', 'subSide'].includes(k)) { fitCamera('overview'); return; }
+  const dirX = sp.rgt ? 1 : -1;   // look from the sub-main end into the field
+  let pos, tgt;
+  if (k === 'rowSp') { const ym = c.y; tgt = V(sp.xs, H(sp.xs, ym) + rh, -ym); pos = V(sp.xs + dirX * 2.4, tgt.y + 1.5, -ym + 0.6); }
+  else if (k === 'ridgeW' || k === 'ridgeH') { tgt = V(sp.xw, H(sp.xw, c.r1y) + rh * 0.6, -c.r1y); pos = V(sp.xw + dirX * 1.9, tgt.y + 0.55, -c.r1y + 0.25); }
+  else if (k === 'plantSp') { tgt = V(sp.xp + st.plantSp / 2, H(sp.xp, sp.yp) + rh + 0.35, -sp.yp); pos = V(tgt.x + 0.2, tgt.y + 0.9, -sp.yp + 2.0); }
+  else if (k === 'emSp') { tgt = V(sp.xe + st.emSp * 1.5, H(sp.xe, sp.ye) + rh, -sp.ye); pos = V(tgt.x - dirX * 0.15, tgt.y + 0.75, -sp.ye + 0.75); }
+  else if (k === 'inset') { const ex = (sp.edgeX + sp.endX) / 2; tgt = V(ex, H(ex, sp.yp), -sp.yp); pos = V(ex + dirX * 4.5, tgt.y + 3.2, -sp.yp + 3.5); }
+  else if (k === 'pump') { const [px, py] = L.pump; tgt = V(px, H(px, py) + 1, -py); pos = V(px + 14, tgt.y + 12, -py + 16); }
+  else { fitCamera('overview'); return; }
+  R.follow = false; flyTo(pos, tgt, dur); dimEmph(k);
+}
+function dimEmph(k) { const key = k === 'ridgeW' || k === 'ridgeH' ? 'ridge' : k; if (!R.dimG) return; R.dimG.traverse(o => { if (o.isSprite && o.material) { const d = o.userData.dk, call = ['rowSp', 'ridge', 'plantSp', 'emSp', 'inset'].includes(d); const close = ['rowSp', 'ridge', 'plantSp', 'emSp', 'inset'].includes(key); o.visible = !close || call; o.material.opacity = !call || d === key ? 1 : 0.35; } }); }
 function dspClose() { document.body.classList.remove('designing'); setTimeout(resize3D, 60); $('#dsp').style.display = 'none'; DS.measOn = false; DS.pumpPick = false; $('#dspMeas').classList.remove('on'); }
 function dspSum() { if (L) $('#dspSum').textContent = `${areaThai(L.area)} · ${L.rows.length} ร่อง · ${L.zones.length} โซน · เทป ${f(L.tape)} ม.`; }
 function dspRender() {
@@ -5407,8 +5423,8 @@ function dspRender() {
   v.insertAdjacentHTML('beforeend', '');
 }
 let dspT = 0;
-function dspApply(k, val) { DSP[k].set(val); save(); clearTimeout(dspT); dspT = setTimeout(() => { R.keepCam = true; onLayoutChanged(); dspSum(); renderDZ(); }, 350); }
-$('#dspK').addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (!b) return; DS.k = b.dataset.k; DS.pumpPick = false; dspRender(); });
+function dspApply(k, val) { DSP[k].set(val); save(); clearTimeout(dspT); dspT = setTimeout(() => { R.keepCam = true; onLayoutChanged(); dspSum(); renderDZ(); if (!['rowAng', 'subSide', 'inset'].includes(k)) dspFocus(k, 0.6); }, 350); }
+$('#dspK').addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (!b) return; DS.k = b.dataset.k; DS.pumpPick = false; dspRender(); dspFocus(DS.k); b.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' }); });
 $('#dspV').addEventListener('click', e => {
   const st = e.target.closest('[data-st]'), o = e.target.closest('[data-o]'), pm = e.target.closest('[data-pump]'), d = DSP[DS.k];
   if (st) { const nv = clamp(Math.round((d.get() + d.step * +st.dataset.st) / d.step) * d.step, d.min, d.max); dspApply(DS.k, nv); dspRender(); }
@@ -5421,13 +5437,13 @@ $('#dspX').addEventListener('click', dspClose);
 $('#dspDim').addEventListener('click', () => { R.dimOn = !R.dimOn; $('#dspDim').classList.toggle('on', R.dimOn); R.dimOn ? buildDims() : clearDims(); });
 $('#dspMeas').addEventListener('click', () => { DS.measOn = !DS.measOn; DS.pumpPick = false; DS.meas = []; $('#dspMeas').classList.toggle('on', DS.measOn); drawMeas(); toast(DS.measOn ? 'แตะ 2 จุดบนพื้นเพื่อวัดระยะ' : 'ปิดการวัดระยะ'); });
 $('#dspReset').addEventListener('click', () => { if (!confirm('คืนค่าการออกแบบเป็นค่าเริ่มต้น?')) return; Object.assign(S.set, { rowSp: 1.0, plantSp: 0.8, emSp: 0.3, ridgeW: null, ridgeH: 0.16, inset: 0.5, subSide: 'left', pumpLL: null, rowDir: 'best' }); save(); R.keepCam = true; onLayoutChanged(); dspRender(); dspSum(); });
-$('#dspZoom').addEventListener('click', () => { const c = DS.call; if (!c) return; R.tween = null; const t = V(c.x, hz(c.x, c.y), -c.y), dir = V(Math.cos(0.9), 0, Math.sin(0.9)); R.camera.position.set(t.x - 3.2, t.y + 2.4, t.z + 3.2); R.controls.target.copy(t); R.controls.update(); });
+$('#dspZoom').addEventListener('click', () => dspFocus(DS.k === 'rowAng' || DS.k === 'subSide' ? 'rowSp' : DS.k));
 /* labels */
-function dimLabel(text, size, bg) {
+function dimLabel(text, size, bg, key) {
   const fs = 44, c = document.createElement('canvas'), x = c.getContext('2d'); x.font = `700 ${fs}px Prompt, sans-serif`; const w = Math.ceil(x.measureText(text).width) + 36; c.width = w; c.height = 72;
   x.font = `700 ${fs}px Prompt, sans-serif`; x.fillStyle = bg || 'rgba(255,255,255,.95)'; x.beginPath(); x.roundRect ? x.roundRect(2, 4, w - 4, 64, 18) : x.rect(2, 4, w - 4, 64); x.fill();
   x.fillStyle = bg ? '#fff' : '#1b2a1e'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(text, w / 2, 38);
-  const tx = new THREE.CanvasTexture(c); tx.colorSpace = THREE.SRGBColorSpace; const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tx, depthTest: false, toneMapped: false })); sp.renderOrder = 6; sp.scale.set(size * w / 72, size, 1); return sp;
+  const tx = new THREE.CanvasTexture(c); tx.colorSpace = THREE.SRGBColorSpace; const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tx, depthTest: false, toneMapped: false, sizeAttenuation: false, transparent: true })); sp.renderOrder = 6; const hh = key === 'meas' ? 0.05 : key === 'edge' ? 0.042 : 0.038; sp.scale.set(hh * w / 72, hh, 1); sp.userData.dk = key || ''; return sp;
 }
 function clearDims() { if (R.dimG) { disposeGroup(R.dimG); R.group && R.group.remove(R.dimG); R.dimG = null; } }
 const dimLine = (pts, col) => { const g = new THREE.BufferGeometry().setFromPoints(pts); return new THREE.Line(g, new THREE.LineBasicMaterial({ color: col || '#ffd23f', depthTest: false, toneMapped: false, transparent: true })); };
@@ -5439,29 +5455,32 @@ function buildDims() {
     let nx = -(b[1] - a[1]) / len, ny = (b[0] - a[0]) / len; if ((mx - cx) * nx + (my - cy) * ny < 0) { nx = -nx; ny = -ny; } const o = big * 0.6;
     const A = V(a[0] + nx * o, hz(a[0], a[1]) + 0.3, -(a[1] + ny * o)), B = V(b[0] + nx * o, hz(b[0], b[1]) + 0.3, -(b[1] + ny * o));
     g.add(dimLine([V(a[0], hz(a[0], a[1]) + 0.3, -a[1]), A, B, V(b[0], hz(b[0], b[1]) + 0.3, -b[1])]));
-    const lb = dimLabel(len >= 100 ? `${f(len, 1)} ม.` : `${f(len, 2)} ม.`, big * 0.9); lb.position.set((A.x + B.x) / 2, (A.y + B.y) / 2 + big * 0.5, (A.z + B.z) / 2); g.add(lb); });
+    const lb = dimLabel(len >= 100 ? `${f(len, 1)} ม.` : `${f(len, 2)} ม.`, big * 0.9, null, 'edge'); lb.position.set((A.x + B.x) / 2, (A.y + B.y) / 2 + big * 0.5, (A.z + B.z) / 2); g.add(lb); });
   // 2) row lengths (first, middle, last)
   [0, Math.floor(L.rows.length / 2), L.rows.length - 1].filter((v, i, a) => a.indexOf(v) === i).forEach(i => { const r = L.rows[i], gs = r.segs.reduce((a, b) => b.len > a.len ? b : a);
-    const lb = dimLabel(`ร่องที่ ${i + 1} ยาว ${f(r.len, 1)} ม.`, big * 0.55, 'rgba(26,127,78,.92)'); lb.position.set((gs.x1 + gs.x2) / 2, hz((gs.x1 + gs.x2) / 2, r.y) + big * 0.5, -r.y); g.add(lb); });
+    const lb = dimLabel(`ร่องที่ ${i + 1} ยาว ${f(r.len, 1)} ม.`, big * 0.55, 'rgba(26,127,78,.92)', 'row'); lb.position.set((gs.x1 + gs.x2) / 2, hz((gs.x1 + gs.x2) / 2, r.y) + big * 0.5, -r.y); g.add(lb); });
   // 3) pump → field main pipe
   if (L.sub.length) { const [px, py] = L.pump, s0 = L.sub[0]; g.add(dimLine([V(px, hz(px, py) + 0.4, -py), V(s0[0], hz(s0[0], py) + 0.4, -py), V(s0[0], hz(s0[0], s0[1]) + 0.4, -s0[1])], '#7fc4ff'));
-    const lb = dimLabel(`ท่อเมน ${f(L.mainLen, 1)} ม. · ท่อย่อย ${f(L.subLen, 1)} ม.`, big * 0.55, 'rgba(31,111,209,.92)'); lb.position.set((px + s0[0]) / 2, hz(px, py) + big * 0.6, -py); g.add(lb); }
+    const lb = dimLabel(`ท่อเมน ${f(L.mainLen, 1)} ม. · ท่อย่อย ${f(L.subLen, 1)} ม.`, big * 0.55, 'rgba(31,111,209,.92)', 'pipe'); lb.position.set((px + s0[0]) / 2, hz(px, py) + big * 0.6, -py); g.add(lb); }
   // 4) close-up callout: ridge spacing, ridge size, plant & emitter spacing, headland
   const mid = Math.floor(L.rows.length / 2), r0 = L.rows[Math.max(0, mid - 1)], r1 = L.rows[mid]; if (r0 && r1 && r0 !== r1) {
     const seg = r1.segs[0], rgt = st.subSide === 'right', xs = rgt ? r1.segs[r1.segs.length - 1].x2 - 4 : seg.x1 + 4, ytop = (r, x) => hz(x, r.y) + (st.ridgeH ?? 0.16) + 0.02;
-    DS.call = { x: xs, y: (r0.y + r1.y) / 2 };
+    DS.call = { x: xs, y: (r0.y + r1.y) / 2, r0y: r0.y, r1y: r1.y };
     const sm = 0.16, rw = Math.min(st.ridgeW || st.rowSp * 0.62, st.rowSp * 0.95), rh = st.ridgeH ?? 0.16;
     const pA = V(xs, ytop(r0, xs) + 0.25, -r0.y), pB = V(xs, ytop(r1, xs) + 0.25, -r1.y);
     g.add(dimLine([V(xs, ytop(r0, xs), -r0.y), pA, pB, V(xs, ytop(r1, xs), -r1.y)], '#ff6b4a'));
-    let lb = dimLabel(`ระยะร่อง ${f(st.rowSp * 100)} ซม.`, sm, 'rgba(201,64,40,.95)'); lb.position.set(xs, pA.y + 0.12, (pA.z + pB.z) / 2); g.add(lb);
+    let lb = dimLabel(`ระยะร่อง ${f(st.rowSp * 100)} ซม.`, sm, 'rgba(201,64,40,.95)', 'rowSp'); lb.position.set(xs, pA.y + 0.12, (pA.z + pB.z) / 2); g.add(lb);
     const xw = xs + 1.2, h0 = hz(xw, r1.y); g.add(dimLine([V(xw, h0 + 0.01, -(r1.y - rw / 2)), V(xw, h0 + 0.01, -(r1.y + rw / 2))], '#ffffff'), dimLine([V(xw, h0, -(r1.y + rw / 2) - 0.05), V(xw, h0 + rh, -(r1.y + rw / 2) - 0.05)], '#ffffff'));
-    lb = dimLabel(`ร่องกว้าง ${f(rw * 100)} · สูง ${f(rh * 100)} ซม.`, sm * 0.85); lb.position.set(xw, h0 + rh + 0.32, -r1.y); g.add(lb);
+    lb = dimLabel(`ร่องกว้าง ${f(rw * 100)} · สูง ${f(rh * 100)} ซม.`, sm * 0.85, null, 'ridge'); lb.position.set(xw, h0 + rh + 0.32, -r1.y); g.add(lb);
     const xp = xs + 2.2, yp = r1.y; g.add(dimLine([V(xp, ytop(r1, xp) + 0.5, -yp), V(xp + st.plantSp, ytop(r1, xp) + 0.5, -yp)], '#5fd068'));
-    lb = dimLabel(`ระยะต้น ${f(st.plantSp * 100)} ซม.`, sm * 0.85, 'rgba(47,125,60,.95)'); lb.position.set(xp + st.plantSp / 2, ytop(r1, xp) + 0.68, -yp); g.add(lb);
+    lb = dimLabel(`ระยะต้น ${f(st.plantSp * 100)} ซม.`, sm * 0.85, 'rgba(47,125,60,.95)', 'plantSp');
+    [xp, xp + st.plantSp].forEach(xx => { const m0 = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.5, 6), new THREE.MeshBasicMaterial({ color: '#3fae4f' })); m0.position.set(xx, ytop(r1, xx) + 0.25, -yp); g.add(m0); }); lb.position.set(xp + st.plantSp / 2, ytop(r1, xp) + 0.68, -yp); g.add(lb);
     const xe = xs - 0.2, ye = r0.y; for (let k = 0; k < 4; k++) { const xx = xe + k * st.emSp; const d0 = new THREE.Mesh(new THREE.SphereGeometry(0.018, 8, 6), new THREE.MeshBasicMaterial({ color: '#2a8cff', depthTest: false })); d0.renderOrder = 6; d0.position.set(xx, ytop(r0, xx), -(ye - 0.0)); g.add(d0); }
-    lb = dimLabel(`หัวหยดทุก ${f(st.emSp * 100)} ซม.`, sm * 0.85, 'rgba(31,111,209,.95)'); lb.position.set(xe + st.emSp * 1.5, ytop(r0, xe) + 0.2, -ye); g.add(lb);
+    lb = dimLabel(`หัวหยดทุก ${f(st.emSp * 100)} ซม.`, sm * 0.85, 'rgba(31,111,209,.95)', 'emSp'); lb.position.set(xe + st.emSp * 1.5, ytop(r0, xe) + 0.2, -ye); g.add(lb);
+    DS.spots = { xs, xw, xp, yp, xe, ye, rgt };
     const edgeX = rgt ? r1.segs[r1.segs.length - 1].x2 + (st.inset ?? 0.5) : seg.x1 - (st.inset ?? 0.5), endX = rgt ? r1.segs[r1.segs.length - 1].x2 : seg.x1;
-    if ((st.inset ?? 0.5) > 0.05) { g.add(dimLine([V(edgeX, hz(edgeX, yp) + 0.05, -yp), V(endX, hz(endX, yp) + 0.05, -yp)], '#ffd23f')); lb = dimLabel(`เว้นขอบ ${f(st.inset ?? 0.5, 1)} ม.`, sm * 0.85); lb.position.set((edgeX + endX) / 2, hz(endX, yp) + 0.3, -yp + 0.4); g.add(lb); }
+    DS.spots.edgeX = edgeX; DS.spots.endX = endX;
+    if ((st.inset ?? 0.5) > 0.05) { g.add(dimLine([V(edgeX, hz(edgeX, yp) + 0.05, -yp), V(endX, hz(endX, yp) + 0.05, -yp)], '#ffd23f')); lb = dimLabel(`เว้นขอบ ${f(st.inset ?? 0.5, 1)} ม.`, sm * 0.85, null, 'inset'); lb.position.set((edgeX + endX) / 2, hz(endX, yp) + 0.3, -yp + 0.4); g.add(lb); }
   }
   R.group.add(g);
 }
@@ -5472,7 +5491,7 @@ function drawMeas() {
   const cd = p => clamp(R.camera.position.distanceTo(p) * 0.011, 0.02, 4);
   P.forEach(p => { const d = new THREE.Mesh(new THREE.SphereGeometry(cd(p), 12, 8), new THREE.MeshBasicMaterial({ color: '#ff3b30', depthTest: false })); d.renderOrder = 7; d.position.copy(p); g.add(d); });
   if (P.length === 2) { g.add(dimLine(P, '#ff3b30')); const a = DS.meas[0], b = DS.meas[1], dd = Math.hypot(b.x - a.x, b.y - a.y), dz = b.h - a.h;
-    const txt = dd < 10 ? `${f(dd * 100)} ซม.` : `${f(dd, 2)} ม. (${f(dd * 100)} ซม.)`; const lb = dimLabel(txt + (Math.abs(dz) > 0.02 ? ` · สูงต่าง ${f(Math.abs(dz) * 100)} ซม.` : ''), cd(P[0].clone().lerp(P[1], 0.5)) * 2.6, 'rgba(255,59,48,.95)');
+    const txt = dd < 10 ? `${f(dd * 100)} ซม.` : `${f(dd, 2)} ม. (${f(dd * 100)} ซม.)`; const lb = dimLabel(txt + (Math.abs(dz) > 0.02 ? ` · สูงต่าง ${f(Math.abs(dz) * 100)} ซม.` : ''), cd(P[0].clone().lerp(P[1], 0.5)) * 2.6, 'rgba(255,59,48,.95)', 'meas');
     lb.position.set((P[0].x + P[1].x) / 2, (P[0].y + P[1].y) / 2 + cd(P[0].clone().lerp(P[1], 0.5)) * 3, (P[0].z + P[1].z) / 2); g.add(lb); toast('ระยะ ' + txt); }
   R.group.add(g);
 }

@@ -1915,7 +1915,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </aside>
 </div>
 <div class="sheet" id="gSheet" style="display:none"><div class="sheetbg" data-close></div><div class="sheetbox">
-  <div class="sheeth"><span class="ti t-bl sm"><svg class="ic"><use href="#i-globe"/></svg></span><b>เชื่อมต่อ Google</b><button class="xbtn" data-close aria-label="ปิด">✕</button></div>
+  <div class="sheeth"><span class="ti t-bl sm"><svg class="ic"><use href="#i-globe"/></svg></span><b>ภาพดาวเทียม Google Maps</b><button class="xbtn" data-close aria-label="ปิด">✕</button></div>
   <p class="sub">ใช้ภาพดาวเทียม Google Maps, ความสูง–ความชันจาก Google Elevation และพยากรณ์จาก Google Weather ต้องใช้ API key ของคุณเอง (มีโควตาใช้ฟรีรายเดือน)</p>
   <label class="fld">Google Maps Platform API key<input type="password" id="gKey" placeholder="AIza..." autocomplete="off" spellcheck="false"></label>
   <div class="gsw">
@@ -1926,15 +1926,15 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <div class="note warn" id="gErr" style="display:none"></div>
   <button class="btn primary xl" id="gSave">บันทึกและทดสอบ</button>
   <button class="btn block" id="gClear" style="margin-top:8px">ลบ key / ใช้ข้อมูลฟรีแทน</button>
-  <details class="more2"><summary>วิธีขอ API key (ประมาณ 5 นาที)</summary>
+  <details class="more2" open><summary>วิธีขอ API key (ประมาณ 10 นาที)</summary>
     <ol class="how">
-      <li>เข้า console.cloud.google.com → สร้างโปรเจกต์ และผูกบัญชีเรียกเก็บเงิน (มีโควตาฟรีรายเดือน)</li>
-      <li>เมนู APIs &amp; Services → Library เปิดใช้ <b>Maps JavaScript API</b>, <b>Elevation API</b> และ <b>Weather API</b></li>
-      <li>Credentials → Create credentials → API key แล้วคัดลอกมาวางด้านบน</li>
-      <li><b>สำคัญ:</b> ตั้ง Application restrictions เป็น Websites ใส่โดเมนเว็บของคุณ (เช่น xxxx.netlify.app/*) และจำกัดเฉพาะ 3 API ข้างบน ป้องกันคนอื่นนำ key ไปใช้</li>
-      <li>ตั้ง Budget alert ใน Billing เพื่อแจ้งเตือนก่อนเกินงบ</li>
+      <li>เข้า <b>console.cloud.google.com</b> ด้วยบัญชี Gmail → สร้างโปรเจกต์ใหม่ → ผูกบัตรเครดิตที่เมนู Billing (มีโควตาฟรีทุกเดือน ใช้ไม่เกินก็ไม่เสียเงิน)</li>
+      <li>เมนู <b>APIs &amp; Services → Library</b> เปิดใช้ <b>Maps JavaScript API</b> (แผนที่ดาวเทียมตอนวัดแปลง) และ <b>Map Tiles API</b> (ภาพดาวเทียมรอบไร่ในภาพ 3D) · ถ้าต้องการเพิ่ม เปิด <b>Elevation API</b> และ <b>Weather API</b></li>
+      <li><b>Credentials → Create credentials → API key</b> แล้วคัดลอกมาวางช่องด้านบน กด "บันทึกและทดสอบ"</li>
+      <li><b>สำคัญ — กันคนอื่นเอาคีย์ไปใช้:</b> แก้คีย์ → Application restrictions = <b>Websites</b> ใส่ <code>sitthisakpanngam-hue.github.io/*</code> · API restrictions เลือกเฉพาะ API ที่เปิดไว้</li>
+      <li><b>กันเสียเงิน:</b> ตั้ง Budget alert ที่ 1 บาท และตั้งเพดาน (Quotas) ของแต่ละ API ให้ต่ำกว่าโควตาฟรี</li>
     </ol>
-    <p class="small">โควตาฟรีต่อเดือนตามราคาของ Google: Dynamic Maps 10,000 ครั้ง · Elevation 5,000 ครั้ง · Weather 10,000 ครั้ง ระบบเรียกข้อมูลเฉพาะตอนเปิดแอป วัดแปลง หรือกดโหลดใหม่</p>
+    <p class="small">โควตาฟรีต่อเดือนตามราคาของ Google: Dynamic Maps 10,000 ครั้ง · 2D Map Tiles 100,000 ครั้ง · Elevation 5,000 ครั้ง · Weather 10,000 ครั้ง · แอปเก็บคีย์ไว้ในเครื่องนี้เท่านั้น ไม่ส่งไปที่อื่น และไม่ติดไปกับไฟล์สำรอง</p>
   </details>
   <p class="small" style="margin-top:8px">⚠️ หน้าตัวอย่างใน Claude บล็อกการเชื่อมต่อ Google ทั้งหมด ต้องเปิดเว็บที่ฝากไว้บน https เท่านั้น · key เก็บในเครื่องนี้เท่านั้น</p>
 </div></div>
@@ -1990,7 +1990,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <label class="strow link2"><span class="sti"><svg class="ic"><use href="#i-map"/></svg></span><span class="stt"><b>กู้คืนจากไฟล์สำรอง</b><small>ใช้ย้ายไปมือถือเครื่องใหม่</small></span><span class="chev">›</span><input type="file" id="stRestore" accept=".json,application/json" style="display:none"></label>
     <button class="strow link2" id="stSnaps"><span class="sti"><svg class="ic"><use href="#i-clock"/></svg></span><span class="stt"><b>ย้อนกลับไปข้อมูลวันก่อน</b><small id="stSnapsS">แอปเก็บสำเนาอัตโนมัติทุกวัน 14 วันล่าสุด</small></span><span class="chev">›</span></button>
     <div id="stSnapList" style="display:none"></div>
-    <button class="strow link2" id="stGoogle"><span class="sti"><svg class="ic"><use href="#i-globe"/></svg></span><span class="stt"><b>แหล่งข้อมูล & Google</b><small id="stGoogleS">แผนที่ ความสูง อากาศ</small></span><span class="chev">›</span></button>
+    <button class="strow link2" id="stGoogle"><span class="sti"><svg class="ic"><use href="#i-globe"/></svg></span><span class="stt"><b>ภาพดาวเทียม Google Maps</b><small id="stGoogleS">แผนที่ ความสูง อากาศ</small></span><span class="chev">›</span></button>
     <button class="strow link2 danger" id="stReset"><span class="sti bad"><svg class="ic"><use href="#i-gear"/></svg></span><span class="stt"><b>ล้างข้อมูลทั้งหมด</b><small>เริ่มใหม่ (ควรสำรองก่อน)</small></span><span class="chev">›</span></button>
   </div>
   <div class="stsec">เกี่ยวกับ</div>

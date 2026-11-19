@@ -149,10 +149,14 @@ body.arxr #view{background:transparent}
 .dspv{display:flex;align-items:center;gap:10px;min-height:46px}.dspv .stp{width:44px;height:44px;border-radius:12px;border:0;background:var(--leaf-2);color:var(--leaf);font-size:22px;font-weight:700;flex:none}
 .dspv .val{flex:1;text-align:center}.dspv .val b{font:700 22px 'IBM Plex Mono',monospace}.dspv .val small{display:block;font-size:11.5px;color:var(--muted)}
 .dspv input[type=range]{width:100%;accent-color:var(--leaf)}.dspv .opt{display:flex;gap:6px;flex:1}.dspv .opt button{flex:1;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 6px;font:600 13px 'Prompt',sans-serif}.dspv .opt button.on{background:var(--leaf-2);border-color:var(--leaf);color:var(--leaf)}
+.dsrec{margin-top:6px;background:var(--leaf-2);border-radius:12px;padding:7px 10px;font-size:12.5px;line-height:1.45}.dsrec:not(.ok){background:#fff4e0}
+.dsr1{display:flex;align-items:center;gap:8px;justify-content:space-between}.dsr1 b{font-size:14px}.dsr1 button{border:0;background:var(--leaf);color:#fff;border-radius:99px;padding:5px 11px;font:600 12px 'Prompt',sans-serif;white-space:nowrap;flex:none}
+.dsr2{color:var(--ink2);margin-top:3px}.dsr3{color:var(--muted);font-size:11px;margin-top:2px}
+.dspk button.off{position:relative}.dspk button.off:after{content:'';position:absolute;top:3px;right:5px;width:7px;height:7px;border-radius:50%;background:#e6a23c}
 .dspt{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px}.dspt button{border:0;background:var(--paper);border-radius:10px;padding:7px 2px;font:600 11.5px 'Prompt',sans-serif;color:var(--ink2)}.dspt button.on{background:var(--leaf-2);color:var(--leaf)}
 body.designing .vtools,body.designing #fab,body.designing #legend3d{display:none!important}
 body.designing #hud{display:none!important}
-@media (max-width:920px){body.designing .view{height:74vh!important;min-height:420px}.dsp{padding:8px 10px}.dspv .val small{font-size:11px;line-height:1.3}.dspv .val b{font-size:19px}.dspk{padding:6px 0 4px}}
+@media (max-width:920px){body.designing .view{height:80vh!important;min-height:460px}.dspv .val small{display:none}.dsp{padding:8px 10px}.dspv .val small{font-size:11px;line-height:1.3}.dspv .val b{font-size:19px}.dspk{padding:6px 0 4px}}
 .arCal{position:absolute;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom) + 86px);background:rgba(255,255,255,.95);border-radius:18px;padding:12px;pointer-events:auto;color:#16241a}
 .arCalT{font-size:13px;margin-bottom:8px;text-align:center}.arCalT small{color:#5d6b60}
 .arRow{display:flex;gap:6px;justify-content:center;align-items:center;margin-top:6px}.arRow button{flex:1;border:1px solid #d6ddd3;background:#f4f7f2;border-radius:12px;padding:9px 4px;font-size:13px;font-weight:600}
@@ -1501,6 +1505,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="dsph"><b>🛠 ออกแบบแปลงเอง</b><span class="small" id="dspSum"></span><button class="dspx" id="dspX">✕</button></div>
       <div class="dspk" id="dspK"></div>
       <div class="dspv" id="dspV"></div>
+      <div class="dsrec" id="dspRec"></div>
       <div class="dspt"><button id="dspDim" class="on">📏 แสดงขนาด</button><button id="dspMeas">📐 วัดระยะ</button><button id="dspZoom">🔍 ดูใกล้</button><button id="dspReset">↺ ค่าเดิม</button></div>
     </div>
     <div class="vtools" id="vtools" style="display:none">
@@ -3035,7 +3040,7 @@ function build3D() {
   R.lastAct = -2;
   R.envHour = -99; updateLighting(true);
   buildSunPath(); R.satMesh = null; buildSatGround(g);
-  R.lvG = null; lvMarkers(); R.dimG = null; if (R.dimOn) { buildDims(); if (document.body.classList.contains('designing')) dimEmph(DS.k); } R.measG = null;
+  R.lvG = null; lvMarkers(); R.dimG = null; if (R.dimOn && document.body.classList.contains('designing')) { buildDims(); dimEmph(DS.k); } R.measG = null;
   if (!R.keepCam) fitCamera('overview'); R.keepCam = false;
 }
 function buildPlants() {
@@ -5391,9 +5396,24 @@ const DSP = {
   subSide: { t: 'ท่อย่อย', opt: [['left', 'ฝั่งซ้าย/ต้นร่อง'], ['right', 'ฝั่งขวา/ปลายร่อง']], get: () => S.set.subSide || 'left', set: v => S.set.subSide = v, hint: 'ท่อจ่ายน้ำเข้าเทปอยู่หัวร่องด้านไหน' },
   pump: { t: 'ตำแหน่งปั๊ม', pick: true, hint: 'แตะ "ย้ายปั๊ม" แล้วแตะพื้นในภาพ 3D ตรงที่ตั้งปั๊มจริง' }
 };
+/* recommended values (sources in the note under each value) */
+const SRC = { nstda: 'สวทช. (คู่มือปลูกมันสำปะหลัง)', doae: 'กรมส่งเสริมการเกษตร', rmu: 'งานวิจัย มรภ. (ยกร่อง 25–30 ซม.)', ku: 'งานวิจัย ม.เกษตรฯ (เทปหัวหยด 30 ซม.)', rule: 'หลักทั่วไป (ยังไม่มีแหล่งอ้างอิง)' };
+function dsRec(k) {
+  const st = S.set, soil = st.soil, rich = soil === 'loam' || soil === 'clay';
+  if (k === 'rowSp') { const r = recSpacing(st).row * 100; return { v: r, lo: 100, hi: 120, why: rich ? 'ดินร่วน/เหนียวอุดมสมบูรณ์ ปลูกห่าง (ดินดีปลูกห่าง ดินเลวปลูกถี่) เช่น 1.2 × 0.8 หรือ 1 × 1 ม.' : 'ดินทราย/ร่วนปนทราย ใช้ระยะแถวแคบลง ทรงพุ่มคลุมดินเร็ว', src: [SRC.nstda, SRC.doae], warn: 'ปลูกชิดเกินไป มันจะ "บ้าใบ" สูงเกิน 3 ม. แต่หัวเล็ก' }; }
+  if (k === 'plantSp') { const r = recSpacing(st).plant * 100; return { v: r, lo: 80, hi: 100, why: 'ระยะระหว่างต้น 80–100 ซม. ปักท่อนพันธุ์ตั้งตรงบนสันร่อง', src: [SRC.nstda] }; }
+  if (k === 'emSp') { const r = recEmit(st).em * 100; return { v: r, lo: 20, hi: 30, why: `ดิน${SOILS[soil].n} น้ำแผ่ด้านข้าง ~${f(wetW(soil, st.emQ) * 100)} ซม. ระยะหัวไม่ควรเกิน 80% ของวงเปียก แถบเปียกจะต่อกัน · เทปหัวหยด 30 ซม. ใช้กันทั่วไปและใช้ในงานวิจัยมันสำปะหลัง`, src: [SRC.ku, SRC.rule] }; }
+  if (k === 'ridgeH') return { v: 25, lo: 25, hi: 30, why: 'ยกร่องสูง 25–30 ซม. ระบายน้ำดี หัวมันลงหัวง่าย ขุดง่าย', src: [SRC.rmu, SRC.ku] };
+  if (k === 'ridgeW') { const r = Math.round(st.rowSp * 0.65 * 20) * 5; return { v: r, lo: Math.round(st.rowSp * 55), hi: Math.round(st.rowSp * 70), why: 'ฐานร่องราว 2/3 ของระยะร่อง เหลือร่องน้ำ/ทางเดินระหว่างร่อง (งานวิจัยใช้ร่องกว้าง 1 ม. ระยะร่อง 1.5 ม.)', src: [SRC.ku, SRC.rule] }; }
+  if (k === 'inset') { const r = st.mech === 'tractor' ? 5 : st.mech === 'small' ? 3 : 1; return { v: r, lo: st.mech === 'tractor' ? 4 : 1, hi: st.mech === 'tractor' ? 6 : 3, why: st.mech === 'tractor' ? 'เผื่อที่ให้แทรกเตอร์เลี้ยวหัวแปลง' : st.mech === 'small' ? 'เผื่อที่ให้รถไถเดินตาม/รถเล็กกลับรถ' : 'เผื่อทางเดินรอบแปลง', src: [SRC.rule] }; }
+  if (k === 'rowAng') { const b = L && L.rowA && L.rowA.best; return b ? { v: Math.round(b.th), lo: null, hi: null, why: `ยกร่องขวางความลาดเท ลดการชะหน้าดิน · แอปคำนวณแนวที่ดีที่สุดจากความลาด แดด และความยาวเทป: ${rowName(b.th)}`, src: [SRC.nstda] } : null; }
+  if (k === 'subSide' && L) { let lh = 0, rh = 0; L.rows.forEach(r => { lh += hz(r.segs[0].x1, r.y); rh += hz(r.segs[r.segs.length - 1].x2, r.y); }); const side = rh > lh + 0.1 * L.rows.length ? 'right' : 'left';
+    return { v: side, why: Math.abs(rh - lh) / L.rows.length < 0.1 ? 'พื้นสองฝั่งสูงพอ ๆ กัน เลือกฝั่งที่ใกล้ปั๊ม' : 'ให้ท่อย่อยอยู่ฝั่งที่สูงกว่า น้ำไหลลงตามร่อง แรงดันสม่ำเสมอ', src: [SRC.rule] }; }
+  return null;
+}
 function dspOpen() {
   if (!L || !R.ok) return toast('วัดแปลงก่อน'); if (S.step !== 2) go(2);
-  document.body.classList.add('designing'); $('#dsp').style.display = ''; R.dimOn = true; buildDims(); dspRender(); dspSum(); setTimeout(resize3D, 60); setTimeout(() => dspFocus(DS.k, 1.8), 120);
+  document.body.classList.add('designing'); $('#dsp').style.display = ''; if (R.dimOn !== false) R.dimOn = true; if (R.dimOn) buildDims(); dspRender(); dspSum(); setTimeout(resize3D, 60); setTimeout(() => dspFocus(DS.k, 1.8), 120);
   $('#dspDim').classList.toggle('on', R.dimOn);
 }
 /* fly the camera to where the chosen value can be seen, with its numbers */
@@ -5412,18 +5432,30 @@ function dspFocus(k, dur = 1.4) {
   R.follow = false; flyTo(pos, tgt, dur); dimEmph(k);
 }
 function dimEmph(k) { const key = k === 'ridgeW' || k === 'ridgeH' ? 'ridge' : k; if (!R.dimG) return; R.dimG.traverse(o => { if (o.isSprite && o.material) { const d = o.userData.dk, call = ['rowSp', 'ridge', 'plantSp', 'emSp', 'inset'].includes(d); const close = ['rowSp', 'ridge', 'plantSp', 'emSp', 'inset'].includes(key); o.visible = !close || call; o.material.opacity = !call || d === key ? 1 : 0.35; } }); }
-function dspClose() { document.body.classList.remove('designing'); setTimeout(resize3D, 60); $('#dsp').style.display = 'none'; DS.measOn = false; DS.pumpPick = false; $('#dspMeas').classList.remove('on'); }
+function dspClose() { clearDims(); if (R.measG) { disposeGroup(R.measG); R.measG = null; } DS.meas = []; document.body.classList.remove('designing'); setTimeout(resize3D, 60); $('#dsp').style.display = 'none'; DS.measOn = false; DS.pumpPick = false; $('#dspMeas').classList.remove('on'); }
+function dspRecRender() {
+  const k = DS.k, d = DSP[k], r = dsRec(k), el = $('#dspRec'); if (!el) return;
+  if (!r) { el.innerHTML = ''; el.style.display = 'none'; return; } el.style.display = '';
+  const cur = d.get(), num = typeof r.v === 'number', ok = num ? (r.lo != null ? cur >= r.lo - 1e-6 && cur <= r.hi + 1e-6 : Math.abs(((cur - r.v + 90) % 180 + 180) % 180 - 90) < 6) : cur === r.v;
+  const vt = num ? `${f(r.v, d.step < 1 ? 1 : 0)} ${d.u}` : (d.opt.find(o => o[0] === r.v) || [0, r.v])[1], rng = num && r.lo != null && r.lo !== r.hi ? ` (ช่วงที่เหมาะ ${f(r.lo)}–${f(r.hi)} ${d.u})` : '';
+  el.className = 'dsrec' + (ok ? ' ok' : '');
+  el.innerHTML = `<div class="dsr1"><span>${ok ? '✓ อยู่ในค่าที่แนะนำ' : '💡 แนะนำ'} <b>${vt}</b>${rng}</span>${ok && (!num || Math.abs(cur - r.v) < 1e-6) ? '' : `<button data-rec="${r.v}">ใช้ค่าแนะนำ</button>`}</div><div class="dsr2">${r.why}${r.warn ? ' · ⚠ ' + r.warn : ''}</div><div class="dsr3">ที่มา: ${r.src.join(' · ')}</div>`;
+  // dot on chips that are outside the recommendation
+  $$('#dspK button').forEach(b => { const kk = b.dataset.k, rr = dsRec(kk), dd = DSP[kk]; if (!rr || !dd.get) { b.classList.remove('off'); return; } const c = dd.get(), n2 = typeof rr.v === 'number';
+    const good = n2 ? (rr.lo != null ? c >= rr.lo - 1e-6 && c <= rr.hi + 1e-6 : Math.abs(((c - rr.v + 90) % 180 + 180) % 180 - 90) < 6) : c === rr.v; b.classList.toggle('off', !good); });
+}
 function dspSum() { if (L) $('#dspSum').textContent = `${areaThai(L.area)} · ${L.rows.length} ร่อง · ${L.zones.length} โซน · เทป ${f(L.tape)} ม.`; }
 function dspRender() {
   $('#dspK').innerHTML = Object.entries(DSP).map(([k, d]) => `<button data-k="${k}" class="${k === DS.k ? 'on' : ''}">${d.t}</button>`).join('');
   const d = DSP[DS.k], v = $('#dspV');
   if (d.opt) v.innerHTML = `<div class="opt">${d.opt.map(([k, t]) => `<button data-o="${k}" class="${d.get() === k ? 'on' : ''}">${t}</button>`).join('')}</div>`;
   else if (d.pick) v.innerHTML = `<div class="opt"><button data-pump="pick" class="${DS.pumpPick ? 'on' : ''}">📍 ย้ายปั๊ม (แตะพื้น)</button><button data-pump="auto">อัตโนมัติ</button></div>`;
-  else { const val = d.get(); v.innerHTML = `<button class="stp" data-st="-1">−</button><div class="val"><b>${f(val, d.step < 1 ? 1 : 0)}</b> ${d.u}<input type="range" min="${d.min}" max="${d.max}" step="${d.step}" value="${val}" id="dspR"><small>${d.hint}</small></div><button class="stp" data-st="1">+</button>`; return; }
-  v.insertAdjacentHTML('beforeend', '');
+  else { const val = d.get(); v.innerHTML = `<button class="stp" data-st="-1">−</button><div class="val"><b>${f(val, d.step < 1 ? 1 : 0)}</b> ${d.u}<input type="range" min="${d.min}" max="${d.max}" step="${d.step}" value="${val}" id="dspR"><small>${d.hint}</small></div><button class="stp" data-st="1">+</button>`; }
+  dspRecRender();
 }
 let dspT = 0;
-function dspApply(k, val) { DSP[k].set(val); save(); clearTimeout(dspT); dspT = setTimeout(() => { R.keepCam = true; onLayoutChanged(); dspSum(); renderDZ(); if (!['rowAng', 'subSide', 'inset'].includes(k)) dspFocus(k, 0.6); }, 350); }
+function dspApply(k, val) { DSP[k].set(val); save(); clearTimeout(dspT); dspT = setTimeout(() => { R.keepCam = true; onLayoutChanged(); dspSum(); renderDZ(); dspRecRender(); if (!['rowAng', 'subSide', 'inset'].includes(k)) dspFocus(k, 0.6); }, 350); }
+$('#dspRec').addEventListener('click', e => { const b = e.target.closest('[data-rec]'); if (!b) return; const v2 = isNaN(+b.dataset.rec) ? b.dataset.rec : +b.dataset.rec; dspApply(DS.k, v2); dspRender(); toast('ใช้ค่าแนะนำแล้ว'); });
 $('#dspK').addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (!b) return; DS.k = b.dataset.k; DS.pumpPick = false; dspRender(); dspFocus(DS.k); b.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' }); });
 $('#dspV').addEventListener('click', e => {
   const st = e.target.closest('[data-st]'), o = e.target.closest('[data-o]'), pm = e.target.closest('[data-pump]'), d = DSP[DS.k];

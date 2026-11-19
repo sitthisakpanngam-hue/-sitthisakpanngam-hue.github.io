@@ -191,6 +191,27 @@ html.bigtext .smans{font-size:34px}html.bigtext .smhow{font-size:19px}
 .smtodo.fmc{background:#f3efe4}
 .fmzones{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:5px;margin-top:6px}.fmzones div{border-radius:9px;padding:5px 4px;text-align:center;background:#eef0ea;border:1px solid #dfe3da}.fmzones b{display:block;font:600 14px 'IBM Plex Mono',monospace}.fmzones small{font-size:10.5px;color:var(--ink2);white-space:nowrap}
 .fmzones .act{background:var(--water);border-color:var(--water)}.fmzones .act b,.fmzones .act small{color:#fff}.fmzones .q{background:var(--warn-2);border-color:#efd9b1}.fmzones .done{background:#e3f1e7;border-color:#bfe0c9}.fmzones .done small{color:var(--good)}
+.s3ui{display:none}
+body.show3d .view{position:fixed!important;inset:0!important;height:100%!important;min-height:0!important;z-index:88;border-radius:0!important}
+body.show3d #v3d{width:100%!important;height:100%!important}
+body.show3d #legend3d,body.show3d #hint3d,body.show3d #vtools,body.show3d #hcomp,body.show3d .v3open,body.show3d #hud,body.show3d #fab,body.show3d #dsp{display:none!important}
+body.show3d .s3ui{display:block;position:fixed;inset:0;z-index:89;pointer-events:none}
+body.show3d .s3ui:before,body.show3d .s3ui:after{content:'';position:absolute;left:0;right:0;pointer-events:none}
+body.show3d .s3ui:before{top:0;height:150px;background:linear-gradient(rgba(8,20,12,.55),rgba(8,20,12,0))}
+body.show3d .s3ui:after{bottom:0;height:170px;background:linear-gradient(rgba(8,20,12,0),rgba(8,20,12,.6))}
+.s3top{position:absolute;top:calc(12px + env(safe-area-inset-top));left:12px;right:12px;display:flex;gap:10px;align-items:center;z-index:1}
+.s3back{pointer-events:auto;border:0;width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.92);font-size:28px;line-height:1;color:var(--leaf);box-shadow:0 4px 14px rgba(0,0,0,.25);flex:none}
+.s3ttl{color:#fff;font:700 20px 'Prompt',sans-serif;text-shadow:0 2px 8px rgba(0,0,0,.45);line-height:1.2}.s3ttl small{display:block;font:500 13.5px 'IBM Plex Sans Thai',sans-serif;opacity:.95}
+.s3chips{position:absolute;top:calc(66px + env(safe-area-inset-top));left:12px;right:12px;display:flex;flex-wrap:wrap;gap:6px;z-index:1}
+.s3chips span{background:rgba(255,255,255,.9);border-radius:99px;padding:5px 11px;font-size:13px;font-weight:600;color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.18)}.s3chips span.w{background:var(--water);color:#fff;animation:s3pulse 1.6s ease-in-out infinite}
+@keyframes s3pulse{50%{box-shadow:0 0 0 6px rgba(31,111,209,.25)}}
+.s3bar{position:absolute;left:0;right:0;bottom:calc(14px + env(safe-area-inset-bottom));display:flex;gap:8px;overflow-x:auto;padding:4px 12px;pointer-events:auto;z-index:1;scrollbar-width:none}.s3bar::-webkit-scrollbar{display:none}
+.s3bar button{flex:none;border:0;background:rgba(255,255,255,.92);border-radius:18px;padding:9px 12px 8px;min-width:78px;display:flex;flex-direction:column;align-items:center;gap:2px;box-shadow:0 4px 14px rgba(0,0,0,.25);color:var(--ink)}
+.s3bar button span{font-size:22px;line-height:1}.s3bar button b{font:600 12px 'IBM Plex Sans Thai',sans-serif;white-space:nowrap}.s3bar button.on{background:var(--leaf);color:#fff}
+.sm3d{position:relative;display:block;width:100%;border:0;padding:0;border-radius:22px;overflow:hidden;background:linear-gradient(#bfe0f5,#e9f4fb 55%,#cfe6c4 56%,#8fbf5a);min-height:150px;text-align:left;box-shadow:0 6px 18px rgba(16,40,24,.14)}
+.sm3d svg{position:absolute;inset:0;width:100%;height:100%}
+.sm3d .t{position:absolute;left:14px;bottom:12px;right:14px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.45)}.sm3d .t b{display:block;font:700 21px 'Prompt',sans-serif}.sm3d .t small{font-size:13px}
+.sm3d .go{position:absolute;right:12px;top:12px;background:rgba(255,255,255,.92);color:var(--leaf);font:700 13px 'Prompt',sans-serif;border-radius:99px;padding:6px 12px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 .smtodo.ai{background:var(--leaf-2)}.smtodo.pc{background:#eef4ea}
 .pcbox{max-height:94vh}.pcbox .sheeth b{display:flex;flex-direction:column;line-height:1.2}.pcbox .sheeth b small{font:400 11.5px 'IBM Plex Sans Thai',sans-serif;color:var(--muted)}
 .pctab{display:flex;margin:4px 0 10px}.pctab button{flex:1;padding:9px 6px;font-size:14px}
@@ -1608,6 +1629,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="dspt"><button id="dspDim" class="on">📏 แสดงขนาด</button><button id="dspMeas">📐 วัดระยะ</button><button id="dspZoom">🔍 ดูใกล้</button><button id="dspReset">↺ ค่าเดิม</button></div>
     </div>
     <div class="vtools" id="vtools" style="display:none">
+      <button id="tShow" title="โชว์ไร่ 3D เต็มจอ"><span style="font-size:17px;line-height:1">⛶</span><span>เต็มจอ</span></button>
       <button id="tOver" title="มุมมองรวม"><svg class="ic"><use href="#i-globe"/></svg><span>ภาพรวม</span></button>
       <button id="tSat" title="ภาพดาวเทียมพื้นที่จริงรอบไร่" class="on more"><svg class="ic"><use href="#i-map"/></svg><span>แผนที่จริง</span></button>
       <button id="tAR" title="กล้อง AR ในพื้นที่จริง" class="arbtn"><svg class="ic"><use href="#i-cam"/></svg><span>กล้อง AR</span></button>
@@ -1633,7 +1655,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div><div class="gdate" id="hDate">—</div><h1 id="hTitle">สวัสดีครับ 👋</h1></div>
         <div class="wxmini" id="hWx"></div>
       </div>
-      <div class="hrow"><button id="hBig"><svg class="ic sm"><use href="#i-text"/></svg>ตัวอักษรใหญ่</button><button id="hSpeak"><svg class="ic sm"><use href="#i-vol"/></svg>อ่านให้ฟัง</button><button id="hFM">🏭 ศูนย์บริหารไร่</button></div>
+      <div class="hrow"><button id="hBig"><svg class="ic sm"><use href="#i-text"/></svg>ตัวอักษรใหญ่</button><button id="hSpeak"><svg class="ic sm"><use href="#i-vol"/></svg>อ่านให้ฟัง</button><button id="hFM">🏭 ศูนย์บริหารไร่</button><button id="h3D">🧊 ไร่ 3D เต็มจอ</button></div>
       <div id="hNew">
         <div class="card banner">
           <div><b>เริ่มต้นใช้งานใน 3 ขั้นตอน</b><span>วัดแปลง → ดูไร่ 3D พร้อมระบบน้ำหยด → ให้น้ำอัตโนมัติ</span></div>
@@ -2026,6 +2048,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     </div>
     <button class="smbtn" id="smBtn">💧 เปิดน้ำตอนนี้</button>
     <div class="smauto" id="smAuto"></div>
+    <button class="sm3d" id="sm3D" aria-label="ดูไร่ 3D เต็มจอ"><svg viewBox="0 0 360 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><circle cx="300" cy="36" r="16" fill="#ffd66b" opacity=".9"/><g transform="translate(180 112) scale(1 .42) rotate(-28)"><rect x="-150" y="-150" width="300" height="300" rx="10" fill="#b58a5e"/><rect x="-140" y="-140" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="-112" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="-84" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="-56" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="-28" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="0" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="28" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="56" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="84" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="112" width="280" height="14" rx="7" fill="#a77a4f"/><circle cx="-128" cy="-133" r="7" fill="#3f8f3a"/><circle cx="-102" cy="-133" r="8" fill="#4f9e45"/><circle cx="-76" cy="-133" r="9" fill="#2f7a35"/><circle cx="-50" cy="-133" r="7" fill="#3f8f3a"/><circle cx="-24" cy="-133" r="8" fill="#4f9e45"/><circle cx="2" cy="-133" r="9" fill="#2f7a35"/><circle cx="28" cy="-133" r="7" fill="#3f8f3a"/><circle cx="54" cy="-133" r="8" fill="#4f9e45"/><circle cx="80" cy="-133" r="9" fill="#2f7a35"/><circle cx="106" cy="-133" r="7" fill="#3f8f3a"/><circle cx="132" cy="-133" r="8" fill="#4f9e45"/><circle cx="-128" cy="-105" r="8" fill="#3f8f3a"/><circle cx="-102" cy="-105" r="9" fill="#4f9e45"/><circle cx="-76" cy="-105" r="7" fill="#2f7a35"/><circle cx="-50" cy="-105" r="8" fill="#3f8f3a"/><circle cx="-24" cy="-105" r="9" fill="#4f9e45"/><circle cx="2" cy="-105" r="7" fill="#2f7a35"/><circle cx="28" cy="-105" r="8" fill="#3f8f3a"/><circle cx="54" cy="-105" r="9" fill="#4f9e45"/><circle cx="80" cy="-105" r="7" fill="#2f7a35"/><circle cx="106" cy="-105" r="8" fill="#3f8f3a"/><circle cx="132" cy="-105" r="9" fill="#4f9e45"/><circle cx="-128" cy="-77" r="9" fill="#3f8f3a"/><circle cx="-102" cy="-77" r="7" fill="#4f9e45"/><circle cx="-76" cy="-77" r="8" fill="#2f7a35"/><circle cx="-50" cy="-77" r="9" fill="#3f8f3a"/><circle cx="-24" cy="-77" r="7" fill="#4f9e45"/><circle cx="2" cy="-77" r="8" fill="#2f7a35"/><circle cx="28" cy="-77" r="9" fill="#3f8f3a"/><circle cx="54" cy="-77" r="7" fill="#4f9e45"/><circle cx="80" cy="-77" r="8" fill="#2f7a35"/><circle cx="106" cy="-77" r="9" fill="#3f8f3a"/><circle cx="132" cy="-77" r="7" fill="#4f9e45"/><circle cx="-128" cy="-49" r="7" fill="#3f8f3a"/><circle cx="-102" cy="-49" r="8" fill="#4f9e45"/><circle cx="-76" cy="-49" r="9" fill="#2f7a35"/><circle cx="-50" cy="-49" r="7" fill="#3f8f3a"/><circle cx="-24" cy="-49" r="8" fill="#4f9e45"/><circle cx="2" cy="-49" r="9" fill="#2f7a35"/><circle cx="28" cy="-49" r="7" fill="#3f8f3a"/><circle cx="54" cy="-49" r="8" fill="#4f9e45"/><circle cx="80" cy="-49" r="9" fill="#2f7a35"/><circle cx="106" cy="-49" r="7" fill="#3f8f3a"/><circle cx="132" cy="-49" r="8" fill="#4f9e45"/><circle cx="-128" cy="-21" r="8" fill="#3f8f3a"/><circle cx="-102" cy="-21" r="9" fill="#4f9e45"/><circle cx="-76" cy="-21" r="7" fill="#2f7a35"/><circle cx="-50" cy="-21" r="8" fill="#3f8f3a"/><circle cx="-24" cy="-21" r="9" fill="#4f9e45"/><circle cx="2" cy="-21" r="7" fill="#2f7a35"/><circle cx="28" cy="-21" r="8" fill="#3f8f3a"/><circle cx="54" cy="-21" r="9" fill="#4f9e45"/><circle cx="80" cy="-21" r="7" fill="#2f7a35"/><circle cx="106" cy="-21" r="8" fill="#3f8f3a"/><circle cx="132" cy="-21" r="9" fill="#4f9e45"/><circle cx="-128" cy="7" r="9" fill="#3f8f3a"/><circle cx="-102" cy="7" r="7" fill="#4f9e45"/><circle cx="-76" cy="7" r="8" fill="#2f7a35"/><circle cx="-50" cy="7" r="9" fill="#3f8f3a"/><circle cx="-24" cy="7" r="7" fill="#4f9e45"/><circle cx="2" cy="7" r="8" fill="#2f7a35"/><circle cx="28" cy="7" r="9" fill="#3f8f3a"/><circle cx="54" cy="7" r="7" fill="#4f9e45"/><circle cx="80" cy="7" r="8" fill="#2f7a35"/><circle cx="106" cy="7" r="9" fill="#3f8f3a"/><circle cx="132" cy="7" r="7" fill="#4f9e45"/><circle cx="-128" cy="35" r="7" fill="#3f8f3a"/><circle cx="-102" cy="35" r="8" fill="#4f9e45"/><circle cx="-76" cy="35" r="9" fill="#2f7a35"/><circle cx="-50" cy="35" r="7" fill="#3f8f3a"/><circle cx="-24" cy="35" r="8" fill="#4f9e45"/><circle cx="2" cy="35" r="9" fill="#2f7a35"/><circle cx="28" cy="35" r="7" fill="#3f8f3a"/><circle cx="54" cy="35" r="8" fill="#4f9e45"/><circle cx="80" cy="35" r="9" fill="#2f7a35"/><circle cx="106" cy="35" r="7" fill="#3f8f3a"/><circle cx="132" cy="35" r="8" fill="#4f9e45"/><circle cx="-128" cy="63" r="8" fill="#3f8f3a"/><circle cx="-102" cy="63" r="9" fill="#4f9e45"/><circle cx="-76" cy="63" r="7" fill="#2f7a35"/><circle cx="-50" cy="63" r="8" fill="#3f8f3a"/><circle cx="-24" cy="63" r="9" fill="#4f9e45"/><circle cx="2" cy="63" r="7" fill="#2f7a35"/><circle cx="28" cy="63" r="8" fill="#3f8f3a"/><circle cx="54" cy="63" r="9" fill="#4f9e45"/><circle cx="80" cy="63" r="7" fill="#2f7a35"/><circle cx="106" cy="63" r="8" fill="#3f8f3a"/><circle cx="132" cy="63" r="9" fill="#4f9e45"/><circle cx="-128" cy="91" r="9" fill="#3f8f3a"/><circle cx="-102" cy="91" r="7" fill="#4f9e45"/><circle cx="-76" cy="91" r="8" fill="#2f7a35"/><circle cx="-50" cy="91" r="9" fill="#3f8f3a"/><circle cx="-24" cy="91" r="7" fill="#4f9e45"/><circle cx="2" cy="91" r="8" fill="#2f7a35"/><circle cx="28" cy="91" r="9" fill="#3f8f3a"/><circle cx="54" cy="91" r="7" fill="#4f9e45"/><circle cx="80" cy="91" r="8" fill="#2f7a35"/><circle cx="106" cy="91" r="9" fill="#3f8f3a"/><circle cx="132" cy="91" r="7" fill="#4f9e45"/><circle cx="-128" cy="119" r="7" fill="#3f8f3a"/><circle cx="-102" cy="119" r="8" fill="#4f9e45"/><circle cx="-76" cy="119" r="9" fill="#2f7a35"/><circle cx="-50" cy="119" r="7" fill="#3f8f3a"/><circle cx="-24" cy="119" r="8" fill="#4f9e45"/><circle cx="2" cy="119" r="9" fill="#2f7a35"/><circle cx="28" cy="119" r="7" fill="#3f8f3a"/><circle cx="54" cy="119" r="8" fill="#4f9e45"/><circle cx="80" cy="119" r="9" fill="#2f7a35"/><circle cx="106" cy="119" r="7" fill="#3f8f3a"/><circle cx="132" cy="119" r="8" fill="#4f9e45"/><rect x="-150" y="-150" width="300" height="300" rx="10" fill="none" stroke="#2f6b3a" stroke-width="5"/></g></svg><span class="go">⛶ เต็มจอ</span><span class="t"><b>🧊 ดูไร่ 3D</b><small id="sm3DS">บินชมรอบไร่ ดูต้นมันโต ดูน้ำหยดแต่ละโซน</small></span></button>
     <div class="smrow">
       <div class="smmini"><span id="smWxI">☀️</span><b id="smWx">—</b><small id="smWxS">—</small></div>
       <div class="smmini"><span>🌱</span><b id="smAge">—</b><small id="smAgeS">—</small></div>
@@ -2052,6 +2075,21 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <div class="aichips" id="aiChips"></div>
   <div class="aiin"><label class="aicam" title="ถ่ายรูป/เลือกรูป">📷<input type="file" accept="image/*" capture="environment" id="aiImg" style="display:none"></label><div class="aiprev" id="aiPrev"></div><textarea id="aiText" rows="1" placeholder="พิมพ์คำถาม เช่น ใบเหลืองเกิดจากอะไร"></textarea><button id="aiMic" title="พูด">🎤</button><button id="aiSend" class="send">➤</button></div>
 </div></div>
+<div id="s3ui" class="s3ui">
+  <div class="s3top"><button class="s3back" id="s3Back" aria-label="กลับ">‹</button><div class="s3ttl" id="s3Title">—</div></div>
+  <div class="s3chips" id="s3Chips"></div>
+  <div class="s3bar">
+    <button id="s3Orbit" class="on"><span>🎬</span><b>บินชมรอบไร่</b></button>
+    <button data-cam="hero"><span>🛰</span><b>มุมสูง</b></button>
+    <button data-cam="low"><span>🎥</span><b>มุมต่ำ</b></button>
+    <button data-cam="eye"><span>🚶</span><b>ยืนในไร่</b></button>
+    <button data-cam="top"><span>🗺</span><b>มองลงตรง</b></button>
+    <button id="s3Grow"><span>🌱</span><b>ดูการเติบโต</b></button>
+    <button id="s3Zone"><span>🎨</span><b>สีโซนน้ำ</b></button>
+    <button id="s3Sun"><span>☀️</span><b>ทางดวงอาทิตย์</b></button>
+    <button id="s3AR"><span>📷</span><b>กล้อง AR</b></button>
+  </div>
+</div>
 <div id="farm" class="fm" style="display:none">
   <div class="fmtop"><button id="fmBack" class="fmback" aria-label="กลับ">‹</button><div><b>ศูนย์บริหารไร่</b><small id="fmClock" class="mono"></small></div></div>
   <div class="fmtabs" id="fmTabs"><button data-t="scada" class="on">📟<span>ควบคุม</span></button><button data-t="season">📅<span>ฤดูกาล</span></button><button data-t="yield">📈<span>ผลผลิต·ราคา</span></button><button data-t="money">💰<span>บัญชี</span></button></div>
@@ -2116,7 +2154,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <div class="stsec">เกี่ยวกับ</div>
   <div class="stgrp">
     <button class="strow link2" id="stIntro"><span class="sti"><svg class="ic"><use href="#i-eye"/></svg></span><span class="stt"><b>ดูวิธีใช้อีกครั้ง</b></span><span class="chev">›</span></button>
-    <div class="strow"><span class="sti"><svg class="ic"><use href="#i-sprout"/></svg></span><span class="stt"><b>ไร่หยด · เวอร์ชัน 19 พ.ย. 69 (ศูนย์บริหารไร่)</b><small>ข้อมูลเก็บในเครื่องนี้เท่านั้น · ค่าที่คำนวณเป็นค่าประมาณ ควรตรวจกับแปลงจริง</small></span></div>
+    <div class="strow"><span class="sti"><svg class="ic"><use href="#i-sprout"/></svg></span><span class="stt"><b>ไร่หยด · เวอร์ชัน 19 พ.ย. 69 (โชว์ไร่ 3D เต็มจอ)</b><small>ข้อมูลเก็บในเครื่องนี้เท่านั้น · ค่าที่คำนวณเป็นค่าประมาณ ควรตรวจกับแปลงจริง</small></span></div>
   </div>
   <div style="height:10px"></div>
 </div></div>
@@ -4200,7 +4238,7 @@ $('#dSheet').addEventListener('click', e => {
 });
 $('#hPlant').addEventListener('click', () => openDiary('plant'));
 { const sc = document.querySelector('#pane0 .suncard'); if (sc && $('#sunSlot')) { sc.style.boxShadow = 'none'; sc.style.marginTop = '12px'; $('#sunSlot').appendChild(sc); } }
-$('#v3open').addEventListener('click', () => go(2));
+$('#v3open').addEventListener('click', () => s3Open());
 $('#devpill').addEventListener('click', () => toast('โหมดจำลอง: ยังไม่ได้ต่ออุปกรณ์จริง — ปุ่มเปิด/ปิดน้ำแสดงผลในแบบจำลองเท่านั้น'));
 $('#hTodo').addEventListener('click', () => { const t = diaryTodos()[0]; openDiary(t ? t.k : null); });
 $('#tMore').addEventListener('click', () => { const v = $('#vtools'); v.classList.toggle('open'); $('#tMore').classList.toggle('on', v.classList.contains('open')); });
@@ -4531,7 +4569,7 @@ function skyBodiesFrame(dir, el) {
   if (night) { const m = sunDir3(((sunPos(SIM.t, L.lat0, L.lon0).az + 180) % 360), 40); R.moonSpr.position.copy(c).add(m.multiplyScalar(d)); R.moonSpr.scale.set(span * 0.45, span * 0.45, 1); }
 }
 function buildGroundCompass(g) {
-  const span = Math.max(L.W, L.H), ctr = V(L.W / 2, 0, -L.H / 2), rad = span * 0.62 + 10;
+  const span = Math.max(L.W, L.H), ctr = V(L.W / 2, 0, -L.H / 2), rad = span * 0.62 + 10; R.compassObjs = [];
   [['N · เหนือ', 0, '#d2402f'], ['ตะวันออก', 90, '#2a5b3a'], ['ใต้', 180, '#2a5b3a'], ['ตะวันตก', 270, '#2a5b3a']].forEach(([t, a, col]) => {
     const p = ctr.clone().add(sunDir3(a, 0).multiplyScalar(rad)), h = hz(p.x, -p.z);
     const post = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 3, 8), STD({ color: a ? '#f2efe6' : '#d2402f' })); post.position.set(p.x, h + 1.5, p.z); post.castShadow = true; g.add(post);
@@ -4539,7 +4577,7 @@ function buildGroundCompass(g) {
     x.fillStyle = a ? '#ffffff' : '#d2402f'; x.beginPath(); x.roundRect ? x.roundRect(6, 10, 244, 76, 20) : x.rect(6, 10, 244, 76); x.fill();
     x.strokeStyle = 'rgba(0,0,0,.15)'; x.lineWidth = 3; x.stroke(); x.fillStyle = a ? col : '#ffffff'; x.font = '700 40px Prompt, sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(t, 128, 50);
     const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace;
-    const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true })); const s = Math.max(3, span * 0.05); sp.scale.set(s * 2.6, s, 1); sp.position.set(p.x, h + 3 + s * 0.6, p.z); g.add(sp);
+    const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true })); const s = Math.max(3, span * 0.05); sp.scale.set(s * 2.6, s, 1); sp.position.set(p.x, h + 3 + s * 0.6, p.z); g.add(sp); R.compassObjs.push(post, sp);
   });
   // north arrow painted on the ground beside the field
   const p = ctr.clone().add(sunDir3(0, 0).multiplyScalar(rad * 0.82)), sh = new THREE.Shape(), s = Math.max(2.5, span * 0.04);
@@ -6403,6 +6441,52 @@ $('#fmBody').addEventListener('click', e => {
     S.mg.lastClose = todayIso(); save(); toast('ปิดฤดูแล้ว · บันทึกวันปลูกใหม่เมื่อปลูกฤดูหน้า'); fmSeason();
   }
 });
+/* ================= โชว์ไร่ 3D: full-screen showcase with cinematic camera ================= */
+const S3 = { on: false, prevStep: 0, wasSimple: false, tmr: null };
+function s3Cam(mode) {
+  if (!R.ok || !L) return; const span = Math.max(L.W, L.H) + 10, t = V(L.W / 2, L.dz * R.vex / 2, -L.H / 2); R.follow = false;
+  const k = R.camera.aspect < 1 ? Math.min(2.2, 1 / R.camera.aspect) : 1;
+  const P = { hero: [t.x - span * 0.42 * k, t.y + span * 0.62 * k, t.z + span * 0.62 * k], low: [t.x - span * 0.4 * k, t.y + span * 0.12 * k, t.z + span * 0.5 * k], top: [t.x, t.y + span * 1.35 * k, t.z + 0.01] }[mode];
+  if (mode === 'eye') { fitCamera('eye'); return; }
+  flyTo(V(...P), t.clone(), 1.8);
+}
+function s3Open() {
+  if (!S.closed || !L) return toast('วัดแปลงก่อน แล้วจะดูไร่ 3D ได้');
+  if (!R.ok) return toast('มือถือเครื่องนี้แสดงภาพ 3D ไม่ได้');
+  S3.prevStep = S.step || 0; S3.wasSimple = document.body.classList.contains('simple');
+  document.body.classList.remove('simple'); $('#simple').style.display = 'none';
+  go(2); document.body.classList.add('show3d'); S3.on = true; (R.compassObjs || []).forEach(o => o.visible = false);
+  setTimeout(() => { resize3D(); s3Cam('hero'); R.controls.autoRotate = true; R.controls.autoRotateSpeed = 0.55; s3UI(); }, 60);
+  clearInterval(S3.tmr); S3.tmr = setInterval(s3Info, 500); s3Info();
+}
+function s3Close() {
+  S3.on = false; clearInterval(S3.tmr); document.body.classList.remove('show3d'); R.controls.autoRotate = false; (R.compassObjs || []).forEach(o => o.visible = true);
+  if (R.growPlay || R.viewDap != null) { R.growPlay = false; R.viewDap = null; updatePlantGrowth(); }
+  go(S3.prevStep > 1 ? S3.prevStep : S3.prevStep); if (S3.wasSimple) applySimple(); setTimeout(resize3D, 60);
+}
+function s3UI() { $('#s3Orbit').classList.toggle('on', !!R.controls.autoRotate); $('#s3Grow').classList.toggle('on', !!R.growPlay); $('#s3Zone').classList.toggle('on', !!R.zoneColors); $('#s3Sun').classList.toggle('on', !!R.showSun); }
+function s3Info() {
+  if (!S3.on || !L) return; const n = SIM.today ? need(SIM.t) : null, c = n && n.c, w = SIM.today ? wx(isoOf(SIM.t)) : null;
+  const dap = R.viewDap != null ? R.viewDap : c && !c.notPlanted ? c.dap : null;
+  $('#s3Title').innerHTML = `ไร่มัน ${areaThai(L.area).replace(/ 0 งาน| 0 ตร\.วา/g, '')}<small>${dap != null ? `${R.viewDap != null ? '▶ ' : ''}อายุ ${dap} วัน · ระยะ${stageOf(Math.max(0, dap)).n}${R.viewDap != null ? ` · สูง ~${f(growthAt(dap).h * 100)} ซม.` : ''}` : 'ยังไม่ได้ปลูก'}</small>`;
+  const ch = [];
+  if (SIM.today) {
+    ch.push(SIM.active ? `<span class="w">💧 ให้น้ำโซน ${SIM.active.z + 1}</span>` : SIM.wait ? '<span>🌧 รอฝน</span>' : '<span>⏸ ปิดน้ำ</span>');
+    ch.push(`<span>🌱 ความชื้นดิน ${f(swNow())}%</span>`);
+    if (w) ch.push(`<span>${w.rain > 1 || w.prob >= 60 ? '🌦' : '☀️'} ${f(w.tmax)}° · ฝน ${f(w.prob)}%</span>`);
+  }
+  $('#s3Chips').innerHTML = ch.join('');
+  $('#s3Grow').querySelector('b').textContent = R.growPlay ? 'หยุด' : 'ดูการเติบโต';
+  if (!R.growPlay && $('#s3Grow').classList.contains('on')) s3UI();
+}
+$('#sm3D').addEventListener('click', s3Open); $('#h3D').addEventListener('click', s3Open); $('#tShow').addEventListener('click', s3Open); $('#s3Back').addEventListener('click', s3Close);
+$('#s3Orbit').addEventListener('click', () => { R.controls.autoRotate = !R.controls.autoRotate; s3UI(); });
+$$('#s3ui [data-cam]').forEach(b => b.addEventListener('click', () => { R.controls.autoRotate = b.dataset.cam !== 'eye' && b.dataset.cam !== 'top' && R.controls.autoRotate; s3Cam(b.dataset.cam); s3UI(); }));
+$('#s3Grow').addEventListener('click', () => { if (R.growPlay) { R.growPlay = false; } else { R.growPlay = true; R.gp = 0; R.viewDap = 0; updatePlantGrowth(); if (!R.controls.autoRotate) { R.controls.autoRotate = true; } } s3UI(); s3Info(); });
+$('#s3Zone').addEventListener('click', () => { $('#tZones').click(); s3UI(); });
+$('#s3Sun').addEventListener('click', () => { $('#tSun').click(); s3UI(); });
+$('#s3AR').addEventListener('click', () => { s3Close(); setTimeout(startAR, 120); });
+addEventListener('keydown', e => { if (e.key === 'Escape' && S3.on) s3Close(); });
 function arMsg(html, ms) { const m = $('#arMsg'); m.innerHTML = html; m.style.display = ''; clearTimeout(AR.msgTO); AR.msgTO = setTimeout(() => { m.style.display = 'none'; }, ms || 3000); }
 /* hide the model ground and scenery; add bright overlays that read well over a camera picture */
 function arScene() {

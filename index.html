@@ -6701,8 +6701,8 @@ function arMap() {
   x.fillStyle = '#fff'; x.font = '700 20px Prompt, sans-serif'; x.textAlign = 'center'; x.fillText('น', S2 / 2, 18);
 }
 $('#tAR').addEventListener('click', startAR);
-$('#tAI3D').classList.toggle('on', !!(S.ui && S.ui.sat3d === true));
-$('#tAI3D').addEventListener('click', () => { const on = !(S.ui && S.ui.sat3d === true); S.ui = { ...(S.ui || {}), sat3d: on }; save(); $('#tAI3D').classList.toggle('on', on); if (!on) { if (R.sat3D) { disposeGroup(R.sat3D); R.sat3D = null; } toast('ปิดต้นไม้/อาคาร 3D จากภาพดาวเทียม'); } else { R.group && buildSatGround(R.group).then(() => { const st = R.sat3D && R.sat3D.userData.stats; toast(st ? `สร้าง 3D จากภาพดาวเทียม: ต้นไม้ ${st.trees} ต้น · อาคาร ${st.buildings} หลัง` : 'เปิดแผนที่จริงก่อน'); }); } });
+$('#tAI3D').classList.toggle('on', !(S.ui && S.ui.sat3d === false));
+$('#tAI3D').addEventListener('click', () => { const on = S.ui && S.ui.sat3d === false; S.ui = { ...(S.ui || {}), sat3d: on }; save(); $('#tAI3D').classList.toggle('on', on); if (!on) { if (R.sat3D) { disposeGroup(R.sat3D); R.sat3D = null; } toast('ปิดต้นไม้/อาคาร 3D จากภาพดาวเทียม'); } else { R.group && buildSatGround(R.group).then(() => { const st = R.sat3D && R.sat3D.userData.stats; toast(st ? `สร้าง 3D จากภาพดาวเทียม: ต้นไม้ ${st.trees} ต้น · อาคาร ${st.buildings} หลัง` : 'เปิดแผนที่จริงก่อน'); }); } });
 $('#arExit').addEventListener('click', () => { if (R.xrOn && AR.xr && AR.xr.sess) AR.xr.sess.end(); else stopAR(); });
 $('#arCal').addEventListener('click', () => { const p = $('#arCalP'); p.style.display = p.style.display === 'none' ? '' : 'none'; $('#arCal').classList.toggle('on', p.style.display === ''); });
 $('#arCalDone').addEventListener('click', () => { $('#arCalP').style.display = 'none'; $('#arCal').classList.remove('on'); });
@@ -6764,6 +6764,18 @@ async function googleTileSession() {
   SAT.gSession = { token: j.session, exp: Date.now() + 10 * 3600e3 }; return j.session;
 }
 function loadImg(src) { return new Promise((res, rej) => { const im = new Image(); im.crossOrigin = 'anonymous'; im.onload = () => res(im); im.onerror = rej; im.src = src; setTimeout(() => rej(new Error('timeout')), 15000); }); }
+// real ground height around the field: AWS open terrain tiles (Terrarium PNG: h = R·256 + G + B/256 − 32768 m)
+async function terrFn(bb) {
+  const z = 14, a = merc(bb.n, bb.w, z), b = merc(bb.s, bb.e, z), tx0 = Math.floor(a.x / 256), ty0 = Math.floor(a.y / 256), tx1 = Math.floor(b.x / 256), ty1 = Math.floor(b.y / 256);
+  const cw = (tx1 - tx0 + 1) * 256, ch = (ty1 - ty0 + 1) * 256, cv = document.createElement('canvas'); cv.width = cw; cv.height = ch; const x = cv.getContext('2d', { willReadFrequently: true });
+  let ok = 0; const jobs = [];
+  for (let ty = ty0; ty <= ty1; ty++) for (let tx = tx0; tx <= tx1; tx++) jobs.push(loadImg(`https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${z}/${tx}/${ty}.png`).then(im => { x.drawImage(im, (tx - tx0) * 256, (ty - ty0) * 256); ok++; }).catch(() => {}));
+  await Promise.all(jobs); if (ok < jobs.length) throw new Error('terrain');
+  const d = x.getImageData(0, 0, cw, ch).data, hgt = new Float32Array(cw * ch);
+  for (let i = 0; i < cw * ch; i++) hgt[i] = d[i * 4] * 256 + d[i * 4 + 1] + d[i * 4 + 2] / 256 - 32768;
+  return (lat, lon) => { const m = merc(lat, lon, z), u = clamp(m.x - tx0 * 256 - 0.5, 0, cw - 1.001), v = clamp(m.y - ty0 * 256 - 0.5, 0, ch - 1.001), i = Math.floor(u), j = Math.floor(v), fu = u - i, fv = v - j, k = j * cw + i;
+    return (hgt[k] * (1 - fu) + hgt[k + 1] * fu) * (1 - fv) + (hgt[k + cw] * (1 - fu) + hgt[k + cw + 1] * fu) * fv; };
+}
 async function satMosaic(bb, z, src) {
   const a = merc(bb.n, bb.w, z), b = merc(bb.s, bb.e, z), tx0 = Math.floor(a.x / 256), ty0 = Math.floor(a.y / 256), tx1 = Math.floor(b.x / 256), ty1 = Math.floor(b.y / 256);
   const cw = (tx1 - tx0 + 1) * 256, ch = (ty1 - ty0 + 1) * 256, cv = document.createElement('canvas'); cv.width = cw; cv.height = ch; const x = cv.getContext('2d');
@@ -6795,12 +6807,18 @@ async function buildSatGround(g) {
     if (!mos) { SAT.state = 'fail'; renderHUD(); return; }
     SAT.cache[key] = mos;
   }
+  let tf = null; try { tf = SAT.terr && SAT.terr.key === key ? SAT.terr.fn : (SAT.terr = { key, fn: await terrFn(bb) }).fn; } catch (e) { SAT.terr = null; }
   if (g !== R.group) return; // the scene was rebuilt meanwhile
-  const N = 110, pos = new Float32Array((N + 1) * (N + 1) * 3), uv = new Float32Array((N + 1) * (N + 1) * 2), idx = [];
+  { const G = L.G, gx0 = G.x0, gy0 = G.y0, gx1 = gx0 + (G.nx - 1) * G.cs, gy1 = gy0 + (G.ny - 1) * G.cs; let off = 0;
+    if (tf) { const df = []; for (let t = 0; t <= 1.0001; t += 0.05) [[gx0 + (gx1 - gx0) * t, gy0], [gx0 + (gx1 - gx0) * t, gy1], [gx0, gy0 + (gy1 - gy0) * t], [gx1, gy0 + (gy1 - gy0) * t]].forEach(([x, y]) => { const ll = sceneToLL(x, y); df.push(gridAt(G, x, y) - tf(ll.lat, ll.lon)); }); df.sort((p, q) => p - q); off = df[df.length >> 1]; }
+    R.satH = (x, y) => { const cx2 = clamp(x, gx0, gx1), cy2 = clamp(y, gy0, gy1), base = gridAt(G, cx2, cy2); if (!tf || (cx2 === x && cy2 === y)) return base * R.vex;
+      const t0 = clamp(Math.hypot(x - cx2, y - cy2) / 80, 0, 1), t = t0 * t0 * (3 - 2 * t0), ll = sceneToLL(x, y); return (base * (1 - t) + (tf(ll.lat, ll.lon) + off) * t) * R.vex; };
+    SAT.relief = tf ? 1 : 0; }
+  const N = 140, pos = new Float32Array((N + 1) * (N + 1) * 3), uv = new Float32Array((N + 1) * (N + 1) * 2), idx = [];
   for (let j = 0; j <= N; j++) for (let i = 0; i <= N; i++) {
     const x = cx - ext / 2 + ext * i / N, y = cy - ext / 2 + ext * j / N, k = j * (N + 1) + i, ll = sceneToLL(x, y), m = merc(ll.lat, ll.lon, mos.z);
     const inGrid = x > L.G.x0 && y > L.G.y0 && x < L.G.x0 + (L.G.nx - 1) * L.G.cs && y < L.G.y0 + (L.G.ny - 1) * L.G.cs;
-    pos.set([x, (inGrid ? hz(x, y) : hz(clamp(x, L.G.x0, L.G.x0 + (L.G.nx - 1) * L.G.cs), clamp(y, L.G.y0, L.G.y0 + (L.G.ny - 1) * L.G.cs))) - 0.04, -y], k * 3);
+    pos.set([x, (inGrid ? hz(x, y) : R.satH(x, y)) - 0.04, -y], k * 3);
     uv.set([(m.x - mos.ox) / mos.w, 1 - (m.y - mos.oy) / mos.h], k * 2);
   }
   for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) { const a = j * (N + 1) + i, b = a + 1, c2 = a + N + 1, d = c2 + 1; idx.push(a, b, c2, b, d, c2); }
@@ -6817,12 +6835,12 @@ async function buildSatGround(g) {
    then stand real 3D trees and buildings on those spots. On-device colour + texture rules — an estimate, not surveyed. */
 function sat3D(g, mos, ext, cx, cy) {
   if (R.sat3D) { disposeGroup(R.sat3D); R.sat3D = null; }
-  if (!(S.ui && S.ui.sat3d === true)) return;
+  if (S.ui && S.ui.sat3d === false) return;
   const cv = mos.tex.image; if (!cv || !cv.getContext) return;
   const px = cv.getContext('2d').getImageData(0, 0, cv.width, cv.height).data, W = cv.width, H = cv.height;
   const cell = 4, n = Math.floor(ext / cell), x0 = cx - ext / 2, y0 = cy - ext / 2, mpp = 156543.03 * Math.cos(L.lat0 * RAD) / Math.pow(2, mos.z), rad = Math.max(1, Math.round(1.6 / mpp));
   const nearPoly = (x, y, d) => { for (let i = 0; i < L.poly.length; i++) if (segDist([x, y], L.poly[i], L.poly[(i + 1) % L.poly.length]) < d) return true; return false; };
-  const cls = new Uint8Array(n * n), col = new Float32Array(n * n * 3), dark = new Float32Array(n * n);
+  const cls = new Uint8Array(n * n), col = new Float32Array(n * n * 3), dark = new Float32Array(n * n), HZ = R.satH || hz, crown = new Uint8Array(n * n);
   const [pmx, pmy] = L.pump;
   for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
     const x = x0 + (i + 0.5) * cell, y = y0 + (j + 0.5) * cell;
@@ -6850,17 +6868,17 @@ function sat3D(g, mos, ext, cx, cy) {
   // buildings
   const nb = roofs.reduce((a, c) => a + c.length, 0);
   if (nb) { const bg = new THREE.BoxGeometry(1, 1, 1); bg.translate(0, 0.5, 0); const bm = new THREE.InstancedMesh(bg, STD({ roughness: 0.6, metalness: 0.15 }), nb); let k = 0;
-    roofs.forEach(comp => { const hb = 2.8 + rr() * (comp.length > 20 ? 4 : 2), base = Math.min(...comp.map(c => { const x = x0 + (c % n + 0.5) * cell, y = y0 + (((c / n) | 0) + 0.5) * cell; return hz(x, y); }));
+    roofs.forEach(comp => { const hb = 2.8 + rr() * (comp.length > 20 ? 4 : 2), base = Math.min(...comp.map(c => { const x = x0 + (c % n + 0.5) * cell, y = y0 + (((c / n) | 0) + 0.5) * cell; return HZ(x, y); }));
       comp.forEach(c => { const x = x0 + (c % n + 0.5) * cell, y = y0 + (((c / n) | 0) + 0.5) * cell; m4.compose(V(x, base - 0.1, -y), qq.identity(), V(cell * 1.02, hb, cell * 1.02)); bm.setMatrixAt(k, m4); cc.setRGB(col[c * 3], col[c * 3 + 1], col[c * 3 + 2], THREE.SRGBColorSpace); bm.setColorAt(k++, cc); }); });
     bm.castShadow = bm.receiveShadow = true; grp.add(bm); }
   // trees
   const cap = R.quality === 'high' ? 1500 : 700, trees = [], taken = new Uint8Array(n * n);
-  for (let q = 0; q < n * n; q++) { if (cls[q] !== 1 || taken[q]) continue; const qi = q % n, qj = (q / n) | 0; let nb2 = 0; for (let b2 = -1; b2 <= 1; b2++) for (let a = -1; a <= 1; a++) { const ni = qi + a, nj = qj + b2; if (ni >= 0 && nj >= 0 && ni < n && nj < n && cls[nj * n + ni] === 1) nb2++; } if (nb2 < 3) continue;
+  for (let q = 0; q < n * n; q++) { if (cls[q] !== 1 || taken[q]) continue; const qi = q % n, qj = (q / n) | 0; let nb2 = 0; for (let b2 = -1; b2 <= 1; b2++) for (let a = -1; a <= 1; a++) { const ni = qi + a, nj = qj + b2; if (ni >= 0 && nj >= 0 && ni < n && nj < n && cls[nj * n + ni] === 1) nb2++; } if (nb2 < 3) continue; crown[q] = nb2;
     trees.push(q); for (let b2 = -2; b2 <= 2; b2++) for (let a = -2; a <= 2; a++) { const ni = qi + a, nj = qj + b2; if (ni >= 0 && nj >= 0 && ni < n && nj < n) taken[nj * n + ni] = 1; } }
   const step = Math.max(1, Math.ceil(trees.length / cap)), pick = trees.filter((_, i) => i % step === 0);
   if (pick.length) { const per = [[], []]; pick.forEach(q => per[rr() < 0.5 ? 0 : 1].push(q));
     per.forEach((list, vi) => { if (!list.length) return; const im = new THREE.InstancedMesh(R.treeGeos[vi], STD({ vertexColors: true, roughness: 0.9 }), list.length); im.userData.shared = true;
-      list.forEach((q, i) => { const x = x0 + (q % n + rr()) * cell, y = y0 + (((q / n) | 0) + rr()) * cell, h = 4 + dark[q] * 4 + rr() * 1.5; qq.setFromAxisAngle(V(0, 1, 0), rr() * 6.28); m4.compose(V(x, hz(x, y) - 0.1, -y), qq, V(h * 1.15, h, h * 1.15)); im.setMatrixAt(i, m4);
+      list.forEach((q, i) => { const x = x0 + (q % n + rr()) * cell, y = y0 + (((q / n) | 0) + rr()) * cell, h = 4 + dark[q] * 4 + rr() * 1.5, wk = 0.9 + crown[q] / 9 * 0.7; qq.setFromAxisAngle(V(0, 1, 0), rr() * 6.28); m4.compose(V(x, HZ(x, y) - 0.1, -y), qq, V(h * wk, h, h * wk)); im.setMatrixAt(i, m4);
         cc.setRGB(clamp(col[q * 3] * 2.2, 0.3, 1.1), clamp(col[q * 3 + 1] * 2.0, 0.5, 1.2), clamp(col[q * 3 + 2] * 2.2, 0.3, 1.1), THREE.SRGBColorSpace); im.setColorAt(i, cc); });
       im.castShadow = true; grp.add(im); }); }
   grp.userData.stats = { trees: pick.length, buildings: roofs.length }; g.add(grp);
@@ -6868,7 +6886,7 @@ function sat3D(g, mos, ext, cx, cy) {
 function applySatVisibility() {
   const on = SAT.on && R.satMesh && SAT.state === 'ok';
   if (R.satMesh) R.satMesh.visible = !!on && !AR.on;
-  if (R.sat3D) R.sat3D.visible = !!on && !AR.on && !!(S.ui && S.ui.sat3d === true);
+  if (R.sat3D) R.sat3D.visible = !!on && !AR.on && !(S.ui && S.ui.sat3d === false);
   (R.fakeScenery || []).forEach(o => o.visible = !on && !AR.on);
   $('#tSat') && $('#tSat').classList.toggle('on', !!on);
 }

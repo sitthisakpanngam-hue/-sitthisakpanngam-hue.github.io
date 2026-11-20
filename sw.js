@@ -2,12 +2,12 @@
    page: network first (new versions arrive), cached copy when offline
    libraries / fonts / map tiles: cache first
    weather & elevation: network first, last answer kept for offline */
-const V = 'raidrop-v12';
+const V = 'raidrop-v13';
 const SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(V).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== V && k.startsWith('raidrop-')).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 const LIB = /(cdn\.jsdelivr\.net|cdnjs\.cloudflare\.com|fonts\.googleapis\.com|fonts\.gstatic\.com)/;
-const TILE = /(server\.arcgisonline\.com|tile\.openstreetmap\.org)/;
+const TILE = /(server\.arcgisonline\.com|tile\.openstreetmap\.org|elevation-tiles-prod)/;
 const DATA = /(api\.open-meteo\.com)/;
 async function netFirst(req, store) {
   try { const r = await fetch(req); if (r && (r.ok || r.type === 'opaque')) { const c = await caches.open(store); c.put(req, r.clone()); } return r; }

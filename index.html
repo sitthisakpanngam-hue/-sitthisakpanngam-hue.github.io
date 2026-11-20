@@ -883,6 +883,21 @@ header #gOpen,header #aiOpen,header #smTog,header #devpill{display:none!importan
 .dsrec .dsrm{border:0;background:none;color:var(--leaf);font:600 12px 'Prompt',sans-serif;padding:2px 0 0}
 .hrow button .ic{color:var(--leaf)}
 .sutmore summary{cursor:pointer;color:var(--leaf);font-weight:600;font-size:13px;margin-top:8px}
+.gdnow{background:var(--leaf-2);border-radius:16px;padding:12px 14px;margin-bottom:10px}.gdnow small{color:var(--leaf);font-weight:600;font-size:12.5px}.gdnow b{display:block;font:600 18px 'Prompt',sans-serif;margin:2px 0}.gdnow span{font-size:13px;color:var(--ink2)}
+.gdbar{display:flex;gap:3px;margin:10px 0 2px}.gdbar i{flex:1;height:6px;border-radius:3px;background:#dfe6da}.gdbar i.done{background:var(--leaf)}.gdbar i.now{background:var(--water)}
+.gdst{background:#fff;border:1px solid var(--line);border-radius:16px;margin-bottom:8px;overflow:hidden}
+.gdst>summary{list-style:none;display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer}.gdst>summary::-webkit-details-marker{display:none}
+.gdst .num{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:700 13px 'Prompt',sans-serif;background:#eef2ec;color:var(--ink2);flex:none}
+.gdst.done .num{background:var(--leaf);color:#fff}.gdst.now{border:2px solid var(--water)}.gdst.now .num{background:var(--water);color:#fff}
+.gdst .tt{flex:1;min-width:0}.gdst .tt b{display:block;font:600 15.5px 'Prompt',sans-serif}.gdst .tt small{color:var(--muted);font-size:12.5px}
+.gdst .cnt{font-size:12px;color:var(--muted);white-space:nowrap}.gdst .now-tag{font:600 11px 'Prompt',sans-serif;background:var(--water);color:#fff;border-radius:99px;padding:2px 8px;margin-left:6px;vertical-align:2px}
+.gdst ul{list-style:none;margin:0;padding:0 14px 10px}
+.gdst li{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid #f0f2ee}
+.gdst li input{width:22px;height:22px;accent-color:var(--leaf);flex:none;margin-top:1px}
+.gdst li .x{flex:1;min-width:0;font-size:14.5px;line-height:1.45}.gdst li.ok .x>b{color:var(--muted);text-decoration:line-through}
+.gdst li .x small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.gdst li button{border:0;background:var(--leaf-2);color:var(--leaf);border-radius:10px;padding:6px 10px;font:600 12.5px 'Prompt',sans-serif;white-space:nowrap;flex:none}
+.gdsrc{font-size:11.5px;color:var(--muted);padding:0 14px 12px}
 .smuse{display:block;margin-top:8px;font-size:14px;color:var(--muted)}
 </style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
@@ -1619,7 +1634,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <button class="gbtn smtog" id="smTog" style="display:none" title="กลับโหมดง่าย">🏠<span>โหมดง่าย</span></button>
   <button class="devpill" id="devpill" title="ยังไม่ได้เชื่อมต่อตัวควบคุมจริง"><i></i>จำลอง</button>
   <button class="gbtn mbtn" id="mOpen" aria-haspopup="true" aria-expanded="false"><svg class="ic"><use href="#i-list"/></svg><span>เมนู</span><i class="mdot" id="mDot"></i></button>
-  <div class="mmenu" id="mMenu" hidden><button data-m="set"><svg class="ic"><use href="#i-gear"/></svg><span><b>ตั้งค่า</b><small>แปลง ดิน ปั๊ม การแจ้งเตือน สำรองข้อมูล</small></span></button><button data-m="ai"><svg class="ic"><use href="#i-chat"/></svg><span><b>ถามหมอมัน AI</b><small>น้ำ ปุ๋ย โรค แมลง</small></span></button><button data-m="mode"><svg class="ic"><use href="#i-layers"/></svg><span><b id="mModeT">โหมดละเอียด</b><small id="mModeS">ไร่ 3D · ออกแบบ · กราฟ</small></span></button><button data-m="dev"><svg class="ic"><use href="#i-plug"/></svg><span><b>ตัวควบคุมหน้างาน</b><small id="mDevS">จำลอง — ยังไม่ได้ต่อตู้จริง</small></span></button></div>
+  <div class="mmenu" id="mMenu" hidden><button data-m="set"><svg class="ic"><use href="#i-gear"/></svg><span><b>ตั้งค่า</b><small>แปลง ดิน ปั๊ม การแจ้งเตือน สำรองข้อมูล</small></span></button><button data-m="ai"><svg class="ic"><use href="#i-chat"/></svg><span><b>ถามหมอมัน AI</b><small>น้ำ ปุ๋ย โรค แมลง</small></span></button><button data-m="mode"><svg class="ic"><use href="#i-layers"/></svg><span><b id="mModeT">โหมดละเอียด</b><small id="mModeS">ไร่ 3D · ออกแบบ · กราฟ</small></span></button><button data-m="guide"><svg class="ic"><use href="#i-book"/></svg><span><b>คู่มือทำไร่</b><small>ไถ · ปลูก · ดูแล · เก็บเกี่ยว — ทำอะไรเมื่อไร</small></span></button><button data-m="dev"><svg class="ic"><use href="#i-plug"/></svg><span><b>ตัวควบคุมหน้างาน</b><small id="mDevS">จำลอง — ยังไม่ได้ต่อตู้จริง</small></span></button></div>
 </header>
 
 
@@ -2125,6 +2140,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <button class="smtodo ai" id="smAI"><span class="smi"><svg class="ic"><use href="#i-chat"/></svg></span><span class="t"><b>ถามหมอมัน AI</b><small>ถามเรื่องน้ำ ปุ๋ย โรค แมลง หรือถ่ายรูปใบมันให้ดู</small></span><span>›</span></button>
     <button class="smtodo fmc" id="smFM"><span class="smi"><svg class="ic"><use href="#i-chart"/></svg></span><span class="t"><b>ศูนย์บริหารไร่</b><small>ผังระบบน้ำสด · ฤดูกาล · คาดผลผลิต · ราคาลานมัน · บัญชี</small></span><span>›</span></button>
     <button class="smtodo pc" id="smPC"><span class="smi"><svg class="ic"><use href="#i-cam"/></svg></span><span class="t"><b>ตรวจต้นมันจากรูป</b><small>ดูโรค/เพลี้ยแป้ง และวัดความสูงต้นจากรูปถ่าย</small></span><span>›</span></button>
+    <button class="smtodo" id="smGuide"><span class="smi"><svg class="ic"><use href="#i-list"/></svg></span><span class="t"><b id="smGuideT">คู่มือทำไร่</b><small id="smGuideS">ทำอะไรเมื่อไร ตั้งแต่ไถถึงเก็บเกี่ยว</small></span><span>›</span></button>
     <button class="smtodo" id="smTodo"><span class="smi"><svg class="ic"><use href="#i-book"/></svg></span><span class="t"><b id="smTodoT">—</b><small>แตะเพื่อบันทึก</small></span><span>›</span></button>
     <button class="smtodo bk" id="smBk" style="display:none"><span class="smi"><svg class="ic"><use href="#i-save"/></svg></span><span class="t"><b>สำรองข้อมูลส่งเข้า LINE</b><small id="smBkS">ไม่ได้สำรองนานแล้ว · กันข้อมูลหายเมื่อเปลี่ยนมือถือ</small></span><span>›</span></button>
     <button class="smfull" id="smFull">ดูไร่ 3D · ออกแบบ · กล้อง AR · กราฟ <b>เปิดโหมดละเอียด ›</b></button>
@@ -2150,6 +2166,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <div class="s3bar">
     <button id="s3Orbit" class="on"><span><svg class="ic"><use href="#i-play"/></svg></span><b>บินชมรอบไร่</b></button><button data-cam="hero"><span><svg class="ic"><use href="#i-globe"/></svg></span><b>มุมสูง</b></button><button data-cam="eye"><span><svg class="ic"><use href="#i-walk"/></svg></span><b>ยืนในไร่</b></button><button id="s3Zone"><span><svg class="ic"><use href="#i-palette"/></svg></span><b>สีโซนน้ำ</b></button><button id="s3More"><span><svg class="ic"><use href="#i-list"/></svg></span><b>เพิ่มเติม</b></button><button data-cam="low" class="s3x"><span><svg class="ic"><use href="#i-eye"/></svg></span><b>มุมต่ำ</b></button><button data-cam="top" class="s3x"><span><svg class="ic"><use href="#i-top"/></svg></span><b>มองลงตรง</b></button><button id="s3Grow" class="s3x"><span><svg class="ic"><use href="#i-sprout"/></svg></span><b>ดูการเติบโต</b></button><button id="s3Sun" class="s3x"><span><svg class="ic"><use href="#i-sunpath"/></svg></span><b>ทางดวงอาทิตย์</b></button><button id="s3AR" class="s3x"><span><svg class="ic"><use href="#i-cam"/></svg></span><b>กล้อง AR</b></button>
   </div>
+</div>
+<div id="guide" class="fm" style="display:none">
+  <div class="fmtop"><button id="gdBack" class="fmback" aria-label="กลับ">‹</button><div><b>คู่มือทำไร่</b><small id="gdSub">ตั้งแต่ไถจนถึงเก็บเกี่ยว</small></div></div>
+  <div class="fmbody" id="gdBody"></div>
 </div>
 <div id="farm" class="fm" style="display:none">
   <div class="fmtop"><button id="fmBack" class="fmback" aria-label="กลับ">‹</button><div><b>ศูนย์บริหารไร่</b><small id="fmClock" class="mono"></small></div></div>
@@ -7009,7 +7029,7 @@ function sutHTML(n) {
   btn.addEventListener('click', e => { e.stopPropagation(); if (mm.hidden) { sync(); mm.hidden = false; btn.setAttribute('aria-expanded', 'true'); } else close(); });
   document.addEventListener('click', e => { if (!mm.hidden && !e.target.closest('#mMenu')) close(); });
   mm.addEventListener('click', e => { const b = e.target.closest('[data-m]'); if (!b) return; close(); const m = b.dataset.m;
-    if (m === 'set') $('#gOpen').click(); else if (m === 'ai') $('#aiOpen').click(); else if (m === 'dev') $('#devpill').click();
+    if (m === 'guide') guideOpen(); else if (m === 'set') $('#gOpen').click(); else if (m === 'ai') $('#aiOpen').click(); else if (m === 'dev') $('#devpill').click();
     else if (m === 'mode') { if (document.body.classList.contains('simple')) $('#smFull').click(); else if (S.closed && L) setSimple(true); else toast('วัดแปลงก่อน แล้วจะใช้โหมดง่ายได้'); } });
   setInterval(() => { const dv = ($('#devpill').textContent || ''); $('#mDot').classList.toggle('on', !/จำลอง/.test(dv)); }, 3000);
 }
@@ -7017,6 +7037,86 @@ function sutHTML(n) {
 { const bar = document.querySelector('.s3bar'), mb = $('#s3More'); if (bar && mb) mb.addEventListener('click', () => { bar.classList.toggle('open'); mb.classList.toggle('on', bar.classList.contains('open')); mb.querySelector('b').textContent = bar.classList.contains('open') ? 'ย่อ' : 'เพิ่มเติม'; }); }
 /* ---- design panel: tap the recommendation to read the reason and sources ---- */
 document.addEventListener('click', e => { const r = e.target.closest('#dspRec'); if (!r || e.target.closest('[data-rec]')) return; r.classList.toggle('more'); });
+
+/* ===== คู่มือทำไร่ ===== */
+const GUIDE = [
+  { id: 'prep', t: 'เตรียมดินและระบบน้ำ', d0: -30, d1: -1, src: 'มทส. 2558 · สวทช.', tasks: [
+    ['ไถระเบิดดินดาน (ถ้ามีชั้นดินแข็ง)', 'ให้รากชอนไชได้ น้ำไม่ขัง ลดหัวเน่า'],
+    ['ไถพรวน ตากดิน กำจัดวัชพืช', 'ไถผาล 3 แล้วผาล 7 ตากดินราว 7–10 วัน'],
+    ['ใส่ปุ๋ยอินทรีย์/ปุ๋ยคอก (ถ้ามี)', 'ช่วยให้ดินอุ้มน้ำ โดยเฉพาะดินทราย'],
+    ['ยกร่องสูง 25–30 ซม. ระยะแถว 1.2–1.5 ม.', 'ระบบน้ำหยดควรปลูกห่างกว่าปกติ ร่องสูงช่วยระบายน้ำช่วงฝน', 'design'],
+    ['วางท่อเมน กรอง และท่อรองประธานตามโซน', 'ติดตั้งก่อนปลูก ให้น้ำได้ทันทีหลังปักท่อน', 'bom'],
+    ['เตรียมท่อนพันธุ์จากต้นแม่อายุ 8–12 เดือน', 'ตัดยาว 20–25 ซม. ใช้ให้หมดภายในราว 2 สัปดาห์'],
+  ] },
+  { id: 'plant', t: 'ปลูก', d0: 0, d1: 3, src: 'มทส. 2558 · กรมวิชาการเกษตร', tasks: [
+    ['ช่วงปลูกที่ดีสำหรับระบบน้ำหยด: ธ.ค.–ก.พ.', 'วัชพืชน้อย ช่วงหัวโตตรงกับหน้าฝน'],
+    ['แช่ท่อนพันธุ์ป้องกันเพลี้ยแป้งก่อนปลูก', 'ใช้สารและอัตราตามฉลาก/คำแนะนำกรมวิชาการเกษตร'],
+    ['ปักท่อนตั้งตรงบนสันร่อง ลึกราว 2/3 ของท่อน', 'ระยะต้น 0.8–1.2 ม.'],
+    ['วางเทปน้ำหยดตามร่อง แล้วให้น้ำทันที', 'ช่วยให้ท่อนงอกเร็วและสม่ำเสมอ'],
+    ['บันทึกวันปลูกในแอป', 'แอปเริ่มนับอายุและให้น้ำอัตโนมัติ', 'd:plant'],
+  ] },
+  { id: 'est', t: 'งอกและตั้งตัว', d0: 1, d1: 30, src: 'มทส. 2558', tasks: [
+    ['ให้น้ำน้อยแต่บ่อย ครั้งละ ~1 ชม. ทุก 3–4 วัน', '1–2 สัปดาห์แรก (โหมดอัตโนมัติทำให้เอง)'],
+    ['พ่นสารคุมวัชพืชก่อนงอก ขณะดินชื้น (ถ้าใช้)', 'วัชพืชมักขึ้นเฉพาะใต้หัวหยด จัดการง่าย'],
+    ['อายุ 15–20 วัน นับต้นงอก ปลูกซ่อมจุดที่ตาย', 'บันทึกเพื่อรู้จำนวนต้นจริง', 'd:germ'],
+    ['ตรวจอัตราไหลหัวหยด หัว–กลาง–ท้ายแปลง', 'รองน้ำใต้หัวหยดแล้วตวง ควรออกใกล้เคียงกัน'],
+  ] },
+  { id: 'veg', t: 'สร้างลำต้นและใบ', d0: 31, d1: 90, src: 'มทส. 2558', tasks: [
+    ['กำจัดวัชพืช ช่วงนี้สำคัญที่สุด (พุ่มยังไม่คลุมดิน)', 'วัชพืชแย่งน้ำและปุ๋ยมาก', 'd:weed'],
+    ['เริ่มให้ปุ๋ยผ่านน้ำหยด แบ่งใส่ทีละน้อยหลายครั้ง', 'ไม่น้อยกว่า 8 ครั้ง ช่วงอายุ 1–5 เดือน · แม่ปุ๋ย 46-0-0, 12-60-0, 0-0-60 ละลายให้หมดก่อน', 'd:fert'],
+    ['ตรวจเพลี้ยแป้ง ไรแดง โดยเฉพาะช่วงแล้ง', 'พบเร็วจัดการง่าย ถ่ายรูปให้หมอมัน AI ดูได้', 'd:pest'],
+    ['วัดความสูงต้นเดือนละครั้ง', 'แอปปรับอายุต้นและความต้องการน้ำให้ตรง', 'd:height'],
+    ['ล้างกรองก่อน–หลังให้น้ำ เดินดูจุดรั่ว', 'กรองตันทำให้ปลายแปลงได้น้ำน้อย'],
+  ] },
+  { id: 'tuber', t: 'สร้างและขยายหัว (ต้องการน้ำมากที่สุด)', d0: 91, d1: 240, src: 'มทส. 2558', tasks: [
+    ['ให้น้ำสม่ำเสมอ อย่าให้ขาดน้ำ', 'อายุ 4–8 เดือนต้องการน้ำมากที่สุด — ดูหน้าให้น้ำทุกวัน'],
+    ['ให้ปุ๋ยผ่านน้ำหยดให้ครบภายในอายุ 5 เดือน', 'หลังจากนี้ใส่ปุ๋ยไม่ค่อยได้ผล', 'd:fert'],
+    ['วัดความสูงต้นเดือนละครั้ง', '', 'd:height'],
+    ['ช่วงฝน: ดูร่องระบายน้ำ อย่าให้น้ำขังโคนต้น', 'หัวที่สะสมแป้งเน่าง่ายเมื่อน้ำขัง'],
+  ] },
+  { id: 'starch', t: 'สะสมแป้ง', d0: 241, d1: -31, src: 'มทส. 2558', tasks: [
+    ['ลดการให้น้ำ (แอปลดให้เองตามอายุ)', 'น้ำมากช่วงนี้ทำให้เปอร์เซ็นต์แป้งต่ำ'],
+    ['ติดต่อรถขุดและลานรับซื้อ เช็กราคาแป้ง', 'วางแผนขุดช่วงราคาดี'],
+  ] },
+  { id: 'harv', t: 'เก็บเกี่ยว', d0: -30, d1: 30, src: 'มทส. 2558', tasks: [
+    ['งดให้น้ำราว 30 วันก่อนขุด', 'เพิ่มเปอร์เซ็นต์แป้ง (แอปงดให้เอง)'],
+    ['ม้วนเก็บเทปน้ำหยดก่อนขุด ห้ามพับ', 'พับแล้วเทปหักแตก ใช้ฤดูหน้าไม่ได้'],
+    ['ขุดแล้วส่งลานภายใน 1–2 วัน', 'หัวมันเสียเร็วหลังขุด แป้งลด'],
+    ['คัดลำต้นสมบูรณ์เก็บไว้ทำท่อนพันธุ์รอบหน้า', 'มัดตั้งตรงในที่ร่ม'],
+    ['บันทึกผลผลิตและเปอร์เซ็นต์แป้ง', 'น้ำหยด: ดินทราย 8–10 ตัน/ไร่ · ดินเหนียว 12–14 ตัน/ไร่ (มทส.)', 'd:harvest'],
+  ] },
+];
+function guideRange(st, H) { const t2 = Math.min(240, H - 61); return ({ prep: [-30, -1], plant: [0, 3], est: [4, 30], veg: [31, 90], tuber: [91, t2], starch: [t2 + 1, H - 31], harv: [H - 30, H + 30] })[st.id]; }
+function guideNow() {
+  const cr = S.crop || {}, H = S.set.harvest; if (!planted()) return { i: 0, dap: null, H };
+  const dap = crop(SIM.t).dap; let i = GUIDE.findIndex(st => { const [a, b] = guideRange(st, H); return dap >= a && dap <= b; });
+  if (dap >= H - 30) i = GUIDE.length - 1; if (i < 0) i = dap < 0 ? 0 : GUIDE.length - 1; return { i, dap, H };
+}
+function guideKey(sid, k) { return (planted() ? S.set.plantDate : 'next') + ':' + sid + ':' + k; }
+function guideDone(sid, k) { return !!(S.ui && S.ui.gd && S.ui.gd[guideKey(sid, k)]); }
+function renderGuide() {
+  const g = guideNow(), pd = planted() ? parseIso(S.set.plantDate) : null, el = $('#gdBody');
+  const dates = st => { if (!pd) return st.id === 'prep' ? 'ก่อนปลูก ~1 เดือน' : ''; const [a, b] = guideRange(st, g.H); return a === b ? dShort(pd + a * DAY) : `${dShort(pd + a * DAY)} – ${dShort(pd + b * DAY)}`; };
+  const age = st => { const [a, b] = guideRange(st, g.H); return st.id === 'prep' ? 'ก่อนปลูก' : st.id === 'plant' ? 'วันปลูก' : st.id === 'harv' ? `อายุ ${a}+ วัน` : `อายุ ${a}–${b} วัน`; };
+  const cur = GUIDE[g.i], left = cur.tasks.filter((t, k) => !guideDone(cur.id, k));
+  $('#gdSub').textContent = g.dap == null ? 'ยังไม่ปลูก — เริ่มจากเตรียมดิน' : `อายุ ${g.dap} วัน · ระยะ${cur.t}`;
+  el.innerHTML = `<div class="gdnow"><small>ตอนนี้</small><b>${cur.t}</b><span>${left.length ? `เหลือ ${left.length} งาน: ${left[0][0]}` : 'งานช่วงนี้ครบแล้ว'}</span>
+      <div class="gdbar">${GUIDE.map((st, i) => `<i class="${i < g.i ? 'done' : i === g.i ? 'now' : ''}"></i>`).join('')}</div></div>`
+    + GUIDE.map((st, i) => { const n = st.tasks.filter((t, k) => guideDone(st.id, k)).length, cls = i < g.i ? 'done' : i === g.i ? 'now' : '';
+      return `<details class="gdst ${cls}"${i === g.i ? ' open' : ''}><summary><span class="num">${i < g.i ? '✓' : i + 1}</span><span class="tt"><b>${st.t}${i === g.i ? '<span class="now-tag">ตอนนี้</span>' : ''}</b><small>${age(st)}${dates(st) ? ' · ' + dates(st) : ''}</small></span><span class="cnt">${n}/${st.tasks.length}</span></summary>
+        <ul>${st.tasks.map(([a, b, act], k) => { const ok = guideDone(st.id, k); return `<li class="${ok ? 'ok' : ''}"><input type="checkbox" data-gk="${st.id}:${k}"${ok ? ' checked' : ''} aria-label="ทำแล้ว"><span class="x"><b>${a}</b>${b ? `<small>${b}</small>` : ''}</span>${act ? `<button data-ga="${act}">${act === 'design' ? 'ออกแบบ' : act === 'bom' ? 'รายการอุปกรณ์' : 'บันทึก'}</button>` : ''}</li>`; }).join('')}</ul>
+        <div class="gdsrc">อ้างอิง: ${st.src}</div></details>`; }).join('')
+    + `<div class="small" style="padding:6px 4px 20px">คำแนะนำทั่วไปสำหรับมันสำปะหลังระบบน้ำหยด ปรับตามสภาพแปลงและคำแนะนำเจ้าหน้าที่เกษตรในพื้นที่</div>`;
+}
+function guideOpen() { renderGuide(); $('#guide').style.display = 'flex'; document.body.classList.add('fmopen'); $('#gdBody').scrollTop = 0; }
+function guideClose() { $('#guide').style.display = 'none'; document.body.classList.remove('fmopen'); }
+$('#gdBack').addEventListener('click', guideClose);
+$('#gdBody').addEventListener('change', e => { const c = e.target.closest('[data-gk]'); if (!c) return; const [sid, k] = c.dataset.gk.split(':'); S.ui = { ...(S.ui || {}) }; S.ui.gd = { ...(S.ui.gd || {}) }; const key = guideKey(sid, +k); if (c.checked) S.ui.gd[key] = 1; else delete S.ui.gd[key]; save(); renderGuide(); });
+$('#gdBody').addEventListener('click', e => { const b = e.target.closest('[data-ga]'); if (!b) return; const a = b.dataset.ga; guideClose();
+  if (a.startsWith('d:')) openDiary(a.slice(2)); else if (!S.closed || !L) toast('วัดแปลงก่อน แล้วจะออกแบบได้'); else { if (document.body.classList.contains('simple')) $('#smFull').click(); go(2); setTimeout(() => { const r = document.querySelector(`[data-dz="${a === 'design' ? 'space' : 'bom'}"]`); if (r) r.click(); }, 350); } });
+$('#smGuide').addEventListener('click', guideOpen);
+setInterval(() => { try { if (!document.body.classList.contains('simple')) return; const g = guideNow(), cur = GUIDE[g.i], left = cur.tasks.filter((t, k) => !guideDone(cur.id, k));
+  $('#smGuideT').textContent = `คู่มือทำไร่ · ${cur.t}`; $('#smGuideS').textContent = left.length ? `ต่อไป: ${left[0][0]}` : 'งานช่วงนี้ครบแล้ว'; } catch (e) {} }, 2000);
 requestAnimationFrame(frame);
 </script>
 <div id="cd" class="cd" style="display:none">

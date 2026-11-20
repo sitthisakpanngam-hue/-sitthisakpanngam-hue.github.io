@@ -9,12 +9,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ไร่หยด">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="ไร่หยด">
 <title>ไร่หยด — ระบบน้ำหยดมันสำปะหลังอัจฉริยะ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -827,8 +825,67 @@ button.devpill{cursor:pointer;font-family:inherit}
 .camcap{background:var(--leaf-2);color:var(--leaf)}
 .lvlList .lv b.n{background:var(--soil)}.lvlList .lv b.n.ref{background:var(--leaf)}
 .dzrec{background:var(--leaf-2)}.dzrec.warn{background:var(--warn-2)}.dzrec.bad{background:var(--bad-2)}
+
+/* ===== v2 (ทดลอง) ===== */
+.hrow{overflow-x:auto;scrollbar-width:none;padding-bottom:2px}.hrow::-webkit-scrollbar{display:none}
+.hrow button{white-space:nowrap;flex:none}
+.hneed{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0 2px}
+.hneed>div{background:#f4f7f2;border-radius:14px;padding:8px 9px;min-width:0}
+.hneed small{display:block;font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hneed b{display:block;font:600 18px 'Prompt',sans-serif;line-height:1.25;white-space:nowrap}
+.hneed b i{font:400 11.5px 'IBM Plex Sans Thai',sans-serif;font-style:normal;color:var(--muted);margin-left:2px}
+.hneed span{display:block;font-size:11px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hneed .go{background:var(--water-2)}.hneed .go b{color:var(--water)}
+.btn.xl.quiet{background:#fff!important;color:var(--water);border:2px solid var(--water-2);box-shadow:none!important}
+.btn.xl.quiet small{opacity:.8}
+.smvol{display:inline-block;margin-top:10px;background:var(--water-2);color:var(--water);border-radius:99px;padding:5px 12px;font:600 14px 'Prompt',sans-serif}
+.brand{position:relative}.testpill{position:absolute;left:-2px;top:30px;font:700 9.5px 'Prompt',sans-serif;background:#ffd23f;color:#4a3600;border-radius:6px;padding:0 5px;line-height:15px;letter-spacing:.2px;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.smbtn.quiet{background:#fff;color:var(--water);border:2px solid #cfe0f5;box-shadow:none;min-height:60px;font-size:19px}
+@media (max-width:430px){header{gap:8px}#gOpen span{display:none!important}#gOpen{padding:8px 10px}}
+.sheetgrip{display:none}
+@media (max-width:920px){
+  .sheetgrip{display:flex;flex-direction:column;align-items:center;gap:2px;position:absolute;left:0;right:0;top:0;height:38px;padding-top:7px;z-index:5;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+  .sheetgrip i{display:block;width:64px;height:6px;border-radius:3px;background:#b3bdb0}
+  .sheetgrip span{font-size:11px;color:var(--muted);line-height:1}
+  .sheetgrip.drag i{background:var(--leaf)}
+  .panel::before{display:none}
+  .panel{padding-top:38px}
+  .noview+.panel .sheetgrip,.view.home3d+.panel .sheetgrip{display:none}
+  body.vhset:not(.show3d):not(.ar) .view:not(.noview):not(.home3d){height:var(--vh)!important;min-height:0!important}
+}
+header #gOpen,header #aiOpen,header #smTog,header #devpill{display:none!important}
+.mbtn{margin-left:auto;position:relative}.steps~.mbtn{margin-left:8px}
+@media (max-width:920px){.mbtn{margin-left:auto!important}}
+.mdot{position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--warn)}.mdot.on{background:var(--good)}
+.mmenu{position:fixed;right:10px;top:calc(var(--hdrH,64px) - 4px);z-index:95;width:min(320px,calc(100vw - 20px));background:#fff;border-radius:18px;box-shadow:0 16px 40px rgba(10,30,20,.22);padding:6px;display:flex;flex-direction:column}
+.mmenu[hidden]{display:none}
+.mmenu button{display:flex;gap:12px;align-items:center;border:0;background:none;border-radius:12px;padding:10px 10px;text-align:left;font:inherit;color:var(--ink);min-height:56px}
+.mmenu button:active,.mmenu button:hover{background:var(--paper)}
+.mmenu button .ic{width:22px;height:22px;color:var(--leaf);flex:none}
+.mmenu b{display:block;font:600 15px 'Prompt',sans-serif}.mmenu small{display:block;font-size:12px;color:var(--muted)}
+/* simple mode: one icon set */
+.smico{display:grid;place-items:center}.smico .ic{width:56px;height:56px;stroke-width:1.6}
+.smcard.ok .smico{color:var(--good)}.smcard.go .smico,.smcard.run .smico{color:var(--water)}.smcard.bad .smico{color:var(--bad)}.smcard.wait .smico{color:#5b7a99}
+.smbtn{display:flex;align-items:center;justify-content:center;gap:10px}.smbtn .ic{width:26px;height:26px;stroke-width:2.2}
+.smread{display:inline-flex;align-items:center;gap:6px}.smread .ic{width:18px;height:18px}
+.smi{width:44px;height:44px;border-radius:14px;background:var(--leaf-2);color:var(--leaf);display:grid;place-items:center;flex:none}.smi .ic{width:22px;height:22px}
+.smtodo.bk .smi{background:#fdf1dc;color:var(--warn)}
+.smmini>span .ic{width:26px;height:26px;color:var(--leaf)}.smmini>span .ic.w{color:var(--water)}.smmini>span .ic.s{color:#e0a01e}
+.smhr{display:block;font:700 34px 'Prompt',sans-serif;color:var(--water);line-height:1.15;margin-top:2px}
+.smhrs{display:block;font-size:15px;color:var(--ink2)}
+.smnext{display:block;margin-top:8px;font-size:15px;color:var(--ink2)}
+/* 3D full screen: 4 main buttons + more */
+.s3bar button .ic{width:22px;height:22px}.s3bar .s3x{display:none}.s3bar.open .s3x{display:flex}
+.s3chips .ic{width:15px;height:15px;vertical-align:-3px;margin-right:2px}
+/* design panel: short recommendation, tap for details */
+.dsrec .dsr2{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.dsrec .dsr3{display:none}.dsrec.more .dsr2{display:block}.dsrec.more .dsr3{display:block}
+.dsrec .dsrm{border:0;background:none;color:var(--leaf);font:600 12px 'Prompt',sans-serif;padding:2px 0 0}
+.hrow button .ic{color:var(--leaf)}
+.sutmore summary{cursor:pointer;color:var(--leaf);font-weight:600;font-size:13px;margin-top:8px}
+.smuse{display:block;margin-top:8px;font-size:14px;color:var(--muted)}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <style>/* required styles */
 
 .leaflet-pane,
@@ -1531,6 +1588,14 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></symbol>
   <symbol id="i-sunpath" viewBox="0 0 24 24"><path d="M3 18h18"/><path d="M5 18a7 7 0 0 1 14 0" stroke-dasharray="2 2.2"/><circle cx="15.5" cy="11.5" r="2.2"/></symbol>
   <symbol id="i-text" viewBox="0 0 24 24"><path d="M4 19 9 5l5 14M5.8 14h6.4M15 19l3-8 3 8M15.9 16.5h4.2"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16.5 9"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.5 21.5 20h-19z"/><path d="M12 10v4.5M12 17.5h.01"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2.5"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4.5 5.5h15v10h-8l-4.5 4v-4h-2.5z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M5 4.5h10.5a3 3 0 0 1 3 3v12H8a3 3 0 0 1-3-3z"/><path d="M5 16.5a3 3 0 0 1 3-3h10.5"/></symbol>
+  <symbol id="i-save" viewBox="0 0 24 24"><path d="M5 4.5h11l3 3v12H5z"/><path d="M8 4.5v5h7v-5M8 19.5v-5h8v5"/></symbol>
+  <symbol id="i-plug" viewBox="0 0 24 24"><path d="M9 3.5v5M15 3.5v5M6.5 8.5h11v3a5.5 5.5 0 0 1-11 0zM12 17v3.5"/></symbol>
   <symbol id="i-list" viewBox="0 0 24 24"><path d="M8.5 6.5h12M8.5 12h12M8.5 17.5h12M4 6.5h.01M4 12h.01M4 17.5h.01"/></symbol>
 </svg>
 <div id="splash"><div class="spl">
@@ -1553,6 +1618,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <button class="gbtn aibtn" id="aiOpen" title="ถามผู้เชี่ยวชาญ AI">🤖<span>ถาม AI</span></button>
   <button class="gbtn smtog" id="smTog" style="display:none" title="กลับโหมดง่าย">🏠<span>โหมดง่าย</span></button>
   <button class="devpill" id="devpill" title="ยังไม่ได้เชื่อมต่อตัวควบคุมจริง"><i></i>จำลอง</button>
+  <button class="gbtn mbtn" id="mOpen" aria-haspopup="true" aria-expanded="false"><svg class="ic"><use href="#i-list"/></svg><span>เมนู</span><i class="mdot" id="mDot"></i></button>
+  <div class="mmenu" id="mMenu" hidden><button data-m="set"><svg class="ic"><use href="#i-gear"/></svg><span><b>ตั้งค่า</b><small>แปลง ดิน ปั๊ม การแจ้งเตือน สำรองข้อมูล</small></span></button><button data-m="ai"><svg class="ic"><use href="#i-chat"/></svg><span><b>ถามหมอมัน AI</b><small>น้ำ ปุ๋ย โรค แมลง</small></span></button><button data-m="mode"><svg class="ic"><use href="#i-layers"/></svg><span><b id="mModeT">โหมดละเอียด</b><small id="mModeS">ไร่ 3D · ออกแบบ · กราฟ</small></span></button><button data-m="dev"><svg class="ic"><use href="#i-plug"/></svg><span><b>ตัวควบคุมหน้างาน</b><small id="mDevS">จำลอง — ยังไม่ได้ต่อตู้จริง</small></span></button></div>
 </header>
 
 
@@ -1648,14 +1715,14 @@ svg.leaflet-image-layer.leaflet-interactive path {
     </div>
   </section>
 
-  <aside class="panel">
+  <aside class="panel"><div class="sheetgrip" id="sheetGrip" title="ลากลงเพื่อดูภาพไร่ให้ใหญ่ขึ้น · แตะเพื่อสลับ"><i></i><span id="sheetHint">ลากลง ดูภาพใหญ่</span></div>
     <!-- HOME -->
     <div class="pane" id="pane0">
       <div class="greet">
         <div><div class="gdate" id="hDate">—</div><h1 id="hTitle">สวัสดีครับ 👋</h1></div>
         <div class="wxmini" id="hWx"></div>
       </div>
-      <div class="hrow"><button id="hBig"><svg class="ic sm"><use href="#i-text"/></svg>ตัวอักษรใหญ่</button><button id="hSpeak"><svg class="ic sm"><use href="#i-vol"/></svg>อ่านให้ฟัง</button><button id="hFM">🏭 ศูนย์บริหารไร่</button><button id="h3D">🧊 ไร่ 3D เต็มจอ</button></div>
+      <div class="hrow"><button id="hBig"><svg class="ic sm"><use href="#i-text"/></svg>ตัวอักษรใหญ่</button><button id="hSpeak"><svg class="ic sm"><use href="#i-vol"/></svg>อ่านให้ฟัง</button><button id="hFM"><svg class="ic sm"><use href="#i-chart"/></svg>ศูนย์บริหารไร่</button><button id="h3D"><svg class="ic sm"><use href="#i-cube"/></svg>ไร่ 3D เต็มจอ</button></div>
       <div id="hNew">
         <div class="card banner">
           <div><b>เริ่มต้นใช้งานใน 3 ขั้นตอน</b><span>วัดแปลง → ดูไร่ 3D พร้อมระบบน้ำหยด → ให้น้ำอัตโนมัติ</span></div>
@@ -1677,12 +1744,13 @@ svg.leaflet-image-layer.leaflet-interactive path {
               <div class="ringtxt"><div class="big mono" id="hSw">—</div><div class="small">ความชื้นดิน</div></div></div>
             <div class="statmain"><div class="statk" id="hFieldName">—</div><div class="verdict" id="hVerdict">—</div><div class="small" id="hNext">—</div></div>
           </div>
+          <div class="hneed" id="hNeed"></div>
           <div class="hprog" id="hProg" style="display:none"><i id="hProgBar"></i></div>
           <button class="btn primary xl big" id="hPlant" style="display:none"><svg class="ic"><use href="#i-sprout"/></svg><span class="bt"><b>บันทึกวันปลูก</b><small>เมื่อปลูกเสร็จ กดเพื่อเริ่มนับอายุและให้น้ำอัตโนมัติ</small></span></button>
           <button class="btn water xl big" id="hWater"><svg class="ic"><use href="#i-drop"/></svg><span class="bt"><b id="hWaterT">เปิดน้ำตอนนี้</b><small id="hWaterS"></small></span></button>
         </div>
         <details class="card bal" id="hBal"><summary class="minih"><span class="ti t-bl sm"><svg class="ic"><use href="#i-rain"/></svg></span><span>น้ำวันนี้ · ฝนพอไหม<br><span id="hBalSum">—</span></span></summary><div class="small" style="margin:6px 0 2px" id="hBalSrc"></div><div id="hBalBody"></div></details>
-        <div class="card htodo" id="hTodo"><span style="font-size:26px">📒</span><div class="hb"><b>สมุดไร่</b><span id="hTodoT">—</span></div><span class="link">เปิด ›</span></div>
+        <div class="card htodo" id="hTodo"><span class="smi"><svg class="ic"><use href="#i-book"/></svg></span><div class="hb"><b>สมุดไร่</b><span id="hTodoT">—</span></div><span class="link">เปิด ›</span></div>
         <div class="card suncard"><div class="minih"><span class="ti t-or sm"><svg class="ic"><use href="#i-sun"/></svg></span>ดวงอาทิตย์วันนี้ <span class="small" style="margin-left:auto;font-weight:400">ตามตำแหน่งจริงของแปลง</span></div><div id="hSun"></div></div>
         <div class="grid2">
           <div class="card mini" data-go="grow"><div class="minih"><span class="ti t-gr sm"><svg class="ic"><use href="#i-sprout"/></svg></span>การเติบโต</div>
@@ -1949,6 +2017,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div class="stats" style="margin-top:10px" id="needStats"></div>
         <div class="formula" id="formula"></div>
       </details>
+      <div class="card" id="sutCard"></div>
 
       <details class="card more">
         <summary>บันทึกการทำงาน</summary>
@@ -2038,26 +2107,26 @@ svg.leaflet-image-layer.leaflet-interactive path {
 <div id="intro"><div class="introbox"><button class="skip" id="iSkip">ข้าม</button><div id="introBody"></div><div id="introBtns"></div></div></div>
 <div id="simple" style="display:none">
   <div class="smp">
-    <div class="smhd"><div><div class="smdate" id="smDate">—</div><div class="smfield" id="smField">—</div></div><button class="smread" id="smRead" aria-label="อ่านให้ฟัง">🔊 อ่าน</button></div>
+    <div class="smhd"><div><div class="smdate" id="smDate">—</div><div class="smfield" id="smField">—</div></div><button class="smread" id="smRead" aria-label="อ่านให้ฟัง"><svg class="ic"><use href="#i-vol"/></svg>อ่าน</button></div>
     <div class="smcard" id="smCard">
-      <div class="smico" id="smIco">💧</div>
+      <div class="smico" id="smIco"></div>
       <div class="smq">วันนี้ต้องให้น้ำไหม?</div>
       <div class="smans" id="smAns">—</div>
       <div class="smhow" id="smHow">—</div>
       <div class="smbar" id="smBar" style="display:none"><i id="smBarI"></i></div>
     </div>
-    <button class="smbtn" id="smBtn">💧 เปิดน้ำตอนนี้</button>
+    <button class="smbtn" id="smBtn">เปิดน้ำตอนนี้</button>
     <div class="smauto" id="smAuto"></div>
-    <button class="sm3d" id="sm3D" aria-label="ดูไร่ 3D เต็มจอ"><svg viewBox="0 0 360 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><circle cx="300" cy="36" r="16" fill="#ffd66b" opacity=".9"/><g transform="translate(180 112) scale(1 .42) rotate(-28)"><rect x="-150" y="-150" width="300" height="300" rx="10" fill="#b58a5e"/><rect x="-140" y="-140" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="-112" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="-84" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="-56" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="-28" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="0" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="28" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="56" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="84" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="112" width="280" height="14" rx="7" fill="#a77a4f"/><circle cx="-128" cy="-133" r="7" fill="#3f8f3a"/><circle cx="-102" cy="-133" r="8" fill="#4f9e45"/><circle cx="-76" cy="-133" r="9" fill="#2f7a35"/><circle cx="-50" cy="-133" r="7" fill="#3f8f3a"/><circle cx="-24" cy="-133" r="8" fill="#4f9e45"/><circle cx="2" cy="-133" r="9" fill="#2f7a35"/><circle cx="28" cy="-133" r="7" fill="#3f8f3a"/><circle cx="54" cy="-133" r="8" fill="#4f9e45"/><circle cx="80" cy="-133" r="9" fill="#2f7a35"/><circle cx="106" cy="-133" r="7" fill="#3f8f3a"/><circle cx="132" cy="-133" r="8" fill="#4f9e45"/><circle cx="-128" cy="-105" r="8" fill="#3f8f3a"/><circle cx="-102" cy="-105" r="9" fill="#4f9e45"/><circle cx="-76" cy="-105" r="7" fill="#2f7a35"/><circle cx="-50" cy="-105" r="8" fill="#3f8f3a"/><circle cx="-24" cy="-105" r="9" fill="#4f9e45"/><circle cx="2" cy="-105" r="7" fill="#2f7a35"/><circle cx="28" cy="-105" r="8" fill="#3f8f3a"/><circle cx="54" cy="-105" r="9" fill="#4f9e45"/><circle cx="80" cy="-105" r="7" fill="#2f7a35"/><circle cx="106" cy="-105" r="8" fill="#3f8f3a"/><circle cx="132" cy="-105" r="9" fill="#4f9e45"/><circle cx="-128" cy="-77" r="9" fill="#3f8f3a"/><circle cx="-102" cy="-77" r="7" fill="#4f9e45"/><circle cx="-76" cy="-77" r="8" fill="#2f7a35"/><circle cx="-50" cy="-77" r="9" fill="#3f8f3a"/><circle cx="-24" cy="-77" r="7" fill="#4f9e45"/><circle cx="2" cy="-77" r="8" fill="#2f7a35"/><circle cx="28" cy="-77" r="9" fill="#3f8f3a"/><circle cx="54" cy="-77" r="7" fill="#4f9e45"/><circle cx="80" cy="-77" r="8" fill="#2f7a35"/><circle cx="106" cy="-77" r="9" fill="#3f8f3a"/><circle cx="132" cy="-77" r="7" fill="#4f9e45"/><circle cx="-128" cy="-49" r="7" fill="#3f8f3a"/><circle cx="-102" cy="-49" r="8" fill="#4f9e45"/><circle cx="-76" cy="-49" r="9" fill="#2f7a35"/><circle cx="-50" cy="-49" r="7" fill="#3f8f3a"/><circle cx="-24" cy="-49" r="8" fill="#4f9e45"/><circle cx="2" cy="-49" r="9" fill="#2f7a35"/><circle cx="28" cy="-49" r="7" fill="#3f8f3a"/><circle cx="54" cy="-49" r="8" fill="#4f9e45"/><circle cx="80" cy="-49" r="9" fill="#2f7a35"/><circle cx="106" cy="-49" r="7" fill="#3f8f3a"/><circle cx="132" cy="-49" r="8" fill="#4f9e45"/><circle cx="-128" cy="-21" r="8" fill="#3f8f3a"/><circle cx="-102" cy="-21" r="9" fill="#4f9e45"/><circle cx="-76" cy="-21" r="7" fill="#2f7a35"/><circle cx="-50" cy="-21" r="8" fill="#3f8f3a"/><circle cx="-24" cy="-21" r="9" fill="#4f9e45"/><circle cx="2" cy="-21" r="7" fill="#2f7a35"/><circle cx="28" cy="-21" r="8" fill="#3f8f3a"/><circle cx="54" cy="-21" r="9" fill="#4f9e45"/><circle cx="80" cy="-21" r="7" fill="#2f7a35"/><circle cx="106" cy="-21" r="8" fill="#3f8f3a"/><circle cx="132" cy="-21" r="9" fill="#4f9e45"/><circle cx="-128" cy="7" r="9" fill="#3f8f3a"/><circle cx="-102" cy="7" r="7" fill="#4f9e45"/><circle cx="-76" cy="7" r="8" fill="#2f7a35"/><circle cx="-50" cy="7" r="9" fill="#3f8f3a"/><circle cx="-24" cy="7" r="7" fill="#4f9e45"/><circle cx="2" cy="7" r="8" fill="#2f7a35"/><circle cx="28" cy="7" r="9" fill="#3f8f3a"/><circle cx="54" cy="7" r="7" fill="#4f9e45"/><circle cx="80" cy="7" r="8" fill="#2f7a35"/><circle cx="106" cy="7" r="9" fill="#3f8f3a"/><circle cx="132" cy="7" r="7" fill="#4f9e45"/><circle cx="-128" cy="35" r="7" fill="#3f8f3a"/><circle cx="-102" cy="35" r="8" fill="#4f9e45"/><circle cx="-76" cy="35" r="9" fill="#2f7a35"/><circle cx="-50" cy="35" r="7" fill="#3f8f3a"/><circle cx="-24" cy="35" r="8" fill="#4f9e45"/><circle cx="2" cy="35" r="9" fill="#2f7a35"/><circle cx="28" cy="35" r="7" fill="#3f8f3a"/><circle cx="54" cy="35" r="8" fill="#4f9e45"/><circle cx="80" cy="35" r="9" fill="#2f7a35"/><circle cx="106" cy="35" r="7" fill="#3f8f3a"/><circle cx="132" cy="35" r="8" fill="#4f9e45"/><circle cx="-128" cy="63" r="8" fill="#3f8f3a"/><circle cx="-102" cy="63" r="9" fill="#4f9e45"/><circle cx="-76" cy="63" r="7" fill="#2f7a35"/><circle cx="-50" cy="63" r="8" fill="#3f8f3a"/><circle cx="-24" cy="63" r="9" fill="#4f9e45"/><circle cx="2" cy="63" r="7" fill="#2f7a35"/><circle cx="28" cy="63" r="8" fill="#3f8f3a"/><circle cx="54" cy="63" r="9" fill="#4f9e45"/><circle cx="80" cy="63" r="7" fill="#2f7a35"/><circle cx="106" cy="63" r="8" fill="#3f8f3a"/><circle cx="132" cy="63" r="9" fill="#4f9e45"/><circle cx="-128" cy="91" r="9" fill="#3f8f3a"/><circle cx="-102" cy="91" r="7" fill="#4f9e45"/><circle cx="-76" cy="91" r="8" fill="#2f7a35"/><circle cx="-50" cy="91" r="9" fill="#3f8f3a"/><circle cx="-24" cy="91" r="7" fill="#4f9e45"/><circle cx="2" cy="91" r="8" fill="#2f7a35"/><circle cx="28" cy="91" r="9" fill="#3f8f3a"/><circle cx="54" cy="91" r="7" fill="#4f9e45"/><circle cx="80" cy="91" r="8" fill="#2f7a35"/><circle cx="106" cy="91" r="9" fill="#3f8f3a"/><circle cx="132" cy="91" r="7" fill="#4f9e45"/><circle cx="-128" cy="119" r="7" fill="#3f8f3a"/><circle cx="-102" cy="119" r="8" fill="#4f9e45"/><circle cx="-76" cy="119" r="9" fill="#2f7a35"/><circle cx="-50" cy="119" r="7" fill="#3f8f3a"/><circle cx="-24" cy="119" r="8" fill="#4f9e45"/><circle cx="2" cy="119" r="9" fill="#2f7a35"/><circle cx="28" cy="119" r="7" fill="#3f8f3a"/><circle cx="54" cy="119" r="8" fill="#4f9e45"/><circle cx="80" cy="119" r="9" fill="#2f7a35"/><circle cx="106" cy="119" r="7" fill="#3f8f3a"/><circle cx="132" cy="119" r="8" fill="#4f9e45"/><rect x="-150" y="-150" width="300" height="300" rx="10" fill="none" stroke="#2f6b3a" stroke-width="5"/></g></svg><span class="go">⛶ เต็มจอ</span><span class="t"><b>🧊 ดูไร่ 3D</b><small id="sm3DS">บินชมรอบไร่ ดูต้นมันโต ดูน้ำหยดแต่ละโซน</small></span></button>
+    <button class="sm3d" id="sm3D" aria-label="ดูไร่ 3D เต็มจอ"><svg viewBox="0 0 360 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><circle cx="300" cy="36" r="16" fill="#ffd66b" opacity=".9"/><g transform="translate(180 112) scale(1 .42) rotate(-28)"><rect x="-150" y="-150" width="300" height="300" rx="10" fill="#b58a5e"/><rect x="-140" y="-140" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="-112" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="-84" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="-56" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="-28" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="0" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="28" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="56" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="84" width="280" height="14" rx="7" fill="#a77a4f"/><rect x="-140" y="112" width="280" height="14" rx="7" fill="#a77a4f"/><circle cx="-128" cy="-133" r="7" fill="#3f8f3a"/><circle cx="-102" cy="-133" r="8" fill="#4f9e45"/><circle cx="-76" cy="-133" r="9" fill="#2f7a35"/><circle cx="-50" cy="-133" r="7" fill="#3f8f3a"/><circle cx="-24" cy="-133" r="8" fill="#4f9e45"/><circle cx="2" cy="-133" r="9" fill="#2f7a35"/><circle cx="28" cy="-133" r="7" fill="#3f8f3a"/><circle cx="54" cy="-133" r="8" fill="#4f9e45"/><circle cx="80" cy="-133" r="9" fill="#2f7a35"/><circle cx="106" cy="-133" r="7" fill="#3f8f3a"/><circle cx="132" cy="-133" r="8" fill="#4f9e45"/><circle cx="-128" cy="-105" r="8" fill="#3f8f3a"/><circle cx="-102" cy="-105" r="9" fill="#4f9e45"/><circle cx="-76" cy="-105" r="7" fill="#2f7a35"/><circle cx="-50" cy="-105" r="8" fill="#3f8f3a"/><circle cx="-24" cy="-105" r="9" fill="#4f9e45"/><circle cx="2" cy="-105" r="7" fill="#2f7a35"/><circle cx="28" cy="-105" r="8" fill="#3f8f3a"/><circle cx="54" cy="-105" r="9" fill="#4f9e45"/><circle cx="80" cy="-105" r="7" fill="#2f7a35"/><circle cx="106" cy="-105" r="8" fill="#3f8f3a"/><circle cx="132" cy="-105" r="9" fill="#4f9e45"/><circle cx="-128" cy="-77" r="9" fill="#3f8f3a"/><circle cx="-102" cy="-77" r="7" fill="#4f9e45"/><circle cx="-76" cy="-77" r="8" fill="#2f7a35"/><circle cx="-50" cy="-77" r="9" fill="#3f8f3a"/><circle cx="-24" cy="-77" r="7" fill="#4f9e45"/><circle cx="2" cy="-77" r="8" fill="#2f7a35"/><circle cx="28" cy="-77" r="9" fill="#3f8f3a"/><circle cx="54" cy="-77" r="7" fill="#4f9e45"/><circle cx="80" cy="-77" r="8" fill="#2f7a35"/><circle cx="106" cy="-77" r="9" fill="#3f8f3a"/><circle cx="132" cy="-77" r="7" fill="#4f9e45"/><circle cx="-128" cy="-49" r="7" fill="#3f8f3a"/><circle cx="-102" cy="-49" r="8" fill="#4f9e45"/><circle cx="-76" cy="-49" r="9" fill="#2f7a35"/><circle cx="-50" cy="-49" r="7" fill="#3f8f3a"/><circle cx="-24" cy="-49" r="8" fill="#4f9e45"/><circle cx="2" cy="-49" r="9" fill="#2f7a35"/><circle cx="28" cy="-49" r="7" fill="#3f8f3a"/><circle cx="54" cy="-49" r="8" fill="#4f9e45"/><circle cx="80" cy="-49" r="9" fill="#2f7a35"/><circle cx="106" cy="-49" r="7" fill="#3f8f3a"/><circle cx="132" cy="-49" r="8" fill="#4f9e45"/><circle cx="-128" cy="-21" r="8" fill="#3f8f3a"/><circle cx="-102" cy="-21" r="9" fill="#4f9e45"/><circle cx="-76" cy="-21" r="7" fill="#2f7a35"/><circle cx="-50" cy="-21" r="8" fill="#3f8f3a"/><circle cx="-24" cy="-21" r="9" fill="#4f9e45"/><circle cx="2" cy="-21" r="7" fill="#2f7a35"/><circle cx="28" cy="-21" r="8" fill="#3f8f3a"/><circle cx="54" cy="-21" r="9" fill="#4f9e45"/><circle cx="80" cy="-21" r="7" fill="#2f7a35"/><circle cx="106" cy="-21" r="8" fill="#3f8f3a"/><circle cx="132" cy="-21" r="9" fill="#4f9e45"/><circle cx="-128" cy="7" r="9" fill="#3f8f3a"/><circle cx="-102" cy="7" r="7" fill="#4f9e45"/><circle cx="-76" cy="7" r="8" fill="#2f7a35"/><circle cx="-50" cy="7" r="9" fill="#3f8f3a"/><circle cx="-24" cy="7" r="7" fill="#4f9e45"/><circle cx="2" cy="7" r="8" fill="#2f7a35"/><circle cx="28" cy="7" r="9" fill="#3f8f3a"/><circle cx="54" cy="7" r="7" fill="#4f9e45"/><circle cx="80" cy="7" r="8" fill="#2f7a35"/><circle cx="106" cy="7" r="9" fill="#3f8f3a"/><circle cx="132" cy="7" r="7" fill="#4f9e45"/><circle cx="-128" cy="35" r="7" fill="#3f8f3a"/><circle cx="-102" cy="35" r="8" fill="#4f9e45"/><circle cx="-76" cy="35" r="9" fill="#2f7a35"/><circle cx="-50" cy="35" r="7" fill="#3f8f3a"/><circle cx="-24" cy="35" r="8" fill="#4f9e45"/><circle cx="2" cy="35" r="9" fill="#2f7a35"/><circle cx="28" cy="35" r="7" fill="#3f8f3a"/><circle cx="54" cy="35" r="8" fill="#4f9e45"/><circle cx="80" cy="35" r="9" fill="#2f7a35"/><circle cx="106" cy="35" r="7" fill="#3f8f3a"/><circle cx="132" cy="35" r="8" fill="#4f9e45"/><circle cx="-128" cy="63" r="8" fill="#3f8f3a"/><circle cx="-102" cy="63" r="9" fill="#4f9e45"/><circle cx="-76" cy="63" r="7" fill="#2f7a35"/><circle cx="-50" cy="63" r="8" fill="#3f8f3a"/><circle cx="-24" cy="63" r="9" fill="#4f9e45"/><circle cx="2" cy="63" r="7" fill="#2f7a35"/><circle cx="28" cy="63" r="8" fill="#3f8f3a"/><circle cx="54" cy="63" r="9" fill="#4f9e45"/><circle cx="80" cy="63" r="7" fill="#2f7a35"/><circle cx="106" cy="63" r="8" fill="#3f8f3a"/><circle cx="132" cy="63" r="9" fill="#4f9e45"/><circle cx="-128" cy="91" r="9" fill="#3f8f3a"/><circle cx="-102" cy="91" r="7" fill="#4f9e45"/><circle cx="-76" cy="91" r="8" fill="#2f7a35"/><circle cx="-50" cy="91" r="9" fill="#3f8f3a"/><circle cx="-24" cy="91" r="7" fill="#4f9e45"/><circle cx="2" cy="91" r="8" fill="#2f7a35"/><circle cx="28" cy="91" r="9" fill="#3f8f3a"/><circle cx="54" cy="91" r="7" fill="#4f9e45"/><circle cx="80" cy="91" r="8" fill="#2f7a35"/><circle cx="106" cy="91" r="9" fill="#3f8f3a"/><circle cx="132" cy="91" r="7" fill="#4f9e45"/><circle cx="-128" cy="119" r="7" fill="#3f8f3a"/><circle cx="-102" cy="119" r="8" fill="#4f9e45"/><circle cx="-76" cy="119" r="9" fill="#2f7a35"/><circle cx="-50" cy="119" r="7" fill="#3f8f3a"/><circle cx="-24" cy="119" r="8" fill="#4f9e45"/><circle cx="2" cy="119" r="9" fill="#2f7a35"/><circle cx="28" cy="119" r="7" fill="#3f8f3a"/><circle cx="54" cy="119" r="8" fill="#4f9e45"/><circle cx="80" cy="119" r="9" fill="#2f7a35"/><circle cx="106" cy="119" r="7" fill="#3f8f3a"/><circle cx="132" cy="119" r="8" fill="#4f9e45"/><rect x="-150" y="-150" width="300" height="300" rx="10" fill="none" stroke="#2f6b3a" stroke-width="5"/></g></svg><span class="go">⛶ เต็มจอ</span><span class="t"><b>ดูไร่ 3D</b><small id="sm3DS">บินชมรอบไร่ ดูต้นมันโต ดูน้ำหยดแต่ละโซน</small></span></button>
     <div class="smrow">
-      <div class="smmini"><span id="smWxI">☀️</span><b id="smWx">—</b><small id="smWxS">—</small></div>
-      <div class="smmini"><span>🌱</span><b id="smAge">—</b><small id="smAgeS">—</small></div>
+      <div class="smmini"><span id="smWxI"></span><b id="smWx">—</b><small id="smWxS">—</small></div>
+      <div class="smmini"><span><svg class="ic"><use href="#i-sprout"/></svg></span><b id="smAge">—</b><small id="smAgeS">—</small></div>
     </div>
-    <button class="smtodo ai" id="smAI"><span>🤖</span><span class="t"><b>ถามหมอมัน AI</b><small>ถามเรื่องน้ำ ปุ๋ย โรค แมลง หรือถ่ายรูปใบมันให้ดู</small></span><span>›</span></button>
-    <button class="smtodo fmc" id="smFM"><span>🏭</span><span class="t"><b>ศูนย์บริหารไร่</b><small>ผังระบบน้ำสด · ฤดูกาล · คาดผลผลิต · ราคาลานมัน · บัญชี</small></span><span>›</span></button>
-    <button class="smtodo pc" id="smPC"><span>📷</span><span class="t"><b>ตรวจต้นมันจากรูป</b><small>ดูโรค/เพลี้ยแป้ง และวัดความสูงต้นจากรูปถ่าย</small></span><span>›</span></button>
-    <button class="smtodo" id="smTodo"><span>📒</span><span class="t"><b id="smTodoT">—</b><small>แตะเพื่อบันทึก</small></span><span>›</span></button>
-    <button class="smtodo bk" id="smBk" style="display:none"><span>💾</span><span class="t"><b>สำรองข้อมูลส่งเข้า LINE</b><small id="smBkS">ไม่ได้สำรองนานแล้ว · กันข้อมูลหายเมื่อเปลี่ยนมือถือ</small></span><span>›</span></button>
+    <button class="smtodo ai" id="smAI"><span class="smi"><svg class="ic"><use href="#i-chat"/></svg></span><span class="t"><b>ถามหมอมัน AI</b><small>ถามเรื่องน้ำ ปุ๋ย โรค แมลง หรือถ่ายรูปใบมันให้ดู</small></span><span>›</span></button>
+    <button class="smtodo fmc" id="smFM"><span class="smi"><svg class="ic"><use href="#i-chart"/></svg></span><span class="t"><b>ศูนย์บริหารไร่</b><small>ผังระบบน้ำสด · ฤดูกาล · คาดผลผลิต · ราคาลานมัน · บัญชี</small></span><span>›</span></button>
+    <button class="smtodo pc" id="smPC"><span class="smi"><svg class="ic"><use href="#i-cam"/></svg></span><span class="t"><b>ตรวจต้นมันจากรูป</b><small>ดูโรค/เพลี้ยแป้ง และวัดความสูงต้นจากรูปถ่าย</small></span><span>›</span></button>
+    <button class="smtodo" id="smTodo"><span class="smi"><svg class="ic"><use href="#i-book"/></svg></span><span class="t"><b id="smTodoT">—</b><small>แตะเพื่อบันทึก</small></span><span>›</span></button>
+    <button class="smtodo bk" id="smBk" style="display:none"><span class="smi"><svg class="ic"><use href="#i-save"/></svg></span><span class="t"><b>สำรองข้อมูลส่งเข้า LINE</b><small id="smBkS">ไม่ได้สำรองนานแล้ว · กันข้อมูลหายเมื่อเปลี่ยนมือถือ</small></span><span>›</span></button>
     <button class="smfull" id="smFull">ดูไร่ 3D · ออกแบบ · กล้อง AR · กราฟ <b>เปิดโหมดละเอียด ›</b></button>
   </div>
 </div>
@@ -2079,15 +2148,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <div class="s3top"><button class="s3back" id="s3Back" aria-label="กลับ">‹</button><div class="s3ttl" id="s3Title">—</div></div>
   <div class="s3chips" id="s3Chips"></div>
   <div class="s3bar">
-    <button id="s3Orbit" class="on"><span>🎬</span><b>บินชมรอบไร่</b></button>
-    <button data-cam="hero"><span>🛰</span><b>มุมสูง</b></button>
-    <button data-cam="low"><span>🎥</span><b>มุมต่ำ</b></button>
-    <button data-cam="eye"><span>🚶</span><b>ยืนในไร่</b></button>
-    <button data-cam="top"><span>🗺</span><b>มองลงตรง</b></button>
-    <button id="s3Grow"><span>🌱</span><b>ดูการเติบโต</b></button>
-    <button id="s3Zone"><span>🎨</span><b>สีโซนน้ำ</b></button>
-    <button id="s3Sun"><span>☀️</span><b>ทางดวงอาทิตย์</b></button>
-    <button id="s3AR"><span>📷</span><b>กล้อง AR</b></button>
+    <button id="s3Orbit" class="on"><span><svg class="ic"><use href="#i-play"/></svg></span><b>บินชมรอบไร่</b></button><button data-cam="hero"><span><svg class="ic"><use href="#i-globe"/></svg></span><b>มุมสูง</b></button><button data-cam="eye"><span><svg class="ic"><use href="#i-walk"/></svg></span><b>ยืนในไร่</b></button><button id="s3Zone"><span><svg class="ic"><use href="#i-palette"/></svg></span><b>สีโซนน้ำ</b></button><button id="s3More"><span><svg class="ic"><use href="#i-list"/></svg></span><b>เพิ่มเติม</b></button><button data-cam="low" class="s3x"><span><svg class="ic"><use href="#i-eye"/></svg></span><b>มุมต่ำ</b></button><button data-cam="top" class="s3x"><span><svg class="ic"><use href="#i-top"/></svg></span><b>มองลงตรง</b></button><button id="s3Grow" class="s3x"><span><svg class="ic"><use href="#i-sprout"/></svg></span><b>ดูการเติบโต</b></button><button id="s3Sun" class="s3x"><span><svg class="ic"><use href="#i-sunpath"/></svg></span><b>ทางดวงอาทิตย์</b></button><button id="s3AR" class="s3x"><span><svg class="ic"><use href="#i-cam"/></svg></span><b>กล้อง AR</b></button>
   </div>
 </div>
 <div id="farm" class="fm" style="display:none">
@@ -3345,10 +3406,10 @@ function updateLighting(force) {
   R.sun.intensity = 3.9 * clamp((el + 2) / 12, 0, 1) * (1 - 0.8 * rk);
   // moonlight keeps the field readable at night
   R.moon.position.copy(tgt).add(V(-0.35, 1, 0.45).normalize().multiplyScalar(span * 2 + 100)); R.moon.target.position.copy(tgt);
-  R.moon.intensity = 1.5 * night * (1 - 0.4 * rk);
-  R.hemi.intensity = 0.5 * day + 1.05 * night; R.hemi.color.set('#b4c6ef').lerp(new THREE.Color('#e3edff'), day).lerp(new THREE.Color('#c9cfd6'), rk * 0.7);
+  R.moon.intensity = 2.3 * night * (1 - 0.4 * rk);
+  R.hemi.intensity = 0.5 * day + 1.5 * night; R.hemi.color.set('#b4c6ef').lerp(new THREE.Color('#e3edff'), day).lerp(new THREE.Color('#c9cfd6'), rk * 0.7);
   R.hemi.groundColor.set('#40444f').lerp(new THREE.Color('#5a4a32'), day);
-  R.renderer.toneMappingExposure = (0.56 + night * 0.3) * (1 - 0.12 * rk);
+  R.renderer.toneMappingExposure = (0.56 + night * 0.42) * (1 - 0.12 * rk);
   const su = R.sky.material.uniforms; su.turbidity.value = 7 + 13 * rk; su.rayleigh.value = 1.5 - 1.2 * rk; su.mieCoefficient.value = 0.004 + 0.02 * rk;
   const se = R.skyEnv.material.uniforms; se.turbidity.value = su.turbidity.value; se.rayleigh.value = su.rayleigh.value; se.mieCoefficient.value = su.mieCoefficient.value;
   const fog = new THREE.Color('#2b3a57').lerp(new THREE.Color('#e3b48c'), day).lerp(new THREE.Color('#c9d5de'), low).lerp(new THREE.Color(day > 0.5 ? '#9aa3aa' : '#323a48'), rk * 0.8);
@@ -3368,7 +3429,7 @@ function updateLighting(force) {
 function fitCamera(mode) {
   if (!R.ok || !L) return;
   const span = Math.max(L.W, L.H) + 10, t = V(L.W / 2, L.dz * R.vex / 2, -L.H / 2);
-  R.controls.maxPolarAngle = Math.PI * 0.495;
+  R.controls.maxPolarAngle = Math.PI * (mode === 'eye' ? 0.495 : 0.44);
   if (mode === 'eye') {
     const r = L.rows[Math.floor(L.rows.length / 2)], y = r.y + S.set.rowSp / 2, x0 = r.segs[0].x1 - 2.5;
     R.camera.position.set(x0, hz(x0, y) + 1.6, -y); R.controls.target.set(x0 + 20, hz(x0 + 20, y) + 0.9, -y);
@@ -3518,10 +3579,11 @@ function audioFrame(dt) {
   }
 }
 let lastFrame = performance.now(), uiAcc = 0;
+try { new IntersectionObserver(es => { R.viewVis = es[0].isIntersecting; }).observe(document.getElementById('view')); } catch (e) {}
 function frame(now) {
   const dt = Math.min(0.1, (now - lastFrame) / 1000); lastFrame = now;
   tick(dt);
-  if (R.ok && R.is3d && R.group) {
+  if (R.ok && R.is3d && R.group && !document.hidden && R.viewVis !== false && !document.body.classList.contains('simple')) {
     // drops
     const az = SIM.active ? SIM.active.z : -1;
     if (az >= 0 || R.dropsOn !== -1) {
@@ -3560,7 +3622,7 @@ function crop(t) {
   else if (dap <= 90) { stage = 'เจริญทางลำต้นและใบ'; kc = 0.35 + (dap - 30) / 60 * 0.45; }
   else if (dap <= 180) { stage = 'สร้างและขยายหัว'; kc = 0.8 + (dap - 90) / 90 * 0.25; }
   else if (dap <= H - 60) { stage = 'สะสมแป้ง'; kc = 1.05 - (dap - 180) / Math.max(1, H - 240) * 0.25; }
-  else if (real <= H) { stage = 'ก่อนเก็บเกี่ยว'; kc = 0.6; noIrr = real > H - 30; }
+  else if (real <= H) { stage = 'ก่อนเก็บเกี่ยว'; kc = Math.max(0.5, 0.8 - (dap - (H - 60)) / 60 * 0.3); noIrr = real > H - 30; }
   else { stage = 'เลยกำหนดเก็บเกี่ยว'; kc = 0.4; noIrr = true; }
   if (real >= 0 && real > H - 30) noIrr = true;
   const zr = 0.25 + Math.min(Math.max(dap, 0), 150) / 150 * 0.55;
@@ -3584,7 +3646,8 @@ function climDay(iso) {
     et0: CL.et0[m] * (rainy ? 0.72 : 1.04) * (0.92 + r() * 0.16), rh: CL.rh[m] + (rainy ? 10 : 0) + (r() - 0.5) * 6, wind: CL.wind[m] * (0.7 + r() * 0.6), src: 'clim' };
 }
 const wx = iso => { const b = W.days[iso] || climDay(iso), o = S.obs && S.obs[iso]; return o && o.rain != null ? { ...b, rain: o.rain, prob: o.rain > 0 ? 100 : 0, obs: true } : b; };
-const peff = rain => rain < 5 ? 0 : rain * 0.8;
+// effective rain: <2 mm wets leaves only; 90% of the rest up to 25 mm; heavy storms lose more to runoff (soil storage is capped separately)
+const peff = rain => rain < 2 ? 0 : rain <= 25 ? (rain - 1) * 0.9 : 21.6 + (rain - 25) * 0.6;
 /* ---- Google Weather (optional) ---- */
 function hargreaves(tmax, tmin, lat, iso) {
   const doy = Math.floor((parseIso(iso) - new Date(+iso.slice(0, 4), 0, 0)) / DAY), phi = lat * Math.PI / 180;
@@ -3639,11 +3702,20 @@ async function loadWeather(quiet) {
   if (W.src !== 'clim') { if (!quiet) toast(W.src === 'google' ? 'โหลดพยากรณ์จาก Google Weather แล้ว' : 'โหลดพยากรณ์อากาศจริงสำเร็จ'); if (L) initSim(); }
   W.loading = false; renderWeather();
 }
+// FAO-56 eq.62: adjust mid/late Kc for local wind and humidity (humid NE Thailand usually lowers Kc a little)
+function kcAdj(c, w) {
+  const k = c.kc; if (!(k > 0.45) || !w) return k;
+  const u2 = clamp((w.wind ?? 8) / 3.6 * 0.748 * 0.75, 1, 6), rhMin = clamp((w.rh ?? 70) - 18, 20, 80), h = clamp(c.height || 1, 0.1, 3);
+  return Math.max(0.3, k + clamp((0.04 * (u2 - 2) - 0.004 * (rhMin - 45)) * Math.pow(h / 3, 0.3), -0.1, 0.1));
+}
+// drip wets a strip under each row, so only that share of the root zone stores irrigation water (FAO-56 ch.8)
+const WETW = { sand: 0.6, lsand: 0.8, loam: 1.0, clay: 1.2 };
+function wetFrac() { const st = S.set; return clamp((WETW[st.soil] || 0.8) / Math.max(0.5, st.rowSp || 1), 0.4, 1); }
 function need(t) {
   const iso = isoOf(t), w = wx(iso), c = crop(t), st = S.set;
-  const etc = c.kc * c.kr * w.et0, taw = SOILS[st.soil].taw * c.zr;
+  const kc = kcAdj(c, w), etc = kc * c.kr * w.et0, pw = wetFrac(), tawFull = SOILS[st.soil].taw * c.zr, taw = tawFull * pw;
   const p = clamp(0.35 + 0.04 * (5 - etc), 0.2, 0.6), raw = p * taw;
-  return { iso, w, c, etc, taw, raw, p, pe: peff(w.rain) };
+  return { iso, w, c, kc, etc, taw, tawFull, pw, raw, p, pe: peff(w.rain) };
 }
 
 /* ================= irrigation simulator ================= */
@@ -3726,7 +3798,12 @@ function autoDecide(initial, noWait) {
     }
   }
   SIM.wait = null; SIM.decided = n.iso;
-  const rainTxt = B.fell > 0.1 ? `ฝนวันนี้ ${f(B.fell, 1)} มม. ใช้ได้จริง ${f(B.used, 1)} มม.${B.used === 0 ? ' (ฝนน้อยกว่า 5 มม. ระเหยหมด)' : ''} · ` : '';
+  if (n.c.dap >= 0 && n.c.dap <= 14) {
+    const hist = SIM.hist || []; let ago = 30; if (SIM.today.irr > 0.5) ago = 0; else for (let i = hist.length - 1, d = 1; i >= 0; i--, d++) if (hist[i].irr > 0.5 || hist[i].pe >= 5) { ago = d; break; }
+    if (ago >= 3 && B.fell < 5) { log(`🌱 ระยะตั้งตัว (${n.c.dap} วันหลังปลูก) — ให้น้ำน้อยแต่บ่อยตามคู่มือ มทส.: ครั้งละ 1 ชม. ทุก 3–4 วัน (ครั้งล่าสุด ${ago >= 30 ? 'นานแล้ว' : ago + ' วันก่อน'})`, 'irr'); return enqueue(L.zones.map(z => ({ z: z.id, min: 60 })), 'auto'); }
+    return log(`🌱 ระยะตั้งตัว — ได้น้ำ/ฝนเมื่อ ${ago} วันก่อน ยังไม่ครบ 3 วัน ไม่ต้องเปิดน้ำ`, 'skip');
+  }
+  const rainTxt = B.fell > 0.1 ? `ฝนวันนี้ ${f(B.fell, 1)} มม. ใช้ได้จริง ${f(B.used, 1)} มม.${B.used === 0 ? ' (ฝนน้อยกว่า 2 มม. ค้างบนใบ ระเหยหมด)' : ''} · ` : '';
   if (B.D <= 0.05) return log(`✅ ${rainTxt}ดินชุ่มเต็มที่แล้ว — วันนี้ไม่ต้องเปิดน้ำ`, 'skip');
   if (B.D < B.trig) return log(`✅ ${rainTxt}ดินขาดน้ำ ${f(B.D, 1)} มม. ยังไม่ถึงเกณฑ์ ${f(B.trig, 1)} มม. — ไม่ต้องเปิดน้ำ`, 'skip');
   let items = plan(B.D); const total = items.reduce((a, b) => a + b.min, 0), cap = 20 * 60;
@@ -3891,9 +3968,10 @@ function renderControl() {
     ['ดินขาดน้ำตอนนี้', f(net, 1) + '<small>มม.</small>'], ['เกณฑ์เริ่มให้น้ำ', f(trig, 1) + '<small>มม.</small>'],
     ['ควรให้น้ำ (รวมการสูญเสีย)', f(vol / 1000, 1) + '<small>ลบ.ม.</small>'], ['เวลาเปิดน้ำรวม', tot > 0.5 ? dur(tot) : '—'],
   ].map(([l, v]) => `<div><div class="l">${l}</div><div class="v mono">${v}</div></div>`).join('');
-  $('#formula').innerHTML = `<b>ETc</b> = Kc ${f(n.c.kc, 2)} × Kr ${f(n.c.kr, 2)} (การคลุมดินของน้ำหยด) × ET₀ ${f(n.w.et0, 2)} = <b>${f(n.etc, 2)} มม.</b><br>` +
-    `<b>น้ำที่ดินเก็บได้ (TAW)</b> = ${SOILS[st.soil].taw} มม./ม. × รากลึก ${f(n.c.zr, 2)} ม. = ${f(n.taw, 1)} มม. · พืชเริ่มเครียดเมื่อขาดเกิน ${f(n.p * 100)}% = ${f(n.raw, 1)} มม.<br>` +
+  $('#formula').innerHTML = `<b>ETc</b> = Kc ${f(n.kc, 2)}${Math.abs(n.kc - n.c.kc) > 0.005 ? ` (ตามอายุ ${f(n.c.kc, 2)} ปรับตามลม/ความชื้น)` : ''} × Kr ${f(n.c.kr, 2)} (การคลุมดินของน้ำหยด) × ET₀ ${f(n.w.et0, 2)} = <b>${f(n.etc, 2)} มม.</b><br>` +
+    `<b>น้ำที่ดินเก็บได้ (TAW)</b> = ${SOILS[st.soil].taw} มม./ม. × รากลึก ${f(n.c.zr, 2)} ม. × ส่วนดินที่น้ำหยดเปียก ${f(n.pw * 100)}% = ${f(n.taw, 1)} มม. · พืชเริ่มเครียดเมื่อขาดเกิน ${f(n.p * 100)}% = ${f(n.raw, 1)} มม.<br>` +
     `<b>ฝนที่เป็นประโยชน์วันนี้</b> ${f(peff(rainToday()), 1)} มม. (นับเมื่อฝนตกจริง) · <b>น้ำที่ต้องให้</b> = ${f(net, 1)} ÷ (ประสิทธิภาพ ${st.eff}% × ความสม่ำเสมอจากพื้นต่างระดับ ${f(L.unif * 100)}%) = ${f(gross, 1)} มม. × ${f(L.cropArea)} ม² = ${f(vol / 1000, 1)} ลบ.ม. · อัตราให้น้ำ ${f(L.appRate, 1)} มม./ชม. → <b>${f(gross / L.appRate * 60)} นาที/โซน</b>`;
+  try { const sc = $('#sutCard'), hh = sutHTML(n); sc.innerHTML = hh; sc.style.display = hh ? '' : 'none'; } catch (e) {}
   // auto panel
   $('#autoCard').style.display = S.mode === 'auto' ? '' : 'none';
   {
@@ -4292,7 +4370,7 @@ new ResizeObserver(() => { if (S.step === 1) drawGPS(); }).observe($('#view'));
 
 /* ================= HOME dashboard ================= */
 const TH_DL = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'], TH_ML = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
-function greetWord(h) { return h < 11 ? 'สวัสดีตอนเช้า ☀️' : h < 16 ? 'สวัสดีตอนบ่าย 🌤' : h < 19 ? 'สวัสดีตอนเย็น 🌇' : 'สวัสดีตอนค่ำ 🌙'; }
+function greetWord(h) { return h < 11 ? 'สวัสดีตอนเช้า' : h < 16 ? 'สวัสดีตอนบ่าย' : h < 19 ? 'สวัสดีตอนเย็น' : 'สวัสดีตอนค่ำ'; }
 function renderHome() {
   const d = new Date(SIM.t || Date.now());
   $('#hDate').textContent = `วัน${TH_DL[d.getDay()]}ที่ ${d.getDate()} ${TH_ML[d.getMonth()]} ${d.getFullYear() + 543} · ${hm(d)} น.`;
@@ -4301,6 +4379,7 @@ function renderHome() {
   $('#hWx').className = 'wxmini' + (wet ? ' rain' : '');
   $('#hWx').innerHTML = `<svg class="ic"><use href="#i-${wet ? 'rain' : 'sun'}"/></svg>${f(w.tmax)}°`;
   const has = S.closed && L && SIM.today;
+  if (has && !R._smBoot) { R._smBoot = 1; setTimeout(applySimple, 0); }
   $('#hNew').style.display = has ? 'none' : ''; $('#hField').style.display = has ? '' : 'none';
   $('#hSrcTxt').textContent = srcSummary();
   if (!has) return;
@@ -4317,7 +4396,7 @@ function renderHome() {
   else if (D > n.raw) v = '⚠️ มันเริ่มขาดน้ำ';
   else if (D >= trig) v = '💧 ถึงเวลาให้น้ำ';
   else v = '✅ ดินชื้นพอ ไม่ต้องให้น้ำ';
-  $('#hVerdict').textContent = v;
+  $('#hVerdict').textContent = v.replace(/^[^\u0E00-\u0E7F\w]+/u, '');
   $('#hField .stat').className = 'card stat ' + (SIM.active ? 'st-run' : D > n.raw ? 'st-bad' : D >= trig ? 'st-warn' : 'st-ok');
   if (!R._sunT || Date.now() - R._sunT > 20000 || R._sunS !== SIM.t >> 22) { R._sunT = Date.now(); R._sunS = SIM.t >> 22; $('#hSun').innerHTML = sunCardHTML(L.lat0, L.lon0); }
   const nx = new Date(SIM.t + minutesTo(st.startHour) * 60000);
@@ -4326,10 +4405,16 @@ function renderHome() {
     : c.notPlanted ? 'ให้น้ำเตรียมดินได้ · ระบบอัตโนมัติเริ่มหลังบันทึกวันปลูก' : S.mode === 'auto' ? `อัตโนมัติ · ตรวจรอบถัดไป ${dShort(nx)} ${pad(st.startHour)}:00 น.` : 'โหมดสั่งเอง · กดปุ่มด้านล่างเพื่อให้น้ำ';
   $('#hProg').style.display = running ? '' : 'none';
   if (running) { const all = [SIM.active, ...SIM.queue].filter(Boolean), tot = all.reduce((a, b) => a + b.tot, 0) + (SIM.doneMin || 0), rem = all.reduce((a, b) => a + b.rem, 0); $('#hProgBar').style.width = (tot ? (1 - rem / tot) * 100 : 0) + '%'; }
-  const hw = $('#hWater'); hw.classList.toggle('water', !running); hw.classList.toggle('danger', running);
+  const hw = $('#hWater'), quiet = !running && !c.notPlanted && D < trig; hw.classList.toggle('water', !running); hw.classList.toggle('danger', running); hw.classList.toggle('quiet', quiet);
+  { const ca = L.cropArea, rai = ca / 1600, use = n.etc * ca / 1000, def = Math.max(0, D), add = def / effF() * ca / 1000, el = $('#hNeed');
+    el.style.display = c.notPlanted || (c.noIrr && c.dap >= 0) ? 'none' : '';
+    const due = D >= trig, mins = recMinutes(), nz = L.zones.length, dl = daysToWater(n, D, trig), vol = due ? add : use;
+    el.innerHTML = `<div class="${due && !running ? 'go' : ''}"><small>เปิดน้ำโซนละ</small><b>${due ? hShort(mins) : 'ยังไม่ต้อง'}</b><span>${due ? nz + ' โซน · รวม ' + hShort(mins * nz) : 'ดินยังชื้นพอ'}</span></div>`
+      + `<div><small>รอบให้น้ำ</small><b>${due ? 'วันนี้' : dl ? 'อีก ~' + dl + ' วัน' : '—'}</b><span>${S.mode === 'auto' ? 'ระบบเปิดให้เอง' : 'กดเปิดเอง'}</span></div>`
+      + `<div><small>${due ? 'ใช้น้ำรอบนี้' : 'มันใช้น้ำวันนี้'}</small><b>${f(vol, 1)}<i>ลบ.ม.</i></b><span>${f(vol / Math.max(rai, 0.01), 1)} ลบ.ม./ไร่</span></div>`; }
   $('#hPlant').style.display = c.notPlanted && !running ? '' : 'none'; $('#hTodo').style.display = c.notPlanted && !running ? 'none' : '';
   { const td = diaryTodos(); $('#hTodoT').textContent = td.length ? td[0].t : 'บันทึกการดูแลแปลง ให้ระบบคำนวณแม่นยำขึ้น'; $('#hTodo').classList.toggle('hot', !!(td[0] && td[0].hot)); }
-  $('#hWaterT').textContent = running ? 'หยุดให้น้ำ' : c.notPlanted ? 'ให้น้ำเตรียมดิน' : 'เปิดน้ำตอนนี้'; $('#hWaterS').textContent = running ? 'แตะเพื่อปิดทุกโซน' : `โซนละ ${dur(recMinutes())} × ${L.zones.length} โซน`;
+  $('#hWaterT').textContent = running ? 'หยุดให้น้ำ' : c.notPlanted ? 'ให้น้ำเตรียมดิน' : quiet ? 'เปิดน้ำเอง (ยังไม่จำเป็น)' : 'เปิดน้ำตอนนี้'; $('#hWaterS').textContent = running ? 'แตะเพื่อปิดทุกโซน' : `โซนละ ${dur(recMinutes())} × ${L.zones.length} โซน`;
   // growth
   const H = st.harvest, g = growthAt(Math.max(0, c.dap));
   $('#hAge').textContent = c.notPlanted ? 'ยังไม่ปลูก' : c.dap < 0 ? 'ยังไม่ถึงวันปลูก' : `${c.dap} วัน`;
@@ -4362,14 +4447,14 @@ function renderBal() {
   else if (B.D <= 0.05) res = `<div class="bres ok">✅ ดินชุ่มเต็มที่ — วันนี้ไม่ต้องเปิดน้ำ</div>`;
   else if (B.D < B.trig) res = `<div class="bres ok">✅ ${B.used > 0 ? 'ฝนช่วยแล้ว ' : ''}ยังไม่ถึงเกณฑ์ — ไม่ต้องเปิดน้ำ (ขาด ${f(B.D, 1)} มม.)</div>`;
   else res = `<div class="bres go">💧 ต้องเติมอีก ${f(B.D, 1)} มม. ≈ ${f(vol, 1)} ลบ.ม. · โซนละ ${dur(recMinutes())}</div>`;
-  { const t = document.createElement('div'); t.innerHTML = res; $('#hBalSum').textContent = t.textContent.trim(); }
+  { const t = document.createElement('div'); t.innerHTML = res; $('#hBalSum').textContent = t.textContent.trim().replace(/^[^\u0E00-\u0E7F\w]+/u, ''); }
   el.innerHTML = `<div class="bline"><span>มันต้องการ (ขาดสะสม ${f(SIM.Dr, 1)} + ใช้วันนี้ ${f(n.etc, 1)})</span><b>${f(SIM.Dr + n.etc, 1)} มม.</b></div>
     <div class="bline"><span>ฝนตกแล้ววันนี้ → ใช้ได้จริง</span><b>${f(B.fell, 1)} → ${f(B.used, 1)} มม.</b></div>
     ${SIM.today.irr > 0.05 ? `<div class="bline"><span>ให้น้ำไปแล้ววันนี้</span><b>${f(SIM.today.irr, 1)} มม.</b></div>` : ''}
     <div class="bline"><span>${ol.now ? 'ฝนที่จะตกต่อ' : 'ฝนที่จะตก'}${ol.start !== null || ol.now ? (ol.now ? '' : ` (อีก ${minTxt(ol.startMin)})`) : ' (6 ชม.ข้างหน้า)'}</span><b>${ol.start !== null || ol.now ? '~' + f(ol.mm, 1) + ' มม.' : 'ไม่มี'}</b></div>
     <div class="bbar"><i style="width:${rainP * 100}%;background:#7aa6d2"></i><i style="width:${irrP * 100}%;background:var(--water)"></i><i style="width:${lackP * 100}%;background:#e6a23c"></i></div>
     <div class="bkey"><span><i style="background:#7aa6d2"></i>ฝน</span><span><i style="background:var(--water)"></i>น้ำหยด</span><span><i style="background:#e6a23c"></i>ยังขาด</span></div>${res}
-    <div class="small" style="margin-top:8px">ฝนน้อยกว่า 5 มม./วัน ระเหยก่อนถึงราก จึงไม่นับ · ฝนที่มากกว่านั้นนับ 80%</div>`;
+    <div class="small" style="margin-top:8px">ฝนน้อยกว่า 2 มม./วัน ค้างบนใบ ไม่นับ · ฝนถึง 25 มม. นับ 90% · ฝนหนักกว่านั้นส่วนเกินไหลบ่า นับ 60% · ส่วนที่เกินความจุดินซึมลึกเลยราก</div>`;
   $('#hBalSrc').textContent = W.m15 && Object.keys(W.m15).length ? 'พยากรณ์ทุก 15 นาที' : W.hours && Object.keys(W.hours).length ? 'พยากรณ์รายชั่วโมง' : 'ค่าเฉลี่ยตามฤดู';
 }
 function homeGo(k) {
@@ -5458,7 +5543,9 @@ function dzRender() {
     h += `<table class="dztbl"><tr><th>รายการ</th><th>จำนวน</th></tr>${items.map(([a, b, c, d2]) => `<tr><td><b>${a}</b><br><span class="small">${b}</span></td><td class="mono">${c}${d2 ? `<br><span class="small">${d2}</span>` : ''}</td></tr>`).join('')}</table>`
       + kvb([['พื้นที่', areaThai(L.area), 'wide'], ['จำนวนร่อง', f(L.rows.length) + '<small>ร่อง</small>'], ['หัวหยด', f(L.em) + '<small>หัว</small>'], ['ต้นมัน', f(L.plants) + '<small>ต้น</small>'], ['น้ำรวม', f(L.flowAll / 1000, 1) + '<small>ลบ.ม./ชม.</small>']])
       + `<div class="small" style="margin-top:10px">จำนวนเป็นค่าประมาณจากแบบในแอป ควรเผื่อเทปและท่อ 5–10% สำหรับรอยต่อและส่วนเกิน</div>`;
-  } else if (k === 'row') { showApply = false; h = ''; }
+  }
+  if (k === 'bom') { try { h = sutBomHTML(); } catch (e) {} }
+  if (k === 'row') { showApply = false; h = ''; }
   else if (k === 'lvl') { showApply = false; h = ''; }
   body.innerHTML = h;
   foot.innerHTML = showApply ? `<button class="btn" id="dzRecBtn">ใช้ค่าแนะนำ</button><button class="btn primary" id="dzApply">ใช้ค่านี้</button>` : `<button class="btn primary" data-close>เสร็จ</button>`;
@@ -5611,12 +5698,12 @@ const DSP = {
   pump: { t: 'ตำแหน่งปั๊ม', pick: true, hint: 'แตะ "ย้ายปั๊ม" แล้วแตะพื้นในภาพ 3D ตรงที่ตั้งปั๊มจริง' }
 };
 /* recommended values (sources in the note under each value) */
-const SRC = { nstda: 'สวทช. (คู่มือปลูกมันสำปะหลัง)', doae: 'กรมส่งเสริมการเกษตร', rmu: 'งานวิจัย มรภ. (ยกร่อง 25–30 ซม.)', ku: 'งานวิจัย ม.เกษตรฯ (เทปหัวหยด 30 ซม.)', rule: 'หลักทั่วไป (ยังไม่มีแหล่งอ้างอิง)' };
+const SRC = { sut: 'คู่มือระบบน้ำหยดสำหรับมันสำปะหลัง ม.เทคโนโลยีสุรนารี (2558)', nstda: 'สวทช. (คู่มือปลูกมันสำปะหลัง)', doae: 'กรมส่งเสริมการเกษตร', rmu: 'งานวิจัย มรภ. (ยกร่อง 25–30 ซม.)', ku: 'งานวิจัย ม.เกษตรฯ (เทปหัวหยด 30 ซม.)', rule: 'หลักทั่วไป (ยังไม่มีแหล่งอ้างอิง)' };
 function dsRec(k) {
   const st = S.set, soil = st.soil, rich = soil === 'loam' || soil === 'clay';
-  if (k === 'rowSp') { const r = recSpacing(st).row * 100; return { v: r, lo: 100, hi: 120, why: rich ? 'ดินร่วน/เหนียวอุดมสมบูรณ์ ปลูกห่าง (ดินดีปลูกห่าง ดินเลวปลูกถี่) เช่น 1.2 × 0.8 หรือ 1 × 1 ม.' : 'ดินทราย/ร่วนปนทราย ใช้ระยะแถวแคบลง ทรงพุ่มคลุมดินเร็ว', src: [SRC.nstda, SRC.doae], warn: 'ปลูกชิดเกินไป มันจะ "บ้าใบ" สูงเกิน 3 ม. แต่หัวเล็ก' }; }
-  if (k === 'plantSp') { const r = recSpacing(st).plant * 100; return { v: r, lo: 80, hi: 100, why: 'ระยะระหว่างต้น 80–100 ซม. ปักท่อนพันธุ์ตั้งตรงบนสันร่อง', src: [SRC.nstda] }; }
-  if (k === 'emSp') { const r = recEmit(st).em * 100; return { v: r, lo: 20, hi: 30, why: `ดิน${SOILS[soil].n} น้ำแผ่ด้านข้าง ~${f(wetW(soil, st.emQ) * 100)} ซม. ระยะหัวไม่ควรเกิน 80% ของวงเปียก แถบเปียกจะต่อกัน · เทปหัวหยด 30 ซม. ใช้กันทั่วไปและใช้ในงานวิจัยมันสำปะหลัง`, src: [SRC.ku, SRC.rule] }; }
+  if (k === 'rowSp') { const r = recSpacing(st).row * 100; return { v: r, lo: 100, hi: 150, why: (rich ? 'ดินร่วน/เหนียวอุดมสมบูรณ์ ปลูกห่าง (ดินดีปลูกห่าง ดินเลวปลูกถี่) เช่น 1.2 × 0.8 หรือ 1 × 1 ม.' : 'ดินทราย/ร่วนปนทราย ใช้ระยะแถวแคบลง ทรงพุ่มคลุมดินเร็ว') + ' · ระบบน้ำหยด: มทส. แนะนำปลูกห่างกว่าปกติ แถว 1.2–1.5 × ต้น 0.8–1.2 ม. เพราะได้น้ำแล้วทรงพุ่มใหญ่', src: [SRC.sut, SRC.nstda, SRC.doae], warn: 'ปลูกชิดเกินไป มันจะ "บ้าใบ" สูงเกิน 3 ม. แต่หัวเล็ก' }; }
+  if (k === 'plantSp') { const r = recSpacing(st).plant * 100; return { v: r, lo: 80, hi: 120, why: 'ระยะระหว่างต้น 80–120 ซม. (มทส.: ระบบน้ำหยด 0.8–1.2 ม.) ปักท่อนพันธุ์ตั้งตรงบนสันร่อง', src: [SRC.sut, SRC.nstda] }; }
+  if (k === 'emSp') { const r = recEmit(st).em * 100; return { v: r, lo: 20, hi: 30, why: `ดิน${SOILS[soil].n} น้ำแผ่ด้านข้าง ~${f(wetW(soil, st.emQ) * 100)} ซม. ระยะหัวไม่ควรเกิน 80% ของวงเปียก แถบเปียกจะต่อกัน · เทปหัวหยด 30 ซม. ใช้กันทั่วไปและใช้ในงานวิจัยมันสำปะหลัง · มทส.: ใช้ 30 ซม. ทุกชนิดดิน อัตราไหล 1.5–2.5 ลิตร/ชม. เทป 16 มม. หนา 8–12 มิล`, src: [SRC.sut, SRC.ku] }; }
   if (k === 'ridgeH') return { v: 25, lo: 25, hi: 30, why: 'ยกร่องสูง 25–30 ซม. ระบายน้ำดี หัวมันลงหัวง่าย ขุดง่าย', src: [SRC.rmu, SRC.ku] };
   if (k === 'ridgeW') { const r = Math.round(st.rowSp * 0.65 * 20) * 5; return { v: r, lo: Math.round(st.rowSp * 55), hi: Math.round(st.rowSp * 70), why: 'ฐานร่องราว 2/3 ของระยะร่อง เหลือร่องน้ำ/ทางเดินระหว่างร่อง (งานวิจัยใช้ร่องกว้าง 1 ม. ระยะร่อง 1.5 ม.)', src: [SRC.ku, SRC.rule] }; }
   if (k === 'inset') { const r = st.mech === 'tractor' ? 5 : st.mech === 'small' ? 3 : 1; return { v: r, lo: st.mech === 'tractor' ? 4 : 1, hi: st.mech === 'tractor' ? 6 : 3, why: st.mech === 'tractor' ? 'เผื่อที่ให้แทรกเตอร์เลี้ยวหัวแปลง' : st.mech === 'small' ? 'เผื่อที่ให้รถไถเดินตาม/รถเล็กกลับรถ' : 'เผื่อทางเดินรอบแปลง', src: [SRC.rule] }; }
@@ -5633,27 +5720,33 @@ function dspOpen() {
 /* fly the camera to where the chosen value can be seen, with its numbers */
 function dspFocus(k, dur = 1.4) {
   const c = DS.call, sp = DS.spots; if (!L) return; const st = S.set, rh = st.ridgeH ?? 0.16, H = (x, y) => hz(x, y);
-  if (!c || !sp || ['rowAng', 'subSide'].includes(k)) { fitCamera('overview'); return; }
+  if (!c || !sp || ['rowAng', 'subSide'].includes(k)) { dsHidePlants(false); fitCamera('overview'); return; }
   const dirX = sp.rgt ? 1 : -1;   // look from the sub-main end into the field
   let pos, tgt;
   if (k === 'rowSp') { const ym = c.y; tgt = V(sp.xs, H(sp.xs, ym) + rh, -ym); pos = V(sp.xs + dirX * 2.4, tgt.y + 1.5, -ym + 0.6); }
   else if (k === 'ridgeW' || k === 'ridgeH') { tgt = V(sp.xw, H(sp.xw, c.r1y) + rh * 0.6, -c.r1y); pos = V(sp.xw + dirX * 1.9, tgt.y + 0.55, -c.r1y + 0.25); }
   else if (k === 'plantSp') { tgt = V(sp.xp + st.plantSp / 2, H(sp.xp, sp.yp) + rh + 0.35, -sp.yp); pos = V(tgt.x + 0.2, tgt.y + 0.9, -sp.yp + 2.0); }
-  else if (k === 'emSp') { tgt = V(sp.xe + st.emSp * 1.5, H(sp.xe, sp.ye) + rh, -sp.ye); pos = V(tgt.x - dirX * 0.15, tgt.y + 0.75, -sp.ye + 0.75); }
+  else if (k === 'emSp') { tgt = V(sp.xe + st.emSp * 1.5, H(sp.xe, sp.ye) + rh, -sp.ye); pos = V(tgt.x - dirX * 0.3, tgt.y + 1.05, -sp.ye + 1.1); }
   else if (k === 'inset') { const ex = (sp.edgeX + sp.endX) / 2; tgt = V(ex, H(ex, sp.yp), -sp.yp); pos = V(ex + dirX * 4.5, tgt.y + 3.2, -sp.yp + 3.5); }
   else if (k === 'pump') { const [px, py] = L.pump; tgt = V(px, H(px, py) + 1, -py); pos = V(px + 14, tgt.y + 12, -py + 16); }
   else { fitCamera('overview'); return; }
+  dsHidePlants(['rowSp', 'ridgeW', 'ridgeH', 'emSp'].includes(k));
   R.follow = false; flyTo(pos, tgt, dur); dimEmph(k);
 }
-function dimEmph(k) { const key = k === 'ridgeW' || k === 'ridgeH' ? 'ridge' : k; if (!R.dimG) return; R.dimG.traverse(o => { if (o.isSprite && o.material) { const d = o.userData.dk, call = ['rowSp', 'ridge', 'plantSp', 'emSp', 'inset'].includes(d); const close = ['rowSp', 'ridge', 'plantSp', 'emSp', 'inset'].includes(key); o.visible = !close || call; o.material.opacity = !call || d === key ? 1 : 0.35; } }); }
-function dspClose() { clearDims(); if (R.measG) { disposeGroup(R.measG); R.measG = null; } DS.meas = []; document.body.classList.remove('designing'); setTimeout(resize3D, 60); $('#dsp').style.display = 'none'; DS.measOn = false; DS.pumpPick = false; $('#dspMeas').classList.remove('on'); }
+function dsHidePlants(on) {
+  if (!R.plantG) return;
+  if (on && R.plantG.visible && crop(SIM.t).height > 0.45) { R._dsHid = true; R.plantG.visible = false; if (!R._dsHidT) { R._dsHidT = 1; toast('ซ่อนต้นมันชั่วคราว ให้เห็นร่องและเทปน้ำหยดชัด ๆ'); } }
+  else if (!on && R._dsHid) { R._dsHid = false; R.plantG.visible = R.showPlants; }
+}
+function dimEmph(k) { const key = k === 'ridgeW' || k === 'ridgeH' ? 'ridge' : k; if (!R.dimG) return; R.dimG.traverse(o => { if (o.isSprite && o.material) { const d = o.userData.dk, call = ['rowSp', 'ridge', 'plantSp', 'emSp', 'inset'].includes(d); const close = ['rowSp', 'ridge', 'plantSp', 'emSp', 'inset'].includes(key); o.visible = close ? d === key : true; o.material.opacity = !call || d === key ? 1 : 0.35; } }); }
+function dspClose() { dsHidePlants(false); clearDims(); if (R.measG) { disposeGroup(R.measG); R.measG = null; } DS.meas = []; document.body.classList.remove('designing'); setTimeout(resize3D, 60); $('#dsp').style.display = 'none'; DS.measOn = false; DS.pumpPick = false; $('#dspMeas').classList.remove('on'); }
 function dspRecRender() {
   const k = DS.k, d = DSP[k], r = dsRec(k), el = $('#dspRec'); if (!el) return;
   if (!r) { el.innerHTML = ''; el.style.display = 'none'; return; } el.style.display = '';
   const cur = d.get(), num = typeof r.v === 'number', ok = num ? (r.lo != null ? cur >= r.lo - 1e-6 && cur <= r.hi + 1e-6 : Math.abs(((cur - r.v + 90) % 180 + 180) % 180 - 90) < 6) : cur === r.v;
   const vt = num ? `${f(r.v, d.step < 1 ? 1 : 0)} ${d.u}` : (d.opt.find(o => o[0] === r.v) || [0, r.v])[1], rng = num && r.lo != null && r.lo !== r.hi ? ` (ช่วงที่เหมาะ ${f(r.lo)}–${f(r.hi)} ${d.u})` : '';
   el.className = 'dsrec' + (ok ? ' ok' : '');
-  el.innerHTML = `<div class="dsr1"><span>${ok ? '✓ อยู่ในค่าที่แนะนำ' : '💡 แนะนำ'} <b>${vt}</b>${rng}</span>${ok && (!num || Math.abs(cur - r.v) < 1e-6) ? '' : `<button data-rec="${r.v}">ใช้ค่าแนะนำ</button>`}</div><div class="dsr2">${r.why}${r.warn ? ' · ⚠ ' + r.warn : ''}</div><div class="dsr3">ที่มา: ${r.src.join(' · ')}</div>`;
+  el.innerHTML = `<div class="dsr1"><span>${ok ? '✓ อยู่ในค่าที่แนะนำ' : 'แนะนำ'} <b>${vt}</b>${rng}</span>${ok && (!num || Math.abs(cur - r.v) < 1e-6) ? '' : `<button data-rec="${r.v}">ใช้ค่าแนะนำ</button>`}</div><div class="dsr2">${r.why}${r.warn ? ' · ⚠ ' + r.warn : ''}</div><div class="dsr3">ที่มา: ${r.src.join(' · ')}</div><button class="dsrm" type="button">อ่านเหตุผล ›</button>`;
   // dot on chips that are outside the recommendation
   $$('#dspK button').forEach(b => { const kk = b.dataset.k, rr = dsRec(kk), dd = DSP[kk]; if (!rr || !dd.get) { b.classList.remove('off'); return; } const c = dd.get(), n2 = typeof rr.v === 'number';
     const good = n2 ? (rr.lo != null ? c >= rr.lo - 1e-6 && c <= rr.hi + 1e-6 : Math.abs(((c - rr.v + 90) % 180 + 180) % 180 - 90) < 6) : c === rr.v; b.classList.toggle('off', !good); });
@@ -5767,6 +5860,10 @@ function applySimple() {
   const hh = document.querySelector('header'); if (hh) document.documentElement.style.setProperty('--hdrH', hh.offsetHeight + 'px');
   if (on) renderSimple(); else if (S.closed && R.ok) setTimeout(resize3D, 50);
 }
+function hShort(m) { m = Math.max(0, Math.round(m / 5) * 5); const h = Math.floor(m / 60), mm = m % 60; return h ? `${h} ชม.${mm ? ' ' + mm + ' น.' : ''}` : `${mm} นาที`; }
+function daysToWater(n, D, trig) { return n.etc > 0.3 ? Math.max(1, Math.round((trig - D) / n.etc)) : null; }
+function smNext(n, D, trig) { const d = daysToWater(n, D, trig); return `<span class="smnext">${d ? `ถึงรอบให้น้ำอีกประมาณ <b>${d} วัน</b>` : 'ยังไม่ถึงรอบให้น้ำ'}${S.mode === 'auto' ? ' · ระบบจะเปิดให้เอง' : ''}</span>`; }
+const smVol = D => `<br><span class="smvol">ใช้น้ำประมาณ ${f(Math.max(0, D) / effF() * L.cropArea / 1000, 1)} ลบ.ม.</span>`;
 function renderSimple() {
   if (!document.body.classList.contains('simple') || !L || !SIM.today) return;
   renderHome();
@@ -5780,15 +5877,15 @@ function renderSimple() {
   else if (SIM.wait && S.mode === 'auto') { ico = '🌧'; ans = 'รอฝนก่อน'; how = waitTxt(); cls = 'wait'; btn = '💧 ไม่รอ เปิดน้ำเลย'; }
   else if (c.notPlanted) { ico = '🟫'; ans = 'ยังไม่ได้ปลูกมัน'; how = 'ปลูกเสร็จแล้วกดปุ่มด้านล่าง ระบบจะเริ่มนับอายุและให้น้ำให้'; cls = 'ok'; btn = '🌱 ปลูกแล้ว — บันทึกวันปลูก'; btnCls = 'plant'; }
   else if (c.noIrr && c.dap >= 0) { ico = '🌾'; ans = 'ไม่ต้องให้น้ำ'; how = 'ช่วงก่อนเก็บเกี่ยว งดน้ำเพื่อให้หัวมันสะสมแป้ง'; cls = 'ok'; btn = '💧 เปิดน้ำเอง'; }
-  else if (D > n.raw) { ico = '⚠️'; ans = 'ต้องให้น้ำด่วน'; how = `มันเริ่มขาดน้ำ · เปิดโซนละ <b>${dur(mins)}</b> × ${nz} โซน<br>รวมประมาณ ${dur(tot)}${over}`; cls = 'bad'; btn = '💧 เปิดน้ำตอนนี้'; }
-  else if (D >= trig) { ico = '💧'; ans = 'วันนี้ต้องให้น้ำ'; how = `เปิดโซนละ <b>${dur(mins)}</b> × ${nz} โซน<br>รวมประมาณ ${dur(tot)}${over}`; cls = 'go'; btn = '💧 เปิดน้ำตอนนี้'; }
-  else { ico = '✅'; ans = 'วันนี้ไม่ต้องให้น้ำ'; how = rainToday() > 1 ? `ฝนตกแล้ว ${f(rainToday(), 0)} มม. ดินยังชื้นพอ` : 'ดินยังชื้นพอ'; cls = 'ok'; btn = '💧 เปิดน้ำเอง'; }
-  $('#smIco').textContent = ico; $('#smAns').textContent = ans; $('#smHow').innerHTML = how; $('#smCard').className = 'smcard ' + cls;
-  $('#smBtn').textContent = btn; $('#smBtn').className = 'smbtn ' + btnCls;
+  else if (D > n.raw) { ico = '⚠️'; ans = 'ต้องให้น้ำด่วน'; how = `มันเริ่มขาดน้ำ — เปิดน้ำ<span class="smhr">${hShort(mins)}</span><span class="smhrs">ต่อโซน × ${nz} โซน · รวม ${hShort(tot)}</span>${over}`; cls = 'bad'; btn = '💧 เปิดน้ำตอนนี้'; how += smVol(D); }
+  else if (D >= trig) { ico = '💧'; ans = 'วันนี้ต้องให้น้ำ'; how = `เปิดน้ำ<span class="smhr">${hShort(mins)}</span><span class="smhrs">ต่อโซน × ${nz} โซน · รวม ${hShort(tot)}</span>${over}`; cls = 'go'; btn = '💧 เปิดน้ำตอนนี้'; how += smVol(D); }
+  else { ico = '✅'; ans = 'วันนี้ไม่ต้องให้น้ำ'; how = rainToday() > 1 ? `ฝนตกแล้ว ${f(rainToday(), 0)} มม. ดินยังชื้นพอ` : 'ดินยังชื้นพอ'; cls = 'ok'; btn = '💧 เปิดน้ำเอง (ยังไม่จำเป็น)'; btnCls = 'quiet'; how += smNext(n, D, trig); }
+  $('#smIco').innerHTML = `<svg class="ic"><use href="#${({ '💧': 'i-drop', '🌧': 'i-rain', '🟫': 'i-sprout', '🌾': 'i-sprout', '⚠️': 'i-alert', '✅': 'i-check' })[ico] || 'i-drop'}"/></svg>`; $('#smAns').textContent = ans; $('#smHow').innerHTML = how; $('#smCard').className = 'smcard ' + cls;
+  { const bi = btn.startsWith('■') ? 'i-stop' : btn.startsWith('🌱') ? 'i-sprout' : 'i-drop'; $('#smBtn').innerHTML = `<svg class="ic"><use href="#${bi}"/></svg>${btn.replace(/^\S+\s/, '')}`; } $('#smBtn').className = 'smbtn ' + btnCls;
   $('#smBar').style.display = running ? '' : 'none';
   if (running) { const all = [SIM.active, ...SIM.queue].filter(Boolean), t0 = all.reduce((a, b) => a + b.tot, 0) + (SIM.doneMin || 0), rem = all.reduce((a, b) => a + b.rem, 0); $('#smBarI').style.width = (t0 ? (1 - rem / t0) * 100 : 0) + '%'; }
   $('#smAuto').textContent = c.notPlanted ? '' : S.mode === 'auto' ? `⟳ อัตโนมัติ: ระบบเปิด–ปิดน้ำเองทุกวัน ${pad(S.set.startHour)}:00 น.` : '✋ โหมดสั่งเอง: กดปุ่มเมื่อต้องการให้น้ำ';
-  const w = wx(isoOf(SIM.t)); $('#smWxI').textContent = w.rain >= 5 || (R.rain_ && R.rain_.on) ? '🌧' : w.prob >= 50 ? '⛅' : '☀️'; $('#smWx').textContent = `${f(w.tmax)}°`; $('#smWxS').textContent = `โอกาสฝน ${f(w.prob)}%`;
+  const w = wx(isoOf(SIM.t)); $('#smWxI').innerHTML = w.rain >= 5 || (R.rain_ && R.rain_.on) || w.prob >= 50 ? '<svg class="ic w"><use href="#i-rain"/></svg>' : '<svg class="ic s"><use href="#i-sun"/></svg>'; $('#smWx').textContent = `${f(w.tmax)}°`; $('#smWxS').textContent = `โอกาสฝน ${f(w.prob)}%`;
   $('#smAge').textContent = c.notPlanted ? '—' : c.dap < 0 ? 'ยังไม่ถึง' : `${c.dap} วัน`; $('#smAgeS').textContent = c.notPlanted ? 'ยังไม่ปลูก' : c.dap < 0 ? 'วันปลูก' : `${stageOf(c.dap).n} · อีก ${Math.max(0, S.set.harvest - c.dap)} วันเก็บ`;
   const td = diaryTodos(); $('#smTodoT').textContent = td.length ? td[0].t : 'บันทึกสมุดไร่ (ฝน · ดิน · ความสูงต้น)';
   const lb = S.ui && S.ui.lastBackup, age = lb ? (Date.now() - lb) / DAY : 99; $('#smBk').style.display = age > 7 && S.closed ? '' : 'none';
@@ -6446,8 +6543,9 @@ const S3 = { on: false, prevStep: 0, wasSimple: false, tmr: null };
 function s3Cam(mode) {
   if (!R.ok || !L) return; const span = Math.max(L.W, L.H) + 10, t = V(L.W / 2, L.dz * R.vex / 2, -L.H / 2); R.follow = false;
   const k = R.camera.aspect < 1 ? Math.min(2.2, 1 / R.camera.aspect) : 1;
-  const P = { hero: [t.x - span * 0.42 * k, t.y + span * 0.62 * k, t.z + span * 0.62 * k], low: [t.x - span * 0.4 * k, t.y + span * 0.12 * k, t.z + span * 0.5 * k], top: [t.x, t.y + span * 1.35 * k, t.z + 0.01] }[mode];
+  const P = { hero: [t.x - span * 0.42 * k, t.y + span * 0.62 * k, t.z + span * 0.62 * k], low: [t.x - span * 0.42 * k, t.y + span * 0.2 * k, t.z + span * 0.55 * k], top: [t.x, t.y + span * 1.35 * k, t.z + 0.01] }[mode];
   if (mode === 'eye') { fitCamera('eye'); return; }
+  R.controls.maxPolarAngle = Math.PI * 0.44;
   flyTo(V(...P), t.clone(), 1.8);
 }
 function s3Open() {
@@ -6471,9 +6569,9 @@ function s3Info() {
   $('#s3Title').innerHTML = `ไร่มัน ${areaThai(L.area).replace(/ 0 งาน| 0 ตร\.วา/g, '')}<small>${dap != null ? `${R.viewDap != null ? '▶ ' : ''}อายุ ${dap} วัน · ระยะ${stageOf(Math.max(0, dap)).n}${R.viewDap != null ? ` · สูง ~${f(growthAt(dap).h * 100)} ซม.` : ''}` : 'ยังไม่ได้ปลูก'}</small>`;
   const ch = [];
   if (SIM.today) {
-    ch.push(SIM.active ? `<span class="w">💧 ให้น้ำโซน ${SIM.active.z + 1}</span>` : SIM.wait ? '<span>🌧 รอฝน</span>' : '<span>⏸ ปิดน้ำ</span>');
-    ch.push(`<span>🌱 ความชื้นดิน ${f(swNow())}%</span>`);
-    if (w) ch.push(`<span>${w.rain > 1 || w.prob >= 60 ? '🌦' : '☀️'} ${f(w.tmax)}° · ฝน ${f(w.prob)}%</span>`);
+    ch.push(SIM.active ? `<span class="w"><svg class="ic"><use href="#i-drop"/></svg>ให้น้ำโซน ${SIM.active.z + 1}</span>` : SIM.wait ? '<span><svg class="ic"><use href="#i-rain"/></svg>รอฝน</span>' : '<span><svg class="ic"><use href="#i-pause"/></svg>ปิดน้ำ</span>');
+    ch.push(`<span><svg class="ic"><use href="#i-sprout"/></svg>ความชื้นดิน ${f(swNow())}%</span>`);
+    if (w) ch.push(`<span><svg class="ic"><use href="#i-${w.rain > 1 || w.prob >= 60 ? 'rain' : 'sun'}"/></svg>${f(w.tmax)}° · ฝน ${f(w.prob)}%</span>`);
   }
   $('#s3Chips').innerHTML = ch.join('');
   $('#s3Grow').querySelector('b').textContent = R.growPlay ? 'หยุด' : 'ดูการเติบโต';
@@ -6785,6 +6883,112 @@ if (S.ui && S.ui.quality) { R.quality = S.ui.quality; qLbl(); }
 go(0); renderGStatus(); if (S.ui && S.ui.big) setBigText(true); setTimeout(applySimple, 50); window.addEventListener('resize', () => { const hh = document.querySelector('header'); if (hh) document.documentElement.style.setProperty('--hdrH', hh.offsetHeight + 'px'); }); $('#rowAngWrap').style.display = S.set.rowDir === 'custom' ? '' : 'none';
 $('#hWater').addEventListener('click', () => { if (SIM.active || SIM.queue.length) { stopAll(); toast('■ ปิดน้ำแล้ว'); } else { quickStart(); R.follow = false; } renderHome(); });
 setTimeout(() => { $('#splash').classList.add('off'); if (!(S.ui && S.ui.intro) && !S.closed) setTimeout(showIntro, 400); }, 900);
+
+/* ---- draggable bottom sheet ---- */
+{
+  const grip = document.getElementById('sheetGrip'), view = document.getElementById('view');
+  const lim = () => { const hd = (document.querySelector('header') || {}).offsetHeight || 60; return { lo: Math.round(innerHeight * 0.3), hi: Math.max(innerHeight * 0.4, innerHeight - hd - 170) }; };
+  const setH = (h, keep) => { const { lo, hi } = lim(); h = Math.round(clamp(h, lo, hi)); document.documentElement.style.setProperty('--vh', h + 'px'); document.body.classList.add('vhset'); hint(h >= hi - 4); if (keep) { S.ui = { ...(S.ui || {}), vh: h / innerHeight }; save(); } };
+  const reset = () => { document.body.classList.remove('vhset'); hint(false); S.ui = { ...(S.ui || {}), vh: null }; save(); };
+  const hint = big => { const t = document.getElementById('sheetHint'); if (t) t.textContent = big ? 'ลากขึ้น ดูรายละเอียด' : 'ลากลง ดูภาพใหญ่'; };
+  const after = () => setTimeout(() => { try { resize3D(); } catch (e) {} }, 30);
+  let y0 = 0, h0 = 0, moved = 0, on = false;
+  grip.addEventListener('pointerdown', e => { on = true; moved = 0; y0 = e.clientY; h0 = view.offsetHeight; grip.classList.add('drag'); try { grip.setPointerCapture(e.pointerId); } catch (er) {} });
+  grip.addEventListener('pointermove', e => { if (!on) return; const dy = e.clientY - y0; moved = Math.max(moved, Math.abs(dy)); if (moved > 4) { setH(h0 + dy); try { resize3D(); } catch (er) {} } });
+  const end = e => { if (!on) return; on = false; grip.classList.remove('drag');
+    const { hi } = lim();
+    if (moved <= 6) { if (view.offsetHeight >= hi - 8) reset(); else setH(hi, true); }
+    else { const h = view.offsetHeight; if (h >= hi - 40) setH(hi, true); else setH(h, true); }
+    after(); };
+  grip.addEventListener('pointerup', end); grip.addEventListener('pointercancel', end);
+  if (S.ui && S.ui.vh) setH(S.ui.vh * innerHeight);
+  addEventListener('resize', () => { if (document.body.classList.contains('vhset') && S.ui && S.ui.vh) setH(S.ui.vh * innerHeight); });
+}
+
+/* ===== คู่มือระบบน้ำหยดสำหรับมันสำปะหลัง (สำนักวิชาเทคโนโลยีการเกษตร ม.เทคโนโลยีสุรนารี, 2558) ===== */
+const SUT = {
+  src: 'คู่มือระบบน้ำหยดสำหรับมันสำปะหลัง · ม.เทคโนโลยีสุรนารี (2558)',
+  // ตารางที่ 5: ความถี่การให้น้ำ (วัน/ครั้ง) ตามอายุ × ชนิดดิน  [1–15 วัน, 1–2 เดือน, 3–4 เดือน, หลัง 4 เดือน]
+  freq: { light: [null, [8, 9], [5, 6], [4, 5]], heavy: [null, [14, 16], [8, 10], [7, 8]] },
+  // ตารางที่ 6 (เทป 30 ซม.): ชั่วโมง × อัตราไหล ÷ (0.3 ม. × ระยะแถว) ≈ น้ำต่อครั้ง 19 มม. (ทราย/ร่วนปนทราย) · 31 มม. (ร่วนเหนียว/เหนียว)
+  depth: { sand: 19, lsand: 19, loam: 25, clay: 31 },
+  // ตารางที่ 3–4: อัตราไหลสูงสุดในท่อ (ลิตร/ชม.)
+  pe: [[16, 1046], [20, 1635], [25, 2591], [32, 4499], [40, 7009], [50, 10952], [63, 17488], [75, 24792], [90, 35665], [110, 53228], [125, 68701]],
+  pvc: [['½', 1405, 12.7], ['¾', 2054, 19], ['1', 3819, 25.4], ['1¼', 6127, 31.8], ['1½', 7992, 38.1], ['2', 12464, 50.8], ['2½', 20200, 63.5], ['3', 27700, 76.2], ['4', 45538, 101.6], ['5', 68649, 127], ['6', 95464, 152.4]],
+};
+const sutGroup = soil => soil === 'clay' ? 'heavy' : soil === 'loam' ? 'mid' : 'light';
+function sutFreq(soil, dap) {
+  const i = dap <= 15 ? 0 : dap <= 60 ? 1 : dap <= 120 ? 2 : 3, g = sutGroup(soil);
+  if (i === 0) return { i, txt: 'ครั้งละ ~1 ชม. ทุก 3–4 วัน (1–2 สัปดาห์แรก)', lo: 3, hi: 4 };
+  const r = g === 'mid' ? [Math.round((SUT.freq.light[i][0] + SUT.freq.heavy[i][0]) / 2), Math.round((SUT.freq.light[i][1] + SUT.freq.heavy[i][1]) / 2)] : SUT.freq[g][i];
+  return { i, txt: `ทุก ${r[0]}–${r[1]} วัน`, lo: r[0], hi: r[1] };
+}
+const sutPE = q => (SUT.pe.find(([, m]) => m >= q) || SUT.pe[SUT.pe.length - 1]);
+const sutPVC = q => (SUT.pvc.find(([, m]) => m >= q) || SUT.pvc[SUT.pvc.length - 1]);
+// Hazen-Williams (C 145) — ใกล้เคียงตารางที่ 2 ของคู่มือ (เช่น 3,600 ล./ชม. ท่อ 40 มม. ≈ 0.18 บาร์/100 ม.)
+function hwBar(qLh, idMm, lenM) { const Q = qLh / 3.6e6, D = idMm / 1000; return 10.67 * Math.pow(Q, 1.852) / (Math.pow(145, 1.852) * Math.pow(D, 4.87)) * lenM / 10.2; }
+// ราคาอ้างอิงในคู่มือ (พ.ศ. 2558) — ใช้ประมาณการ ราคาจริงขึ้นกับสเปกและร้าน
+const PE_PRICE = d => d === 63 ? 36 : d === 90 ? 100 : Math.round(36 * Math.pow(d / 63, 2.87));
+function sutBOM() {
+  const zq = Math.max(...L.zones.map(z => z.flow)), pq = S.set.pumpQ * 1000, ends = L.rows.reduce((a, r) => a + r.segs.length, 0);
+  const sub = sutPE(zq), main = sutPE(Math.max(pq, zq)), mainV = sutPVC(Math.max(pq, zq));
+  const big = main[0] >= 75, filt = main[0] >= 75 ? ['3 นิ้ว', 5000] : ['2 นิ้ว', 800], pump = S.set.pumpQ > 18 ? ['4–5 แรง (ไฟฟ้า)', 20000] : ['2 แรง (ไฟฟ้า)', 4500];
+  const tape = Math.ceil(L.tape * 1.05), subM = Math.ceil(L.subLen * 1.05), mainM = Math.ceil(L.mainLen * 1.05);
+  const it = [
+    ['ปั๊มน้ำ', `${pump[0]} · ${f(S.set.pumpQ)} ลบ.ม./ชม. · แรงดัน ~${f(L.head / 10.2, 1)} บาร์`, 1, 'เครื่อง', pump[1]],
+    ['กรองน้ำ (ดิสก์/ตะแกรง)', `${filt[0]} · ล้างก่อน–หลังให้น้ำทุกครั้ง`, 1, 'ชุด', filt[1]],
+    [`ท่อเมน PE ${main[0]} มม.`, `(หรือ PVC ${mainV[0]} นิ้ว) รับน้ำได้ถึง ${f(main[1] / 1000, 1)} ลบ.ม./ชม.`, mainM, 'ม.', PE_PRICE(main[0])],
+    [`ท่อรองประธาน PE ${sub[0]} มม.`, `จ่ายน้ำเข้าเทป · โซนใหญ่สุด ${f(zq / 1000, 1)} ลบ.ม./ชม.`, subM, 'ม.', PE_PRICE(sub[0])],
+    [`สามทาง ${main[0]} มม.`, 'แยกท่อไปแต่ละโซน', Math.max(1, L.zones.length - 1), 'ตัว', big ? 500 : 220],
+    [`บอลวาล์ว/วาล์วโซน ${sub[0]} มม.`, 'เปิด–ปิดทีละโซน (หรือโซลินอยด์ถ้าสั่งจากแอป)', L.zones.length, 'ตัว', sub[0] >= 75 ? 800 : 120],
+    [`ปิดปลายท่อ ${sub[0]} มม.`, 'ปลายท่อรองประธาน · เปิดล้างตะกอน', L.zones.length, 'ตัว', sub[0] >= 75 ? 250 : 110],
+    ['ข้อต่อสายน้ำหยด', '1 ตัวต่อเทป 1 เส้น', L.rows.length, 'ตัว', 8],
+    ['เทปน้ำหยด 16 มม. หนา 8–12 มิล', `หัวหยดทุก ${f(S.set.emSp * 100)} ซม. · ${f(S.set.emQ, 1)} ลิตร/ชม.`, tape, 'ม.', 1.6],
+    ['ตัวปิดปลายเทป', 'หรือพับปลายเทปแล้วรัด', ends, 'ตัว', 0],
+    ['เกจวัดแรงดัน', 'หน้า–หลังกรอง (แรงดันหน้าแปลง ≥ 1 บาร์)', 2, 'ตัว', 0],
+    ['วาล์วไล่ลม', 'จุดสูงสุดของท่อเมน กันท่อแตก/เทปฉีก', 1, 'ตัว', 0],
+  ];
+  const tot = it.reduce((a, x) => a + x[2] * x[4], 0), rai = L.cropArea / 1600;
+  const loss = hwBar(Math.max(pq, zq), main[0] * 0.93, L.mainLen) + hwBar(zq, sub[0] * 0.93, L.subLen / Math.max(1, L.zones.length) / 2);
+  return { it, tot, rai, sub, main, mainV, loss, zq, pq };
+}
+function sutBomHTML() {
+  const B = sutBOM(), money = v => v ? f(v) : '—';
+  return `<table class="dztbl"><tr><th>รายการ</th><th>จำนวน</th><th>บาท</th></tr>${B.it.map(([a, b, n, u, p]) => `<tr><td><b>${a}</b><br><span class="small">${b}</span></td><td class="mono">${f(n)} ${u}${p ? `<br><span class="small">@${p < 10 ? f(p, 1) : f(p)}</span>` : ''}</td><td class="mono">${money(n * p)}</td></tr>`).join('')}
+    <tr><td><b>รวมโดยประมาณ</b></td><td></td><td class="mono"><b>${f(B.tot)}</b></td></tr></table>`
+    + kvb([['ต่อไร่', f(B.tot / Math.max(B.rai, 0.1)) + '<small>บาท/ไร่</small>'], ['แรงดันสูญเสียในท่อ', '~' + f(B.loss, 2) + '<small>บาร์</small>'], ['น้ำทั้งฤดู (ให้จริง 300–400 มม.)', `${f(B.rai * 480)}–${f(B.rai * 640)}<small>ลบ.ม.</small>`, 'wide'], ['บ่อที่ต้องมี (ลึก 4 ม.)', `~${f(B.rai * 640 / 4 / 1600, 1)}<small>ไร่</small>`, 'wide']])
+    + `<div class="dzrec"><b>ขนาดท่อตามตารางที่ 3–4 ของคู่มือ</b><ul class="dzwhy"><li>ท่อเมนรับน้ำปั๊ม ${f(B.pq / 1000, 1)} ลบ.ม./ชม. → PE ${B.main[0]} มม. หรือ PVC ${B.mainV[0]} นิ้ว (เล็กกว่านี้น้ำไม่พอ ใหญ่กว่านี้เปลืองงบ)</li><li>แรงดันหน้าแปลงควร ≥ 1 บาร์ และไม่เกินที่เทปทนได้ (ส่วนใหญ่ 1.5–2 บาร์) · ดูดน้ำลึก 10 ม. หรือแปลงสูงกว่าปั๊ม 10 ม. เสียแรงดัน 1 บาร์</li><li>ทำแบบคู่มือ: โซนละ 2.5 ไร่ เปิดทีละโซน ใช้ปั๊มเล็ก (2 แรง) ท่อ 63 มม. ถูกที่สุด (≈46,500 บาท/10 ไร่) แต่ใช้เวลารดนานสุด</li></ul></div>`
+    + `<div class="dzsec">ดูแลรักษาระบบ (คู่มือ มทส.)</div><ul class="dzwhy"><li>หลังติดตั้ง รองน้ำใต้หัวหยดหัว–กลาง–ท้ายแปลง ตวงว่าน้ำออกเท่ากันไหม</li><li>ล้างกรองก่อนและหลังให้น้ำ · เปิดปลายท่อไล่ตะกอนเป็นระยะ</li><li>หมั่นเดินดูจุดรั่ว ข้อต่อหลุด หนูกัด หัวหยดตัน</li><li>เลิกใช้ให้ม้วนเทปเก็บ ห้ามพับ (เทปจะหักแตก)</li></ul>`
+    + `<div class="small" style="margin-top:8px">ราคาอ้างอิงจาก ${SUT.src} — ราคาปัจจุบันอาจต่างไป · เผื่อท่อและเทปแล้ว 5% · — = ไม่มีราคาในคู่มือ</div>`;
+}
+function sutHTML(n) {
+  const c = n.c; if (c.notPlanted || c.dap < 0) return '';
+  const st = S.set, fq = sutFreq(st.soil, c.dap), dep = SUT.depth[st.soil] || 19, hrs = dep * st.emSp * st.rowSp / st.emQ;
+  const rainy = (() => { const m = new Date(SIM.t).getMonth(); return m >= 4 && m <= 9; })();
+  const hist = SIM.hist || [], wetAgo = (() => { if (SIM.today && SIM.today.irr > 0.5) return 0; for (let i = hist.length - 1, d = 1; i >= 0; i--, d++) if (hist[i].irr > 0.5 || hist[i].pe >= 5) return d; return 30; })();
+  return `<h3>📘 เทียบกับคู่มือ มทส. <span class="tag">${c.dap} วัน</span></h3><p class="sub">${SUT.src}</p>`
+    + kvb([['ความถี่ที่คู่มือแนะนำ', fq.txt, 'wide'], ['ครั้งละ (เทปของคุณ)', fq.i === 0 ? '~1<small>ชม.</small>' : `~${f(hrs, 1)}<small>ชม. (≈${dep} มม.)</small>`], ['ได้น้ำ/ฝนครั้งล่าสุด', wetAgo >= 30 ? '> 30<small>วัน</small>' : wetAgo === 0 ? 'วันนี้' : `${wetAgo}<small>วันก่อน</small>`]])
+    + `<details class="sutmore"><summary>อ่านคำอธิบาย</summary><div class="dzrec${fq.i > 0 && wetAgo > fq.hi + 1 && !rainy ? ' warn' : ''}" style="font-size:13px">แอปคำนวณจากอากาศ ดิน และอายุจริงรายวัน จึงอาจให้ถี่หรือห่างกว่าตาราง · ถ้าห่างจากครั้งล่าสุดเกินคู่มือมาก ให้ลองล้วงดินตรวจในสมุดไร่${rainy ? ' · ช่วงฝน (พ.ค.–ต.ค.) ฝนตกพอมักไม่ต้องให้น้ำ' : ''}<br><span class="small">คู่มือ: ต้องการน้ำทั้งฤดู ~1,000 มม. · ให้จริงช่วงไม่มีฝน 300–400 มม. (480–640 ลบ.ม./ไร่) · ช่วงต้องการน้ำมากที่สุดอายุ 4–8 เดือน · ปลูกที่เหมาะคือ ธ.ค.–ก.พ.</span></div></details>`;
+}
+
+/* ---- header menu ---- */
+{
+  const btn = $('#mOpen'), mm = $('#mMenu');
+  const sync = () => { const simple = document.body.classList.contains('simple'); $('#mModeT').textContent = simple ? 'โหมดละเอียด' : 'โหมดง่าย'; $('#mModeS').textContent = simple ? 'ไร่ 3D · ออกแบบ · กล้อง AR · กราฟ' : 'หน้าเดียว ตอบว่าวันนี้ต้องให้น้ำไหม';
+    const dv = ($('#devpill').textContent || '').trim(), real = !/จำลอง/.test(dv); $('#mDevS').textContent = real ? dv : 'จำลอง — ยังไม่ได้ต่อตู้จริง'; $('#mDot').classList.toggle('on', real);
+    const hh = document.querySelector('header'); if (hh) document.documentElement.style.setProperty('--hdrH', hh.offsetHeight + 'px'); };
+  const close = () => { mm.hidden = true; btn.setAttribute('aria-expanded', 'false'); };
+  btn.addEventListener('click', e => { e.stopPropagation(); if (mm.hidden) { sync(); mm.hidden = false; btn.setAttribute('aria-expanded', 'true'); } else close(); });
+  document.addEventListener('click', e => { if (!mm.hidden && !e.target.closest('#mMenu')) close(); });
+  mm.addEventListener('click', e => { const b = e.target.closest('[data-m]'); if (!b) return; close(); const m = b.dataset.m;
+    if (m === 'set') $('#gOpen').click(); else if (m === 'ai') $('#aiOpen').click(); else if (m === 'dev') $('#devpill').click();
+    else if (m === 'mode') { if (document.body.classList.contains('simple')) $('#smFull').click(); else if (S.closed && L) setSimple(true); else toast('วัดแปลงก่อน แล้วจะใช้โหมดง่ายได้'); } });
+  setInterval(() => { const dv = ($('#devpill').textContent || ''); $('#mDot').classList.toggle('on', !/จำลอง/.test(dv)); }, 3000);
+}
+/* ---- 3D full screen: more button ---- */
+{ const bar = document.querySelector('.s3bar'), mb = $('#s3More'); if (bar && mb) mb.addEventListener('click', () => { bar.classList.toggle('open'); mb.classList.toggle('on', bar.classList.contains('open')); mb.querySelector('b').textContent = bar.classList.contains('open') ? 'ย่อ' : 'เพิ่มเติม'; }); }
+/* ---- design panel: tap the recommendation to read the reason and sources ---- */
+document.addEventListener('click', e => { const r = e.target.closest('#dspRec'); if (!r || e.target.closest('[data-rec]')) return; r.classList.toggle('more'); });
 requestAnimationFrame(frame);
 </script>
 <div id="cd" class="cd" style="display:none">

@@ -6701,8 +6701,8 @@ function arMap() {
   x.fillStyle = '#fff'; x.font = '700 20px Prompt, sans-serif'; x.textAlign = 'center'; x.fillText('น', S2 / 2, 18);
 }
 $('#tAR').addEventListener('click', startAR);
-$('#tAI3D').classList.toggle('on', !(S.ui && S.ui.sat3d === false));
-$('#tAI3D').addEventListener('click', () => { const on = S.ui && S.ui.sat3d === false; S.ui = { ...(S.ui || {}), sat3d: on }; save(); $('#tAI3D').classList.toggle('on', on); if (!on) { if (R.sat3D) { disposeGroup(R.sat3D); R.sat3D = null; } toast('ปิดต้นไม้/อาคาร 3D จากภาพดาวเทียม'); } else { R.group && buildSatGround(R.group).then(() => { const st = R.sat3D && R.sat3D.userData.stats; toast(st ? `สร้าง 3D จากภาพดาวเทียม: ต้นไม้ ${st.trees} ต้น · อาคาร ${st.buildings} หลัง` : 'เปิดแผนที่จริงก่อน'); }); } });
+$('#tAI3D').classList.toggle('on', !!(S.ui && S.ui.sat3d === true));
+$('#tAI3D').addEventListener('click', () => { const on = !(S.ui && S.ui.sat3d === true); S.ui = { ...(S.ui || {}), sat3d: on }; save(); $('#tAI3D').classList.toggle('on', on); if (!on) { if (R.sat3D) { disposeGroup(R.sat3D); R.sat3D = null; } toast('ปิดต้นไม้/อาคาร 3D จากภาพดาวเทียม'); } else { R.group && buildSatGround(R.group).then(() => { const st = R.sat3D && R.sat3D.userData.stats; toast(st ? `สร้าง 3D จากภาพดาวเทียม: ต้นไม้ ${st.trees} ต้น · อาคาร ${st.buildings} หลัง` : 'เปิดแผนที่จริงก่อน'); }); } });
 $('#arExit').addEventListener('click', () => { if (R.xrOn && AR.xr && AR.xr.sess) AR.xr.sess.end(); else stopAR(); });
 $('#arCal').addEventListener('click', () => { const p = $('#arCalP'); p.style.display = p.style.display === 'none' ? '' : 'none'; $('#arCal').classList.toggle('on', p.style.display === ''); });
 $('#arCalDone').addEventListener('click', () => { $('#arCalP').style.display = 'none'; $('#arCal').classList.remove('on'); });
@@ -6817,7 +6817,7 @@ async function buildSatGround(g) {
    then stand real 3D trees and buildings on those spots. On-device colour + texture rules — an estimate, not surveyed. */
 function sat3D(g, mos, ext, cx, cy) {
   if (R.sat3D) { disposeGroup(R.sat3D); R.sat3D = null; }
-  if (S.ui && S.ui.sat3d === false) return;
+  if (!(S.ui && S.ui.sat3d === true)) return;
   const cv = mos.tex.image; if (!cv || !cv.getContext) return;
   const px = cv.getContext('2d').getImageData(0, 0, cv.width, cv.height).data, W = cv.width, H = cv.height;
   const cell = 4, n = Math.floor(ext / cell), x0 = cx - ext / 2, y0 = cy - ext / 2, mpp = 156543.03 * Math.cos(L.lat0 * RAD) / Math.pow(2, mos.z), rad = Math.max(1, Math.round(1.6 / mpp));
@@ -6826,7 +6826,7 @@ function sat3D(g, mos, ext, cx, cy) {
   const [pmx, pmy] = L.pump;
   for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
     const x = x0 + (i + 0.5) * cell, y = y0 + (j + 0.5) * cell;
-    if (pip(x, y, L.poly) || nearPoly(x, y, 6) || Math.hypot(x - pmx, y - pmy) < 26) continue;
+    if (pip(x, y, L.poly) || nearPoly(x, y, 15) || Math.hypot(x - pmx, y - pmy) < 26) continue;
     const ll = sceneToLL(x, y), m = merc(ll.lat, ll.lon, mos.z), u = Math.round(m.x - mos.ox), v = Math.round(m.y - mos.oy); if (u < rad || v < rad || u >= W - rad || v >= H - rad) continue;
     let sr = 0, sg = 0, sb = 0, sl = 0, sl2 = 0, k = 0;
     for (let dv = -rad; dv <= rad; dv++) for (let du = -rad; du <= rad; du++) { const o = ((v + dv) * W + u + du) * 4, r0 = px[o], g0 = px[o + 1], b0 = px[o + 2], l = (0.3 * r0 + 0.59 * g0 + 0.11 * b0) / 255; sr += r0; sg += g0; sb += b0; sl += l; sl2 += l * l; k++; }
@@ -6834,7 +6834,7 @@ function sat3D(g, mos, ext, cx, cy) {
     const mx = Math.max(r, gg, b), mn = Math.min(r, gg, b), sat = mx ? (mx - mn) / mx : 0; let hue = 0;
     if (mx > mn) { hue = mx === r ? ((gg - b) / (mx - mn)) % 6 : mx === gg ? (b - r) / (mx - mn) + 2 : (r - gg) / (mx - mn) + 4; hue = (hue * 60 + 360) % 360; }
     const q = j * n + i; col[q * 3] = r; col[q * 3 + 1] = gg; col[q * 3 + 2] = b;
-    if (hue >= 65 && hue <= 170 && lum < 0.34 && sat > 0.18 && sd > 0.025) { cls[q] = 1; dark[q] = clamp((0.34 - lum) / 0.2, 0, 1); }       // tree canopy
+    if (hue >= 65 && hue <= 170 && lum < 0.27 && sat > 0.2 && sd > 0.045) { cls[q] = 1; dark[q] = clamp((0.27 - lum) / 0.15, 0, 1); }       // tree canopy
     else if ((sat < 0.13 && lum > 0.66 && sd < 0.09) || ((hue < 22 || hue > 340) && sat > 0.42 && lum > 0.25 && lum < 0.62 && sd < 0.08) || (hue > 190 && hue < 235 && sat > 0.3 && lum > 0.35 && lum < 0.7 && sd < 0.06)) cls[q] = 2;  // roof
   }
   // keep roofs that form compact building-sized patches (drop lone bright pixels, long roads, big bright clearings)
@@ -6854,11 +6854,13 @@ function sat3D(g, mos, ext, cx, cy) {
       comp.forEach(c => { const x = x0 + (c % n + 0.5) * cell, y = y0 + (((c / n) | 0) + 0.5) * cell; m4.compose(V(x, base - 0.1, -y), qq.identity(), V(cell * 1.02, hb, cell * 1.02)); bm.setMatrixAt(k, m4); cc.setRGB(col[c * 3], col[c * 3 + 1], col[c * 3 + 2], THREE.SRGBColorSpace); bm.setColorAt(k++, cc); }); });
     bm.castShadow = bm.receiveShadow = true; grp.add(bm); }
   // trees
-  const cap = R.quality === 'high' ? 7000 : 3000, trees = []; for (let q = 0; q < n * n; q++) if (cls[q] === 1 && rr() < 0.7) trees.push(q);
+  const cap = R.quality === 'high' ? 1500 : 700, trees = [], taken = new Uint8Array(n * n);
+  for (let q = 0; q < n * n; q++) { if (cls[q] !== 1 || taken[q]) continue; const qi = q % n, qj = (q / n) | 0; let nb2 = 0; for (let b2 = -1; b2 <= 1; b2++) for (let a = -1; a <= 1; a++) { const ni = qi + a, nj = qj + b2; if (ni >= 0 && nj >= 0 && ni < n && nj < n && cls[nj * n + ni] === 1) nb2++; } if (nb2 < 3) continue;
+    trees.push(q); for (let b2 = -2; b2 <= 2; b2++) for (let a = -2; a <= 2; a++) { const ni = qi + a, nj = qj + b2; if (ni >= 0 && nj >= 0 && ni < n && nj < n) taken[nj * n + ni] = 1; } }
   const step = Math.max(1, Math.ceil(trees.length / cap)), pick = trees.filter((_, i) => i % step === 0);
   if (pick.length) { const per = [[], []]; pick.forEach(q => per[rr() < 0.5 ? 0 : 1].push(q));
     per.forEach((list, vi) => { if (!list.length) return; const im = new THREE.InstancedMesh(R.treeGeos[vi], STD({ vertexColors: true, roughness: 0.9 }), list.length); im.userData.shared = true;
-      list.forEach((q, i) => { const x = x0 + (q % n + rr()) * cell, y = y0 + (((q / n) | 0) + rr()) * cell, h = 5 + dark[q] * 7 + rr() * 2; qq.setFromAxisAngle(V(0, 1, 0), rr() * 6.28); m4.compose(V(x, hz(x, y) - 0.1, -y), qq, V(h * 1.15, h, h * 1.15)); im.setMatrixAt(i, m4);
+      list.forEach((q, i) => { const x = x0 + (q % n + rr()) * cell, y = y0 + (((q / n) | 0) + rr()) * cell, h = 4 + dark[q] * 4 + rr() * 1.5; qq.setFromAxisAngle(V(0, 1, 0), rr() * 6.28); m4.compose(V(x, hz(x, y) - 0.1, -y), qq, V(h * 1.15, h, h * 1.15)); im.setMatrixAt(i, m4);
         cc.setRGB(clamp(col[q * 3] * 2.2, 0.3, 1.1), clamp(col[q * 3 + 1] * 2.0, 0.5, 1.2), clamp(col[q * 3 + 2] * 2.2, 0.3, 1.1), THREE.SRGBColorSpace); im.setColorAt(i, cc); });
       im.castShadow = true; grp.add(im); }); }
   grp.userData.stats = { trees: pick.length, buildings: roofs.length }; g.add(grp);
@@ -6866,7 +6868,7 @@ function sat3D(g, mos, ext, cx, cy) {
 function applySatVisibility() {
   const on = SAT.on && R.satMesh && SAT.state === 'ok';
   if (R.satMesh) R.satMesh.visible = !!on && !AR.on;
-  if (R.sat3D) R.sat3D.visible = !!on && !AR.on && !(S.ui && S.ui.sat3d === false);
+  if (R.sat3D) R.sat3D.visible = !!on && !AR.on && !!(S.ui && S.ui.sat3d === true);
   (R.fakeScenery || []).forEach(o => o.visible = !on && !AR.on);
   $('#tSat') && $('#tSat').classList.toggle('on', !!on);
 }

@@ -3484,6 +3484,12 @@ function fxFrame(dt, now) {
 }
 function flashView() { const f = $('#flash'); f.classList.add('on'); setTimeout(() => f.classList.remove('on'), 700); }
 /* camera fly-to */
+function camGround() {
+  if (!L || !R.camera) return; const c = R.camera.position, x = c.x, y = -c.z;
+  let g = (R.satH ? R.satH(x, y) : hz(x, y)) + (S.set.ridgeH ?? 0.16) + 0.5;
+  if (R.plantG && R.plantG.visible && R.controls.maxPolarAngle < Math.PI * 0.49 && pip(x, y, L.poly)) g = Math.max(g, hz(x, y) + Math.min(2.6, (crop(SIM.t).height || 0) + 0.4));
+  if (c.y < g) c.y = g;
+}
 function flyTo(pos, tgt, durS = 1.6) { R.tween = { p0: R.camera.position.clone(), t0: R.controls.target.clone(), p1: pos, t1: tgt, start: performance.now(), dur: durS * 1000 }; }
 function flyToZone(zi) {
   const z = L.zones[zi], r = L.rows[z.rows[Math.floor(z.rows.length / 2)]], sg = r.segs[0];
@@ -3596,7 +3602,7 @@ function frame(now) {
     }
     R.flags && R.flags.forEach((fl, i) => { if (!fl) return; fl.position.y = fl.userData.h + 1.9 + (i === az ? Math.sin(now / 200) * 0.05 : 0); fl.scale.x = i === az ? 1.25 : 1; });
     rainFrame(dt, now); if (!AR.on) sunPathFrame(); paintRidges(false); if (!AR.on) updateLighting(false); fxFrame(dt, now);
-    if (AR.on) arFrame(dt); else { tweenStep(now); R.controls.update(); }
+    if (AR.on) arFrame(dt); else { tweenStep(now); R.controls.update(); camGround(); }
     hudCompassFrame(); if (!document.body.classList.contains('simple')) R.renderer.render(R.scene, R.camera);
   }
   audioFrame(dt);

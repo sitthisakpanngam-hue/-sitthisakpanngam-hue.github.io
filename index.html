@@ -2685,8 +2685,8 @@ const GST = { maps: '—', elev: '—', wx: '—', err: '' };
 function leafletAdapter(el, c, z) {
   const LF = window.L, m = LF.map(el, { zoomControl: false, maxZoom: 21 }).setView([c.lat, c.lon], z);
   const layers = [
-    LF.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxNativeZoom: 19, maxZoom: 21, attribution: 'ภาพดาวเทียม © Esri, Maxar, Earthstar Geographics' }),
-    LF.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxNativeZoom: 19, maxZoom: 21, attribution: '© OpenStreetMap contributors' })];
+    LF.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { crossOrigin: 'anonymous', maxNativeZoom: 19, maxZoom: 21, attribution: 'ภาพดาวเทียม © Esri, Maxar, Earthstar Geographics' }),
+    LF.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { crossOrigin: 'anonymous', maxNativeZoom: 19, maxZoom: 21, attribution: '© OpenStreetMap contributors' })];
   layers.forEach(t => { t.on('tileload', () => { MAP.tilesOk++; $('#mapNote').style.display = 'none'; }); t.on('tileerror', () => { MAP.tilesErr++; if (!MAP.tilesOk && MAP.tilesErr > 2 && !$('#mapNote').dataset.closed) $('#mapNote').style.display = 'block'; }); });
   let li = 0; layers[0].addTo(m);
   const poly = LF.polygon([], { color: '#f28c28', weight: 3, fillColor: '#f28c28', fillOpacity: 0.28 }).addTo(m);
@@ -6782,7 +6782,7 @@ async function satMosaic(bb, z, src) {
   x.fillStyle = '#7d8a5a'; x.fillRect(0, 0, cw, ch);
   let tok = null; if (src === 'google') tok = await googleTileSession();
   const url = (tx, ty) => src === 'google' ? `https://tile.googleapis.com/v1/2dtiles/${z}/${tx}/${ty}?session=${tok}&key=${encodeURIComponent(G().key)}`
-    : `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${ty}/${tx}`;
+    : `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${ty}/${tx}?blankTile=false`;
   const jobs = []; let ok = 0;
   for (let ty = ty0; ty <= ty1; ty++) for (let tx = tx0; tx <= tx1; tx++) jobs.push(loadImg(url(tx, ty)).then(im => { x.drawImage(im, (tx - tx0) * 256, (ty - ty0) * 256); ok++; }).catch(() => {}));
   await Promise.all(jobs);

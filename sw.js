@@ -2,10 +2,10 @@
    page: network first (new versions arrive), cached copy when offline
    libraries / fonts / map tiles: cache first
    weather & elevation: network first, last answer kept for offline */
-const V = 'raidrop-v13';
+const V = 'raidrop-v14';
 const SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(V).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())); });
-self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== V && k.startsWith('raidrop-')).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
+self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k.startsWith('raidrop-') && k !== V && !k.startsWith(V + '-')).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 const LIB = /(cdn\.jsdelivr\.net|cdnjs\.cloudflare\.com|fonts\.googleapis\.com|fonts\.gstatic\.com)/;
 const TILE = /(server\.arcgisonline\.com|tile\.openstreetmap\.org|elevation-tiles-prod)/;
 const DATA = /(api\.open-meteo\.com)/;
@@ -14,8 +14,9 @@ async function netFirst(req, store) {
   catch (e) { const m = await caches.match(req, { ignoreSearch: req.mode === 'navigate' }); if (m) return m; if (req.mode === 'navigate') return caches.match('./index.html'); throw e; }
 }
 async function cacheFirst(req, store, max) {
-  const m = await caches.match(req); if (m) return m;
-  const r = await fetch(req); if (r && (r.ok || r.type === 'opaque')) { const c = await caches.open(store); c.put(req, r.clone()); if (max) c.keys().then(ks => { if (ks.length > max) ks.slice(0, ks.length - max).forEach(k => c.delete(k)); }); }
+  // a CORS request (3D satellite / elevation read pixels) must never get an opaque copy, or the canvas is tainted
+  const m = await caches.match(req); if (m && !(req.mode === 'cors' && m.type === 'opaque')) return m;
+  const r = await fetch(req); if (r && (r.ok || (r.type === 'opaque' && req.mode !== 'cors'))) { const c = await caches.open(store); c.put(req, r.clone()); if (max) c.keys().then(ks => { if (ks.length > max) ks.slice(0, ks.length - max).forEach(k => c.delete(k)); }); }
   return r;
 }
 self.addEventListener('fetch', e => {

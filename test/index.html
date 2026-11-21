@@ -2008,6 +2008,52 @@ body.designing .dsp{left:0!important;right:0!important;bottom:0!important;border
 @media (prefers-reduced-motion:reduce){.revealbn,.revealbn .rbic,.revealbn.out{animation:none!important}.revealbn.out{opacity:0}}
 </style>
 <style id="fabcss">.fab .fi .ic{width:30px;height:30px;color:#fff;stroke-width:2.2}@media (max-width:920px){.fab .fi .ic{width:26px;height:26px}}</style>
+<style id="sheetcss">
+/* ---------- bottom sheets in the same M1 style as the pages ---------- */
+.sheetbox{background:#fff!important;padding-top:14px!important}
+.sheeth{gap:12px!important;margin:2px 0 12px!important}
+.sheeth b{font:600 20px/1.25 'Prompt',sans-serif!important}
+.sheeth .ti{width:44px;height:44px;border-radius:14px!important;display:grid;place-items:center;flex:none}
+.sheeth .ti .ic{width:22px;height:22px}
+.xbtn{width:44px!important;height:44px!important;border-radius:50%!important;background:var(--paper)!important;display:grid;place-items:center;color:var(--ink);flex:none;padding:0}
+.xbtn .ic{width:20px;height:20px;stroke-width:2.2}
+.stsec{font:600 13px 'Prompt',sans-serif;color:var(--muted);margin:16px 4px 6px;letter-spacing:.2px}
+.stgrp{border-radius:22px!important;overflow:hidden;background:var(--paper);border:0!important}
+.stgrp .strow{border-top:1px solid rgba(0,0,0,.05)!important}.stgrp .strow:first-child{border-top:0!important}
+/* AI chat */
+.aim{border-radius:22px!important}.aim.a{background:var(--paper)!important;border:0!important}
+.aichips button{min-height:38px;padding:6px 14px!important;border:0!important;background:var(--leaf-2)!important;color:var(--m1ld,#1f5a28)!important;font:500 14px 'Prompt',sans-serif!important;border-radius:19px!important}
+.aiin{border-radius:28px!important;border:0!important;background:var(--paper)!important;padding:6px!important}
+.aiin button,.aicam{width:44px!important;height:44px!important;background:#fff!important;color:var(--ink)}
+.aiin .ic,.aicam .ic{width:21px;height:21px}
+.aiin .send{background:var(--leaf)!important;color:#fff!important}
+.aiin #aiMic.on{background:var(--bad)!important;color:#fff!important;animation:fx2Pulse 1.2s ease-in-out infinite}
+@keyframes fx2Pulse{0%,100%{box-shadow:0 0 0 0 rgba(176,58,31,.45)}50%{box-shadow:0 0 0 8px rgba(176,58,31,0)}}
+/* photo check + diary */
+.pcshot .big .ic{width:46px;height:46px;color:var(--leaf)}
+.pcshot{border-radius:24px!important}
+.seg.mini{border-radius:22px!important}.seg.mini button{border-radius:18px!important;min-height:38px}
+.dtiles button,.dtodo button{border-radius:18px!important}
+.dstatus{border-radius:22px!important}
+/* ---------- farm centre + farming guide ---------- */
+.fmtop{gap:12px!important;padding:calc(12px + env(safe-area-inset-top)) 16px 10px!important;border-bottom:0!important}
+.fmtop b{font:600 20px 'Prompt',sans-serif!important}
+.fmback{width:44px!important;height:44px!important;border-radius:50%!important;background:var(--paper)!important;color:var(--ink)!important;font-size:28px!important;display:grid;place-items:center}
+.fmtabs{gap:6px!important;padding:6px 12px 10px!important;border-bottom:0!important;box-shadow:0 6px 14px -12px rgba(16,40,24,.4)}
+.fmtabs button{border-radius:20px!important;min-height:44px;font:500 13.5px 'Prompt',sans-serif!important}
+.fmtabs button.on{background:var(--leaf-2)!important;color:var(--m1ld,#1f5a28)!important;font-weight:600!important}
+.fmbody{padding:14px 14px calc(28px + var(--sab))!important}
+.fmcard,.gdst{border:0!important;border-radius:24px!important;padding:14px 16px;margin-bottom:12px!important;background:#fff}
+.gdst{padding:0}
+.fmh{font:600 16px 'Prompt',sans-serif!important}
+.fmkpi>div{border:0!important;border-radius:18px!important;background:#fff}
+.gdnow{border-radius:24px!important;padding:16px!important}
+.gdst .num{width:34px!important;height:34px!important}
+.gdst .now-tag{background:var(--water)!important}
+.fmbody.fmin>*{animation:fxUp .4s cubic-bezier(.2,.8,.2,1) both}
+.fmbody.fmin>*:nth-child(2){animation-delay:.04s}.fmbody.fmin>*:nth-child(3){animation-delay:.08s}.fmbody.fmin>*:nth-child(n+4){animation-delay:.12s}
+@media (prefers-reduced-motion:reduce){.fmbody>*,.aiin #aiMic.on{animation:none!important}}
+</style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -2047,7 +2093,7 @@ body.designing .dsp{left:0!important;right:0!important;bottom:0!important;border
   <symbol id="i-text" viewBox="0 0 24 24"><path d="M4 19 9 5l5 14M5.8 14h6.4M15 19l3-8 3 8M15.9 16.5h4.2"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16.5 9"/></symbol>
   <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.5 21.5 20h-19z"/><path d="M12 10v4.5M12 17.5h.01"/></symbol>
-  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></symbol><symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2.5"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path d="M4 12h14M13 6l6 6-6 6"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol><symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></symbol><symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2.5"/></symbol>
   <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></symbol>
   <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4.5 5.5h15v10h-8l-4.5 4v-4h-2.5z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/></symbol>
   <symbol id="i-book" viewBox="0 0 24 24"><path d="M5 4.5h10.5a3 3 0 0 1 3 3v12H8a3 3 0 0 1-3-3z"/><path d="M5 16.5a3 3 0 0 1 3-3h10.5"/></symbol>
@@ -2570,7 +2616,7 @@ body.designing .dsp{left:0!important;right:0!important;bottom:0!important;border
   </aside>
 </div>
 <div class="sheet" id="gSheet" style="display:none"><div class="sheetbg" data-close></div><div class="sheetbox">
-  <div class="sheeth"><span class="ti t-bl sm"><svg class="ic"><use href="#i-globe"/></svg></span><b>ภาพดาวเทียม Google Maps</b><button class="xbtn" data-close aria-label="ปิด">✕</button></div>
+  <div class="sheeth"><span class="ti t-bl sm"><svg class="ic"><use href="#i-globe"/></svg></span><b>ภาพดาวเทียม Google Maps</b><button class="xbtn" data-close aria-label="ปิด"><svg class="ic"><use href="#i-x"/></svg></button></div>
   <p class="sub">ใช้ภาพดาวเทียม Google Maps, ความสูง–ความชันจาก Google Elevation และพยากรณ์จาก Google Weather ต้องใช้ API key ของคุณเอง (มีโควตาใช้ฟรีรายเดือน)</p>
   <label class="fld">Google Maps Platform API key<input type="password" id="gKey" placeholder="AIza..." autocomplete="off" spellcheck="false"></label>
   <div class="gsw">
@@ -2613,7 +2659,7 @@ body.designing .dsp{left:0!important;right:0!important;bottom:0!important;border
   </div>
 </div>
 <div class="sheet" id="aiSheet" style="display:none"><div class="sheetbg" data-close></div><div class="sheetbox aibox">
-  <div class="sheeth"><span class="ti t-gr sm">🤖</span><b>หมอมัน AI<small id="aiMode">—</small></b><button class="xbtn" id="aiCfgBtn" aria-label="ตั้งค่า AI" style="margin-left:auto">⚙︎</button><button class="xbtn" data-close aria-label="ปิด">✕</button></div>
+  <div class="sheeth"><span class="ti t-gr sm"><svg class="ic"><use href="#i-chat"/></svg></span><b>หมอมัน AI<small id="aiMode">—</small></b><button class="xbtn" id="aiCfgBtn" aria-label="ตั้งค่า AI" style="margin-left:auto"><svg class="ic"><use href="#i-gear"/></svg></button><button class="xbtn" data-close aria-label="ปิด"><svg class="ic"><use href="#i-x"/></svg></button></div>
   <div class="aicfg" id="aiCfg" style="display:none">
     <div class="small"><b>ค่าเริ่มต้น: AI ฟรี ใช้ได้ทันที ไม่ต้องใส่คีย์</b> · ถ้าเน็ตหลุดหรือบริการฟรีไม่ว่าง จะตอบแบบพื้นฐานจากข้อมูลไร่แทนอัตโนมัติ</div>
     <div class="seg mini" id="aiProv" style="margin:8px 0;flex-wrap:wrap"><button data-p="free">ฟรี ไม่ต้องใช้คีย์</button><button data-p="puter">ฟรี ผ่าน Puter</button><button data-p="gemini">Gemini (คีย์)</button><button data-p="claude">Claude (คีย์)</button></div>
@@ -2624,7 +2670,7 @@ body.designing .dsp{left:0!important;right:0!important;bottom:0!important;border
   </div>
   <div class="aimsgs" id="aiMsgs"></div>
   <div class="aichips" id="aiChips"></div>
-  <div class="aiin"><label class="aicam" title="ถ่ายรูป/เลือกรูป">📷<input type="file" accept="image/*" capture="environment" id="aiImg" style="display:none"></label><div class="aiprev" id="aiPrev"></div><textarea id="aiText" rows="1" placeholder="พิมพ์คำถาม เช่น ใบเหลืองเกิดจากอะไร"></textarea><button id="aiMic" title="พูด">🎤</button><button id="aiSend" class="send">➤</button></div>
+  <div class="aiin"><label class="aicam" title="ถ่ายรูป/เลือกรูป"><svg class="ic"><use href="#i-cam"/></svg><input type="file" accept="image/*" capture="environment" id="aiImg" style="display:none"></label><div class="aiprev" id="aiPrev"></div><textarea id="aiText" rows="1" placeholder="พิมพ์คำถาม เช่น ใบเหลืองเกิดจากอะไร"></textarea><button id="aiMic" title="พูด" aria-label="พูดแทนพิมพ์"><svg class="ic"><use href="#i-mic"/></svg></button><button id="aiSend" class="send" aria-label="ส่ง"><svg class="ic"><use href="#i-send"/></svg></button></div>
 </div></div>
 <div id="s3ui" class="s3ui">
   <div class="s3top"><button class="s3back" id="s3Back" aria-label="กลับ">‹</button><div class="s3ttl" id="s3Title">—</div></div>
@@ -2643,16 +2689,16 @@ body.designing .dsp{left:0!important;right:0!important;bottom:0!important;border
   <div class="fmbody" id="fmBody"></div>
 </div>
 <div class="sheet" id="ctlSheet" style="display:none"><div class="sheetbg" data-close></div><div class="sheetbox">
-  <div class="sheeth"><span class="ti t-gr sm"><svg class="ic"><use href="#i-plug"/></svg></span><b>ตัวควบคุมหน้างาน<small id="ctlSub">—</small></b><button class="xbtn" data-close aria-label="ปิด">✕</button></div>
+  <div class="sheeth"><span class="ti t-gr sm"><svg class="ic"><use href="#i-plug"/></svg></span><b>ตัวควบคุมหน้างาน<small id="ctlSub">—</small></b><button class="xbtn" data-close aria-label="ปิด"><svg class="ic"><use href="#i-x"/></svg></button></div>
   <div class="ctlscan" id="ctlScanBox" style="display:none"><video id="ctlVid" playsinline muted></video><i class="ctlframe"></i><button class="btn block" data-ctl="stopscan">หยุดสแกน</button></div>
   <div id="ctlBody"></div>
   <input type="file" accept="image/*" capture="environment" id="ctlFile" style="display:none">
 </div></div>
 <div class="sheet" id="pcSheet" style="display:none"><div class="sheetbg" data-close></div><div class="sheetbox pcbox">
-  <div class="sheeth"><span class="ti t-gr sm">📷</span><b>ตรวจต้นมันจากรูป<small id="pcSub">คัดกรองโรค/แมลง และวัดความสูง</small></b><button class="xbtn" data-close aria-label="ปิด">✕</button></div>
+  <div class="sheeth"><span class="ti t-gr sm"><svg class="ic"><use href="#i-cam"/></svg></span><b>ตรวจต้นมันจากรูป<small id="pcSub">คัดกรองโรค/แมลง และวัดความสูง</small></b><button class="xbtn" data-close aria-label="ปิด"><svg class="ic"><use href="#i-x"/></svg></button></div>
   <div class="seg mini pctab" id="pcTab"><button data-m="check" class="on">🩺 ตรวจโรค / แมลง</button><button data-m="height">📏 วัดความสูง</button></div>
   <div id="pcStart" class="pcstart">
-    <label class="pcshot"><input type="file" accept="image/*" capture="environment" id="pcFile" style="display:none"><span class="big">📷</span><b>ถ่ายรูป</b><small id="pcHint">—</small></label>
+    <label class="pcshot"><input type="file" accept="image/*" capture="environment" id="pcFile" style="display:none"><span class="big"><svg class="ic"><use href="#i-cam"/></svg></span><b>ถ่ายรูป</b><small id="pcHint">—</small></label>
     <label class="btn block" style="justify-content:center"><input type="file" accept="image/*" id="pcFile2" style="display:none">🖼 เลือกรูปจากเครื่อง</label>
   </div>
   <div id="pcWork" style="display:none">
@@ -2673,7 +2719,7 @@ body.designing .dsp{left:0!important;right:0!important;bottom:0!important;border
   <div class="pchist" id="pcHist"></div>
 </div></div>
 <div class="sheet" id="stSheet" style="display:none"><div class="sheetbg" data-close></div><div class="sheetbox">
-  <div class="sheeth"><span class="ti t-gr sm"><svg class="ic"><use href="#i-gear"/></svg></span><b>ตั้งค่า</b><button class="xbtn" data-close aria-label="ปิด">✕</button></div>
+  <div class="sheeth"><span class="ti t-gr sm"><svg class="ic"><use href="#i-gear"/></svg></span><b>ตั้งค่า</b><button class="xbtn" data-close aria-label="ปิด"><svg class="ic"><use href="#i-x"/></svg></button></div>
   <div class="stsec">เสียง</div>
   <div class="stgrp">
     <label class="strow"><span class="sti"><svg class="ic"><use href="#i-vol"/></svg></span><span class="stt"><b>เพลงชาวไร่</b><small>ดนตรีพื้นบ้านเบา ๆ (แคน พิณ ฉิ่ง) แต่งขึ้นใหม่ในแอป</small></span><input type="checkbox" class="sw" id="stMusic"></label>
@@ -2714,13 +2760,13 @@ body.designing .dsp{left:0!important;right:0!important;bottom:0!important;border
   <div style="height:10px"></div>
 </div></div>
 <div class="sheet" id="dzSheet" style="display:none"><div class="sheetbg" data-close></div><div class="sheetbox dzbox">
-  <div class="sheeth"><span class="ti t-gr sm" id="dzIco">📐</span><b id="dzTitle">ออกแบบ</b><button class="xbtn" data-close aria-label="ปิด">✕</button></div>
+  <div class="sheeth"><span class="ti t-gr sm" id="dzIco">📐</span><b id="dzTitle">ออกแบบ</b><button class="xbtn" data-close aria-label="ปิด"><svg class="ic"><use href="#i-x"/></svg></button></div>
   <div id="dzBody"></div>
   <div id="dzHold"></div>
   <div class="dzfoot" id="dzFoot"></div>
 </div></div>
 <div class="sheet" id="lvSheet" style="display:none"><div class="sheetbg" data-close></div><div class="sheetbox">
-  <div class="sheeth"><span class="ti t-gr sm">📏</span><b id="lvTitle">จุดวัดระดับ</b><button class="xbtn" data-close aria-label="ปิด">✕</button></div>
+  <div class="sheeth"><span class="ti t-gr sm"><svg class="ic"><use href="#i-ruler"/></svg></span><b id="lvTitle">จุดวัดระดับ</b><button class="xbtn" data-close aria-label="ปิด"><svg class="ic"><use href="#i-x"/></svg></button></div>
   <div class="lvForm">
     <div class="small" id="lvWhere"></div>
     <div id="lvRefNote" class="note" style="display:none">จุดแรกคือ <b>จุดอ้างอิง (ระดับ 0)</b> — จุดอื่นจะวัดเทียบกับจุดนี้ แนะนำเลือกจุดข้างปั๊มหรือหัวแปลง</div>
@@ -2749,7 +2795,7 @@ body.designing .dsp{left:0!important;right:0!important;bottom:0!important;border
   <div class="cdBar" style="grid-template-columns:1fr"><button id="clUse" class="pin"><b>✔</b>ใช้มุมนี้</button></div>
 </div>
 <div class="sheet" id="dSheet" style="display:none"><div class="sheetbg" data-close></div><div class="sheetbox">
-  <div class="sheeth"><span class="ti t-gr sm"><svg class="ic"><use href="#i-list"/></svg></span><b>สมุดไร่</b><button class="xbtn" data-close aria-label="ปิด">✕</button></div>
+  <div class="sheeth"><span class="ti t-gr sm"><svg class="ic"><use href="#i-list"/></svg></span><b>สมุดไร่</b><button class="xbtn" data-close aria-label="ปิด"><svg class="ic"><use href="#i-x"/></svg></button></div>
   <div id="dMain">
     <div class="dstatus" id="dStatus"></div>
     <div class="sect" style="margin:12px 2px 8px">ควรทำ / ควรบันทึกเร็ว ๆ นี้</div>
@@ -3454,7 +3500,7 @@ function drawGPS() {
 const isSmall = matchMedia('(max-width: 920px)').matches;
 const AR = { on: false };
 const R = { ok: false, showPlants: true, zoneColors: false, elevView: false, vex: 1, wet: [], quality: isSmall ? 'eco' : 'high', dayLock: false, envAt: 0, envHour: -99 };
-const ZC = ['#2a78d6', '#e08a1e', '#1f9e89', '#8b5cc7', '#d4507a', '#6b8e23', '#c0782d', '#3a9bd9'];
+const ZC = ['#3B7DD8', '#C98A2B', '#3E9A5C', '#7B6BB8', '#C2573A', '#2E8C86', '#A0794A', '#5C86B5'];
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
 const STD = (o) => new THREE.MeshStandardMaterial({ roughness: 0.85, metalness: 0, ...o });
 
@@ -3818,7 +3864,7 @@ function build3D() {
     const box = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.35, 0.4), STD({ color: '#3a3f44' })); box.position.set(x, h + 0.05, -y); g.add(box);
     const v = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.3, 14), STD({ color: '#d03a2c', roughness: 0.4 })); v.position.set(x, h + 0.35, -y); v.castShadow = true; g.add(v); R.valves[z.id] = v;
     pipe(g, V(x - 1.2, h, -y), V(x - 1.2, h + 2.2, -y), 0.025, '#cfcabd');
-    const fl = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.55, 0.02), STD({ color: ZC[z.id % ZC.length], roughness: 0.7, side: THREE.DoubleSide })); fl.position.set(x - 0.75, h + 1.9, -y); fl.userData.h = h; fl.castShadow = true; g.add(fl); R.flags[z.id] = fl;
+    const fl = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.55, 0.02), STD({ color: '#F4F2EC', roughness: 0.7, side: THREE.DoubleSide })); R.flagSig = ''; fl.position.set(x - 0.75, h + 1.9, -y); fl.userData.h = h; fl.castShadow = true; g.add(fl); R.flags[z.id] = fl;
   });
   // surroundings: trees, eucalyptus line, grass tufts
   const rr = rng(hash(String(L.lat0.toFixed(4)))), avoid = (x, y, d) => dist([x, y], [px, py]) < d || dist([x, y], pc) < 10;
@@ -4191,10 +4237,12 @@ function frame(now) {
       });
       R.drops.instanceMatrix.needsUpdate = true; R.dropsOn = az;
     }
+    { const iso = SIM.today && SIM.today.iso, sig = L.zones.map(z => SIM.active && SIM.active.z === z.id ? 'a' : SIM.queue.some(q => q.z === z.id) ? 'q' : SIM.doneZ && SIM.doneZ[z.id] === iso ? 'd' : 'i').join('');
+      if (R.flags && R.flagSig !== sig) { R.flagSig = sig; R.flags.forEach((fl, i) => { if (fl) fl.material.color.set({ a: '#0B63C4', q: '#8FA7BF', d: '#2B7A34', i: '#F4F2EC' }[sig[i]] || '#F4F2EC'); }); } }
     R.flags && R.flags.forEach((fl, i) => { if (!fl) return; fl.position.y = fl.userData.h + 1.9 + (i === az ? Math.sin(now / 200) * 0.05 : 0); fl.scale.x = i === az ? 1.25 : 1; });
     rainFrame(dt, now); if (!AR.on) sunPathFrame(); paintRidges(false); if (!AR.on) updateLighting(false); fxFrame(dt, now);
     if (AR.on) arFrame(dt); else { tweenStep(now); R.controls.update(); camGround(); }
-    hudCompassFrame(); if (!document.body.classList.contains('simple')) R.renderer.render(R.scene, R.camera);
+    hudCompassFrame(); compassEdge(); if (!document.body.classList.contains('simple')) R.renderer.render(R.scene, R.camera);
   }
   audioFrame(dt);
   if (R.growPlay && L) { const H = S.set.harvest; R.gp = Math.min(H, (R.gp || 0) + dt * H / 14); const v = Math.round(R.gp);
@@ -5294,11 +5342,28 @@ function sunDir3(az, el) {
   const c = Math.cos(-L.ang), s = Math.sin(-L.ang), north = V(-s, 0, -c), east = V(c, 0, -s), er = el * RAD, a = az * RAD;
   return east.multiplyScalar(Math.sin(a)).add(north.multiplyScalar(Math.cos(a))).multiplyScalar(Math.cos(er)).add(V(0, Math.sin(er), 0)).normalize();
 }
+/* crisp pill label (canvas drawn at 3x, Prompt font); userData.ar = width/height */
+const _ce = new THREE.Vector3();
+/* direction labels: hidden when they would be cut by the edge of the view */
+function compassEdge() { if (!R.compassObjs || (typeof S3 !== 'undefined' && S3.on)) return; R.compassObjs.forEach(o => { if (!o.isSprite) return; _ce.copy(o.position).project(R.camera); o.visible = _ce.z < 1 && Math.abs(_ce.x) < 0.84 && _ce.y < 0.86 && _ce.y > -0.82; }); }
+function pillSprite(text, ink = '#1C1F1D', bg = 'rgba(255,255,255,.94)', arrow = false) {
+  const fs = 56, padX = 34, H = 104, c = document.createElement('canvas'), x = c.getContext('2d'); x.font = `600 ${fs}px Prompt, sans-serif`;
+  const tw = Math.ceil(x.measureText(text).width) + (arrow ? 46 : 0), W = Math.max(H, tw + padX * 2); c.width = W; c.height = H + 8;
+  x.font = `600 ${fs}px Prompt, sans-serif`; x.shadowColor = 'rgba(16,40,24,.25)'; x.shadowBlur = 8; x.shadowOffsetY = 2;
+  x.fillStyle = bg; x.beginPath(); x.roundRect ? x.roundRect(4, 2, W - 8, H - 4, (H - 4) / 2) : x.rect(4, 2, W - 8, H - 4); x.fill(); x.shadowColor = 'transparent';
+  x.fillStyle = ink; x.textBaseline = 'middle'; x.textAlign = 'center';
+  if (arrow) { const ax = padX + 14, ay = H / 2; x.beginPath(); x.moveTo(ax, ay - 22); x.lineTo(ax + 14, ay + 16); x.lineTo(ax, ay + 8); x.lineTo(ax - 14, ay + 16); x.closePath(); x.fill(); x.fillText(text, W / 2 + 22, H / 2 + 2); }
+  else x.fillText(text, W / 2, H / 2 + 2);
+  const tx = new THREE.CanvasTexture(c); tx.colorSpace = THREE.SRGBColorSpace; tx.anisotropy = 4;
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tx, depthTest: false, transparent: true, toneMapped: false })); sp.renderOrder = 6; sp.userData.ar = c.width / c.height; return sp;
+}
 function labelSprite(text, col = '#5a3d00') {
-  const c = document.createElement('canvas'); c.width = 96; c.height = 48; const x = c.getContext('2d');
-  x.fillStyle = 'rgba(255,248,225,.92)'; x.beginPath(); x.roundRect ? x.roundRect(4, 6, 88, 36, 12) : x.rect(4, 6, 88, 36); x.fill();
-  x.fillStyle = col; x.font = '600 24px Prompt, sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(text, 48, 25);
-  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), depthTest: false, transparent: true })); sp.renderOrder = 5; return sp;
+  const c = document.createElement('canvas'); c.width = 288; c.height = 144; const x = c.getContext('2d');
+  x.shadowColor = 'rgba(16,40,24,.22)'; x.shadowBlur = 10; x.shadowOffsetY = 3;
+  x.fillStyle = 'rgba(255,255,255,.95)'; x.beginPath(); x.roundRect ? x.roundRect(10, 20, 268, 104, 52) : x.rect(10, 20, 268, 104); x.fill(); x.shadowColor = 'transparent';
+  x.fillStyle = col; x.font = `600 ${text.length > 6 ? 54 : 62}px Prompt, sans-serif`; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(text, 144, 75);
+  const tx = new THREE.CanvasTexture(c); tx.colorSpace = THREE.SRGBColorSpace; tx.anisotropy = 4;
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tx, depthTest: false, transparent: true, toneMapped: false })); sp.renderOrder = 5; return sp;
 }
 function buildSunPath() {
   if (R.sunPathG) { disposeGroup(R.sunPathG); R.sunPathG = null; }
@@ -5366,11 +5431,8 @@ function buildGroundCompass(g) {
   [['N · เหนือ', 0, '#d2402f'], ['ตะวันออก', 90, '#2a5b3a'], ['ใต้', 180, '#2a5b3a'], ['ตะวันตก', 270, '#2a5b3a']].forEach(([t, a, col]) => {
     const p = ctr.clone().add(sunDir3(a, 0).multiplyScalar(rad)), h = hz(p.x, -p.z);
     const post = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 3, 8), STD({ color: a ? '#f2efe6' : '#d2402f' })); post.position.set(p.x, h + 1.5, p.z); post.castShadow = true; g.add(post);
-    const c = document.createElement('canvas'); c.width = 256; c.height = 96; const x = c.getContext('2d');
-    x.fillStyle = a ? '#ffffff' : '#d2402f'; x.beginPath(); x.roundRect ? x.roundRect(6, 10, 244, 76, 20) : x.rect(6, 10, 244, 76); x.fill();
-    x.strokeStyle = 'rgba(0,0,0,.15)'; x.lineWidth = 3; x.stroke(); x.fillStyle = a ? col : '#ffffff'; x.font = '700 40px Prompt, sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(t, 128, 50);
-    const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace;
-    const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true })); const s = Math.max(3, span * 0.05); sp.scale.set(s * 2.6, s, 1); sp.position.set(p.x, h + 3 + s * 0.6, p.z); g.add(sp); R.compassObjs.push(post, sp);
+    const sp = pillSprite(a ? t : 'เหนือ', a ? '#1C1F1D' : '#FFFFFF', a ? 'rgba(255,255,255,.94)' : '#B03A1F', !a);
+    sp.material.sizeAttenuation = false; sp.center.set(0.5, 0); const hh = 0.045; sp.scale.set(hh * sp.userData.ar, hh, 1); sp.position.set(p.x, h + 3.05, p.z); g.add(sp); R.compassObjs.push(post, sp);
   });
   // north arrow painted on the ground beside the field
   const p = ctr.clone().add(sunDir3(0, 0).multiplyScalar(rad * 0.82)), sh = new THREE.Shape(), s = Math.max(2.5, span * 0.04);
@@ -7083,7 +7145,8 @@ function fmYield() {
 }
 function fmOpen(tab) { const el = $('#farm'); el.style.display = 'flex'; document.body.classList.add('fmopen'); fmTab(tab || FM.tab); clearInterval(FM.tmr); FM.tmr = setInterval(() => { if (FM.tab === 'scada') fmScada(); }, 1500); }
 function fmClose() { $('#farm').style.display = 'none'; document.body.classList.remove('fmopen'); clearInterval(FM.tmr); }
-function fmTab(t) { FM.tab = t; FM.sig = ''; $$('#fmTabs button').forEach(b => b.classList.toggle('on', b.dataset.t === t)); $('#fmBody').scrollTop = 0; ({ scada: fmScada, season: fmSeason, yield: fmYieldUI, money: fmMoney })[t](); }
+function fmEnter(el) { if (!el) return; el.classList.remove('fmin'); void el.offsetWidth; el.classList.add('fmin'); clearTimeout(el._fmT); el._fmT = setTimeout(() => el.classList.remove('fmin'), 800); }
+function fmTab(t) { FM.tab = t; FM.sig = ''; setTimeout(() => fmEnter($('#fmBody')), 0); $$('#fmTabs button').forEach(b => b.classList.toggle('on', b.dataset.t === t)); $('#fmBody').scrollTop = 0; ({ scada: fmScada, season: fmSeason, yield: fmYieldUI, money: fmMoney })[t](); }
 const fmNoField = () => '<div class="fmcard"><b>ยังไม่ได้วัดแปลง</b><p class="small">วัดแปลงก่อน แล้วศูนย์บริหารจะแสดงสถานะระบบน้ำ ผลผลิต และบัญชีของไร่คุณ</p></div>';
 /* ---------- 📟 SCADA overview ---------- */
 function fmAlarms() {
@@ -7346,8 +7409,8 @@ function arScene() {
   const pb = []; for (let i = 1; i < L.sub.length; i++) { const a = L.sub[i - 1], b = L.sub[i]; pb.push(a[0], hz(a[0], a[1]) + 0.08, -a[1], b[0], hz(b[0], b[1]) + 0.08, -b[1]); }
   if (pb.length) { const bg = new THREE.BufferGeometry(); bg.setAttribute('position', new THREE.Float32BufferAttribute(pb, 3)); g.add(new THREE.LineSegments(bg, new THREE.LineBasicMaterial({ color: '#3aa0ff', toneMapped: false }))); }
   // zone labels over each valve, pump label
-  L.zones.forEach(z => { if (!R.valves[z.id]) return; const sp = labelSprite(`โซน ${z.id + 1}`, '#123b22'); const v = R.valves[z.id].position; sp.position.set(v.x, v.y + 2.6, v.z); sp.scale.set(1.6, 0.8, 1); sp.material.depthTest = true; g.add(sp); });
-  { const [px, py] = L.pump, sp = labelSprite('ปั๊มน้ำ', '#0d3c75'); sp.position.set(px, hz(px, py) + 3.4, -py); sp.scale.set(2, 1, 1); g.add(sp); }
+  L.zones.forEach(z => { if (!R.valves[z.id]) return; const sp = labelSprite(`โซน ${z.id + 1}`, '#1C1F1D'); const v = R.valves[z.id].position; sp.position.set(v.x, v.y + 2.6, v.z); sp.scale.set(1.8, 0.9, 1); sp.material.depthTest = true; g.add(sp); });
+  { const [px, py] = L.pump, sp = labelSprite('ปั๊มน้ำ', '#0B63C4'); sp.position.set(px, hz(px, py) + 3.4, -py); sp.scale.set(2.2, 1.1, 1); g.add(sp); }
 }
 /* drip tape lines only near the person (far-away lines turn into noise on a phone screen) */
 function arTape(cx, cy) {
@@ -7819,7 +7882,7 @@ function renderGuide() {
         <div class="gdsrc">อ้างอิง: ${st.src}</div></details>`; }).join('')
     + `<div class="small" style="padding:6px 4px 20px">คำแนะนำทั่วไปสำหรับมันสำปะหลังระบบน้ำหยด ปรับตามสภาพแปลงและคำแนะนำเจ้าหน้าที่เกษตรในพื้นที่</div>`;
 }
-function guideOpen() { renderGuide(); $('#guide').style.display = 'flex'; document.body.classList.add('fmopen'); $('#gdBody').scrollTop = 0; }
+function guideOpen() { renderGuide(); fmEnter($('#gdBody')); $('#guide').style.display = 'flex'; document.body.classList.add('fmopen'); $('#gdBody').scrollTop = 0; }
 function guideClose() { $('#guide').style.display = 'none'; document.body.classList.remove('fmopen'); }
 $('#gdBack').addEventListener('click', guideClose);
 $('#gdBody').addEventListener('change', e => { const c = e.target.closest('[data-gk]'); if (!c) return; const [sid, k] = c.dataset.gk.split(':'); S.ui = { ...(S.ui || {}) }; S.ui.gd = { ...(S.ui.gd || {}) }; const key = guideKey(sid, +k); if (c.checked) S.ui.gd[key] = 1; else delete S.ui.gd[key]; save(); renderGuide(); });

@@ -2007,6 +2007,7 @@ body.designing .dsp{left:0!important;right:0!important;bottom:0!important;border
 @keyframes rbOut{to{opacity:0;transform:translate(-50%,-62%) scale(.96)}}
 @media (prefers-reduced-motion:reduce){.revealbn,.revealbn .rbic,.revealbn.out{animation:none!important}.revealbn.out{opacity:0}}
 </style>
+<style id="fabcss">.fab .fi .ic{width:30px;height:30px;color:#fff;stroke-width:2.2}@media (max-width:920px){.fab .fi .ic{width:26px;height:26px}}</style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -4139,7 +4140,7 @@ function zoneAt(ev) {
 function renderFab() {
   const fab = $('#fab'); const show = S.step === 2 && R.is3d && L && R.ok; fab.style.display = show ? 'flex' : 'none'; if (!show) return;
   const run = !!(SIM.active || SIM.queue.length); fab.classList.toggle('run', run);
-  $('#fabIcon').textContent = run ? '■' : '💧'; $('#fabText').textContent = run ? 'ปิดน้ำ' : 'เปิดน้ำ';
+  { const ic = $('#fabIcon'), k = run ? 'stop' : 'drop'; if (ic.dataset.k !== k) { ic.dataset.k = k; ic.innerHTML = `<svg class="ic"><use href="#i-${k}"/></svg>`; } const tx = run ? 'ปิดน้ำ' : 'เปิดน้ำ'; if ($('#fabText').textContent !== tx) $('#fabText').textContent = tx; }
   let pr = 0; if (run) { const all = [SIM.active, ...SIM.queue].filter(Boolean), tot = all.reduce((a, b) => a + b.tot, 0) + (SIM.doneMin || 0), rem = all.reduce((a, b) => a + b.rem, 0); pr = tot ? 1 - rem / tot : 0; }
   $('#fabProg').style.strokeDashoffset = 226.2 * (1 - pr);
 }
@@ -8164,7 +8165,7 @@ requestAnimationFrame(frame);
   const flush = () => { queued = false; const s = pending; pending = new Set(); s.forEach(n => { if (n.isConnected) sweep(n); }); };
   new MutationObserver(recs => {
     for (const r of recs) { if (r.type === 'characterData') pending.add(r.target); else r.addedNodes.forEach(x => pending.add(x)); }
-    if (!queued && pending.size) { queued = true; requestAnimationFrame(flush); }
+    if (!queued && pending.size) { queued = true; queueMicrotask(flush); }
   }).observe(document.body, { childList: true, subtree: true, characterData: true });
   sweep(document.body);
 }

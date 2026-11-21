@@ -1994,6 +1994,19 @@ body.designing .dsp{left:0!important;right:0!important;bottom:0!important;border
 @keyframes fx2Flash{0%{box-shadow:0 0 0 0 rgba(43,122,52,.55)}100%{box-shadow:0 0 0 14px rgba(43,122,52,0)}}
 @media (prefers-reduced-motion:reduce){.grstage b{transition:none}.fx2flash{animation:none}}
 </style>
+<style id="revealcss">
+.revealbn{position:absolute;left:50%;top:50%;z-index:9;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;padding:18px 26px 16px;border-radius:28px;background:rgba(255,255,255,.95);box-shadow:0 14px 40px rgba(16,40,24,.28);color:var(--ink);pointer-events:none;max-width:calc(100% - 32px);animation:rbIn .6s cubic-bezier(.34,1.56,.64,1) both}
+.revealbn .rbic{width:44px;height:44px;border-radius:50%;background:var(--leaf);color:#fff;display:grid;place-items:center;margin-bottom:4px;animation:rbIc .5s .25s cubic-bezier(.34,1.56,.64,1) both}
+.revealbn .rbic .ic{width:26px;height:26px;stroke-width:2.6}
+.revealbn small{font:600 13px 'Prompt',sans-serif;color:var(--leaf)}
+.revealbn b{font:700 clamp(24px,6.4vw,34px)/1.15 'Prompt',sans-serif;letter-spacing:-.3px}
+.revealbn .rbs{font-size:13px;color:var(--ink2)}
+.revealbn.out{animation:rbOut .55s ease-in forwards}
+@keyframes rbIn{from{opacity:0;transform:translate(-50%,-40%) scale(.85)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@keyframes rbIc{from{transform:scale(0) rotate(-40deg)}to{transform:none}}
+@keyframes rbOut{to{opacity:0;transform:translate(-50%,-62%) scale(.96)}}
+@media (prefers-reduced-motion:reduce){.revealbn,.revealbn .rbic,.revealbn.out{animation:none!important}.revealbn.out{opacity:0}}
+</style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -3051,7 +3064,7 @@ function closeField() {
   if (!L || L.area < 2) { toast('พื้นที่เล็กเกินไป ตรวจสอบเส้นทางอีกครั้ง'); return; }
   S.closed = true; save(); gpsUI('off', 'ปิดแปลงเรียบร้อย'); updateFieldStats(); drawGPS(); onLayoutChanged();
   toast(`ปิดแปลงแล้ว ${areaThai(L.area)}` + (L.elevOK ? ` · ต่างระดับ ${f(L.dz, 1)} ม.` : '') + ' — กำลังแสดงภาพ 3D');
-  if (!R.noAutoGo) { R.mToolsOpen = false; updateFieldStats(); try { scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) {} setTimeout(() => { try { dispatchEvent(new Event('raiyod:closed')); } catch (e) {} }, 120); }
+  if (!R.noAutoGo) { R.mToolsOpen = false; updateFieldStats(); go(2); try { scrollTo(0, 0); } catch (e) {} setTimeout(reveal3D, 250); }
   if (useG('elev') && S.src !== 'map' && S.src !== 'coord') setTimeout(() => fetchDEM(true), 600);
 }
 function measureCard(a, p, v) {
@@ -3861,7 +3874,7 @@ function build3D() {
   R.envHour = -99; updateLighting(true);
   buildSunPath(); R.satMesh = null; buildSatGround(g);
   R.lvG = null; lvMarkers(); R.dimG = null; if (R.dimOn && document.body.classList.contains('designing')) { buildDims(); dimEmph(DS.k); } R.measG = null;
-  if (!R.keepCam) fitCamera('overview'); R.keepCam = false;
+  if (!R.keepCam && !(R.revealT > performance.now())) fitCamera('overview'); R.keepCam = false;
 }
 function buildPlants() {
   if (!R.group || !L) return;
@@ -3974,6 +3987,31 @@ function updateLighting(force) {
   }
   R.sunEl = el;
 }
+/* the moment a field is closed: the 3D farm builds itself in front of you (top view → swoop down, crop grows in, area banner) */
+function reveal3D() {
+  if (!R.ok || !L || S.step !== 2) return;
+  const calm = document.body.classList.contains('fxcalm') || matchMedia('(prefers-reduced-motion: reduce)').matches;
+  R.follow = false; R.tween = null; R.revealT = performance.now() + 4000;
+  const v = $('#view'), old = v.querySelector('.revealbn'); if (old) old.remove();
+  const b = document.createElement('div'); b.className = 'revealbn'; b.setAttribute('role', 'status');
+  b.innerHTML = `<span class="rbic"><svg class="ic"><use href="#i-check"/></svg></span><small>วัดแปลงเสร็จแล้ว</small><b>${areaThai(L.area)}</b><span class="rbs">${f(L.rows.length)} ร่อง · ${L.zones.length} โซน · วางระบบน้ำหยดให้แล้ว</span>`;
+  v.appendChild(b); setTimeout(() => b.classList.add('out'), calm ? 2600 : 4200); setTimeout(() => b.remove(), calm ? 3000 : 4800);
+  try { navigator.vibrate && window.__fxHap !== false && navigator.vibrate([20, 60, 20]); } catch (e) {}
+  if (calm) { fitCamera('overview'); return; }
+  fitCamera('top');
+  const span = Math.max(L.W, L.H) + 10, t = V(L.W / 2, L.dz * R.vex / 2, -L.H / 2);
+  setTimeout(() => { if (S.step === 2) flyTo(V(t.x - span * 0.62, t.y + span * 0.36, t.z + span * 0.92), t, 2.8); }, 450);
+  const td = crop(SIM.t).dap;
+  if (planted() && td > 0 && R.pMeshes) {
+    R.revealing = true; R.viewDap = 0; updatePlantGrowth(); const t0 = performance.now() + 500, D = 2600;
+    const step = now => {
+      if (S.step !== 2 || !R.revealing) { R.revealing = false; return; }
+      const k = clamp((now - t0) / D, 0, 1), q = 1 - Math.pow(1 - k, 3); R.viewDap = Math.round(td * q); updatePlantGrowth();
+      if (k < 1) requestAnimationFrame(step); else { R.revealing = false; R.viewDap = null; updatePlantGrowth(); }
+    };
+    requestAnimationFrame(step);
+  }
+}
 function fitCamera(mode) {
   if (!R.ok || !L) return;
   const span = Math.max(L.W, L.H) + 10, t = V(L.W / 2, L.dz * R.vex / 2, -L.H / 2);
@@ -3996,7 +4034,7 @@ function fxFrame(dt, now) {
     R.pumpLight.material.color.set(act >= 0 ? '#44ff7a' : '#3a3a3a');
     if (act < 0) { for (let i = 0; i < R.flowN; i++) R.flow.setMatrixAt(i, _z); R.flow.instanceMatrix.needsUpdate = true; for (let i = 0; i < 3; i++) R.pondRings.setMatrixAt(i, _z); R.pondRings.instanceMatrix.needsUpdate = true; R.house.position.y = R.houseY; }
     if (R.lastAct >= 0) { R.dropIdx[R.lastAct].forEach(i => R.rings.setMatrixAt(i, _z)); R.rings.instanceMatrix.needsUpdate = true; }
-    if (act >= 0) { flashView(); if (R.follow) flyToZone(act); }
+    if (act >= 0) { flashView(); if (R.follow && !(R.revealT > performance.now())) flyToZone(act); }
     R.lastAct = act;
   }
   // wet strips grow visibly while a zone runs, fade slowly afterwards (sim time)
@@ -4517,7 +4555,7 @@ function renderHUD() {
   if (R.elevView && L.elevOK) s += `<div class="chip"><div class="t">สีตามระดับความสูง</div><div style="display:flex;align-items:center;gap:6px;font-size:12px"><span>ต่ำ</span><span style="width:90px;height:8px;border-radius:4px;background:linear-gradient(90deg,#ead9b8,#6e4426)"></span><span>สูง (+${f(L.dz, 1)} ม.)</span></div></div>`;
   if (SAT.on && SAT.state === 'loading' && S.step > 0) s += `<div class="chip"><div class="t">🛰 กำลังโหลดภาพดาวเทียมรอบไร่…</div></div>`;
   if (SAT.on && SAT.state === 'ok' && S.step > 0) s += `<div class="chip" style="padding:3px 9px;opacity:.85"><div class="t">ภาพดาวเทียม © ${SAT.src === 'google' ? 'Google' : 'Esri, Maxar, Earthstar Geographics'}</div></div>`;
-  if (R.viewDap != null) { const vd = Math.round(R.viewDap); s += `<div class="chip" style="border-color:#cfe0c6"><div class="v" style="color:var(--leaf)">🌱 ภาพจำลองอายุ ${vd} วัน</div><div class="t">ระยะ${stageOf(vd).n} · สูง ~${f(heightAt(vd) * 100)} ซม.</div></div>`; }
+  if (R.viewDap != null && !R.revealing) { const vd = Math.round(R.viewDap); s += `<div class="chip" style="border-color:#cfe0c6"><div class="v" style="color:var(--leaf)">🌱 ภาพจำลองอายุ ${vd} วัน</div><div class="t">ระยะ${stageOf(vd).n} · สูง ~${f(heightAt(vd) * 100)} ซม.</div></div>`; }
   if (SIM.wait && S.mode === 'auto' && !SIM.active) s += `<div class="chip"><div class="v">${SIM.wait.kind === 'now' ? '⏳ รอฝนหยุดแล้วค่อยเปิดน้ำ' : '⏳ รอฝนก่อนเปิดน้ำ'}</div><div class="t">${waitTxt()}</div></div>`;
   if (R.rain_ && R.rain_.on) s += `<div class="chip" style="border-color:#c9d3dd"><div class="v">🌧 ${R.rain_.demo ? 'ตัวอย่างฝนตก' : 'ฝนกำลังตก · ' + f(R.rain_.rate, 1) + ' มม./ชม.'}</div><div class="t">${R.rain_.demo ? 'กด 🌧 อีกครั้งเพื่อปิด' : 'ระบบนับน้ำฝนเข้าความชื้นดินแล้ว'}</div></div>`;
   if (SIM.active) { const pr = (1 - SIM.active.rem / SIM.active.tot) * 100;
